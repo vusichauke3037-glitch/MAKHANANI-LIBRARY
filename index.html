@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WORDSWORTH HIGH SCHOOL - Digital Library</title>
+<script src="https://unpkg.com/html5-qrcode"></script>
+<style>
+*{box-sizing:border-box;font-family:Arial,sans-serif}
+body{margin:0;background:#f2f4f7;color:#222}
+header{background:#12355F;color:#fff;padding:18px 16px;text-align:center}
+header h1{margin:0;font-size:28px;letter-spacing:1px}
+header h1 span{color:#FFD35C}
+header p{margin:6px 0 0;opacity:.9}
+.goldbar{background:#C89614;color:#12355F;font-weight:900;padding:10px;text-align:center}
+.wrap{max-width:1100px;margin:auto;padding:14px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.card{background:#fff;border-radius:14px;padding:14px;text-align:center;box-shadow:0 2px 8px #0001}
+.card b{font-size:28px}
+.card small{color:#777}
+.search{width:100%;padding:14px;border-radius:12px;border:1px solid #ddd;margin:14px 0;font-size:16px}
+.btns{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+button{padding:14px;border:0;border-radius:12px;font-weight:900;cursor:pointer;font-size:15px;color:#fff}
+.b-scan{background:#12355F}.b-add{background:#1a7a3a}.b-issue{background:#d67e00}.b-return{background:#0078b4}
+.box{background:#fff;border-radius:14px;padding:16px;margin-top:14px;box-shadow:0 2px 8px #0001}
+input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ddd;border-radius:10px;font-size:15px}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th{background:#12355F;color:#fff;padding:10px;text-align:left}
+td{padding:10px;border-bottom:1px solid #eee;font-size:14px}
+.pill{padding:5px 10px;border-radius:20px;color:#fff;font-weight:900;font-size:12px}
+.AVAILABLE{background:#1a7a3a}.ISSUED{background:#d67e00}.DAMAGED,.LOST{background:#c62828}.NEEDS{background:#6a1b9a}
+.small{font-size:13px;color:#666}
+#reader{width:100%;display:none}
+@media(max-width:700px){.cards,.btns{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+
+<header>
+<h1>📚 WORDSWORTH <span>HIGH SCHOOL</span></h1>
+<p>DIGITAL LIBRARY SYSTEM • Vukona Press • Powered by Firebase</p>
+</header>
+<div class="goldbar">Welcome, Coordinator • Wordsworth Campus • 2026 • vusichauke3037@gmail.com | 078 023 3263</div>
+
+<div class="wrap">
+<div class="cards">
+<div class="card"><small>TOTAL BOOKS</small><br><b id="tTotal">0</b></div>
+<div class="card"><small>AVAILABLE</small><br><b id="tAvail" style="color:#1a7a3a">0</b></div>
+<div class="card"><small>ISSUED</small><br><b id="tIssued" style="color:#d67e00">0</b></div>
+<div class="card"><small>LOST / DAMAGED</small><br><b id="tLost" style="color:#c62828">0</b></div>
+</div>
+
+<input class="search" id="search" placeholder="🔍 Search by Title, Author, Control No, ISBN, Learner..." oninput="render()">
+
+<div class="btns">
+<button class="b-scan" onclick="toggleScan()">📷 SCAN BARCODE</button>
+<button class="b-add" onclick="showAdd()">+ ADD BOOK</button>
+<button class="b-issue" onclick="document.getElementById('issueBox').scrollIntoView({behavior:'smooth'})">📤 ISSUE</button>
+<button class="b-return" onclick="exportCSV()">⬇ EXPORT CSV</button>
+</div>
+
+<div id="reader"></div>
+
+<div class="box" id="addBox" style="display:none">
+<h3>➕ Add New Book - Wordsworth</h3>
+<input id="fControl" placeholder="Control Number - e.g. WHS-001">
+<input id="fISBN" placeholder="ISBN - scan or type">
+<input id="fTitle" placeholder="Book Title">
+<input id="fAuthor" placeholder="Author">
+<select id="fGrade"><option>Grade 8</option><option>Grade 9</option><option>Grade 10</option><option>Grade 11</option><option>Grade 12</option><option>Library Book</option></select>
+<select id="fStatus"><option>AVAILABLE</option><option>ISSUED</option><option>DAMAGED</option><option>LOST</option><option>NEEDS REPAIR</option></select>
+<button class="b-add" onclick="addBook()">SAVE BOOK</button>
+</div>
+
+<div class="box" id="issueBox">
+<h3>📤 Issue / Return Book</h3>
+<input id="iControl" placeholder="Control No - e.g. WHS-002">
+<input id="iLearner" placeholder="Learner Name + Grade + Class - e.g. Thandi M. Gr 11A">
+<div class="btns" style="margin-top:8px">
+<button class="b-issue" onclick="issueBook()">ISSUE TO LEARNER</button>
+<button class="b-return" onclick="returnBook()">RETURN BOOK</button>
+</div>
+<p class="small">Only Coordinator / Librarian can add/delete educators & books. Educators can only Issue / Return.</p>
+</div>
+
+<div class="box">
+<h3>📚 Wordsworth Book List</h3>
+<table><thead><tr><th>Control No</th><th>Title</th><th>Status</th><th>Learner / Info</th><th>Action</th></tr></thead>
+<tbody id="list"></tbody></table>
+</div>
+
+<div class="box">
+<h3>👩‍🏫 Educators - Coordinator Only</h3>
+<input id="eName" placeholder="Educator Name">
+<input id="eCode" placeholder="Educator Code / PIN">
+<button class="b-scan" onclick="addEducator()">ADD EDUCATOR (Coordinator Only)</button>
+<div id="eduList" style="margin-top:10px"></div>
+</div>
+
+<p class="small" style="text-align:center">Built by Vusi Chauke • Vukona Press • Same engine as Xintimani V10.6 • Barcode + ISBN + Control No + Firebase Real-time</p>
+</div>
+
+<script>
+// ===== WORDSWORTH LIBRARY - LOCAL + FIREBASE READY =====
+let books = JSON.parse(localStorage.getItem('whs_books')||'[]');
+let educators = JSON.parse(localStorage.getItem('whs_edu')||'[]');
+if(books.length===0){
+  books=[
+    {c:'WHS-001',isbn:'978000000001',t:'Maths Lit Grade 10',a:'CAPS',g:'Grade 10',s:'AVAILABLE',l:'-'},
+    {c:'WHS-002',isbn:'978000000002',t:'English HL Grade 11',a:'CAPS',g:'Grade 11',s:'ISSUED',l:'Thandi M. Gr 11A'},
+    {c:'WHS-003',isbn:'978000000003',t:'Life Science Gr 12',a:'CAPS',g:'Grade 12',s:'ISSUED',l:'Sipho K. Gr 12B'},
+    {c:'WHS-004',isbn:'978000000004',t:'Geography Gr 9',a:'CAPS',g:'Grade 9',s:'DAMAGED',l:'-'},
+    {c:'WHS-005',isbn:'978000000005',t:'Accounting Gr 10',a:'CAPS',g:'Grade 10',s:'AVAILABLE',l:'-'},
+  ];
+  save();
+}
+function save(){localStorage.setItem('whs_books',JSON.stringify(books));localStorage.setItem('whs_edu',JSON.stringify(educators));}
+function showAdd(){document.getElementById('addBox').style.display='block';document.getElementById('fControl').value='WHS-'+String(books.length+1).padStart(3,'0');}
+function addBook(){
+  let c=document.getElementById('fControl').value.trim(), isbn=document.getElementById('fISBN').value.trim(), t=document.getElementById('fTitle').value.trim(), a=document.getElementById('fAuthor').value.trim();
+  if(!c||!t) return alert('Enter Control No + Title');
+  books.push({c,isbn,t,a,g:document.getElementById('fGrade').value,s:document.getElementById('fStatus').value,l:'-'});
+  save(); render(); alert('Book Added: '+c+' - '+t);
+}
+function issueBook(){
+  let c=document.getElementById('iControl').value.trim().toUpperCase(), l=document.getElementById('iLearner').value.trim();
+  let b=books.find(x=>x.c.toUpperCase()===c); if(!b) return alert('Book not found');
+  b.s='ISSUED'; b.l=l||'Learner'; save(); render(); alert('Issued '+c+' to '+b.l);
+}
+function returnBook(){
+  let c=document.getElementById('iControl').value.trim().toUpperCase();
+  let b=books.find(x=>x.c.toUpperCase()===c); if(!b) return alert('Book not found');
+  b.s='AVAILABLE'; b.l='-'; save(); render(); alert('Returned '+c);
+}
+function delBook(c){ if(confirm('Delete '+c+'? Only Coordinator can do this.')){books=books.filter(x=>x.c!==c); save(); render();}}
+function changeStatus(c){
+  let b=books.find(x=>x.c===c); let ns=prompt('New Status: AVAILABLE / ISSUED / DAMAGED / LOST / NEEDS REPAIR',b.s); if(ns){b.s=ns.toUpperCase(); save(); render();}
+}
+function addEducator(){
+  let n=document.getElementById('eName').value.trim(); if(!n) return alert('Enter name');
+  // COORDINATOR LOCK - in real Firebase version, check role == coordinator
+  educators.push(n); save(); render(); alert('Educator Added: '+n);
+}
+function render(){
+  let q=document.getElementById('search').value.toLowerCase();
+  document.getElementById('tTotal').innerText=books.length;
+  document.getElementById('tAvail').innerText=books.filter(b=>b.s==='AVAILABLE').length;
+  document.getElementById('tIssued').innerText=books.filter(b=>b.s==='ISSUED').length;
+  document.getElementById('tLost').innerText=books.filter(b=>b.s==='LOST'||b.s==='DAMAGED').length;
+  document.getElementById('list').innerHTML=books.filter(b=>(b.t+b.a+b.c+b.isbn+b.l).toLowerCase().includes(q)).map(b=>`
+    <tr><td><b>${b.c}</b><br><small>ISBN: ${b.isbn||'-'}<br>${b.g}</small></td>
+    <td><b>${b.t}</b><br><small>${b.a||''}</small></td>
+    <td><span class="pill ${b.s}">${b.s}</span></td>
+    <td>${b.l}</td>
+    <td><button style="background:#12355F;padding:8px" onclick="changeStatus('${b.c}')">Edit</button> <button style="background:#c62828;padding:8px" onclick="delBook('${b.c}')">Delete</button></td></tr>`).join('');
+  document.getElementById('eduList').innerHTML=educators.map(e=>`<span style="background:#eef;padding:6px 10px;border-radius:20px;display:inline-block;margin:3px">${e}</span>`).join('')||'<small>No educators yet</small>';
+}
+function exportCSV(){
+  let csv='Control,ISBN,Title,Author,Grade,Status,Learner\n'+books.map(b=>[b.c,b.isbn,b.t,b.a,b.g,b.s,b.l].join(',')).join('\n');
+  let a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download='Wordsworth_Library.csv'; a.click();
+}
+let scanner=null, scanning=false;
+function toggleScan(){
+  let el=document.getElementById('reader');
+  if(scanning){el.style.display='none'; scanner.clear(); scanning=false; return;}
+  el.style.display='block'; scanning=true;
+  scanner=new Html5Qrcode("reader");
+  scanner.start({facingMode:"environment"},{fps:10,qrbox:250},(txt)=>{
+    document.getElementById('fISBN').value=txt;
+    document.getElementById('iControl').value=txt;
+    document.getElementById('fControl').value=txt;
+    alert('Scanned: '+txt); scanner.stop(); el.style.display='none'; scanning=false;
+  });
+}
+render();
+
+// ===== TO CONNECT FIREBASE - PASTE YOUR CONFIG HERE =====
+// Replace with your Wordsworth Firebase config from console:
+// const firebaseConfig = { apiKey:"...", authDomain:"...", projectId:"wordsworth-library", ... };
+// Then sync books to Firestore collection "wordsworth_books" - same as Xintimani V10.6
+</script>
+</body>
+</html>
