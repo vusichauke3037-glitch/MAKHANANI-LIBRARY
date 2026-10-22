@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WORDSWORTH HIGH SCHOOL - Digital Library | Coordinator Login</title>
+<title>WORDSWORTH HIGH SCHOOL - Library | Principal Dashboard</title>
 <script src="https://unpkg.com/html5-qrcode"></script>
 <style>
 *{box-sizing:border-box;font-family:Arial,sans-serif}
@@ -19,7 +19,7 @@ header p{margin:6px 0 0;opacity:.9}
 .search{width:100%;padding:14px;border-radius:12px;border:1px solid #ddd;margin:14px 0;font-size:16px}
 .btns{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 button{padding:14px;border:0;border-radius:12px;font-weight:900;cursor:pointer;font-size:15px;color:#fff}
-.b-scan{background:#12355F}.b-add{background:#1a7a3a}.b-issue{background:#d67e00}.b-return{background:#0078b4}
+.b-scan{background:#12355F}.b-add{background:#1a7a3a}.b-issue{background:#d67e00}.b-return{background:#0078b4}.b-prin{background:#5e35b1}
 .box{background:#fff;border-radius:14px;padding:16px;margin-top:14px;box-shadow:0 2px 8px #0001}
 input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ddd;border-radius:10px;font-size:15px}
 table{width:100%;border-collapse:collapse;margin-top:10px}
@@ -31,11 +31,12 @@ td{padding:10px;border-bottom:1px solid #eee;font-size:14px}
 #reader{width:100%;display:none}
 #loginBox{background:#12355F;color:#fff;border-radius:14px;padding:20px;margin-top:14px;text-align:center}
 #loginBox input{max-width:400px;margin:8px auto;display:block}
-.coord-only{display:none}
-body.is-coord .coord-only{display:block}
-body.is-coord .coord-inline{display:inline-block}
-.coord-inline{display:none}
-.badge{padding:4px 10px;border-radius:20px;background:#fff;color:#12355F;font-size:12px;font-weight:900}
+.coord-only{display:none} body.is-coord .coord-only{display:block}
+.edu-only{display:none} body.is-edu .edu-only, body.is-coord .edu-only{display:block}
+.prin-only{display:none} body.is-prin .prin-only{display:block}
+.prin-bar{background:#5e35b1;color:#fff;border-radius:14px;padding:16px;margin-top:14px}
+.progress{height:14px;background:#e0e0e0;border-radius:20px;overflow:hidden;margin:6px 0}
+.progress div{height:100%;background:#1a7a3a}
 @media(max-width:700px){.cards,.btns{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
@@ -44,15 +45,33 @@ body.is-coord .coord-inline{display:inline-block}
 <div class="goldbar">● <span id="syncStatus">LIVE - SYNCED TO FIREBASE</span> • <span id="userBadge">NOT LOGGED IN</span></div>
 <div class="wrap">
 
-<!-- ===== LOGIN ===== -->
 <div class="box" id="loginBox">
 <h3 style="margin:0">🔒 WORDSWORTH LIBRARY LOGIN</h3>
-<p class="small" style="color:#FFD35C">Coordinator = Full Control • Educator = Issue / Return Only</p>
-<input id="loginName" placeholder="Your Name - e.g. Mr Chauke">
-<input id="loginPin" type="password" placeholder="PIN - Coordinator: WHS2026 | Educator: WHS1234">
+<p class="small" style="color:#FFD35C">Coordinator = Full Control • Educator = Issue/Return • Principal = View + Reports Only</p>
+<input id="loginName" placeholder="Your Name - e.g. Mr Principal / Mr Chauke">
+<input id="loginPin" type="password" placeholder="PIN - Coord: WHS2026 | Educator: WHS1234 | Principal: WHS9999">
 <button class="b-add" onclick="doLogin()" style="max-width:400px;width:100%">LOGIN</button>
 <button onclick="doLogout()" style="background:#666;max-width:400px;width:100%;margin-top:8px">LOGOUT</button>
-<p class="small" style="color:#cfe0ff">Change PINs in code: const COORD_PIN = "WHS2026"</p>
+</div>
+
+<!-- ===== PRINCIPAL DASHBOARD - PRINCIPAL ONLY ===== -->
+<div class="prin-only">
+<div class="prin-bar">
+<h3 style="margin:0">👨‍💼 PRINCIPAL DASHBOARD - WORDSWORTH HIGH SCHOOL</h3>
+<p style="margin:6px 0 0;opacity:.9">Read-Only • You cannot delete / add / issue books. For SGB / Audit use.</p>
+</div>
+<div class="box">
+<h3>📊 School Overview</h3>
+<div id="prinStats"></div>
+<h3>📚 Books By Grade</h3>
+<div id="prinByGrade"></div>
+<h3>⚠️ Lost / Damaged - Needs Attention</h3>
+<div id="prinLost"></div>
+<h3>📤 Currently Issued - Who Has Books?</h3>
+<div id="prinIssued"></div>
+<button class="b-prin" onclick="exportCSV()" style="width:100%;margin-top:12px">⬇ DOWNLOAD FULL REPORT (CSV) FOR SGB</button>
+<button class="b-prin" onclick="window.print()" style="width:100%;margin-top:8px;background:#333">🖨 PRINT THIS DASHBOARD</button>
+</div>
 </div>
 
 <div class="cards">
@@ -65,12 +84,11 @@ body.is-coord .coord-inline{display:inline-block}
 <div class="btns">
 <button class="b-scan" onclick="toggleScan()">📷 SCAN BARCODE</button>
 <button class="b-add coord-only" onclick="showAdd()">+ ADD BOOK</button>
-<button class="b-issue" onclick="document.getElementById('issueBox').scrollIntoView({behavior:'smooth'})">📤 ISSUE</button>
+<button class="b-issue edu-only" onclick="document.getElementById('issueBox').scrollIntoView({behavior:'smooth'})">📤 ISSUE</button>
 <button class="b-return" onclick="exportCSV()">⬇ EXPORT CSV</button>
 </div>
 <div id="reader"></div>
 
-<!-- ADD BOOK - COORDINATOR ONLY -->
 <div class="box coord-only" id="addBox" style="display:none">
 <h3>➕ Add New Book - Coordinator Only</h3>
 <input id="fControl" placeholder="Control Number - e.g. WHS-001">
@@ -82,8 +100,8 @@ body.is-coord .coord-inline{display:inline-block}
 <button class="b-add" onclick="addBook()">SAVE TO FIREBASE ☁️</button>
 </div>
 
-<div class="box" id="issueBox">
-<h3>📤 Issue / Return Book - All Educators Can Do This</h3>
+<div class="box edu-only" id="issueBox">
+<h3>📤 Issue / Return Book - Educator / Coordinator</h3>
 <input id="iControl" placeholder="Control No - e.g. WHS-002">
 <input id="iLearner" placeholder="Learner Name + Grade + Class - e.g. Thandi M. Gr 11A">
 <div class="btns" style="margin-top:8px">
@@ -91,14 +109,13 @@ body.is-coord .coord-inline{display:inline-block}
 <button class="b-return" onclick="returnBook()">RETURN BOOK</button>
 </div>
 </div>
+<div class="box prin-only" style="background:#f3efff;border:2px solid #5e35b1"><b>👨‍💼 Principal Mode:</b> You are in View-Only mode. Issue / Add / Delete are disabled for safety. Use Dashboard above + Export CSV.</div>
 
 <div class="box">
 <h3>📚 Wordsworth Book List - LIVE FROM FIREBASE</h3>
 <table><thead><tr><th>Control No</th><th>Title</th><th>Status</th><th>Learner</th><th class="coord-only">Action</th></tr></thead><tbody id="list"></tbody></table>
-<p class="small">Educators see list but cannot Delete / Edit. Only Coordinator sees Action buttons.</p>
 </div>
 
-<!-- EDUCATORS - COORDINATOR ONLY -->
 <div class="box coord-only">
 <h3>👩‍🏫 Educators - Coordinator Only 🔒</h3>
 <input id="eName" placeholder="Educator Name">
@@ -107,15 +124,12 @@ body.is-coord .coord-inline{display:inline-block}
 <button class="b-scan" onclick="addEducator()">ADD EDUCATOR (Coordinator Only)</button>
 <div id="eduList" style="margin-top:10px"></div>
 </div>
-
 <p class="small" style="text-align:center">Built by Vusi Chauke • vusichauke3037@gmail.com • 078 023 3263 • Vukona Press • Firebase Firestore Real-time</p>
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-// ===== YOUR REAL WORDSWORTH FIREBASE CONFIG =====
 const firebaseConfig = {
   apiKey: "AIzaSyAJyTZ-tmrsY0m-EmN80HSRERSR_tiVX4E",
   authDomain: "wordsworth-library.firebaseapp.com",
@@ -128,92 +142,75 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// ===== COORDINATOR LOGIN - CHANGE THESE PINS =====
+// ===== 3 ROLES - CHANGE PINS HERE =====
 const COORD_PIN = "WHS2026";
 const EDU_PIN = "WHS1234";
+const PRIN_PIN = "WHS9999";
 let currentRole = sessionStorage.getItem('whs_role') || '';
 let currentName = sessionStorage.getItem('whs_name') || '';
 function applyRole(){
-  document.body.classList.toggle('is-coord', currentRole === 'Coordinator');
-  document.getElementById('userBadge').innerText = currentRole ? currentName + ' • ' + currentRole.toUpperCase() : 'NOT LOGGED IN';
-  // Show/hide Action column
-  document.querySelectorAll('.coord-only').forEach(el=>{
-    if(el.tagName==='TH') el.style.display = currentRole==='Coordinator' ? '' : 'none';
-  });
+  document.body.classList.toggle('is-coord', currentRole==='Coordinator');
+  document.body.classList.toggle('is-edu', currentRole==='Educator' || currentRole==='Coordinator');
+  document.body.classList.toggle('is-prin', currentRole==='Principal');
+  document.getElementById('userBadge').innerText = currentRole ? currentName+' • '+currentRole.toUpperCase() : 'NOT LOGGED IN';
   render();
 }
 window.doLogin = () => {
-  let name = document.getElementById('loginName').value.trim();
-  let pin = document.getElementById('loginPin').value.trim();
+  let name=document.getElementById('loginName').value.trim(); let pin=document.getElementById('loginPin').value.trim();
   if(!name) return alert('Enter your name');
-  if(pin === COORD_PIN) currentRole = 'Coordinator';
-  else if(pin === EDU_PIN) currentRole = 'Educator';
-  else return alert('❌ Wrong PIN. Coordinator: WHS2026 | Educator: WHS1234');
-  currentName = name;
-  sessionStorage.setItem('whs_role', currentRole);
-  sessionStorage.setItem('whs_name', currentName);
-  alert('✅ Welcome ' + name + ' - ' + currentRole);
-  applyRole();
+  if(pin===COORD_PIN) currentRole='Coordinator';
+  else if(pin===EDU_PIN) currentRole='Educator';
+  else if(pin===PRIN_PIN) currentRole='Principal';
+  else return alert('❌ Wrong PIN. Coord: WHS2026 | Educator: WHS1234 | Principal: WHS9999');
+  currentName=name; sessionStorage.setItem('whs_role',currentRole); sessionStorage.setItem('whs_name',currentName);
+  alert('✅ Welcome '+name+' - '+currentRole); applyRole();
 };
-window.doLogout = () => {
-  currentRole=''; currentName='';
-  sessionStorage.removeItem('whs_role'); sessionStorage.removeItem('whs_name');
-  applyRole(); alert('Logged out');
-};
-// Guard: only Coordinator can do these
-function needCoord(){ if(currentRole!=='Coordinator'){ alert('🔒 Only Coordinator can do this. Login with PIN WHS2026'); return false; } return true; }
+window.doLogout = () => { currentRole=''; currentName=''; sessionStorage.removeItem('whs_role'); sessionStorage.removeItem('whs_name'); applyRole(); alert('Logged out'); };
+function needCoord(){ if(currentRole!=='Coordinator'){ alert('🔒 Only Coordinator can do this. Login WHS2026'); return false; } return true; }
+function blockPrincipal(){ if(currentRole==='Principal'){ alert('👨‍💼 Principal is View-Only. You cannot change books.'); return true; } return false; }
 
-// ===== FIRESTORE =====
-let books = []; let educators = [];
-onSnapshot(collection(db, "wordsworth_books"), (snap)=>{ books = snap.docs.map(d=>({id:d.id, ...d.data()})); render(); }, (err)=>{ document.getElementById('syncStatus').innerText = "FIREBASE ERROR: "+err.message; });
-onSnapshot(collection(db, "wordsworth_educators"), (snap)=>{ educators = snap.docs.map(d=>({id:d.id, ...d.data()})); render(); });
+let books=[]; let educators=[];
+onSnapshot(collection(db,"wordsworth_books"), (snap)=>{ books=snap.docs.map(d=>({id:d.id,...d.data()})); render(); });
+onSnapshot(collection(db,"wordsworth_educators"), (snap)=>{ educators=snap.docs.map(d=>({id:d.id,...d.data()})); render(); });
 
-window.showAdd = () => { if(!needCoord()) return; document.getElementById('addBox').style.display='block'; document.getElementById('fControl').value='WHS-'+String(books.length+1).padStart(3,'0'); };
-window.addBook = async () => {
-  if(!needCoord()) return;
-  const data = { c: document.getElementById('fControl').value.trim(), isbn: document.getElementById('fISBN').value.trim(), t: document.getElementById('fTitle').value.trim(), a: document.getElementById('fAuthor').value.trim(), g: document.getElementById('fGrade').value, s: document.getElementById('fStatus').value, l:'-', createdAt: Date.now(), addedBy: currentName };
-  if(!data.c||!data.t) return alert('Enter Control No + Title');
-  await addDoc(collection(db,'wordsworth_books'), data); alert('✅ Saved to Firebase: '+data.c);
-};
-window.issueBook = async () => {
-  let c=document.getElementById('iControl').value.trim().toUpperCase(); let l=document.getElementById('iLearner').value.trim();
-  let b=books.find(x=>x.c.toUpperCase()===c); if(!b) return alert('Book not found: '+c);
-  await updateDoc(doc(db,'wordsworth_books',b.id),{s:'ISSUED', l:l||'Learner'}); alert('📤 Issued '+c+' to '+l);
-};
-window.returnBook = async () => {
-  let c=document.getElementById('iControl').value.trim().toUpperCase(); let b=books.find(x=>x.c.toUpperCase()===c); if(!b) return alert('Book not found');
-  await updateDoc(doc(db,'wordsworth_books',b.id),{s:'AVAILABLE', l:'-'}); alert('📥 Returned '+c);
-};
-window.changeStatus = async (id) => { if(!needCoord()) return; let b=books.find(x=>x.id===id); let ns=prompt('New Status: AVAILABLE / ISSUED / DAMAGED / LOST / NEEDS REPAIR',b.s); if(!ns) return; await updateDoc(doc(db,'wordsworth_books',id),{s:ns.toUpperCase()}); };
-window.delBook = async (id,c) => { if(!needCoord()) return; if(!confirm('Delete '+c+'? Coordinator Only.')) return; await deleteDoc(doc(db,'wordsworth_books',id)); };
-window.addEducator = async () => {
-  if(!needCoord()) return;
-  let name=document.getElementById('eName').value.trim(); let code=document.getElementById('eCode').value.trim(); let role=document.getElementById('eRole').value;
-  if(!name) return alert('Enter name');
-  await addDoc(collection(db,'wordsworth_educators'),{name, code, role, createdAt:Date.now()}); alert('✅ Educator Added: '+name+' ('+role+')');
-};
-window.delEducator = async (id,name) => { if(!needCoord()) return; if(!confirm('Delete educator '+name+'? Coordinator Only.')) return; await deleteDoc(doc(db,'wordsworth_educators',id)); };
-window.exportCSV = () => { let csv='Control,ISBN,Title,Author,Grade,Status,Learner\n'+books.map(b=>[b.c,b.isbn,b.t,b.a,b.g,b.s,b.l].join(',')).join('\n'); let a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download='Wordsworth_Library.csv'; a.click(); };
+window.showAdd = () => { if(blockPrincipal()||!needCoord()) return; document.getElementById('addBox').style.display='block'; document.getElementById('fControl').value='WHS-'+String(books.length+1).padStart(3,'0'); };
+window.addBook = async () => { if(blockPrincipal()||!needCoord()) return; const data={c:document.getElementById('fControl').value.trim(), isbn:document.getElementById('fISBN').value.trim(), t:document.getElementById('fTitle').value.trim(), a:document.getElementById('fAuthor').value.trim(), g:document.getElementById('fGrade').value, s:document.getElementById('fStatus').value, l:'-', createdAt:Date.now(), addedBy:currentName}; if(!data.c||!data.t) return alert('Enter Control No + Title'); await addDoc(collection(db,'wordsworth_books'),data); alert('✅ Saved: '+data.c); };
+window.issueBook = async () => { if(blockPrincipal()) return; let c=document.getElementById('iControl').value.trim().toUpperCase(); let l=document.getElementById('iLearner').value.trim(); let b=books.find(x=>x.c.toUpperCase()===c); if(!b) return alert('Book not found'); await updateDoc(doc(db,'wordsworth_books',b.id),{s:'ISSUED',l:l||'Learner'}); alert('📤 Issued '+c+' to '+l); };
+window.returnBook = async () => { if(blockPrincipal()) return; let c=document.getElementById('iControl').value.trim().toUpperCase(); let b=books.find(x=>x.c.toUpperCase()===c); if(!b) return alert('Book not found'); await updateDoc(doc(db,'wordsworth_books',b.id),{s:'AVAILABLE',l:'-'}); alert('📥 Returned '+c); };
+window.changeStatus = async (id) => { if(blockPrincipal()||!needCoord()) return; let b=books.find(x=>x.id===id); let ns=prompt('New Status: AVAILABLE / ISSUED / DAMAGED / LOST / NEEDS REPAIR',b.s); if(!ns) return; await updateDoc(doc(db,'wordsworth_books',id),{s:ns.toUpperCase()}); };
+window.delBook = async (id,c) => { if(blockPrincipal()||!needCoord()) return; if(!confirm('Delete '+c+'? Coordinator Only.')) return; await deleteDoc(doc(db,'wordsworth_books',id)); };
+window.addEducator = async () => { if(blockPrincipal()||!needCoord()) return; let name=document.getElementById('eName').value.trim(); let code=document.getElementById('eCode').value.trim(); let role=document.getElementById('eRole').value; if(!name) return alert('Enter name'); await addDoc(collection(db,'wordsworth_educators'),{name,code,role,createdAt:Date.now()}); alert('✅ Educator Added: '+name); };
+window.delEducator = async (id,name) => { if(blockPrincipal()||!needCoord()) return; if(!confirm('Delete educator '+name+'?')) return; await deleteDoc(doc(db,'wordsworth_educators',id)); };
+window.exportCSV = () => { let csv='Control,ISBN,Title,Author,Grade,Status,Learner\n'+books.map(b=>[b.c,b.isbn,b.t,b.a,b.g,b.s,b.l].join(',')).join('\n'); let a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download='Wordsworth_Library_Principal_Report.csv'; a.click(); };
+
+function renderPrincipal(){
+  if(currentRole!=='Principal') return;
+  let total=books.length, avail=books.filter(b=>b.s==='AVAILABLE').length, issued=books.filter(b=>b.s==='ISSUED').length, lost=books.filter(b=>b.s==='LOST'||b.s==='DAMAGED').length;
+  let pct = total? Math.round(avail/total*100):0;
+  document.getElementById('prinStats').innerHTML = `<b>Total: ${total} | Available: ${avail} (${pct}%) | Issued: ${issued} | Lost/Damaged: ${lost}</b><div class="progress"><div style="width:${pct}%"></div></div><small>${pct}% of books are available right now.</small>`;
+  let grades=['Grade 8','Grade 9','Grade 10','Grade 11','Grade 12','Library Book'];
+  document.getElementById('prinByGrade').innerHTML = grades.map(g=>{ let arr=books.filter(b=>b.g===g); let a2=arr.filter(b=>b.s==='AVAILABLE').length; return `<div><b>${g}:</b> ${arr.length} books • ${a2} Available • ${arr.length-a2} Issued/Lost <div class="progress"><div style="width:${arr.length?Math.round(a2/arr.length*100):0}%"></div></div></div>`; }).join('');
+  let lostBooks=books.filter(b=>b.s==='LOST'||b.s==='DAMAGED');
+  document.getElementById('prinLost').innerHTML = lostBooks.length ? lostBooks.map(b=>`• <b>${b.c}</b> ${b.t} - ${b.s} - Learner: ${b.l}`).join('<br>') : '✅ No lost/damaged books. Excellent!';
+  let issuedBooks=books.filter(b=>b.s==='ISSUED');
+  document.getElementById('prinIssued').innerHTML = issuedBooks.length ? issuedBooks.slice(0,20).map(b=>`• <b>${b.c}</b> ${b.t} → ${b.l}`).join('<br>') + (issuedBooks.length>20?`<br><small>+ ${issuedBooks.length-20} more - Export CSV for full list</small>`:'') : 'No books currently issued.';
+}
+
 window.render = () => {
   let q=document.getElementById('search').value.toLowerCase();
   document.getElementById('tTotal').innerText=books.length;
   document.getElementById('tAvail').innerText=books.filter(b=>b.s==='AVAILABLE').length;
   document.getElementById('tIssued').innerText=books.filter(b=>b.s==='ISSUED').length;
   document.getElementById('tLost').innerText=books.filter(b=>b.s==='LOST'||b.s==='DAMAGED').length;
-  let isCoord = currentRole==='Coordinator';
+  let isCoord=currentRole==='Coordinator';
   document.getElementById('list').innerHTML = books.filter(b=>(b.t+b.a+b.c+(b.isbn||'')+b.l).toLowerCase().includes(q)).map(b=>`
     <tr><td><b>${b.c}</b><br><small>ISBN: ${b.isbn||'-'}<br>${b.g}</small></td><td><b>${b.t}</b><br><small>${b.a||''}</small></td><td><span class="pill ${b.s}">${b.s}</span></td><td>${b.l}</td>
-    ${isCoord ? `<td><button style="background:#12355F;padding:8px" onclick="changeStatus('${b.id}')">Edit</button> <button style="background:#c62828;padding:8px" onclick="delBook('${b.id}','${b.c}')">Delete</button></td>` : ``}</tr>`).join('') || '<tr><td colspan=5>No books yet. Coordinator: Add WHS-001.</td></tr>';
+    ${isCoord?`<td><button style="background:#12355F;padding:8px" onclick="changeStatus('${b.id}')">Edit</button> <button style="background:#c62828;padding:8px" onclick="delBook('${b.id}','${b.c}')">Delete</button></td>`:``}</tr>`).join('') || '<tr><td colspan=5>No books yet.</td></tr>';
   document.getElementById('eduList').innerHTML = educators.map(e=>`<span style="background:#eef;padding:6px 10px;border-radius:20px;display:inline-block;margin:3px">${e.name} - ${e.role} <b style="cursor:pointer;color:red" onclick="delEducator('${e.id}','${e.name}')">×</b></span>`).join('') || '<small>No educators yet</small>';
+  renderPrincipal();
 };
 let scanner=null, scanning=false;
-window.toggleScan = () => {
-  let el=document.getElementById('reader');
-  if(scanning){ el.style.display='none'; scanner.clear(); scanning=false; return; }
-  el.style.display='block'; scanning=true;
-  scanner=new Html5Qrcode("reader");
-  scanner.start({facingMode:"environment"},{fps:10,qrbox:250},(txt)=>{ document.getElementById('fISBN').value=txt; document.getElementById('iControl').value=txt; alert('Scanned: '+txt); scanner.stop(); el.style.display='none'; scanning=false; });
-};
+window.toggleScan = () => { let el=document.getElementById('reader'); if(scanning){ el.style.display='none'; scanner.clear(); scanning=false; return; } el.style.display='block'; scanning=true; scanner=new Html5Qrcode("reader"); scanner.start({facingMode:"environment"},{fps:10,qrbox:250},(txt)=>{ document.getElementById('fISBN').value=txt; document.getElementById('iControl').value=txt; alert('Scanned: '+txt); scanner.stop(); el.style.display='none'; scanning=false; }); };
 applyRole();
 </script>
 </body>
