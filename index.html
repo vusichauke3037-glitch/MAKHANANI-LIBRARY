@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WORDSWORTH HIGH SCHOOL - Digital Library | V6 Due Date</title>
+<title>WORDSWORTH HIGH SCHOOL - Digital Library | V7 Fixed Due Date</title>
 <script src="https://unpkg.com/html5-qrcode"></script>
 <style>
 *{box-sizing:border-box;font-family:Arial,sans-serif}
@@ -16,7 +16,6 @@ header p{margin:6px 0 0;opacity:.9}
 .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .card{background:#fff;border-radius:14px;padding:14px;text-align:center;box-shadow:0 2px 8px #0001;cursor:pointer}
 .card b{font-size:28px} .card small{color:#777}
-.card.active{outline:3px solid #12355F;background:#e8f0fe}
 .search{width:100%;padding:14px;border-radius:12px;border:1px solid #ddd;margin:14px 0 8px;font-size:16px}
 .filters{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 14px}
 .fbtn{padding:10px 16px;border-radius:20px;border:2px solid #ddd;background:#fff;font-weight:900;cursor:pointer;color:#222;font-size:14px}
@@ -49,7 +48,7 @@ td{padding:10px;border-bottom:1px solid #eee;font-size:14px}
 </style>
 </head>
 <body>
-<header><h1>📚 WORDSWORTH <span>HIGH SCHOOL</span></h1><p>DIGITAL LIBRARY • FIREBASE LIVE • Vukona Press • V6</p></header>
+<header><h1>📚 WORDSWORTH <span>HIGH SCHOOL</span></h1><p>DIGITAL LIBRARY • FIREBASE LIVE • Vukona Press • V7</p></header>
 <div class="goldbar">● <span id="syncStatus">LIVE - SYNCED TO FIREBASE</span> • <span id="userBadge">NOT LOGGED IN</span> • <span id="overdueBadge"></span></div>
 <div class="wrap">
 
@@ -64,10 +63,10 @@ td{padding:10px;border-bottom:1px solid #eee;font-size:14px}
 </div>
 
 <div class="prin-only">
-<div class="prin-bar"><h3 style="margin:0">👨‍💼 PRINCIPAL DASHBOARD - WORDSWORTH HIGH SCHOOL</h3><p style="margin:6px 0 0;opacity:.9">Read-Only • You cannot delete / add / issue books. For SGB / Audit use.</p></div>
+<div class="prin-bar"><h3 style="margin:0">👨‍💼 PRINCIPAL DASHBOARD - WORDSWORTH HIGH SCHOOL</h3><p style="margin:6px 0 0;opacity:.9">Read-Only • Fixed Return Date: 30 November Every Year</p></div>
 <div class="box">
 <h3>📊 School Overview</h3><div id="prinStats"></div>
-<h3>⏰ Overdue Books - NEW IN V6</h3><div id="prinOverdue"></div>
+<h3>⏰ Overdue Books - After 30 November</h3><div id="prinOverdue"></div>
 <h3>📚 Books By Grade</h3><div id="prinByGrade"></div>
 <h3>🧾 Book Condition</h3><div id="prinCondition"></div>
 <h3>📋 Book Status Breakdown</h3><div id="prinStatus"></div>
@@ -79,10 +78,10 @@ td{padding:10px;border-bottom:1px solid #eee;font-size:14px}
 </div>
 
 <div class="cards">
-<div class="card" id="cardAll" onclick="setStatusFilter('ALL')"><small>📚 TOTAL BOOKS<br><small>Tap to show all</small></small><br><b id="tTotal">0</b></div>
-<div class="card" id="cardAvail" onclick="setStatusFilter('AVAILABLE')"><small>✅ AVAILABLE</small><br><b id="tAvail" style="color:#1a7a3a">0</b></div>
-<div class="card" id="cardIssued" onclick="setStatusFilter('ISSUED')"><small>📤 ISSUED</small><br><b id="tIssued" style="color:#d67e00">0</b></div>
-<div class="card" id="cardLost" onclick="setStatusFilter('OVERDUE')"><small>⏰ OVERDUE</small><br><b id="tLost" style="color:#c62828">0</b></div>
+<div class="card" onclick="setStatusFilter('ALL')"><small>📚 TOTAL BOOKS<br><small>Tap to show all</small></small><br><b id="tTotal">0</b></div>
+<div class="card" onclick="setStatusFilter('AVAILABLE')"><small>✅ AVAILABLE</small><br><b id="tAvail" style="color:#1a7a3a">0</b></div>
+<div class="card" onclick="setStatusFilter('ISSUED')"><small>📤 ISSUED</small><br><b id="tIssued" style="color:#d67e00">0</b></div>
+<div class="card" onclick="setStatusFilter('OVERDUE')"><small>⏰ OVERDUE</small><br><b id="tLost" style="color:#c62828">0</b></div>
 </div>
 
 <input class="search" id="search" placeholder="🔍 Search Title, Author, Control No, ISBN, Learner, Condition, Status..." oninput="render()">
@@ -133,16 +132,16 @@ td{padding:10px;border-bottom:1px solid #eee;font-size:14px}
 <h3>📤 Issue / Return Book - Educator / Coordinator</h3>
 <input id="iControl" placeholder="Control No - e.g. WHS-002">
 <input id="iLearner" placeholder="Learner Name + Grade + Class - e.g. Thandi M. Gr 11A">
-<label class="small"><b>📅 Loan Period (Days):</b></label>
-<select id="iDays"><option value="7">7 Days - Short Loan</option><option value="14" selected>14 Days - Normal (Default)</option><option value="21">21 Days</option><option value="30">30 Days - Long Loan</option></select>
-<p class="small" id="duePreview">Due Date will be: <b id="duePreviewDate">-</b></p>
+<div style="background:#fff3cd;border:2px solid #C89614;border-radius:10px;padding:12px;text-align:center;margin:8px 0">
+<b>📅 FIXED RETURN DATE: 30 NOVEMBER <span id="dueYearLabel"></span></b><br>
+<span class="small">All books issued now must be returned by <b>30 November</b> every year. No exceptions.<br>After 30 Nov, book automatically becomes ⏰ OVERDUE.</span>
+</div>
 <div class="btns" style="margin-top:8px">
 <button class="b-issue" onclick="issueBook()">ISSUE TO LEARNER</button>
 <button class="b-return" onclick="returnBook()">RETURN BOOK</button>
 </div>
-<p class="small">When you Issue, Due Date is set automatically. If learner returns late, book turns ⏰ OVERDUE automatically.</p>
 </div>
-<div class="box prin-only" style="background:#f3efff;border:2px solid #5e35b1"><b>👨‍💼 Principal Mode:</b> View-Only. Use Dashboard + Export CSV.</div>
+<div class="box prin-only" style="background:#f3efff;border:2px solid #5e35b1"><b>👨‍💼 Principal Mode:</b> View-Only. Fixed Due Date: 30 November every year.</div>
 
 <div class="box">
 <h3>📚 Wordsworth Book List - LIVE FROM FIREBASE</h3>
@@ -157,7 +156,7 @@ td{padding:10px;border-bottom:1px solid #eee;font-size:14px}
 <button class="b-scan" onclick="addEducator()">ADD EDUCATOR (Coordinator Only)</button>
 <div id="eduList" style="margin-top:10px"></div>
 </div>
-<p class="small" style="text-align:center">Built by Vusi Chauke • vusichauke3037@gmail.com • 078 023 3263 • Vukona Press • Firebase Firestore • V6 Due Date</p>
+<p class="small" style="text-align:center">Built by Vusi Chauke • vusichauke3037@gmail.com • 078 023 3263 • Vukona Press • Firebase Firestore • V7 Fixed Due 30 Nov</p>
 </div>
 
 <script type="module">
@@ -178,7 +177,16 @@ const COORD_PIN = "WHS2026"; const EDU_PIN = "WHS1234"; const PRIN_PIN = "WHS999
 let currentRole = sessionStorage.getItem('whs_role') || '';
 let currentName = sessionStorage.getItem('whs_name') || '';
 let statusFilter = 'ALL'; let condFilter = 'ALL';
-// ===== DUE DATE HELPERS - V6 =====
+// ===== FIXED DUE DATE - 30 NOVEMBER EVERY YEAR - V7 =====
+function getFixedDueDate(){
+  let now = new Date();
+  let year = now.getFullYear();
+  // 30 Nov this year at 23:59
+  let due = new Date(year, 10, 30, 23, 59, 59); // Month 10 = November (0-indexed)
+  // If today is AFTER 30 Nov, use 30 Nov NEXT year
+  if(now > due) due = new Date(year+1, 10, 30, 23, 59, 59);
+  return due.getTime();
+}
 function fmtDate(ts){ if(!ts) return '-'; let d=new Date(ts); return d.toLocaleDateString('en-ZA',{day:'2-digit',month:'short',year:'numeric'}); }
 function daysLeft(ts){ if(!ts) return null; return Math.ceil((ts - Date.now())/(1000*60*60*24)); }
 function isOverdue(b){ return (b.s==='ISSUED' || b.s==='OVERDUE') && b.due && b.due < Date.now(); }
@@ -187,7 +195,7 @@ function dueText(b){
   if(!b.due || b.s==='AVAILABLE') return '';
   let dl = daysLeft(b.due);
   if(dl < 0) return `<br><span class="due due-late">⏰ OVERDUE by ${Math.abs(dl)} day(s) • Due: ${fmtDate(b.due)}</span>`;
-  if(dl <= 2) return `<br><span class="due due-soon">⚠️ Due in ${dl} day(s) • ${fmtDate(b.due)}</span>`;
+  if(dl <= 14) return `<br><span class="due due-soon">⚠️ Due in ${dl} day(s) • ${fmtDate(b.due)}</span>`;
   return `<br><span class="due due-ok">📅 Due: ${fmtDate(b.due)} • ${dl} days left</span>`;
 }
 function applyRole(){
@@ -227,9 +235,9 @@ onSnapshot(collection(db,"wordsworth_books"), (snap)=>{ books=snap.docs.map(d=>(
 onSnapshot(collection(db,"wordsworth_educators"), (snap)=>{ educators=snap.docs.map(d=>({id:d.id,...d.data()})); render(); });
 window.showAdd = () => { if(blockPrincipal()||!needCoord()) return; document.getElementById('addBox').style.display='block'; document.getElementById('fControl').value='WHS-'+String(books.length+1).padStart(3,'0'); };
 window.addBook = async () => { if(blockPrincipal()||!needCoord()) return; const data={c:document.getElementById('fControl').value.trim(), isbn:document.getElementById('fISBN').value.trim(), t:document.getElementById('fTitle').value.trim(), a:document.getElementById('fAuthor').value.trim(), g:document.getElementById('fGrade').value, cond:document.getElementById('fCondition').value, s:document.getElementById('fStatus').value, l:'-', due:null, issuedAt:null, createdAt:Date.now(), addedBy:currentName}; if(!data.c||!data.t) return alert('Enter Control No + Title'); await addDoc(collection(db,'wordsworth_books'),data); alert('✅ Saved: '+data.c+' - Status: '+data.s+' - Condition: '+data.cond); };
-// ===== ISSUE - SETS DUE DATE AUTOMATICALLY =====
-window.issueBook = async () => { if(blockPrincipal()) return; let c=document.getElementById('iControl').value.trim().toUpperCase(); let l=document.getElementById('iLearner').value.trim(); let days=parseInt(document.getElementById('iDays').value)||14; let b=books.find(x=>x.c.toUpperCase()===c); if(!b) return alert('Book not found'); let due = Date.now() + days*24*60*60*1000; await updateDoc(doc(db,'wordsworth_books',b.id),{s:'ISSUED',l:l||'Learner', due:due, issuedAt:Date.now(), loanDays:days}); alert('📤 Issued '+c+' to '+l+'\n📅 Due: '+fmtDate(due)+' ('+days+' days)\n\nReturn by this date or it turns OVERDUE.'); };
-window.returnBook = async () => { if(blockPrincipal()) return; let c=document.getElementById('iControl').value.trim().toUpperCase(); let b=books.find(x=>x.c.toUpperCase()===c); if(!b) return alert('Book not found'); let late = b.due && b.due < Date.now() ? ' ⚠️ Was OVERDUE by '+Math.abs(daysLeft(b.due))+' day(s).' : ''; await updateDoc(doc(db,'wordsworth_books',b.id),{s:'AVAILABLE',l:'-', due:null, issuedAt:null}); alert('📥 Returned '+c+late); };
+// ===== ISSUE - FIXED DUE DATE 30 NOV =====
+window.issueBook = async () => { if(blockPrincipal()) return; let c=document.getElementById('iControl').value.trim().toUpperCase(); let l=document.getElementById('iLearner').value.trim(); let b=books.find(x=>x.c.toUpperCase()===c); if(!b) return alert('Book not found'); let due = getFixedDueDate(); await updateDoc(doc(db,'wordsworth_books',b.id),{s:'ISSUED',l:l||'Learner', due:due, issuedAt:Date.now(), loanDays:'FIXED-30NOV'}); alert('📤 Issued '+c+' to '+l+'\n📅 FIXED Due Date: '+fmtDate(due)+'\n\nAll books must be returned by 30 November every year.'); };
+window.returnBook = async () => { if(blockPrincipal()) return; let c=document.getElementById('iControl').value.trim().toUpperCase(); let b=books.find(x=>x.c.toUpperCase()===c); if(!b) return alert('Book not found'); let late = b.due && b.due < Date.now() ? ' ⚠️ Was OVERDUE by '+Math.abs(daysLeft(b.due))+' day(s) - after 30 Nov.' : ''; await updateDoc(doc(db,'wordsworth_books',b.id),{s:'AVAILABLE',l:'-', due:null, issuedAt:null}); alert('📥 Returned '+c+late); };
 window.changeStatus = async (id) => { if(blockPrincipal()||!needCoord()) return; let b=books.find(x=>x.id===id); let ns=prompt('New Status: AVAILABLE / ISSUED / DAMAGED / LOST / NEEDS REPAIR / OVERDUE / RESERVED',displayStatus(b)); if(!ns) return; let nc=prompt('New Condition: NEW / GOOD / FAIR / WORN / DAMAGED', b.cond||'GOOD'); await updateDoc(doc(db,'wordsworth_books',id),{s:ns.toUpperCase(), cond:(nc||b.cond||'GOOD').toUpperCase()}); };
 window.delBook = async (id,c) => { if(blockPrincipal()||!needCoord()) return; if(!confirm('Delete '+c+'? Coordinator Only.')) return; await deleteDoc(doc(db,'wordsworth_books',id)); };
 window.addEducator = async () => { if(blockPrincipal()||!needCoord()) return; let name=document.getElementById('eName').value.trim(); let code=document.getElementById('eCode').value.trim(); let role=document.getElementById('eRole').value; if(!name) return alert('Enter name'); if(!code) return alert('Enter Code / PIN for this educator'); await addDoc(collection(db,'wordsworth_educators'),{name,code,role,createdAt:Date.now()}); alert('✅ Educator Added: '+name+' ('+role+')\n\nThey login with:\nName: '+name+'\nCode: '+code); document.getElementById('eName').value=''; document.getElementById('eCode').value=''; };
@@ -239,9 +247,9 @@ function renderPrincipal(){
   if(currentRole!=='Principal') return;
   let total=books.length, avail=books.filter(b=>b.s==='AVAILABLE').length, issued=books.filter(b=>b.s==='ISSUED' && !isOverdue(b)).length, overdue=books.filter(b=>isOverdue(b)).length, lost=books.filter(b=>b.s==='LOST'||b.s==='DAMAGED').length;
   let pct = total? Math.round(avail/total*100):0;
-  document.getElementById('prinStats').innerHTML = `<b>Total: ${total} | Available: ${avail} (${pct}%) | Issued: ${issued} | Overdue: ${overdue} | Lost/Damaged: ${lost}</b><div class="progress"><div style="width:${pct}%"></div></div><small>${pct}% of books are available right now.</small>`;
+  document.getElementById('prinStats').innerHTML = `<b>Total: ${total} | Available: ${avail} (${pct}%) | Issued: ${issued} | Overdue (after 30 Nov): ${overdue} | Lost/Damaged: ${lost}</b><div class="progress"><div style="width:${pct}%"></div></div><small>${pct}% of books are available right now. Fixed Return Date: 30 November ${new Date(getFixedDueDate()).getFullYear()}.</small>`;
   let overBooks=books.filter(b=>isOverdue(b));
-  document.getElementById('prinOverdue').innerHTML = overBooks.length ? overBooks.map(b=>`• <b>${b.c}</b> ${b.t} → ${b.l} - OVERDUE by ${Math.abs(daysLeft(b.due))} day(s) - Due was ${fmtDate(b.due)}`).join('<br>') : '✅ No overdue books. All learners returned on time!';
+  document.getElementById('prinOverdue').innerHTML = overBooks.length ? overBooks.map(b=>`• <b>${b.c}</b> ${b.t} → ${b.l} - OVERDUE by ${Math.abs(daysLeft(b.due))} day(s) - Due was ${fmtDate(b.due)}`).join('<br>') : '✅ No overdue books. All learners returned on time (before 30 Nov)!';
   let grades=['Grade 8','Grade 9','Grade 10','Grade 11','Grade 12','Library Book'];
   document.getElementById('prinByGrade').innerHTML = grades.map(g=>{ let arr=books.filter(b=>b.g===g); let a2=arr.filter(b=>b.s==='AVAILABLE').length; return `<div><b>${g}:</b> ${arr.length} books • ${a2} Available • ${arr.length-a2} Issued/Lost <div class="progress"><div style="width:${arr.length?Math.round(a2/arr.length*100):0}%"></div></div></div>`; }).join('');
   let conds=['NEW','GOOD','FAIR','WORN','DAMAGED'];
@@ -261,6 +269,7 @@ window.render = () => {
   document.getElementById('tIssued').innerText=books.filter(b=>b.s==='ISSUED' && !isOverdue(b)).length;
   document.getElementById('tLost').innerText=overdueCount;
   document.getElementById('overdueBadge').innerText = overdueCount ? '⏰ '+overdueCount+' OVERDUE' : '✅ NO OVERDUE';
+  let dy = document.getElementById('dueYearLabel'); if(dy) dy.innerText = new Date(getFixedDueDate()).getFullYear();
   document.querySelectorAll('.fbtn').forEach(btn=>{
     if(btn.dataset.f) btn.classList.toggle('active', btn.dataset.f===statusFilter);
     if(btn.dataset.c) btn.classList.toggle('active', btn.dataset.c===condFilter);
@@ -271,7 +280,7 @@ window.render = () => {
     let okC = condFilter==='ALL' || (b.cond||'GOOD')===condFilter;
     return okS && okC;
   };
-  document.getElementById('filterInfo').innerText = `Showing: ${statusFilter==='ALL'?'ALL Statuses':statusFilter} • ${condFilter==='ALL'?'ALL Conditions':condFilter} • ${books.filter(matchFilter).length} books`;
+  document.getElementById('filterInfo').innerText = `Showing: ${statusFilter==='ALL'?'ALL Statuses':statusFilter} • ${condFilter==='ALL'?'ALL Conditions':condFilter} • ${books.filter(matchFilter).length} books • Fixed Due: 30 Nov ${new Date(getFixedDueDate()).getFullYear()}`;
   let isCoord=currentRole==='Coordinator';
   let filtered = books.filter(b=> (b.t+b.a+b.c+(b.isbn||'')+b.l+(b.cond||'')+b.s).toLowerCase().includes(q) && matchFilter(b));
   document.getElementById('list').innerHTML = filtered.map(b=>{
@@ -279,15 +288,10 @@ window.render = () => {
     return `<tr><td><b>${b.c}</b><br><small>ISBN: ${b.isbn||'-'}<br>${b.g}</small></td><td><b>${b.t}</b><br><small>${b.a||''}</small></td><td><span class="pill ${ds}">${ds}</span></td><td><span class="cond ${b.cond==='DAMAGED'?'DAMAGED-C':(b.cond||'GOOD')}">${b.cond||'GOOD'}</span></td><td>${b.l}${dueText(b)}</td>
     ${isCoord?`<td><button style="background:#12355F;padding:8px" onclick="changeStatus('${b.id}')">Edit</button> <button style="background:#c62828;padding:8px" onclick="delBook('${b.id}','${b.c}')">Delete</button></td>`:``}</tr>`; }).join('') || '<tr><td colspan=6>No books with this Status / Condition. Tap ALL to reset.</td></tr>';
   document.getElementById('eduList').innerHTML = educators.map(e=>`<span style="background:#eef;padding:6px 10px;border-radius:20px;display:inline-block;margin:3px">${e.name} - ${e.role} - Code: ${e.code} <b style="cursor:pointer;color:red" onclick="delEducator('${e.id}','${e.name}')">×</b></span>`).join('') || '<small>No educators yet</small>';
-  // Due preview in Issue box
-  let days = parseInt(document.getElementById('iDays')?.value || 14);
-  let dp = document.getElementById('duePreviewDate'); if(dp) dp.innerText = fmtDate(Date.now()+days*24*60*60*1000)+' ('+days+' days)';
   renderPrincipal();
 };
 let scanner=null, scanning=false;
 window.toggleScan = () => { let el=document.getElementById('reader'); if(scanning){ el.style.display='none'; scanner.clear(); scanning=false; return; } el.style.display='block'; scanning=true; scanner=new Html5Qrcode("reader"); scanner.start({facingMode:"environment"},{fps:10,qrbox:250},(txt)=>{ document.getElementById('fISBN').value=txt; document.getElementById('iControl').value=txt; alert('Scanned: '+txt); scanner.stop(); el.style.display='none'; scanning=false; }); };
-// Update due preview when loan days change
-document.getElementById('iDays')?.addEventListener('change', render);
 applyRole();
 </script>
 </body>
