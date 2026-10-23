@@ -3,7 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WORDSWORTH HIGH SCHOOL - Digital Library | V7 Blue White</title>
+<title>WORDSWORTH HIGH SCHOOL - Digital Library</title>
+<!-- PWA - MAKES IT A REAL APP -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0B3D91">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Wordsworth Library">
+<link rel="apple-touch-icon" href="icon-512.png">
+<link rel="icon" type="image/png" href="icon-512.png">
 <script src="https://unpkg.com/html5-qrcode"></script>
 <style>
 *{box-sizing:border-box;font-family:Arial,sans-serif}
@@ -36,21 +45,23 @@ td{padding:10px;border-bottom:1px solid #eee;font-size:14px}
 .due{font-size:12px;font-weight:900}.due-ok{color:#1a7a3a}.due-soon{color:#d67e00}.due-late{color:#c62828}
 .small{font-size:13px;color:#666}
 #reader{width:100%;display:none}
-#loginBox{background:#0B3D91;color:#fff;border-radius:14px;padding:20px;margin-top:14px;text-align:center;border:3px solid #fff;box-shadow:0 4px 14px #0B3D9140}
+#loginBox{background:#0B3D91;color:#fff;border-radius:14px;padding:20px;margin-top:14px;text-align:center}
 #loginBox input{max-width:400px;margin:8px auto;display:block}
 .coord-only{display:none} body.is-coord .coord-only{display:block}
 .edu-only{display:none} body.is-edu .edu-only, body.is-coord .edu-only{display:block}
 .prin-only{display:none} body.is-prin .prin-only{display:block}
-.prin-bar{background:#0B3D91;color:#fff;border-radius:14px;padding:16px;margin-top:14px;border:3px solid #0B3D91}
+.prin-bar{background:#0B3D91;color:#fff;border-radius:14px;padding:16px;margin-top:14px}
 .progress{height:14px;background:#e0e0e0;border-radius:20px;overflow:hidden;margin:6px 0}
 .progress div{height:100%;background:#0B3D91}
+#installBtn{background:#fff;color:#0B3D91;border:2px solid #0B3D91;width:100%;margin-top:10px;display:none}
 @media(max-width:700px){.cards,.btns{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
-<header><h1>📚 WORDSWORTH <span>HIGH SCHOOL</span></h1><p>DIGITAL LIBRARY • FIREBASE LIVE • Vukona Press • V7 • 💙🤍 BLUE & WHITE</p></header>
+<header><h1>📚 WORDSWORTH <span>HIGH SCHOOL</span></h1><p>DIGITAL LIBRARY • FIREBASE LIVE • Vukona Press • V7 • 💙🤍 BLUE & WHITE • APP</p></header>
 <div class="goldbar">● <span id="syncStatus">LIVE - SYNCED TO FIREBASE</span> • <span id="userBadge">NOT LOGGED IN</span> • <span id="overdueBadge"></span></div>
 <div class="wrap">
+<button id="installBtn" onclick="installApp()">📱 INSTALL AS APP - Tap Here</button>
 
 <div class="box" id="loginBox">
 <h3 style="margin:0">🔒 WORDSWORTH LIBRARY LOGIN</h3>
@@ -156,8 +167,16 @@ td{padding:10px;border-bottom:1px solid #eee;font-size:14px}
 <button class="b-scan" onclick="addEducator()">ADD EDUCATOR (Coordinator Only)</button>
 <div id="eduList" style="margin-top:10px"></div>
 </div>
-<p class="small" style="text-align:center">Built by Vusi Chauke • vusichauke3037@gmail.com • 078 023 3263 • Vukona Press • Firebase: wordsworth-library • Wordsworth V7 💙🤍 Fixed Due 30 Nov</p>
+<p class="small" style="text-align:center">Built by Vusi Chauke • vusichauke3037@gmail.com • 078 023 3263 • Vukona Press • Wordsworth V7 💙🤍 Fixed Due 30 Nov • APP Version</p>
 </div>
+
+<script>
+// PWA INSTALL
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',(e)=>{e.preventDefault();deferredPrompt=e;document.getElementById('installBtn').style.display='block';});
+window.installApp=async()=>{if(deferredPrompt){deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;document.getElementById('installBtn').style.display='none';}else{alert('📱 To Install:\n\nChrome Menu (⋮) → Add to Home screen / Install app');}};
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}
+</script>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -182,116 +201,35 @@ const NAME_KEY = 'whs_name';
 let currentRole = sessionStorage.getItem(STORAGE_KEY) || '';
 let currentName = sessionStorage.getItem(NAME_KEY) || '';
 let statusFilter = 'ALL'; let condFilter = 'ALL';
-function getFixedDueDate(){
-  let now = new Date(); let year = now.getFullYear();
-  let due = new Date(year, 10, 30, 23, 59, 59);
-  if(now > due) due = new Date(year+1, 10, 30, 23, 59, 59);
-  return due.getTime();
-}
-function fmtDate(ts){ if(!ts) return '-'; let d=new Date(ts); return d.toLocaleDateString('en-ZA',{day:'2-digit',month:'short',year:'numeric'}); }
-function daysLeft(ts){ if(!ts) return null; return Math.ceil((ts - Date.now())/(1000*60*60*24)); }
-function isOverdue(b){ return (b.s==='ISSUED' || b.s==='OVERDUE') && b.due && b.due < Date.now(); }
-function displayStatus(b){ if(isOverdue(b)) return 'OVERDUE'; return b.s; }
-function dueText(b){
-  if(!b.due || b.s==='AVAILABLE') return '';
-  let dl = daysLeft(b.due);
-  if(dl < 0) return `<br><span class="due due-late">⏰ OVERDUE by ${Math.abs(dl)} day(s) • Due: ${fmtDate(b.due)}</span>`;
-  if(dl <= 14) return `<br><span class="due due-soon">⚠️ Due in ${dl} day(s) • ${fmtDate(b.due)}</span>`;
-  return `<br><span class="due due-ok">📅 Due: ${fmtDate(b.due)} • ${dl} days left</span>`;
-}
-function applyRole(){
-  document.body.classList.toggle('is-coord', currentRole==='Coordinator' || currentRole==='Librarian');
-  document.body.classList.toggle('is-edu', currentRole==='Educator' || currentRole==='Coordinator' || currentRole==='Librarian');
-  document.body.classList.toggle('is-prin', currentRole==='Principal');
-  document.getElementById('userBadge').innerText = currentRole ? currentName+' • '+currentRole.toUpperCase() : 'NOT LOGGED IN';
-  render();
-}
-window.setStatusFilter = (s) => { statusFilter = s; render(); };
-window.setCondFilter = (c) => { condFilter = c; render(); };
-window.doLogin = () => {
-  let name = document.getElementById('loginName').value.trim();
-  let pinRaw = document.getElementById('loginPin').value.trim();
-  let pin = pinRaw.toUpperCase().replace(/\s/g,'');
-  if(!name) return alert('Enter your name'); if(!pinRaw) return alert('Enter PIN / Code');
-  if(pin === COORD_PIN || pin === "2026"){ currentRole='Coordinator'; }
-  else if(pin === PRIN_PIN || pin === "9999"){ currentRole='Principal'; }
-  else if(pin === EDU_PIN || pin === "1234"){ currentRole='Educator'; }
-  else {
-    let found = educators.find(e => e.name.toLowerCase().trim() === name.toLowerCase().trim() && String(e.code).trim().toUpperCase() === pin);
-    if(found){ currentRole = found.role; if(currentRole === 'Librarian') currentRole = 'Coordinator'; }
-    else {
-      let byPin = educators.find(e => String(e.code).trim().toUpperCase() === pin);
-      if(byPin) return alert('❌ Name mismatch.\n\nYou typed: "'+name+'"\nBut in Firebase it is: "'+byPin.name+'"\n\nType name EXACTLY as in Educator list, or use shared PIN WHS1234');
-      return alert('❌ Wrong PIN / Name.\n\nTry shared PINs: WHS2026 / WHS1234 / WHS9999');
-    }
-  }
-  currentName = name; sessionStorage.setItem(STORAGE_KEY, currentRole); sessionStorage.setItem(NAME_KEY, currentName);
-  alert('✅ Welcome '+name+' - '+currentRole+' - Wordsworth'); applyRole();
-};
-window.doLogout = () => { currentRole=''; currentName=''; sessionStorage.removeItem(STORAGE_KEY); sessionStorage.removeItem(NAME_KEY); applyRole(); alert('Logged out'); };
-function needCoord(){ if(currentRole!=='Coordinator'){ alert('🔒 Only Coordinator can do this. Login WHS2026'); return false; } return true; }
-function blockPrincipal(){ if(currentRole==='Principal'){ alert('👨‍💼 Principal is View-Only. You cannot change books.'); return true; } return false; }
-let books=[]; let educators=[];
-onSnapshot(collection(db,BOOKS_COL), (snap)=>{ books=snap.docs.map(d=>({id:d.id,...d.data()})); render(); }, (err)=>{ document.getElementById('syncStatus').innerText = "FIREBASE ERROR: "+err.message; });
-onSnapshot(collection(db,EDU_COL), (snap)=>{ educators=snap.docs.map(d=>({id:d.id,...d.data()})); render(); });
-window.showAdd = () => { if(blockPrincipal()||!needCoord()) return; document.getElementById('addBox').style.display='block'; document.getElementById('fControl').value=PREFIX+String(books.length+1).padStart(3,'0'); };
-window.addBook = async () => { if(blockPrincipal()||!needCoord()) return; const data={c:document.getElementById('fControl').value.trim(), isbn:document.getElementById('fISBN').value.trim(), t:document.getElementById('fTitle').value.trim(), a:document.getElementById('fAuthor').value.trim(), g:document.getElementById('fGrade').value, cond:document.getElementById('fCondition').value, s:document.getElementById('fStatus').value, l:'-', due:null, issuedAt:null, createdAt:Date.now(), addedBy:currentName}; if(!data.c||!data.t) return alert('Enter Control No + Title'); await addDoc(collection(db,BOOKS_COL),data); alert('✅ Saved: '+data.c+' - Status: '+data.s+' - Condition: '+data.cond); };
-window.issueBook = async () => { if(blockPrincipal()) return; let c=document.getElementById('iControl').value.trim().toUpperCase(); let l=document.getElementById('iLearner').value.trim(); let b=books.find(x=>x.c.toUpperCase()===c); if(!b) return alert('Book not found'); let due = getFixedDueDate(); await updateDoc(doc(db,BOOKS_COL,b.id),{s:'ISSUED',l:l||'Learner', due:due, issuedAt:Date.now(), loanDays:'FIXED-30NOV'}); alert('📤 Issued '+c+' to '+l+'\n📅 FIXED Due Date: '+fmtDate(due)+'\n\nAll books must be returned by 30 November every year.'); };
-window.returnBook = async () => { if(blockPrincipal()) return; let c=document.getElementById('iControl').value.trim().toUpperCase(); let b=books.find(x=>x.c.toUpperCase()===c); if(!b) return alert('Book not found'); let late = b.due && b.due < Date.now() ? ' ⚠️ Was OVERDUE by '+Math.abs(daysLeft(b.due))+' day(s) - after 30 Nov.' : ''; await updateDoc(doc(db,BOOKS_COL,b.id),{s:'AVAILABLE',l:'-', due:null, issuedAt:null}); alert('📥 Returned '+c+late); };
-window.changeStatus = async (id) => { if(blockPrincipal()||!needCoord()) return; let b=books.find(x=>x.id===id); let ns=prompt('New Status: AVAILABLE / ISSUED / DAMAGED / LOST / NEEDS REPAIR / OVERDUE / RESERVED',displayStatus(b)); if(!ns) return; let nc=prompt('New Condition: NEW / GOOD / FAIR / WORN / DAMAGED', b.cond||'GOOD'); await updateDoc(doc(db,BOOKS_COL,id),{s:ns.toUpperCase(), cond:(nc||b.cond||'GOOD').toUpperCase()}); };
-window.delBook = async (id,c) => { if(blockPrincipal()||!needCoord()) return; if(!confirm('Delete '+c+'? Coordinator Only.')) return; await deleteDoc(doc(db,BOOKS_COL,id)); };
-window.addEducator = async () => { if(blockPrincipal()||!needCoord()) return; let name=document.getElementById('eName').value.trim(); let code=document.getElementById('eCode').value.trim(); let role=document.getElementById('eRole').value; if(!name) return alert('Enter name'); if(!code) return alert('Enter Code / PIN for this educator'); await addDoc(collection(db,EDU_COL),{name,code,role,createdAt:Date.now()}); alert('✅ Educator Added: '+name+' ('+role+')\n\nThey login with:\nName: '+name+'\nCode: '+code); document.getElementById('eName').value=''; document.getElementById('eCode').value=''; };
-window.delEducator = async (id,name) => { if(blockPrincipal()||!needCoord()) return; if(!confirm('Delete educator '+name+'?')) return; await deleteDoc(doc(db,EDU_COL,id)); };
-window.exportCSV = () => { let csv='Control,ISBN,Title,Author,Grade,Condition,Status,DueDate,Learner\n'+books.map(b=>[b.c,b.isbn,b.t,b.a,b.g,b.cond||'GOOD',displayStatus(b),fmtDate(b.due),b.l].join(',')).join('\n'); let a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download='Wordsworth_Library_Principal_Report.csv'; a.click(); };
-function renderPrincipal(){
-  if(currentRole!=='Principal') return;
-  let total=books.length, avail=books.filter(b=>b.s==='AVAILABLE').length, issued=books.filter(b=>b.s==='ISSUED' && !isOverdue(b)).length, overdue=books.filter(b=>isOverdue(b)).length, lost=books.filter(b=>b.s==='LOST'||b.s==='DAMAGED').length;
-  let pct = total? Math.round(avail/total*100):0;
-  document.getElementById('prinStats').innerHTML = `<b>Total: ${total} | Available: ${avail} (${pct}%) | Issued: ${issued} | Overdue (after 30 Nov): ${overdue} | Lost/Damaged: ${lost}</b><div class="progress"><div style="width:${pct}%"></div></div><small>${pct}% of books are available right now. Fixed Return Date: 30 November ${new Date(getFixedDueDate()).getFullYear()}.</small>`;
-  let overBooks=books.filter(b=>isOverdue(b));
-  document.getElementById('prinOverdue').innerHTML = overBooks.length ? overBooks.map(b=>`• <b>${b.c}</b> ${b.t} → ${b.l} - OVERDUE by ${Math.abs(daysLeft(b.due))} day(s) - Due was ${fmtDate(b.due)}`).join('<br>') : '✅ No overdue books. All learners returned on time (before 30 Nov)!';
-  let grades=['Grade 8','Grade 9','Grade 10','Grade 11','Grade 12','Library Book'];
-  document.getElementById('prinByGrade').innerHTML = grades.map(g=>{ let arr=books.filter(b=>b.g===g); let a2=arr.filter(b=>b.s==='AVAILABLE').length; return `<div><b>${g}:</b> ${arr.length} books • ${a2} Available • ${arr.length-a2} Issued/Lost <div class="progress"><div style="width:${arr.length?Math.round(a2/arr.length*100):0}%"></div></div></div>`; }).join('');
-  let conds=['NEW','GOOD','FAIR','WORN','DAMAGED'];
-  document.getElementById('prinCondition').innerHTML = conds.map(cd=>{ let n=books.filter(b=>(b.cond||'GOOD')===cd).length; return `<div><b>${cd}:</b> ${n} books <div class="progress"><div style="width:${total?Math.round(n/total*100):0}%"></div></div></div>`; }).join('');
-  let stats=['AVAILABLE','ISSUED','DAMAGED','LOST','NEEDS REPAIR','OVERDUE','RESERVED'];
-  document.getElementById('prinStatus').innerHTML = stats.map(st=>{ let n = st==='OVERDUE' ? books.filter(b=>isOverdue(b)).length : st==='ISSUED' ? books.filter(b=>b.s==='ISSUED' && !isOverdue(b)).length : books.filter(b=>b.s===st).length; return `• <b>${st}:</b> ${n} books`; }).join('<br>');
-  let lostBooks=books.filter(b=>b.s==='LOST'||b.s==='DAMAGED');
-  document.getElementById('prinLost').innerHTML = lostBooks.length ? lostBooks.map(b=>`• <b>${b.c}</b> ${b.t} - ${b.s} - Condition: ${b.cond||'-'} - Learner: ${b.l}`).join('<br>') : '✅ No lost/damaged books. Excellent!';
-  let issuedBooks=books.filter(b=>b.s==='ISSUED');
-  document.getElementById('prinIssued').innerHTML = issuedBooks.length ? issuedBooks.slice(0,20).map(b=>`• <b>${b.c}</b> ${b.t} (${b.cond||'-'}) → ${b.l} - Due: ${fmtDate(b.due)} ${isOverdue(b)?'⏰ OVERDUE':''}`).join('<br>') + (issuedBooks.length>20?`<br><small>+ ${issuedBooks.length-20} more - Export CSV for full list</small>`:'') : 'No books currently issued.';
-}
-window.render = () => {
-  let q=document.getElementById('search').value.toLowerCase();
-  let overdueCount = books.filter(b=>isOverdue(b)).length;
-  document.getElementById('tTotal').innerText=books.length;
-  document.getElementById('tAvail').innerText=books.filter(b=>b.s==='AVAILABLE').length;
-  document.getElementById('tIssued').innerText=books.filter(b=>b.s==='ISSUED' && !isOverdue(b)).length;
-  document.getElementById('tLost').innerText=overdueCount;
-  document.getElementById('overdueBadge').innerText = overdueCount ? '⏰ '+overdueCount+' OVERDUE' : '✅ NO OVERDUE';
-  let dy = document.getElementById('dueYearLabel'); if(dy) dy.innerText = new Date(getFixedDueDate()).getFullYear();
-  document.querySelectorAll('.fbtn').forEach(btn=>{
-    if(btn.dataset.f) btn.classList.toggle('active', btn.dataset.f===statusFilter);
-    if(btn.dataset.c) btn.classList.toggle('active', btn.dataset.c===condFilter);
-  });
-  let matchFilter = (b) => {
-    let ds = displayStatus(b);
-    let okS = statusFilter==='ALL' || (statusFilter==='LOST' ? (b.s==='LOST'||b.s==='DAMAGED') : ds===statusFilter);
-    let okC = condFilter==='ALL' || (b.cond||'GOOD')===condFilter;
-    return okS && okC;
-  };
-  document.getElementById('filterInfo').innerText = `Showing: ${statusFilter==='ALL'?'ALL Statuses':statusFilter} • ${condFilter==='ALL'?'ALL Conditions':condFilter} • ${books.filter(matchFilter).length} books • Fixed Due: 30 Nov ${new Date(getFixedDueDate()).getFullYear()}`;
-  let isCoord=currentRole==='Coordinator';
-  let filtered = books.filter(b=> (b.t+b.a+b.c+(b.isbn||'')+b.l+(b.cond||'')+b.s).toLowerCase().includes(q) && matchFilter(b));
-  document.getElementById('list').innerHTML = filtered.map(b=>{
-    let ds = displayStatus(b);
-    return `<tr><td><b>${b.c}</b><br><small>ISBN: ${b.isbn||'-'}<br>${b.g}</small></td><td><b>${b.t}</b><br><small>${b.a||''}</small></td><td><span class="pill ${ds}">${ds}</span></td><td><span class="cond ${b.cond==='DAMAGED'?'DAMAGED-C':(b.cond||'GOOD')}">${b.cond||'GOOD'}</span></td><td>${b.l}${dueText(b)}</td>
-    ${isCoord?`<td><button style="background:#0B3D91;padding:8px" onclick="changeStatus('${b.id}')">Edit</button> <button style="background:#c62828;padding:8px" onclick="delBook('${b.id}','${b.c}')">Delete</button></td>`:``}</tr>`; }).join('') || '<tr><td colspan=6>No books with this Status / Condition. Tap ALL to reset.</td></tr>';
-  document.getElementById('eduList').innerHTML = educators.map(e=>`<span style="background:#EAF2FF;padding:6px 10px;border-radius:20px;display:inline-block;margin:3px">${e.name} - ${e.role} - Code: ${e.code} <b style="cursor:pointer;color:red" onclick="delEducator('${e.id}','${e.name}')">×</b></span>`).join('') || '<small>No educators yet</small>';
-  renderPrincipal();
-};
-let scanner=null, scanning=false;
-window.toggleScan = () => { let el=document.getElementById('reader'); if(scanning){ el.style.display='none'; scanner.clear(); scanning=false; return; } el.style.display='block'; scanning=true; scanner=new Html5Qrcode("reader"); scanner.start({facingMode:"environment"},{fps:10,qrbox:250},(txt)=>{ document.getElementById('fISBN').value=txt; document.getElementById('iControl').value=txt; alert('Scanned: '+txt); scanner.stop(); el.style.display='none'; scanning=false; }); };
+function getFixedDueDate(){let now=new Date();let year=now.getFullYear();let due=new Date(year,10,30,23,59,59);if(now>due) due=new Date(year+1,10,30,23,59,59);return due.getTime();}
+function fmtDate(ts){if(!ts) return '-';let d=new Date(ts);return d.toLocaleDateString('en-ZA',{day:'2-digit',month:'short',year:'numeric'});}
+function daysLeft(ts){if(!ts) return null;return Math.ceil((ts-Date.now())/(1000*60*60*24));}
+function isOverdue(b){return (b.s==='ISSUED'||b.s==='OVERDUE')&&b.due&&b.due<Date.now();}
+function displayStatus(b){if(isOverdue(b)) return 'OVERDUE';return b.s;}
+function dueText(b){if(!b.due||b.s==='AVAILABLE') return '';let dl=daysLeft(b.due);if(dl<0) return `<br><span class="due due-late">⏰ OVERDUE by ${Math.abs(dl)} day(s) • Due: ${fmtDate(b.due)}</span>`;if(dl<=14) return `<br><span class="due due-soon">⚠️ Due in ${dl} day(s) • ${fmtDate(b.due)}</span>`;return `<br><span class="due due-ok">📅 Due: ${fmtDate(b.due)} • ${dl} days left</span>`;}
+function applyRole(){document.body.classList.toggle('is-coord',currentRole==='Coordinator'||currentRole==='Librarian');document.body.classList.toggle('is-edu',currentRole==='Educator'||currentRole==='Coordinator'||currentRole==='Librarian');document.body.classList.toggle('is-prin',currentRole==='Principal');document.getElementById('userBadge').innerText=currentRole?currentName+' • '+currentRole.toUpperCase():'NOT LOGGED IN';render();}
+window.setStatusFilter=(s)=>{statusFilter=s;render();};
+window.setCondFilter=(c)=>{condFilter=c;render();};
+window.doLogin=()=>{let name=document.getElementById('loginName').value.trim();let pinRaw=document.getElementById('loginPin').value.trim();let pin=pinRaw.toUpperCase().replace(/\s/g,'');if(!name) return alert('Enter your name');if(!pinRaw) return alert('Enter PIN / Code');if(pin===COORD_PIN||pin==="2026"){currentRole='Coordinator';}else if(pin===PRIN_PIN||pin==="9999"){currentRole='Principal';}else if(pin===EDU_PIN||pin==="1234"){currentRole='Educator';}else{let found=educators.find(e=>e.name.toLowerCase().trim()===name.toLowerCase().trim()&&String(e.code).trim().toUpperCase()===pin);if(found){currentRole=found.role;if(currentRole==='Librarian') currentRole='Coordinator';}else{let byPin=educators.find(e=>String(e.code).trim().toUpperCase()===pin);if(byPin) return alert('❌ Name mismatch.\n\nYou typed: "'+name+'"\nBut in Firebase it is: "'+byPin.name+'"');return alert('❌ Wrong PIN / Name.\n\nTry: WHS2026 / WHS1234 / WHS9999');}}currentName=name;sessionStorage.setItem(STORAGE_KEY,currentRole);sessionStorage.setItem(NAME_KEY,currentName);alert('✅ Welcome '+name+' - '+currentRole+' - Wordsworth');applyRole();};
+window.doLogout=()=>{currentRole='';currentName='';sessionStorage.removeItem(STORAGE_KEY);sessionStorage.removeItem(NAME_KEY);applyRole();alert('Logged out');};
+function needCoord(){if(currentRole!=='Coordinator'){alert('🔒 Only Coordinator can do this. Login WHS2026');return false;}return true;}
+function blockPrincipal(){if(currentRole==='Principal'){alert('👨‍💼 Principal is View-Only. You cannot change books.');return true;}return false;}
+let books=[];let educators=[];
+onSnapshot(collection(db,BOOKS_COL),(snap)=>{books=snap.docs.map(d=>({id:d.id,...d.data()}));render();},(err)=>{document.getElementById('syncStatus').innerText="FIREBASE ERROR: "+err.message;});
+onSnapshot(collection(db,EDU_COL),(snap)=>{educators=snap.docs.map(d=>({id:d.id,...d.data()}));render();});
+window.showAdd=()=>{if(blockPrincipal()||!needCoord()) return;document.getElementById('addBox').style.display='block';document.getElementById('fControl').value=PREFIX+String(books.length+1).padStart(3,'0');};
+window.addBook=async()=>{if(blockPrincipal()||!needCoord()) return;const data={c:document.getElementById('fControl').value.trim(),isbn:document.getElementById('fISBN').value.trim(),t:document.getElementById('fTitle').value.trim(),a:document.getElementById('fAuthor').value.trim(),g:document.getElementById('fGrade').value,cond:document.getElementById('fCondition').value,s:document.getElementById('fStatus').value,l:'-',due:null,issuedAt:null,createdAt:Date.now(),addedBy:currentName};if(!data.c||!data.t) return alert('Enter Control No + Title');await addDoc(collection(db,BOOKS_COL),data);alert('✅ Saved: '+data.c);};
+window.issueBook=async()=>{if(blockPrincipal()) return;let c=document.getElementById('iControl').value.trim().toUpperCase();let l=document.getElementById('iLearner').value.trim();let b=books.find(x=>x.c.toUpperCase()===c);if(!b) return alert('Book not found');let due=getFixedDueDate();await updateDoc(doc(db,BOOKS_COL,b.id),{s:'ISSUED',l:l||'Learner',due:due,issuedAt:Date.now(),loanDays:'FIXED-30NOV'});alert('📤 Issued '+c+' to '+l+'\n📅 Due: '+fmtDate(due));};
+window.returnBook=async()=>{if(blockPrincipal()) return;let c=document.getElementById('iControl').value.trim().toUpperCase();let b=books.find(x=>x.c.toUpperCase()===c);if(!b) return alert('Book not found');await updateDoc(doc(db,BOOKS_COL,b.id),{s:'AVAILABLE',l:'-',due:null,issuedAt:null});alert('📥 Returned '+c);};
+window.changeStatus=async(id)=>{if(blockPrincipal()||!needCoord()) return;let b=books.find(x=>x.id===id);let ns=prompt('New Status: AVAILABLE / ISSUED / DAMAGED / LOST / NEEDS REPAIR / OVERDUE / RESERVED',displayStatus(b));if(!ns) return;let nc=prompt('New Condition: NEW / GOOD / FAIR / WORN / DAMAGED',b.cond||'GOOD');await updateDoc(doc(db,BOOKS_COL,id),{s:ns.toUpperCase(),cond:(nc||b.cond||'GOOD').toUpperCase()});};
+window.delBook=async(id,c)=>{if(blockPrincipal()||!needCoord()) return;if(!confirm('Delete '+c+'?')) return;await deleteDoc(doc(db,BOOKS_COL,id));};
+window.addEducator=async()=>{if(blockPrincipal()||!needCoord()) return;let name=document.getElementById('eName').value.trim();let code=document.getElementById('eCode').value.trim();let role=document.getElementById('eRole').value;if(!name) return alert('Enter name');if(!code) return alert('Enter Code');await addDoc(collection(db,EDU_COL),{name,code,role,createdAt:Date.now()});alert('✅ Educator Added: '+name);document.getElementById('eName').value='';document.getElementById('eCode').value='';};
+window.delEducator=async(id,name)=>{if(blockPrincipal()||!needCoord()) return;if(!confirm('Delete educator '+name+'?')) return;await deleteDoc(doc(db,EDU_COL,id));};
+window.exportCSV=()=>{let csv='Control,ISBN,Title,Author,Grade,Condition,Status,DueDate,Learner\n'+books.map(b=>[b.c,b.isbn,b.t,b.a,b.g,b.cond||'GOOD',displayStatus(b),fmtDate(b.due),b.l].join(',')).join('\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='Wordsworth_Library_Principal_Report.csv';a.click();};
+function renderPrincipal(){if(currentRole!=='Principal') return;let total=books.length,avail=books.filter(b=>b.s==='AVAILABLE').length,issued=books.filter(b=>b.s==='ISSUED'&&!isOverdue(b)).length,overdue=books.filter(b=>isOverdue(b)).length,lost=books.filter(b=>b.s==='LOST'||b.s==='DAMAGED').length;let pct=total?Math.round(avail/total*100):0;document.getElementById('prinStats').innerHTML=`<b>Total: ${total} | Available: ${avail} (${pct}%) | Issued: ${issued} | Overdue: ${overdue} | Lost/Damaged: ${lost}</b><div class="progress"><div style="width:${pct}%"></div></div>`;let overBooks=books.filter(b=>isOverdue(b));document.getElementById('prinOverdue').innerHTML=overBooks.length?overBooks.map(b=>`• <b>${b.c}</b> ${b.t} → ${b.l} - OVERDUE by ${Math.abs(daysLeft(b.due))} day(s)`).join('<br>'):'✅ No overdue books!';let grades=['Grade 8','Grade 9','Grade 10','Grade 11','Grade 12','Library Book'];document.getElementById('prinByGrade').innerHTML=grades.map(g=>{let arr=books.filter(b=>b.g===g);let a2=arr.filter(b=>b.s==='AVAILABLE').length;return `<div><b>${g}:</b> ${arr.length} books • ${a2} Available <div class="progress"><div style="width:${arr.length?Math.round(a2/arr.length*100):0}%"></div></div></div>`;}).join('');let conds=['NEW','GOOD','FAIR','WORN','DAMAGED'];document.getElementById('prinCondition').innerHTML=conds.map(cd=>{let n=books.filter(b=>(b.cond||'GOOD')===cd).length;return `<div><b>${cd}:</b> ${n} books</div>`;}).join('');let stats=['AVAILABLE','ISSUED','DAMAGED','LOST','NEEDS REPAIR','OVERDUE','RESERVED'];document.getElementById('prinStatus').innerHTML=stats.map(st=>{let n=st==='OVERDUE'?books.filter(b=>isOverdue(b)).length:st==='ISSUED'?books.filter(b=>b.s==='ISSUED'&&!isOverdue(b)).length:books.filter(b=>b.s===st).length;return `• <b>${st}:</b> ${n}`;}).join('<br>');let lostBooks=books.filter(b=>b.s==='LOST'||b.s==='DAMAGED');document.getElementById('prinLost').innerHTML=lostBooks.length?lostBooks.map(b=>`• <b>${b.c}</b> ${b.t} - ${b.s} - ${b.l}`).join('<br>'):'✅ No lost/damaged books.';let issuedBooks=books.filter(b=>b.s==='ISSUED');document.getElementById('prinIssued').innerHTML=issuedBooks.length?issuedBooks.slice(0,20).map(b=>`• <b>${b.c}</b> ${b.t} → ${b.l} - Due: ${fmtDate(b.due)}`).join('<br>'):'No books issued.';}
+window.render=()=>{let q=document.getElementById('search').value.toLowerCase();let overdueCount=books.filter(b=>isOverdue(b)).length;document.getElementById('tTotal').innerText=books.length;document.getElementById('tAvail').innerText=books.filter(b=>b.s==='AVAILABLE').length;document.getElementById('tIssued').innerText=books.filter(b=>b.s==='ISSUED'&&!isOverdue(b)).length;document.getElementById('tLost').innerText=overdueCount;document.getElementById('overdueBadge').innerText=overdueCount?'⏰ '+overdueCount+' OVERDUE':'✅ NO OVERDUE';let dy=document.getElementById('dueYearLabel');if(dy) dy.innerText=new Date(getFixedDueDate()).getFullYear();document.querySelectorAll('.fbtn').forEach(btn=>{if(btn.dataset.f) btn.classList.toggle('active',btn.dataset.f===statusFilter);if(btn.dataset.c) btn.classList.toggle('active',btn.dataset.c===condFilter);});let matchFilter=(b)=>{let ds=displayStatus(b);let okS=statusFilter==='ALL'||(statusFilter==='LOST'?(b.s==='LOST'||b.s==='DAMAGED'):ds===statusFilter);let okC=condFilter==='ALL'||(b.cond||'GOOD')===condFilter;return okS&&okC;};document.getElementById('filterInfo').innerText=`Showing: ${statusFilter} • ${condFilter} • ${books.filter(matchFilter).length} books • Fixed Due: 30 Nov ${new Date(getFixedDueDate()).getFullYear()}`;let isCoord=currentRole==='Coordinator';let filtered=books.filter(b=>(b.t+b.a+b.c+(b.isbn||'')+b.l+(b.cond||'')+b.s).toLowerCase().includes(q)&&matchFilter(b));document.getElementById('list').innerHTML=filtered.map(b=>{let ds=displayStatus(b);return `<tr><td><b>${b.c}</b><br><small>ISBN: ${b.isbn||'-'}<br>${b.g}</small></td><td><b>${b.t}</b><br><small>${b.a||''}</small></td><td><span class="pill ${ds}">${ds}</span></td><td><span class="cond ${b.cond==='DAMAGED'?'DAMAGED-C':(b.cond||'GOOD')}">${b.cond||'GOOD'}</span></td><td>${b.l}${dueText(b)}</td>${isCoord?`<td><button style="background:#0B3D91;padding:8px" onclick="changeStatus('${b.id}')">Edit</button> <button style="background:#c62828;padding:8px" onclick="delBook('${b.id}','${b.c}')">Delete</button></td>`:``}</tr>`;}).join('')||'<tr><td colspan=6>No books. Tap ALL to reset.</td></tr>';document.getElementById('eduList').innerHTML=educators.map(e=>`<span style="background:#EAF2FF;padding:6px 10px;border-radius:20px;display:inline-block;margin:3px">${e.name} - ${e.role} - Code: ${e.code} <b style="cursor:pointer;color:red" onclick="delEducator('${e.id}','${e.name}')">×</b></span>`).join('')||'<small>No educators yet</small>';renderPrincipal();};
+let scanner=null,scanning=false;
+window.toggleScan=()=>{let el=document.getElementById('reader');if(scanning){el.style.display='none';scanner.clear();scanning=false;return;}el.style.display='block';scanning=true;scanner=new Html5Qrcode("reader");scanner.start({facingMode:"environment"},{fps:10,qrbox:250},(txt)=>{document.getElementById('fISBN').value=txt;document.getElementById('iControl').value=txt;alert('Scanned: '+txt);scanner.stop();el.style.display='none';scanning=false;});};
 applyRole();
 </script>
 </body>
