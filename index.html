@@ -310,27 +310,25 @@ window.addEventListener('beforeinstallprompt',(e)=>{ e.preventDefault(); deferre
 function installApp(){ if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt.userChoice.then(()=>{ deferredPrompt=null; document.getElementById('installBtn').style.display='none'; }); } else { alert('📱 To Install:\n\nAndroid Chrome: Tap ⋮ (top right) → Add to Home Screen\n\niPhone Safari: Tap Share ⬆️ → Add to Home Screen\n\nThen open it like an App from home screen.'); } }
 if('serviceWorker' in navigator){ window.addEventListener('load',()=>{ navigator.serviceWorker.register('sw.js').then(()=>{ console.log('SW registered'); }).catch(()=>{}); }); }
 
-// ===== 🔥 FIREBASE SYNC V13 - LIVE SYNC - R0 =====
-// ⚠️ PASTE YOUR REAL CONFIG FROM Firebase Console → Project Settings → Your Apps
+// ===== 🔥 FIREBASE SYNC V13 - YOUR REAL CONFIG =====
 const firebaseConfig = {
-  apiKey: "PASTE_YOUR_apiKey_HERE",
-  authDomain: "PASTE_YOUR_authDomain_HERE",
-  databaseURL: "PASTE_YOUR_databaseURL_HERE",
-  projectId: "PASTE_YOUR_projectId_HERE",
-  storageBucket: "PASTE_YOUR_storageBucket_HERE",
-  messagingSenderId: "PASTE_YOUR_messagingSenderId_HERE",
-  appId: "PASTE_YOUR_appId_HERE"
+  apiKey: "AIzaSyAJyTZ-tmrsY0m-EmN80HSRERSR_tiVX4E",
+  authDomain: "wordsworth-library.firebaseapp.com",
+  databaseURL: "https://wordsworth-library-default-rtdb.firebaseio.com",
+  projectId: "wordsworth-library",
+  storageBucket: "wordsworth-library.firebasestorage.app",
+  messagingSenderId: "236216515385",
+  appId: "1:236216515385:web:9f3e8937f829e9d2bf06e8",
+  measurementId: "G-TRNF5K8XKM"
 };
 let firebaseDB = null;
 let firebaseSchoolKey = document.title.includes("George Sonto") ? "georgesonto" : "wordsworth";
 let isApplyingFirebase = false;
 try{
-  if(firebaseConfig.apiKey && firebaseConfig.apiKey!=="PASTE_YOUR_apiKey_HERE"){
-    firebase.initializeApp(firebaseConfig);
-    firebaseDB = firebase.database();
-    firebaseDB.goOnline();
-    console.log("🔥 Firebase Connected - School: " + firebaseSchoolKey);
-  } else { console.log("Firebase config not pasted yet - Local only"); document.getElementById("firebaseStatus").textContent = "⚠️ Paste Firebase Config To Enable Live Sync - Local Mode For Now"; }
+  firebase.initializeApp(firebaseConfig);
+  firebaseDB = firebase.database();
+  firebaseDB.goOnline();
+  console.log("🔥 Firebase Connected - School: " + firebaseSchoolKey);
 }catch(e){ console.log("Firebase init failed", e); }
 function getSchoolPrefix(){ if(document.title.includes("George Sonto")) return "georgesonto_"; return "wordsworth_"; }
 function getSchoolNameShort(){ if(document.title.includes("George Sonto")) return "GEORGE SONTO"; return "WORDSWORTH"; }
@@ -402,8 +400,6 @@ function manualScanFallback(){ stopScan(); let code = prompt("⌨️ Type Barcod
 function stopScan(){ document.getElementById("scanModal").style.display = "none"; if(scanRaf) cancelAnimationFrame(scanRaf); if(scanStream){ scanStream.getTracks().forEach(t=>t.stop()); scanStream=null; } let video = document.getElementById("scanVideo"); if(video) video.srcObject = null; }
 function scanAndIssue(){ startScan("issue", "ISSUE Book - Scan Book First"); }
 function scanAndRetrieve(){ startScan("retrieve", "RETRIEVE Book - Scan Returned Book"); }
-
-// ===== SYNC / BACKUP (Manual + Firebase) =====
 function collectAllData(){ let p = getSchoolPrefix(); return { app:"Vukona Press Library", school:getSchoolNameShort(), version:"V13", exportedAt:new Date().toISOString(), exportedBy:currentRole||"Unknown", learners:JSON.parse(localStorage.getItem(p+"learners")||"{}"), borrowed:JSON.parse(localStorage.getItem(p+"borrowed")||"[]"), books:JSON.parse(localStorage.getItem(p+"books")||"null")||books, pins:JSON.parse(localStorage.getItem(p+"pins")||"{}"), educators:JSON.parse(localStorage.getItem(p+"educators")||"[]"), issueLog:JSON.parse(localStorage.getItem(p+"issueLog")||"[]") }; }
 function applyAllData(data){ let p = getSchoolPrefix(); if(!data||!data.learners||!data.books){ alert("❌ Invalid backup."); return false; } if(data.school && data.school!==getSchoolNameShort()){ if(!confirm("⚠️ Backup from "+data.school+" but this is "+getSchoolNameShort()+". Import anyway?")) return false; } localStorage.setItem(p+"learners", JSON.stringify(data.learners)); localStorage.setItem(p+"borrowed", JSON.stringify(data.borrowed||[])); localStorage.setItem(p+"books", JSON.stringify(data.books||[])); if(data.pins) localStorage.setItem(p+"pins", JSON.stringify(data.pins)); if(data.educators) localStorage.setItem(p+"educators", JSON.stringify(data.educators)); if(data.issueLog) localStorage.setItem(p+"issueLog", JSON.stringify(data.issueLog)); localStorage.setItem(p+"lastSync", new Date().toISOString()); pushToFirebase(); return true; }
 function refreshSyncStats(){ let d = collectAllData(); let total=0; for(let k in d.learners) total+=(d.learners[k]||[]).length; document.getElementById("syncStats").innerHTML=`👥 Learners: <b>${total}</b> | 📚 Books: <b>${d.books.length}</b> | 📖 Borrowed: <b>${d.borrowed.filter(b=>!b.returned).length}</b><br>👩🏾‍🏫 Educators: <b>${d.educators.length}</b> | 📋 Log: <b>${d.issueLog.length}</b>`; let last=localStorage.getItem(getSchoolPrefix()+"lastSync"); document.getElementById("lastSyncText").textContent = last ? new Date(last).toLocaleString() : "Never"; let dev=localStorage.getItem(getSchoolPrefix()+"deviceID"); if(!dev){ dev="PHONE-"+Math.random().toString(36).substring(2,7).toUpperCase(); localStorage.setItem(getSchoolPrefix()+"deviceID", dev); } document.getElementById("deviceID").textContent=dev; }
