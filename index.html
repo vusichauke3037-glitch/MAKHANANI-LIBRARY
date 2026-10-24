@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Wordsworth High - Digital Library | Vukona Press</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0B1A2E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Wordsworth Library">
+<link rel="apple-touch-icon" href="icon-192.png">
 <style>
 body{font-family:Arial,sans-serif;margin:0;background:#f2f6ff;color:#222}
 .header{background:#0B1A2E;color:white;padding:20px;text-align:center}
@@ -33,7 +39,8 @@ button{padding:12px 18px;border:none;border-radius:8px;font-weight:bold;cursor:p
 <p><b>DIGITAL LIBRARY - Powered by Vukona Press | Xintimani Group</b></p>
 <p>SACE Registered Educator | SACE No: 12275145</p>
 <p>078 023 3263 | vusichauke3037@gmail.com</p>
-<p style="font-size:13px">40 Classes A-H | Max 60 Per Class | 2,400 Learners | Auto ID 8A01-8A60 | Auto Barcode MAT / MATL / LIFO / LIFS | Grade Rule | Issuer / Retriever | Barcode Print</p>
+<p style="font-size:13px">40 Classes A-H | Max 60 Per Class | 2,400 Learners | Auto ID 8A01-8A60 | Auto Barcode MAT / MATL / LIFO / LIFS | Grade Rule | Issuer / Retriever | Barcode Print | Scan | Install As App</p>
+<button id="installBtn" style="display:none;background:#FFD700;color:#0B1A2E;width:100%;margin-top:10px" onclick="installApp()">📱 Install As App On This Phone</button>
 </div>
 
 <div class="card blue">
@@ -57,6 +64,7 @@ button{padding:12px 18px;border:none;border-radius:8px;font-weight:bold;cursor:p
 <div class="card blue">
 <h3>🔍 Search Books</h3>
 <input type="text" id="searchBox" placeholder="Search: Maths, Science, English, Barcode MAT-001, LIFS-001..." onkeyup="searchBooks()">
+<button style="background:#0B3D91;color:white;width:100%;margin-top:4px" onclick="startScan('search','Search Book')">📷 SCAN Barcode To Search Book</button>
 <div id="bookList"></div>
 </div>
 
@@ -122,13 +130,16 @@ button{padding:12px 18px;border:none;border-radius:8px;font-weight:bold;cursor:p
 <div style="background:#E8F5E9;padding:12px;border-radius:8px">
 <h4 style="margin:0">📤 1. ISSUE Textbook To Learner</h4>
 <input type="text" id="issueBarcode" placeholder="📷 SCAN / Type Barcode e.g. MAT-001">
+<button style="background:#0B3D91;color:white;width:100%;margin:4px 0" onclick="startScan('issue','ISSUE Book')">📷 SCAN Book To ISSUE</button>
 <input type="text" id="issueLearnerID" placeholder="Learner ID e.g. 8A01">
-<button class="btn-green" onclick="issueBook()">📤 ISSUE Book To Learner</button>
+<button class="btn-green" onclick="issueBook()">📤 ISSUE Book To Learner (After Scan)</button>
+<button style="background:#0B3D91;color:white;width:100%;margin-top:6px" onclick="scanAndIssue()">📷 📤 SCAN + ISSUE - 1 Tap</button>
 <p id="issueMsg" style="font-weight:bold"></p>
 </div>
 <div style="background:#FFF3E0;padding:12px;border-radius:8px;margin-top:12px">
 <h4 style="margin:0">📥 2. RETRIEVE (Return) Textbook From Learner</h4>
 <input type="text" id="retrieveBarcode" placeholder="📷 SCAN / Type Barcode e.g. MAT-001">
+<button style="background:#0B3D91;color:white;width:100%;margin:4px 0" onclick="startScan('retrieve','RETRIEVE / Return Book')">📷 SCAN Book To RETRIEVE / Return</button>
 <label>Condition on Return:</label>
 <select id="retrieveCondition">
 <option value="Good">✅ Good - Clean, No Damage</option>
@@ -136,7 +147,8 @@ button{padding:12px 18px;border:none;border-radius:8px;font-weight:bold;cursor:p
 <option value="Lost">🚫 Lost - Learner Cannot Find It</option>
 <option value="Wet / Dirty">💧 Wet / Dirty</option>
 </select>
-<button style="background:#FF6B00;color:white;width:100%" onclick="retrieveBook()">📥 RETRIEVE / Return Book</button>
+<button style="background:#FF6B00;color:white;width:100%" onclick="retrieveBook()">📥 RETRIEVE / Return Book (After Scan)</button>
+<button style="background:#0B3D91;color:white;width:100%;margin-top:6px" onclick="scanAndRetrieve()">📷 📥 SCAN + RETRIEVE - 1 Tap</button>
 <p id="retrieveMsg" style="font-weight:bold"></p>
 </div>
 <h4>📋 Issue / Retrieve Log (<span id="issuerLogCount">0</span>)</h4>
@@ -156,13 +168,13 @@ button{padding:12px 18px;border:none;border-radius:8px;font-weight:bold;cursor:p
 <small style="color:#555">Auto-generated from Subject. Unique per subject.</small><br>
 <small id="barcodeRange" style="color:#1B5E20;font-weight:bold"></small>
 </div>
+<button style="background:#0B3D91;color:white;width:100%;margin:6px 0" onclick="startScan('add','Add Book - Scan ISBN On Back')">📷 SCAN ISBN / Barcode On Back Of Book To Add</button>
 <input type="number" id="newBookQty" placeholder="📦 Total Number of Textbooks for this Title e.g. 120" min="1" max="500" value="1" style="border:2px solid #FF6B00;font-weight:bold;font-size:18px" oninput="updateBarcodePreview()">
 <p style="font-size:12px;color:#666">💡 Example: Subject = Mathematics, Qty = 120 → System creates <b>MAT-001 to MAT-120</b> automatically.<br>
 <b>Codes:</b> Mathematics=MAT, Mathematical Literacy=MATL, Life Orientation=LIFO, Life Sciences=LIFS, Physical Science=PHYS</p>
 <input type="hidden" id="newBookBarcode">
 <button style="background:#FF6B00;color:white;width:100%" onclick="addBook()">+ Add Book To Library</button>
 <p id="bookMsg" style="font-weight:bold"></p>
-
 <div style="background:#FFF8E1;padding:12px;border-radius:8px;border:2px dashed #FF6B00;margin-top:12px">
 <h4 style="margin:0">🖨️ Print Barcodes - Coordinator</h4>
 <p style="font-size:13px;margin:5px 0">Print stickers to stick on books. 1 book = 1 barcode.</p>
@@ -189,7 +201,6 @@ button{padding:12px 18px;border:none;border-radius:8px;font-weight:bold;cursor:p
 <button style="background:#1B5E20;color:white;flex:1" onclick="printBarcodesByGrade(document.getElementById('printGradeSelect').value)">Print By Grade</button>
 </div>
 </div>
-
 <h4>📖 Current Books (<span id="bookCount">0</span> copies total)</h4>
 <div id="manageBookList"></div>
 </div>
@@ -230,12 +241,13 @@ button{padding:12px 18px;border:none;border-radius:8px;font-weight:bold;cursor:p
 <p><b>Parent:</b> Type Learner ID e.g. 8A01 → See your child only<br>
 <b>Learner:</b> Search books by Title or Barcode e.g. MAT-001 → Borrow<br>
 <b>Educator:</b> Login (1234) → Add learners, Auto ID 8A01-8A60, Find ANY learner in School Pool<br>
-<b>Issuer / Retriever:</b> Login (4321) → ISSUE books + RETRIEVE books + Condition Good/Damaged/Lost<br>
-<b>Coordinator:</b> Login (5678) → Add Books + Print Barcodes Per Title / Grade / Subject + Add Educators<br>
+<b>Issuer / Retriever:</b> Login (4321) → SCAN book → ISSUE / RETRIEVE + Condition Good/Damaged/Lost<br>
+<b>Coordinator:</b> Login (5678) → Add Books + SCAN ISBN + Print Barcodes Per Title / Grade / Subject + Add Educators<br>
 <b>Principal:</b> Login (9999) → See Dashboard + Print for SGB</p>
 <p><b>Grade Rule:</b> Grade 8 learner ONLY gets Grade 8 books. System blocks mismatch.<br>
-<b>Barcode Codes:</b> Mathematics=MAT, Mathematical Literacy=MATL, Life Orientation=LIFO, Life Sciences=LIFS, Physical Science=PHYS, Accounting=ACC, Geography=GEO, English=ENG<br>
-<b>School Pool:</b> Learners belong to SCHOOL, not to one educator. Any educator can select any learner.</p>
+<b>Barcode Codes:</b> Mathematics=MAT, Mathematical Literacy=MATL, Life Orientation=LIFO, Life Sciences=LIFS, Physical Science=PHYS<br>
+<b>Scan:</b> Tap SCAN → Point camera at barcode → Beep → Auto-fills. If camera fails, type manually.<br>
+<b>Install As App:</b> Tap Install button at top, or Browser Menu → Add to Home Screen. Works offline.</p>
 </div>
 
 <div class="footer">
@@ -247,7 +259,24 @@ Xintimani Group | 078 023 3263 | vusichauke3037@gmail.com
 <a class="whatsapp" href="https://wa.me/27780233263?text=Hi%20Vusi,%20I%20need%20help%20with%20Wordsworth%20Library">💬 WhatsApp</a>
 <div id="printArea"></div>
 
+<div id="scanModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:9999;text-align:center;padding-top:20px">
+<h3 style="color:white;margin:0">📷 Point Camera At Barcode</h3>
+<p id="scanTargetText" style="color:#FFD700;font-weight:bold">Scanning for: Issue Book</p>
+<video id="scanVideo" autoplay playsinline style="width:90%;max-width:400px;border:4px solid #FFD700;border-radius:12px;margin:10px 0"></video>
+<p style="color:white;font-size:13px">Hold steady 10-15cm away • Good light • Barcode flat</p>
+<p id="scanStatus" style="color:white;font-weight:bold">📷 Starting camera...</p>
+<button style="background:#25D366;color:white;width:85%;margin:5px" onclick="manualScanFallback()">⌨️ Type Barcode Instead</button>
+<button style="background:#c62828;color:white;width:85%" onclick="stopScan()">❌ Close Camera</button>
+<p style="color:#aaa;font-size:11px;margin-top:10px">Camera stays on YOUR phone only. No photo is saved or sent anywhere.</p>
+</div>
+
 <script>
+// ===== PWA - Install + Offline =====
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',(e)=>{ e.preventDefault(); deferredPrompt=e; document.getElementById('installBtn').style.display='block'; });
+function installApp(){ if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt.userChoice.then(()=>{ deferredPrompt=null; document.getElementById('installBtn').style.display='none'; }); } else { alert('📱 To Install:\n\nAndroid Chrome: Tap ⋮ (top right) → Add to Home Screen\n\niPhone Safari: Tap Share ⬆️ → Add to Home Screen\n\nThen open it like an App from home screen.'); } }
+if('serviceWorker' in navigator){ window.addEventListener('load',()=>{ navigator.serviceWorker.register('sw.js').then(()=>{ console.log('SW registered'); }).catch(()=>{}); }); }
+
 const MAX = 60;
 let learners = JSON.parse(localStorage.getItem("wordsworth_learners")||"{}");
 let borrowedBooks = JSON.parse(localStorage.getItem("wordsworth_borrowed")||"[]");
@@ -270,6 +299,17 @@ function getSubjectCode(subject){ let s = subject.trim().toUpperCase().replace(/
 function getNextBarcodeNumber(subjectCode){ let max = 0; books.forEach(b=>{ if(!b.barcode) return; let parts = b.barcode.split("-"); if(parts.length>=2 && parts[0]===subjectCode){ let num = parseInt(parts[1]); if(!isNaN(num) && num>max) max=num; } }); return max + 1; }
 function drawBarcodeBars(code){ let seed = 0; for(let i=0;i<code.length;i++) seed += code.charCodeAt(i) * (i+1); let bars = ""; let patterns = ["||| ","|| ","|||| ","| || ","|| | ","|||  ","|  ||","||  |","| ||| "]; for(let i=0;i<14;i++){ let p = patterns[(seed + i*7) % patterns.length]; bars += p; } return bars; }
 function barcodeStickerHTML(book){ let grade = getBookGrade(book); let gradeText = grade ? "GRADE "+grade : "GENERAL"; let school = document.title.includes("George Sonto") ? "GEORGE SONTO HIGH" : "WORDSWORTH HIGH"; return `<div class="barcode-sticker"><div style="font-size:11px;font-weight:bold">${school}</div><div style="font-size:11px">${book.name}</div><div style="font-size:10px">${book.subject} | ${gradeText}</div><div class="barcode-bars">${drawBarcodeBars(book.barcode)}</div><div class="barcode-num">${book.barcode}</div><div style="font-size:10px">Vukona Press | Scan to Issue</div></div>`; }
+
+// ===== SCANNER =====
+let scanStream = null; let scanTarget = ""; let scanRaf = null;
+async function startScan(target, label){ scanTarget = target; document.getElementById("scanTargetText").textContent = "Scanning for: " + (label||target); document.getElementById("scanModal").style.display = "block"; document.getElementById("scanStatus").textContent = "📷 Starting camera..."; if(!("BarcodeDetector" in window)){ document.getElementById("scanStatus").textContent = "⚠️ Your browser does not support auto-scan. Use manual entry."; setTimeout(()=>{ manualScanFallback(); }, 800); return; } if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ document.getElementById("scanStatus").textContent = "⚠️ Camera not available."; manualScanFallback(); return; } try{ scanStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}}); let video = document.getElementById("scanVideo"); video.srcObject = scanStream; await video.play(); document.getElementById("scanStatus").textContent = "✅ Camera ON - Point at barcode..."; scanLoop(); }catch(e){ document.getElementById("scanStatus").textContent = "❌ Camera blocked. Allow camera permission, or type manually."; alert("❌ Camera blocked.\nAllow camera in browser settings, or tap 'Type Barcode Instead'."); } }
+async function scanLoop(){ if(!scanStream) return; try{ let detector = new BarcodeDetector({formats:["code_128","code_39","ean_13","ean_8","upc_a","upc_e","qr_code"]}); let video = document.getElementById("scanVideo"); let codes = await detector.detect(video); if(codes && codes.length>0){ let raw = codes[0].rawValue.trim().toUpperCase(); document.getElementById("scanStatus").textContent = "✅ Scanned: " + raw; try{ let ctx = new (window.AudioContext||window.webkitAudioContext)(); let o=ctx.createOscillator(); o.connect(ctx.destination); o.frequency.value=880; o.start(); o.stop(ctx.currentTime+0.15); }catch(e){} stopScan(); onBarcodeScanned(raw); return; } }catch(e){} scanRaf = requestAnimationFrame(()=>{ setTimeout(scanLoop, 150); }); }
+function onBarcodeScanned(code){ let clean = code.replace(/[^A-Z0-9\-]/g,""); if(scanTarget==="issue"){ document.getElementById("issueBarcode").value = clean; document.getElementById("issueMsg").textContent = "📷 Scanned: " + clean + " - Now enter Learner ID and tap ISSUE"; document.getElementById("issueMsg").style.color = "green"; document.getElementById("issueLearnerID").focus(); alert("📷 Scanned: " + clean + "\n\nNow enter Learner ID (e.g. 8A01) and tap ISSUE."); } else if(scanTarget==="retrieve"){ document.getElementById("retrieveBarcode").value = clean; document.getElementById("retrieveMsg").textContent = "📷 Scanned: " + clean + " - Select Condition and tap RETRIEVE"; document.getElementById("retrieveMsg").style.color = "green"; } else if(scanTarget==="search"){ document.getElementById("searchBox").value = clean; searchBooks(); document.getElementById("bookList").scrollIntoView({behavior:"smooth"}); } else if(scanTarget==="add"){ document.getElementById("newBookBarcode").value = clean; let exists = books.find(b=>(b.barcode||"").toUpperCase()===clean); if(exists){ alert("📷 Scanned: "+clean+"\n\n⚠️ This book ALREADY exists:\n"+exists.name+" ("+exists.barcode+")"); } else { alert("📷 Scanned ISBN / Barcode: "+clean+"\n\nNow type Book Name (e.g. Maths Grade 10) + Subject + Qty and tap Add Book."); } document.getElementById("newBookName").focus(); } }
+function manualScanFallback(){ stopScan(); let code = prompt("⌨️ Type Barcode Manually:\n\nExample: MAT-001 / LIFS-005 / PHYS-002"); if(code) onBarcodeScanned(code.trim().toUpperCase()); }
+function stopScan(){ document.getElementById("scanModal").style.display = "none"; if(scanRaf) cancelAnimationFrame(scanRaf); if(scanStream){ scanStream.getTracks().forEach(t=>t.stop()); scanStream=null; } let video = document.getElementById("scanVideo"); if(video) video.srcObject = null; }
+function scanAndIssue(){ startScan("issue", "ISSUE Book - Scan Book First"); }
+function scanAndRetrieve(){ startScan("retrieve", "RETRIEVE Book - Scan Returned Book"); }
+
 let books=[
 {name:"Maths Grade 10",author:"DBE",subject:"Mathematics",grade:10,barcode:"MAT-001",baseBarcode:"MAT",subjectCode:"MAT",status:"Available"},
 {name:"Physical Science Grade 11",author:"DBE",subject:"Physical Science",grade:11,barcode:"PHYS-001",baseBarcode:"PHYS",subjectCode:"PHYS",status:"Available"},
