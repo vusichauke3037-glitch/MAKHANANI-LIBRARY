@@ -1,12 +1,16 @@
 {
-  "name": "Wordsworth High School Library",
+  "name": "Wordsworth High - Digital Library",
   "short_name": "Wordsworth Library",
-  "description": "Wordsworth High School Digital Library - Vukona Press",
+  "description": "Digital Library & Textbook System by Vukona Press | Xintimani Group - Auto Learner ID, Auto Barcode, Grade Rule, Issuer / Retriever, Scan, Barcode Print",
+  "id": "/WORDSWORTH-LIBRARY/",
   "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#0B3D91",
-  "theme_color": "#0B3D91",
   "orientation": "portrait",
+  "background_color": "#0B1A2E",
+  "theme_color": "#0B1A2E",
+  "categories": ["education", "books", "productivity"],
+  "lang": "en-ZA",
   "icons": [
     {
       "src": "icon-192.png",
@@ -18,7 +22,19 @@
       "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
