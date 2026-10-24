@@ -3,235 +3,146 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WORDSWORTH HIGH SCHOOL - Digital Library</title>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0B3D91">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Wordsworth Library">
-<link rel="apple-touch-icon" href="icon-512.png">
-<link rel="icon" type="image/png" href="icon-512.png">
-<script src="https://unpkg.com/html5-qrcode"></script>
+<title>Wordsworth High - Digital Library | Vukona Press</title>
 <style>
-*{box-sizing:border-box;font-family:Arial,sans-serif}
-body{margin:0;background:#eef3ff;color:#222}
-header{background:#0B3D91;color:#fff;padding:18px 16px;text-align:center}
-header h1{margin:0;font-size:28px} header h1 span{color:#FFD700}
-header p{margin:6px 0 0;opacity:.9}
-.goldbar{background:#FFD700;color:#0B3D91;font-weight:900;padding:10px;text-align:center}
-.wrap{max-width:1100px;margin:auto;padding:14px}
-.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
-.card{background:#fff;border-radius:14px;padding:14px;text-align:center;box-shadow:0 2px 8px #0001;cursor:pointer;border-top:4px solid #0B3D91}
-.card b{font-size:26px} .card small{color:#777}
-.search{width:100%;padding:14px;border-radius:12px;border:2px solid #0B3D91;margin:14px 0 8px;font-size:16px}
-.filters{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 14px}
-.fbtn{padding:10px 16px;border-radius:20px;border:2px solid #0B3D91;background:#fff;font-weight:900;cursor:pointer;color:#0B3D91;font-size:14px}
-.fbtn.active{background:#0B3D91;color:#FFD700;border-color:#0B3D91}
-.fbtn.avail.active{background:#1a7a3a;border-color:#1a7a3a;color:#fff}.fbtn.iss.active{background:#d67e00;border-color:#d67e00;color:#fff}.fbtn.bad.active{background:#c62828;border-color:#c62828;color:#fff}.fbtn.purp.active{background:#6a1b9a;border-color:#6a1b9a;color:#fff}
-.btns{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-button{padding:14px;border:0;border-radius:12px;font-weight:900;cursor:pointer;font-size:15px;color:#fff}
-.b-scan{background:#0B3D91}.b-add{background:#1a7a3a}.b-issue{background:#F9A825;color:#0B3D91}.b-return{background:#0078b4}.b-prin{background:#0B3D91}
-.box{background:#fff;border-radius:14px;padding:16px;margin-top:14px;box-shadow:0 2px 8px #0001;border-left:5px solid #FFD700}
-input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ddd;border-radius:10px;font-size:15px}
-table{width:100%;border-collapse:collapse;margin-top:10px}
-th{background:#0B3D91;color:#FFD700;padding:10px;text-align:left}
-td{padding:10px;border-bottom:1px solid #eee;font-size:14px}
-.pill{padding:5px 10px;border-radius:20px;color:#fff;font-weight:900;font-size:12px}
-.AVAILABLE{background:#1a7a3a}.ISSUED{background:#d67e00}.DAMAGED,.LOST,.OVERDUE{background:#c62828}.NEEDS,.RESERVED{background:#6a1b9a}
-.cond{padding:4px 8px;border-radius:12px;font-weight:900;font-size:12px;color:#fff}
-.NEW{background:#1a7a3a}.GOOD{background:#2e7d32}.FAIR{background:#d67e00}.WORN{background:#ef6c00}.DAMAGED-C{background:#c62828}
-.due{font-size:12px;font-weight:900}.due-ok{color:#1a7a3a}.due-soon{color:#d67e00}.due-late{color:#c62828}
-.small{font-size:13px;color:#666}
-#reader{width:100%;display:none}
-#loginBox{background:#0B3D91;color:#fff;border-radius:14px;padding:20px;margin-top:14px;text-align:center;border:4px solid #FFD700}
-#loginBox input{max-width:400px;margin:8px auto;display:block}
-.coord-only{display:none} body.is-coord .coord-only{display:block}
-.edu-only{display:none} body.is-edu .edu-only, body.is-coord .edu-only{display:block}
-.prin-only{display:none} body.is-prin .prin-only{display:block}
-.prin-bar{background:#0B3D91;color:#FFD700;border-radius:14px;padding:16px;margin-top:14px;border:3px solid #FFD700}
-.progress{height:14px;background:#e0e0e0;border-radius:20px;overflow:hidden;margin:6px 0}
-.progress div{height:100%;background:#0B3D91}
-#installBtn{background:#FFD700;color:#0B3D91;border:2px solid #0B3D91;width:100%;margin-top:10px;display:none}
-.qty-badge{background:#FFD700;color:#0B3D91;padding:3px 8px;border-radius:10px;font-weight:900;font-size:12px;display:inline-block;margin-top:4px}
-@media(max-width:700px){.cards,.btns{grid-template-columns:repeat(2,1fr)}}
+body{font-family:Arial;margin:0;background:#f2f6ff}
+.header{background:#0B1A2E;color:white;padding:20px;text-align:center}
+.header b{color:#FFD700}
+.card{background:white;margin:15px;padding:15px;border-radius:12px;box-shadow:0 2px 8px #ccc}
+.green{border-left:6px solid #1B5E20}
+.blue{border-left:6px solid #0B3D91}
+input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-radius:8px;font-size:16px}
+button{padding:12px 18px;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
+.btn-green{background:#1B5E20;color:white;width:100%}
+.btn-red{background:#c62828;color:white;padding:5px 10px}
+.btn-blue{background:#0B3D91;color:white}
+.progress{background:#ddd;height:18px;border-radius:10px;overflow:hidden}
+.progress div{background:#1B5E20;height:100%;width:0%}
+.footer{background:#FFD700;padding:15px;text-align:center;font-weight:bold}
+.whatsapp{position:fixed;bottom:20px;right:20px;background:#25D366;color:white;padding:14px 18px;border-radius:50px;text-decoration:none;font-weight:bold;box-shadow:0 4px 10px #888}
+.book{border:1px solid #ddd;padding:10px;border-radius:10px;margin:8px 0}
 </style>
 </head>
 <body>
-<header><h1>📚 WORDSWORTH <span>HIGH SCHOOL</span></h1><p>DIGITAL LIBRARY • FIREBASE LIVE • Vukona Press • V8 • 💙🤍 BLUE & WHITE • APP • 📦 QTY</p></header>
-<div class="goldbar">● <span id="syncStatus">LIVE - SYNCED TO FIREBASE</span> • <span id="userBadge">NOT LOGGED IN</span> • <span id="overdueBadge"></span></div>
-<div class="wrap">
-<button id="installBtn" onclick="installApp()">📱 INSTALL AS APP - Tap Here</button>
 
-<div class="box" id="loginBox">
-<h3 style="margin:0">🔒 WORDSWORTH LIBRARY LOGIN</h3>
-<p class="small" style="color:#FFD700">Coordinator = Full Control • Educator = Issue/Return • Principal = View + Reports Only</p>
-<p class="small" style="color:#cfe0ff">Master PINs: Coord WHS2026 | Educator WHS1234 | Principal WHS9999<br>OR use your own Name + Code added by Coordinator</p>
-<input id="loginName" placeholder="Your Name - EXACT as added e.g. Mrs Mokoena">
-<input id="loginPin" type="password" placeholder="PIN / Your Code - e.g. WHS2026 or 5555">
-<button class="b-add" onclick="doLogin()" style="max-width:400px;width:100%;background:#FFD700;color:#0B3D91">LOGIN</button>
-<button onclick="doLogout()" style="background:#555;max-width:400px;width:100%;margin-top:8px">LOGOUT</button>
+<div class="header">
+<h2>WORDSWORTH HIGH SCHOOL</h2>
+<p><b>DIGITAL LIBRARY - Powered by Vukona Press | Xintimani Group</b></p>
+<p>SACE Registered Educator | SACE No: 12275145</p>
+<p>078 023 3263 | vusichauke3037@gmail.com</p>
 </div>
 
-<div class="prin-only">
-<div class="prin-bar"><h3 style="margin:0">👨‍💼 PRINCIPAL DASHBOARD - WORDSWORTH HIGH SCHOOL</h3><p style="margin:6px 0 0;opacity:.9;color:#fff">Read-Only • Fixed Return Date: 30 November Every Year</p></div>
-<div class="box">
-<h3>📊 School Overview</h3><div id="prinStats"></div>
-<h3>⏰ Overdue Books - After 30 November</h3><div id="prinOverdue"></div>
-<h3>📚 Books By Grade</h3><div id="prinByGrade"></div>
-<h3>🧾 Book Condition</h3><div id="prinCondition"></div>
-<h3>📋 Book Status Breakdown</h3><div id="prinStatus"></div>
-<h3>⚠️ Lost / Damaged - Needs Attention</h3><div id="prinLost"></div>
-<h3>📤 Currently Issued - Who Has Books?</h3><div id="prinIssued"></div>
-<button class="b-prin" onclick="exportCSV()" style="width:100%;margin-top:12px">⬇ DOWNLOAD FULL REPORT (CSV) FOR SGB</button>
-<button class="b-prin" onclick="window.print()" style="width:100%;margin-top:8px;background:#333">🖨 PRINT THIS DASHBOARD</button>
-</div>
+<!-- SEARCH -->
+<div class="card blue">
+<h3>🔍 Search Books</h3>
+<input type="text" id="searchBox" placeholder="Search: Maths, Science, English..." onkeyup="searchBooks()">
+<div id="bookList"></div>
 </div>
 
-<div class="cards">
-<div class="card" onclick="setStatusFilter('ALL')"><small>📚 TOTAL TITLES<br><small>Different books</small></small><br><b id="tTotal">0</b></div>
-<div class="card"><small>📦 TOTAL COPIES<br><small>All textbooks added</small></small><br><b id="tQty" style="color:#0B3D91">0</b></div>
-<div class="card" onclick="setStatusFilter('AVAILABLE')"><small>✅ AVAILABLE</small><br><b id="tAvail" style="color:#1a7a3a">0</b></div>
-<div class="card" onclick="setStatusFilter('ISSUED')"><small>📤 ISSUED</small><br><b id="tIssued" style="color:#d67e00">0</b></div>
-<div class="card" onclick="setStatusFilter('OVERDUE')"><small>⏰ OVERDUE</small><br><b id="tLost" style="color:#c62828">0</b></div>
+<!-- EDUCATOR -->
+<div class="card green">
+<h3>👩🏾‍🏫 Educator / Coordinator - Add Learners</h3>
+<p><b>Rule: Maximum 50 Learners Per Class</b></p>
+
+<label>Select Class:</label>
+<select id="classSelect" onchange="showLearners()">
+<option>Grade 8A</option><option>Grade 8B</option>
+<option>Grade 9A</option><option>Grade 9B</option>
+<option>Grade 10A</option><option>Grade 10B</option>
+<option>Grade 11A</option><option>Grade 12A</option>
+</select>
+
+<input type="text" id="learnerName" placeholder="Learner Full Name">
+<input type="text" id="learnerID" placeholder="Learner ID / Admission No">
+<button class="btn-green" onclick="addLearner()">+ Add Learner</button>
+
+<p id="countText" style="font-weight:bold"></p>
+<div class="progress"><div id="progressBar"></div></div>
+<p id="errorText" style="color:red;font-weight:bold"></p>
+<ul id="learnerList"></ul>
 </div>
 
-<input class="search" id="search" placeholder="🔍 Search Title, Author, Control No, ISBN, Learner, Condition, Status..." oninput="render()">
-<div class="filters">
-<button class="fbtn active" data-f="ALL" onclick="setStatusFilter('ALL')">📚 ALL</button>
-<button class="fbtn avail" data-f="AVAILABLE" onclick="setStatusFilter('AVAILABLE')">✅ AVAILABLE</button>
-<button class="fbtn iss" data-f="ISSUED" onclick="setStatusFilter('ISSUED')">📤 ISSUED</button>
-<button class="fbtn bad" data-f="DAMAGED" onclick="setStatusFilter('DAMAGED')">🔴 DAMAGED</button>
-<button class="fbtn bad" data-f="LOST" onclick="setStatusFilter('LOST')">❌ LOST</button>
-<button class="fbtn purp" data-f="NEEDS REPAIR" onclick="setStatusFilter('NEEDS REPAIR')">🛠 NEEDS REPAIR</button>
-<button class="fbtn bad" data-f="OVERDUE" onclick="setStatusFilter('OVERDUE')">⏰ OVERDUE</button>
-<button class="fbtn purp" data-f="RESERVED" onclick="setStatusFilter('RESERVED')">🔖 RESERVED</button>
-</div>
-<div class="filters">
-<span class="small" style="align-self:center"><b>Condition:</b></span>
-<button class="fbtn" data-c="ALL" onclick="setCondFilter('ALL')">ALL COND.</button>
-<button class="fbtn" data-c="NEW" onclick="setCondFilter('NEW')">NEW</button>
-<button class="fbtn" data-c="GOOD" onclick="setCondFilter('GOOD')">GOOD</button>
-<button class="fbtn" data-c="FAIR" onclick="setCondFilter('FAIR')">FAIR</button>
-<button class="fbtn" data-c="WORN" onclick="setCondFilter('WORN')">WORN</button>
-<button class="fbtn" data-c="DAMAGED" onclick="setCondFilter('DAMAGED')">DAMAGED</button>
-</div>
-<p class="small" id="filterInfo" style="text-align:center">Showing: ALL Books</p>
-
-<div class="btns">
-<button class="b-scan" onclick="toggleScan()">📷 SCAN BARCODE</button>
-<button class="b-add coord-only" onclick="showAdd()">+ ADD BOOK</button>
-<button class="b-issue edu-only" onclick="document.getElementById('issueBox').scrollIntoView({behavior:'smooth'})">📤 ISSUE</button>
-<button class="b-return" onclick="exportCSV()">⬇ EXPORT CSV</button>
-</div>
-<div id="reader"></div>
-
-<div class="box coord-only" id="addBox" style="display:none">
-<h3>➕ Add New Book - Coordinator Only</h3>
-<input id="fControl" placeholder="Control Number - e.g. WHS-001">
-<input id="fQty" type="number" value="1" min="1" placeholder="Total Quantity / Copies - e.g. 30">
-<input id="fISBN" placeholder="ISBN - scan or type">
-<input id="fTitle" placeholder="Book Title">
-<input id="fAuthor" placeholder="Author">
-<select id="fGrade"><option>Grade 8</option><option>Grade 9</option><option>Grade 10</option><option>Grade 11</option><option>Grade 12</option><option>Library Book</option></select>
-<label class="small"><b>📖 BOOK CONDITION:</b></label>
-<select id="fCondition"><option>NEW</option><option>GOOD</option><option>FAIR</option><option>WORN</option><option>DAMAGED</option></select>
-<label class="small"><b>📋 BOOK STATUS:</b></label>
-<select id="fStatus"><option>AVAILABLE</option><option>ISSUED</option><option>DAMAGED</option><option>LOST</option><option>NEEDS REPAIR</option><option>OVERDUE</option><option>RESERVED</option></select>
-<button class="b-add" onclick="addBook()">SAVE TO FIREBASE ☁️</button>
+<!-- HOW TO USE -->
+<div class="card">
+<h3>ℹ️ How To Use</h3>
+<p>1. Educator selects class → Adds learner<br>
+2. Max 50 per class — system blocks 51st<br>
+3. Learner can search & borrow books<br>
+4. Coordinator can Remove learner to make space</p>
 </div>
 
-<div class="box edu-only" id="issueBox">
-<h3>📤 Issue / Return Book - Educator / Coordinator</h3>
-<input id="iControl" placeholder="Control No - e.g. WHS-002">
-<input id="iLearner" placeholder="Learner Name + Grade + Class - e.g. Thandi M. Gr 11A">
-<div style="background:#FFFDE7;border:2px solid #FFD700;border-radius:10px;padding:12px;text-align:center;margin:8px 0">
-<b style="color:#0B3D91">📅 FIXED RETURN DATE: 30 NOVEMBER <span id="dueYearLabel"></span></b><br>
-<span class="small">All books issued now must be returned by <b>30 November</b> every year. No exceptions.<br>After 30 Nov, book automatically becomes ⏰ OVERDUE.</span>
-</div>
-<div class="btns" style="margin-top:8px">
-<button class="b-issue" onclick="issueBook()">ISSUE TO LEARNER</button>
-<button class="b-return" onclick="returnBook()">RETURN BOOK</button>
-</div>
-</div>
-<div class="box prin-only" style="background:#E8F0FF;border:2px solid #0B3D91"><b>👨‍💼 Principal Mode:</b> View-Only. Fixed Due Date: 30 November every year.</div>
-
-<div class="box">
-<h3>📚 Wordsworth Book List - LIVE FROM FIREBASE</h3>
-<table><thead><tr><th>Control No<br><small>Qty</small></th><th>Title</th><th>Status</th><th>Condition</th><th>Learner / Due Date</th><th class="coord-only">Action</th></tr></thead><tbody id="list"></tbody></table>
+<div class="footer">
+✅ Built & Secured by Vusi Chauke<br>
+SACE No: 12275145 | ND Chem Eng | PGCE | NC IT NQF 5<br>
+Xintimani Group | 078 023 3263
 </div>
 
-<div class="box coord-only">
-<h3>👩‍🏫 Educators - Coordinator Only 🔒</h3>
-<input id="eName" placeholder="Educator Name - e.g. Mrs Mokoena">
-<input id="eCode" placeholder="Educator Code / PIN - e.g. 5555">
-<select id="eRole"><option>Educator</option><option>Librarian</option><option>Coordinator</option></select>
-<button class="b-scan" onclick="addEducator()">ADD EDUCATOR (Coordinator Only)</button>
-<div id="eduList" style="margin-top:10px"></div>
-</div>
-<p class="small" style="text-align:center">Built by Vusi Chauke • vusichauke3037@gmail.com • 078 023 3263 • Vukona Press • Wordsworth V8 💙🤍 Fixed Due 30 Nov • 📦 QTY</p>
-</div>
+<a class="whatsapp" href="https://wa.me/27780233263?text=Hi%20Vusi,%20I%20need%20help%20with%20Wordsworth%20Library">💬 WhatsApp</a>
 
 <script>
-let deferredPrompt=null;
-window.addEventListener('beforeinstallprompt',(e)=>{e.preventDefault();deferredPrompt=e;document.getElementById('installBtn').style.display='block';});
-window.installApp=async()=>{if(deferredPrompt){deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;document.getElementById('installBtn').style.display='none';}else{alert('📱 To Install:\n\nChrome Menu (⋮) → Add to Home screen / Install app');}};
-if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}
-</script>
+// --- BOOKS ---
+let books=[
+{name:"Maths Grade 10",author:"DBE",subject:"Maths"},
+{name:"Physical Science Grade 11",author:"DBE",subject:"Science"},
+{name:"English Home Language Grade 12",author:"DBE",subject:"English"},
+{name:"Natural Science Grade 9",author:"DBE",subject:"Science"},
+{name:"Life Sciences Grade 10",author:"DBE",subject:"Science"},
+{name:"Accounting Grade 11",author:"DBE",subject:"Accounting"},
+];
+function searchBooks(){
+  let q=document.getElementById("searchBox").value.toLowerCase();
+  let filtered=books.filter(b=>(b.name+" "+b.subject).toLowerCase().includes(q));
+  let html="";
+  filtered.forEach(b=>{
+    html+=`<div class="book"><b>${b.name}</b><br>${b.subject} | ${b.author}<br><button class="btn-blue" onclick="alert('Borrowed: ${b.name}')">📚 Borrow</button></div>`;
+  });
+  document.getElementById("bookList").innerHTML=html||"<p>No books found</p>";
+}
+searchBooks();
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, addDoc, doc, updateDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-const firebaseConfig = {
-  apiKey: "AIzaSyAl0rL5H4Hm9d9b0v2Q5W6X9z8Y7Z6X5W4",
-  authDomain: "wordsworth-library.firebaseapp.com",
-  projectId: "wordsworth-library",
-  storageBucket: "wordsworth-library.firebasestorage.app",
-  messagingSenderId: "123456789012",
-  appId: "1:123456789012:web:abcdef1234567890",
-  measurementId: "G-XXXXXXXXXX"
-};
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const COORD_PIN = "WHS2026"; const EDU_PIN = "WHS1234"; const PRIN_PIN = "WHS9999";
-const PREFIX = "WHS-";
-const BOOKS_COL = "wordsworth_books";
-const EDU_COL = "wordsworth_educators";
-const STORAGE_KEY = 'whs_role';
-const NAME_KEY = 'whs_name';
-let currentRole = sessionStorage.getItem(STORAGE_KEY) || '';
-let currentName = sessionStorage.getItem(NAME_KEY) || '';
-let statusFilter = 'ALL'; let condFilter = 'ALL';
-function getFixedDueDate(){let now=new Date();let year=now.getFullYear();let due=new Date(year,10,30,23,59,59);if(now>due) due=new Date(year+1,10,30,23,59,59);return due.getTime();}
-function fmtDate(ts){if(!ts) return '-';let d=new Date(ts);return d.toLocaleDateString('en-ZA',{day:'2-digit',month:'short',year:'numeric'});}
-function daysLeft(ts){if(!ts) return null;return Math.ceil((ts-Date.now())/(1000*60*60*24));}
-function isOverdue(b){return (b.s==='ISSUED'||b.s==='OVERDUE')&&b.due&&b.due<Date.now();}
-function displayStatus(b){if(isOverdue(b)) return 'OVERDUE';return b.s;}
-function dueText(b){if(!b.due||b.s==='AVAILABLE') return '';let dl=daysLeft(b.due);if(dl<0) return `<br><span class="due due-late">⏰ OVERDUE by ${Math.abs(dl)} day(s) • Due: ${fmtDate(b.due)}</span>`;if(dl<=14) return `<br><span class="due due-soon">⚠️ Due in ${dl} day(s) • ${fmtDate(b.due)}</span>`;return `<br><span class="due due-ok">📅 Due: ${fmtDate(b.due)} • ${dl} days left</span>`;}
-function applyRole(){document.body.classList.toggle('is-coord',currentRole==='Coordinator'||currentRole==='Librarian');document.body.classList.toggle('is-edu',currentRole==='Educator'||currentRole==='Coordinator'||currentRole==='Librarian');document.body.classList.toggle('is-prin',currentRole==='Principal');document.getElementById('userBadge').innerText=currentRole?currentName+' • '+currentRole.toUpperCase():'NOT LOGGED IN';render();}
-window.setStatusFilter=(s)=>{statusFilter=s;render();};
-window.setCondFilter=(c)=>{condFilter=c;render();};
-window.doLogin=()=>{let name=document.getElementById('loginName').value.trim();let pinRaw=document.getElementById('loginPin').value.trim();let pin=pinRaw.toUpperCase().replace(/\s/g,'');if(!name) return alert('Enter your name');if(!pinRaw) return alert('Enter PIN / Code');if(pin===COORD_PIN||pin==="2026"){currentRole='Coordinator';}else if(pin===PRIN_PIN||pin==="9999"){currentRole='Principal';}else if(pin===EDU_PIN||pin==="1234"){currentRole='Educator';}else{let found=educators.find(e=>e.name.toLowerCase().trim()===name.toLowerCase().trim()&&String(e.code).trim().toUpperCase()===pin);if(found){currentRole=found.role;if(currentRole==='Librarian') currentRole='Coordinator';}else{let byPin=educators.find(e=>String(e.code).trim().toUpperCase()===pin);if(byPin) return alert('❌ Name mismatch.\n\nYou typed: "'+name+'"\nBut in Firebase it is: "'+byPin.name+'"');return alert('❌ Wrong PIN / Name.\n\nTry: WHS2026 / WHS1234 / WHS9999');}}currentName=name;sessionStorage.setItem(STORAGE_KEY,currentRole);sessionStorage.setItem(NAME_KEY,currentName);alert('✅ Welcome '+name+' - '+currentRole+' - Wordsworth');applyRole();};
-window.doLogout=()=>{currentRole='';currentName='';sessionStorage.removeItem(STORAGE_KEY);sessionStorage.removeItem(NAME_KEY);applyRole();alert('Logged out');};
-function needCoord(){if(currentRole!=='Coordinator'){alert('🔒 Only Coordinator can do this. Login WHS2026');return false;}return true;}
-function blockPrincipal(){if(currentRole==='Principal'){alert('👨‍💼 Principal is View-Only. You cannot change books.');return true;}return false;}
-let books=[];let educators=[];
-onSnapshot(collection(db,BOOKS_COL),(snap)=>{books=snap.docs.map(d=>({id:d.id,...d.data()}));render();},(err)=>{document.getElementById('syncStatus').innerText="FIREBASE ERROR: "+err.message;});
-onSnapshot(collection(db,EDU_COL),(snap)=>{educators=snap.docs.map(d=>({id:d.id,...d.data()}));render();});
-window.showAdd=()=>{if(blockPrincipal()||!needCoord()) return;document.getElementById('addBox').style.display='block';document.getElementById('fControl').value=PREFIX+String(books.length+1).padStart(3,'0');};
-window.addBook=async()=>{if(blockPrincipal()||!needCoord()) return;const data={c:document.getElementById('fControl').value.trim(),qty:parseInt(document.getElementById('fQty').value)||1,isbn:document.getElementById('fISBN').value.trim(),t:document.getElementById('fTitle').value.trim(),a:document.getElementById('fAuthor').value.trim(),g:document.getElementById('fGrade').value,cond:document.getElementById('fCondition').value,s:document.getElementById('fStatus').value,l:'-',due:null,issuedAt:null,createdAt:Date.now(),addedBy:currentName};if(!data.c||!data.t) return alert('Enter Control No + Title');await addDoc(collection(db,BOOKS_COL),data);alert('✅ Saved: '+data.c+' • Qty: '+data.qty);};
-window.issueBook=async()=>{if(blockPrincipal()) return;let c=document.getElementById('iControl').value.trim().toUpperCase();let l=document.getElementById('iLearner').value.trim();let b=books.find(x=>x.c.toUpperCase()===c);if(!b) return alert('Book not found');let due=getFixedDueDate();await updateDoc(doc(db,BOOKS_COL,b.id),{s:'ISSUED',l:l||'Learner',due:due,issuedAt:Date.now(),loanDays:'FIXED-30NOV'});alert('📤 Issued '+c+' to '+l+'\n📅 Due: '+fmtDate(due));};
-window.returnBook=async()=>{if(blockPrincipal()) return;let c=document.getElementById('iControl').value.trim().toUpperCase();let b=books.find(x=>x.c.toUpperCase()===c);if(!b) return alert('Book not found');await updateDoc(doc(db,BOOKS_COL,b.id),{s:'AVAILABLE',l:'-',due:null,issuedAt:null});alert('📥 Returned '+c);};
-window.changeStatus=async(id)=>{if(blockPrincipal()||!needCoord()) return;let b=books.find(x=>x.id===id);let ns=prompt('New Status: AVAILABLE / ISSUED / DAMAGED / LOST / NEEDS REPAIR / OVERDUE / RESERVED',displayStatus(b));if(!ns) return;let nc=prompt('New Condition: NEW / GOOD / FAIR / WORN / DAMAGED',b.cond||'GOOD');let nq=prompt('Total Quantity / Copies:',b.qty||1);await updateDoc(doc(db,BOOKS_COL,id),{s:ns.toUpperCase(),cond:(nc||b.cond||'GOOD').toUpperCase(),qty:parseInt(nq)||1});};
-window.delBook=async(id,c)=>{if(blockPrincipal()||!needCoord()) return;if(!confirm('Delete '+c+'?')) return;await deleteDoc(doc(db,BOOKS_COL,id));};
-window.addEducator=async()=>{if(blockPrincipal()||!needCoord()) return;let name=document.getElementById('eName').value.trim();let code=document.getElementById('eCode').value.trim();let role=document.getElementById('eRole').value;if(!name) return alert('Enter name');if(!code) return alert('Enter Code');await addDoc(collection(db,EDU_COL),{name,code,role,createdAt:Date.now()});alert('✅ Educator Added: '+name);document.getElementById('eName').value='';document.getElementById('eCode').value='';};
-window.delEducator=async(id,name)=>{if(blockPrincipal()||!needCoord()) return;if(!confirm('Delete educator '+name+'?')) return;await deleteDoc(doc(db,EDU_COL,id));};
-window.exportCSV=()=>{let csv='Control,Qty,ISBN,Title,Author,Grade,Condition,Status,DueDate,Learner\n'+books.map(b=>[b.c,b.qty||1,b.isbn,b.t,b.a,b.g,b.cond||'GOOD',displayStatus(b),fmtDate(b.due),b.l].join(',')).join('\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='Wordsworth_Library_Principal_Report.csv';a.click();};
-function renderPrincipal(){if(currentRole!=='Principal') return;let total=books.length,totalQty=books.reduce((s,b)=>s+(parseInt(b.qty)||1),0),avail=books.filter(b=>b.s==='AVAILABLE').length,issued=books.filter(b=>b.s==='ISSUED'&&!isOverdue(b)).length,overdue=books.filter(b=>isOverdue(b)).length,lost=books.filter(b=>b.s==='LOST'||b.s==='DAMAGED').length;let pct=total?Math.round(avail/total*100):0;document.getElementById('prinStats').innerHTML=`<b>Total Titles: ${total} | Total Copies: ${totalQty} | Available Titles: ${avail} (${pct}%) | Issued: ${issued} | Overdue: ${overdue} | Lost/Damaged: ${lost}</b><div class="progress"><div style="width:${pct}%"></div></div>`;let overBooks=books.filter(b=>isOverdue(b));document.getElementById('prinOverdue').innerHTML=overBooks.length?overBooks.map(b=>`• <b>${b.c}</b> ${b.t} (Qty: ${b.qty||1}) → ${b.l} - OVERDUE by ${Math.abs(daysLeft(b.due))} day(s)`).join('<br>'):'✅ No overdue books!';let grades=['Grade 8','Grade 9','Grade 10','Grade 11','Grade 12','Library Book'];document.getElementById('prinByGrade').innerHTML=grades.map(g=>{let arr=books.filter(b=>b.g===g);let q=arr.reduce((s,b)=>s+(parseInt(b.qty)||1),0);let a2=arr.filter(b=>b.s==='AVAILABLE').length;return `<div><b>${g}:</b> ${arr.length} titles • ${q} copies • ${a2} Available <div class="progress"><div style="width:${arr.length?Math.round(a2/arr.length*100):0}%"></div></div></div>`;}).join('');let conds=['NEW','GOOD','FAIR','WORN','DAMAGED'];document.getElementById('prinCondition').innerHTML=conds.map(cd=>{let n=books.filter(b=>(b.cond||'GOOD')===cd).length;let q=books.filter(b=>(b.cond||'GOOD')===cd).reduce((s,b)=>s+(parseInt(b.qty)||1),0);return `<div><b>${cd}:</b> ${n} titles • ${q} copies</div>`;}).join('');let stats=['AVAILABLE','ISSUED','DAMAGED','LOST','NEEDS REPAIR','OVERDUE','RESERVED'];document.getElementById('prinStatus').innerHTML=stats.map(st=>{let n=st==='OVERDUE'?books.filter(b=>isOverdue(b)).length:st==='ISSUED'?books.filter(b=>b.s==='ISSUED'&&!isOverdue(b)).length:books.filter(b=>b.s===st).length;return `• <b>${st}:</b> ${n}`;}).join('<br>');let lostBooks=books.filter(b=>b.s==='LOST'||b.s==='DAMAGED');document.getElementById('prinLost').innerHTML=lostBooks.length?lostBooks.map(b=>`• <b>${b.c}</b> ${b.t} - ${b.s} - ${b.l}`).join('<br>'):'✅ No lost/damaged books.';let issuedBooks=books.filter(b=>b.s==='ISSUED');document.getElementById('prinIssued').innerHTML=issuedBooks.length?issuedBooks.slice(0,20).map(b=>`• <b>${b.c}</b> ${b.t} → ${b.l} - Due: ${fmtDate(b.due)}`).join('<br>'):'No books issued.';}
-window.render=()=>{let q=document.getElementById('search').value.toLowerCase();let overdueCount=books.filter(b=>isOverdue(b)).length;document.getElementById('tTotal').innerText=books.length;document.getElementById('tQty').innerText=books.reduce((s,b)=>s+(parseInt(b.qty)||1),0);document.getElementById('tAvail').innerText=books.filter(b=>b.s==='AVAILABLE').length;document.getElementById('tIssued').innerText=books.filter(b=>b.s==='ISSUED'&&!isOverdue(b)).length;document.getElementById('tLost').innerText=overdueCount;document.getElementById('overdueBadge').innerText=overdueCount?'⏰ '+overdueCount+' OVERDUE':'✅ NO OVERDUE';let dy=document.getElementById('dueYearLabel');if(dy) dy.innerText=new Date(getFixedDueDate()).getFullYear();document.querySelectorAll('.fbtn').forEach(btn=>{if(btn.dataset.f) btn.classList.toggle('active',btn.dataset.f===statusFilter);if(btn.dataset.c) btn.classList.toggle('active',btn.dataset.c===condFilter);});let matchFilter=(b)=>{let ds=displayStatus(b);let okS=statusFilter==='ALL'||(statusFilter==='LOST'?(b.s==='LOST'||b.s==='DAMAGED'):ds===statusFilter);let okC=condFilter==='ALL'||(b.cond||'GOOD')===condFilter;return okS&&okC;};let totalQty=books.reduce((s,b)=>s+(parseInt(b.qty)||1),0);document.getElementById('filterInfo').innerText=`Showing: ${statusFilter} • ${condFilter} • ${books.filter(matchFilter).length} titles • Total Copies: ${totalQty} • Fixed Due: 30 Nov ${new Date(getFixedDueDate()).getFullYear()}`;let isCoord=currentRole==='Coordinator';let filtered=books.filter(b=>(b.t+b.a+b.c+(b.isbn||'')+b.l+(b.cond||'')+b.s).toLowerCase().includes(q)&&matchFilter(b));document.getElementById('list').innerHTML=filtered.map(b=>{let ds=displayStatus(b);return `<tr><td><b>${b.c}</b><br><span class="qty-badge">📦 Qty: ${b.qty||1}</span><br><small>ISBN: ${b.isbn||'-'}<br>${b.g}</small></td><td><b>${b.t}</b><br><small>${b.a||''}</small></td><td><span class="pill ${ds}">${ds}</span></td><td><span class="cond ${b.cond==='DAMAGED'?'DAMAGED-C':(b.cond||'GOOD')}">${b.cond||'GOOD'}</span></td><td>${b.l}${dueText(b)}</td>${isCoord?`<td><button style="background:#0B3D91;padding:8px" onclick="changeStatus('${b.id}')">Edit</button> <button style="background:#c62828;padding:8px" onclick="delBook('${b.id}','${b.c}')">Delete</button></td>`:``}</tr>`;}).join('')||'<tr><td colspan=6>No books. Tap ALL to reset.</td></tr>';document.getElementById('eduList').innerHTML=educators.map(e=>`<span style="background:#E8F0FF;padding:6px 10px;border-radius:20px;display:inline-block;margin:3px">${e.name} - ${e.role} - Code: ${e.code} <b style="cursor:pointer;color:red" onclick="delEducator('${e.id}','${e.name}')">×</b></span>`).join('')||'<small>No educators yet</small>';renderPrincipal();};
-let scanner=null,scanning=false;
-window.toggleScan=()=>{let el=document.getElementById('reader');if(scanning){el.style.display='none';scanner.clear();scanning=false;return;}el.style.display='block';scanning=true;scanner=new Html5Qrcode("reader");scanner.start({facingMode:"environment"},{fps:10,qrbox:250},(txt)=>{document.getElementById('fISBN').value=txt;document.getElementById('iControl').value=txt;alert('Scanned: '+txt);scanner.stop();el.style.display='none';scanning=false;});};
-applyRole();
+// --- LEARNERS MAX 50 ---
+const MAX=50;
+let learners=JSON.parse(localStorage.getItem("wordsworth_learners")||"{}");
+
+function save(){ localStorage.setItem("wordsworth_learners",JSON.stringify(learners)); }
+
+function addLearner(){
+  let cls=document.getElementById("classSelect").value;
+  let name=document.getElementById("learnerName").value.trim();
+  let id=document.getElementById("learnerID").value.trim();
+  let err=document.getElementById("errorText");
+  if(!name||!id){ err.textContent="⚠️ Enter Name + Learner ID"; return; }
+  if(!learners[cls]) learners[cls]=[];
+  if(learners[cls].length>=MAX){
+    err.textContent="🚫 Class FULL - Maximum 50 learners reached for "+cls;
+    alert("🚫 Class FULL - Maximum 50 learners reached!");
+    return;
+  }
+  if(learners[cls].find(l=>l.id===id)){ err.textContent="⚠️ Learner ID already exists"; return; }
+  learners[cls].push({name,id}); save();
+  err.textContent="";
+  document.getElementById("learnerName").value="";
+  document.getElementById("learnerID").value="";
+  showLearners();
+  alert("✅ Added: "+name+" to "+cls);
+}
+
+function showLearners(){
+  let cls=document.getElementById("classSelect").value;
+  let list=learners[cls]||[];
+  document.getElementById("countText").textContent=`Learners in ${cls}: ${list.length} / 50`;
+  document.getElementById("progressBar").style.width=(list.length/50*100)+"%";
+  let ul=document.getElementById("learnerList"); ul.innerHTML="";
+  list.forEach((l,i)=>{
+    let li=document.createElement("li");
+    li.innerHTML=`${i+1}. ${l.name} - ${l.id} `;
+    let b=document.createElement("button"); b.textContent="Remove"; b.className="btn-red";
+    b.onclick=()=>{ learners[cls].splice(i,1); save(); showLearners(); };
+    li.appendChild(b); ul.appendChild(li);
+  });
+  if(list.length>=MAX) document.getElementById("errorText").textContent="🚫 Class FULL - 50/50";
+}
+showLearners();
 </script>
 </body>
 </html>
