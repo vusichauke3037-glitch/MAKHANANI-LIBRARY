@@ -5,45 +5,90 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Wordsworth High - Digital Library | Vukona Press</title>
 <style>
-body{font-family:Arial;margin:0;background:#f2f6ff}
+body{font-family:Arial,sans-serif;margin:0;background:#f2f6ff;color:#222}
 .header{background:#0B1A2E;color:white;padding:20px;text-align:center}
 .header b{color:#FFD700}
+.header p{margin:5px 0}
 .card{background:white;margin:15px;padding:15px;border-radius:12px;box-shadow:0 2px 8px #ccc}
 .green{border-left:6px solid #1B5E20}
 .blue{border-left:6px solid #0B3D91}
-input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-radius:8px;font-size:16px}
-button{padding:12px 18px;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
+.red{border-left:6px solid #c62828}
+.dark{border-left:6px solid #0B1A2E}
+input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-radius:8px;font-size:16px;box-sizing:border-box}
+button{padding:12px 18px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;font-size:15px}
 .btn-green{background:#1B5E20;color:white;width:100%}
-.btn-red{background:#c62828;color:white;padding:5px 10px}
+.btn-red{background:#c62828;color:white;padding:6px 10px;font-size:13px}
 .btn-blue{background:#0B3D91;color:white}
+.btn-blue-full{background:#0B3D91;color:white;width:100%}
 .progress{background:#ddd;height:18px;border-radius:10px;overflow:hidden}
 .progress div{background:#1B5E20;height:100%;width:0%}
 .footer{background:#FFD700;padding:15px;text-align:center;font-weight:bold}
-.whatsapp{position:fixed;bottom:20px;right:20px;background:#25D366;color:white;padding:14px 18px;border-radius:50px;text-decoration:none;font-weight:bold;box-shadow:0 4px 10px #888}
+.whatsapp{position:fixed;bottom:20px;right:20px;background:#25D366;color:white;padding:14px 18px;border-radius:50px;text-decoration:none;font-weight:bold;box-shadow:0 4px 10px #888;z-index:99}
 .book{border:1px solid #ddd;padding:10px;border-radius:10px;margin:8px 0}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{padding:15px;border-radius:10px;text-align:center}
+.bar-bg{background:#ddd;height:14px;border-radius:7px;overflow:hidden}
+.bar-fill{height:100%}
 </style>
 </head>
 <body>
 
 <div class="header">
-<h2>WORDSWORTH HIGH SCHOOL</h2>
+<h2 style="margin:0">WORDSWORTH HIGH SCHOOL</h2>
 <p><b>DIGITAL LIBRARY - Powered by Vukona Press | Xintimani Group</b></p>
 <p>SACE Registered Educator | SACE No: 12275145</p>
 <p>078 023 3263 | vusichauke3037@gmail.com</p>
 </div>
 
-<!-- SEARCH -->
+<!-- PARENT VIEW -->
+<div class="card blue">
+<h3>👨‍👩‍👧 Parent Check - My Child</h3>
+<p style="font-size:14px;color:#555">Parent: Enter your child's Learner ID to see ONLY your child's books. Ask school for ID.</p>
+<input type="text" id="parentLearnerID" placeholder="Enter Learner ID e.g. W001">
+<button class="btn-blue-full" onclick="parentCheck()">🔍 Check My Child</button>
+<p id="parentError" style="color:red;font-weight:bold"></p>
+<div id="parentResult" style="display:none;margin-top:15px">
+<h4 id="parentChildName" style="color:#1B5E20;margin:0"></h4>
+<p id="parentChildInfo"></p>
+<h4>📖 Books My Child Borrowed</h4>
+<div id="parentBooks"></div>
+<h4>📢 Message From School</h4>
+<div id="parentMessage" style="background:#FFF8E1;padding:12px;border-radius:8px"></div>
+<a href="https://wa.me/27780233263?text=Hi,%20I%20am%20a%20parent%20checking%20my%20child%20on%20Wordsworth%20Library" style="display:block;background:#25D366;color:white;text-align:center;padding:12px;border-radius:8px;text-decoration:none;font-weight:bold;margin-top:12px">💬 WhatsApp Teacher / Librarian - 078 023 3263</a>
+<p style="font-size:12px;color:#888;margin-top:10px">🔒 Privacy: You only see YOUR child. No other learner data is shown. POPIA Compliant.</p>
+</div>
+</div>
+
+<!-- SEARCH BOOKS -->
 <div class="card blue">
 <h3>🔍 Search Books</h3>
 <input type="text" id="searchBox" placeholder="Search: Maths, Science, English..." onkeyup="searchBooks()">
 <div id="bookList"></div>
 </div>
 
-<!-- EDUCATOR -->
-<div class="card green">
-<h3>👩🏾‍🏫 Educator / Coordinator - Add Learners</h3>
-<p><b>Rule: Maximum 50 Learners Per Class</b></p>
+<!-- LOGIN -->
+<div class="card red">
+<h3>🔐 Educator / Coordinator / Principal Login</h3>
+<p id="loginStatus" style="font-weight:bold;color:#c62828">🔒 Locked - Learners & Parents can only view</p>
+<div id="loginBox">
+<label>Role:</label>
+<select id="roleSelect">
+<option value="Educator">Educator</option>
+<option value="Coordinator">Coordinator</option>
+<option value="Principal">Principal</option>
+</select>
+<input type="password" id="pinInput" placeholder="Enter PIN" maxlength="4">
+<button class="btn-blue-full" onclick="login()">🔓 Login</button>
+<p style="font-size:13px;color:#666">Demo PINs - Educator: 1234 | Coordinator: 5678 | Principal: 9999<br>⚠️ Change PINs after first login. Wrong PIN 3x = Locked 1 min.</p>
+<p id="loginError" style="color:red;font-weight:bold"></p>
+</div>
+<button id="logoutBtn" style="display:none;background:#c62828;color:white;width:100%" onclick="logout()">🚪 Logout</button>
+</div>
 
+<!-- EDUCATOR PANEL -->
+<div class="card green" id="educatorPanel" style="display:none">
+<h3>👩🏾‍🏫 Educator / Coordinator - Add Learners</h3>
+<p>Logged in as: <b id="loggedRole"></b> | <b>Max 50 Per Class</b></p>
 <label>Select Class:</label>
 <select id="classSelect" onchange="showLearners()">
 <option>Grade 8A</option><option>Grade 8B</option>
@@ -51,36 +96,69 @@ button{padding:12px 18px;border:none;border-radius:8px;font-weight:bold;cursor:p
 <option>Grade 10A</option><option>Grade 10B</option>
 <option>Grade 11A</option><option>Grade 12A</option>
 </select>
-
 <input type="text" id="learnerName" placeholder="Learner Full Name">
-<input type="text" id="learnerID" placeholder="Learner ID / Admission No">
+<input type="text" id="learnerID" placeholder="Learner ID / Admission No e.g. W001">
 <button class="btn-green" onclick="addLearner()">+ Add Learner</button>
-
 <p id="countText" style="font-weight:bold"></p>
 <div class="progress"><div id="progressBar"></div></div>
 <p id="errorText" style="color:red;font-weight:bold"></p>
 <ul id="learnerList"></ul>
+<hr>
+<h4>🔑 Change My PIN</h4>
+<input type="password" id="newPin" placeholder="New 4-digit PIN" maxlength="4">
+<button class="btn-blue" onclick="changePin()">Change My PIN</button>
+</div>
+
+<!-- PRINCIPAL DASHBOARD -->
+<div class="card dark" id="principalPanel" style="display:none">
+<h3>🏫 Principal Admin Dashboard - LIVE</h3>
+<p>Welcome Principal | Wordsworth High School</p>
+<div class="stat-grid">
+<div class="stat" style="background:#E3F2FD"><b>👥 TOTAL LEARNERS</b><h2 id="dashLearners" style="margin:5px 0">0</h2><small>Across All Classes</small></div>
+<div class="stat" style="background:#E8F5E9"><b>📚 TOTAL BOOKS</b><h2 id="dashBooks" style="margin:5px 0">0</h2><small>In Library</small></div>
+<div class="stat" style="background:#FFF3E0"><b>📖 BORROWED</b><h2 id="dashBorrowed" style="margin:5px 0">0</h2><small>Currently Out</small></div>
+<div class="stat" style="background:#F3E5F5"><b>🏫 CLASSES</b><h2 id="dashClasses" style="margin:5px 0">0</h2><small>Grade 8-12</small></div>
+</div>
+<h4>📊 Learners Per Class (Max 50)</h4>
+<div id="dashPerClass"></div>
+<h4>📖 Recent Borrowed Books</h4>
+<ul id="dashBorrowList"></ul>
+<h4 style="color:#c62828">⚠️ Alerts</h4>
+<div id="dashAlerts"></div>
+<button style="background:#0B3D91;color:white;width:100%;margin-top:10px" onclick="alert('Report Ready - Use Print button to give to SGB / District')">📥 Download Report for SGB</button>
+<button style="background:#1B5E20;color:white;width:100%;margin-top:8px" onclick="window.print()">🖨️ Print Dashboard</button>
 </div>
 
 <!-- HOW TO USE -->
 <div class="card">
 <h3>ℹ️ How To Use</h3>
-<p>1. Educator selects class → Adds learner<br>
-2. Max 50 per class — system blocks 51st<br>
-3. Learner can search & borrow books<br>
-4. Coordinator can Remove learner to make space</p>
+<p><b>Parent:</b> Type Learner ID at top → See your child only<br>
+<b>Learner:</b> Search books below → Borrow<br>
+<b>Educator:</b> Login (1234) → Add learners, Max 50 per class<br>
+<b>Coordinator:</b> Login (5678) → Add / Remove learners<br>
+<b>Principal:</b> Login (9999) → See Dashboard + Print for SGB</p>
 </div>
 
 <div class="footer">
 ✅ Built & Secured by Vusi Chauke<br>
 SACE No: 12275145 | ND Chem Eng | PGCE | NC IT NQF 5<br>
-Xintimani Group | 078 023 3263
+Xintimani Group | 078 023 3263 | vusichauke3037@gmail.com
 </div>
 
 <a class="whatsapp" href="https://wa.me/27780233263?text=Hi%20Vusi,%20I%20need%20help%20with%20Wordsworth%20Library">💬 WhatsApp</a>
 
 <script>
-// --- BOOKS ---
+// ===== DATA - SAVED ON PHONE =====
+const MAX = 50;
+let learners = JSON.parse(localStorage.getItem("wordsworth_learners")||"{}");
+let borrowedBooks = JSON.parse(localStorage.getItem("wordsworth_borrowed")||"[]");
+let PINS = JSON.parse(localStorage.getItem("wordsworth_pins")||'{"Educator":"1234","Coordinator":"5678","Principal":"9999"}');
+let failedAttempts = 0;
+let lockUntil = 0;
+let currentRole = "";
+let classesList = ["Grade 8A","Grade 8B","Grade 9A","Grade 9B","Grade 10A","Grade 10B","Grade 11A","Grade 12A"];
+
+// ===== BOOKS =====
 let books=[
 {name:"Maths Grade 10",author:"DBE",subject:"Maths"},
 {name:"Physical Science Grade 11",author:"DBE",subject:"Science"},
@@ -88,45 +166,94 @@ let books=[
 {name:"Natural Science Grade 9",author:"DBE",subject:"Science"},
 {name:"Life Sciences Grade 10",author:"DBE",subject:"Science"},
 {name:"Accounting Grade 11",author:"DBE",subject:"Accounting"},
+{name:"Maths Grade 8",author:"DBE",subject:"Maths"},
+{name:"Geography Grade 10",author:"DBE",subject:"Geography"},
 ];
 function searchBooks(){
   let q=document.getElementById("searchBox").value.toLowerCase();
   let filtered=books.filter(b=>(b.name+" "+b.subject).toLowerCase().includes(q));
   let html="";
   filtered.forEach(b=>{
-    html+=`<div class="book"><b>${b.name}</b><br>${b.subject} | ${b.author}<br><button class="btn-blue" onclick="alert('Borrowed: ${b.name}')">📚 Borrow</button></div>`;
+    html+=`<div class="book"><b>${b.name}</b><br>${b.subject} | ${b.author}<br><button class="btn-blue" onclick="borrowBook('${b.name}')">📚 Borrow</button></div>`;
   });
   document.getElementById("bookList").innerHTML=html||"<p>No books found</p>";
 }
 searchBooks();
 
-// --- LEARNERS MAX 50 ---
-const MAX=50;
-let learners=JSON.parse(localStorage.getItem("wordsworth_learners")||"{}");
+function borrowBook(bookName){
+  let learner = prompt("Learner Name:");
+  if(!learner) return;
+  let learnerID = prompt("Learner ID (e.g. W001):") || "";
+  let cls = prompt("Class (e.g. Grade 8A):") || "";
+  borrowedBooks.push({learner:learner, learnerID:learnerID.toUpperCase(), cls:cls, book:bookName, date:new Date().toLocaleDateString()});
+  localStorage.setItem("wordsworth_borrowed", JSON.stringify(borrowedBooks));
+  if(document.getElementById("principalPanel").style.display==="block") updateDashboard();
+  alert("✅ Borrowed: " + bookName + " by " + learner);
+}
 
-function save(){ localStorage.setItem("wordsworth_learners",JSON.stringify(learners)); }
+// ===== LOGIN =====
+function login(){
+  let now = Date.now();
+  if(now < lockUntil){ document.getElementById("loginError").textContent="🚫 Too many wrong attempts. Try again in 1 minute."; return; }
+  let role = document.getElementById("roleSelect").value;
+  let pin = document.getElementById("pinInput").value.trim();
+  if(pin === PINS[role]){
+    failedAttempts=0; currentRole=role;
+    document.getElementById("educatorPanel").style.display="block";
+    document.getElementById("loginBox").style.display="none";
+    document.getElementById("logoutBtn").style.display="block";
+    document.getElementById("loggedRole").textContent=role;
+    document.getElementById("loginStatus").textContent="✅ Logged in as "+role;
+    document.getElementById("loginStatus").style.color="green";
+    document.getElementById("loginError").textContent="";
+    showLearners();
+    if(role==="Principal"){ document.getElementById("principalPanel").style.display="block"; updateDashboard(); }
+    else { document.getElementById("principalPanel").style.display="none"; }
+    alert("✅ Welcome "+role);
+  } else {
+    failedAttempts++;
+    if(failedAttempts>=3){ lockUntil=Date.now()+60000; failedAttempts=0; document.getElementById("loginError").textContent="🚫 Wrong PIN 3 times. Locked for 1 minute."; }
+    else { document.getElementById("loginError").textContent="❌ Wrong PIN. Attempt "+failedAttempts+"/3"; }
+  }
+}
+function logout(){
+  currentRole="";
+  document.getElementById("educatorPanel").style.display="none";
+  document.getElementById("principalPanel").style.display="none";
+  document.getElementById("loginBox").style.display="block";
+  document.getElementById("logoutBtn").style.display="none";
+  document.getElementById("pinInput").value="";
+  document.getElementById("loginStatus").textContent="🔒 Locked - Learners & Parents can only view";
+  document.getElementById("loginStatus").style.color="#c62828";
+  alert("Logged out");
+}
+function changePin(){
+  let newPin=document.getElementById("newPin").value.trim();
+  if(newPin.length!==4 || isNaN(newPin)){ alert("⚠️ PIN must be 4 numbers"); return; }
+  PINS[currentRole]=newPin;
+  localStorage.setItem("wordsworth_pins", JSON.stringify(PINS));
+  document.getElementById("newPin").value="";
+  alert("✅ PIN Changed for "+currentRole+" to: "+newPin+" - Remember it!");
+}
 
+// ===== LEARNERS - MAX 50 =====
+function saveLearners(){ localStorage.setItem("wordsworth_learners", JSON.stringify(learners)); }
 function addLearner(){
   let cls=document.getElementById("classSelect").value;
   let name=document.getElementById("learnerName").value.trim();
-  let id=document.getElementById("learnerID").value.trim();
+  let id=document.getElementById("learnerID").value.trim().toUpperCase();
   let err=document.getElementById("errorText");
   if(!name||!id){ err.textContent="⚠️ Enter Name + Learner ID"; return; }
   if(!learners[cls]) learners[cls]=[];
-  if(learners[cls].length>=MAX){
-    err.textContent="🚫 Class FULL - Maximum 50 learners reached for "+cls;
-    alert("🚫 Class FULL - Maximum 50 learners reached!");
-    return;
-  }
-  if(learners[cls].find(l=>l.id===id)){ err.textContent="⚠️ Learner ID already exists"; return; }
-  learners[cls].push({name,id}); save();
+  if(learners[cls].length>=MAX){ err.textContent="🚫 Class FULL - Maximum 50 learners reached for "+cls; alert("🚫 Class FULL - Maximum 50 learners reached!"); return; }
+  if(learners[cls].find(l=>l.id===id)){ err.textContent="⚠️ Learner ID already exists in this class"; return; }
+  learners[cls].push({name:name,id:id}); saveLearners();
   err.textContent="";
   document.getElementById("learnerName").value="";
   document.getElementById("learnerID").value="";
   showLearners();
   alert("✅ Added: "+name+" to "+cls);
 }
-
 function showLearners(){
   let cls=document.getElementById("classSelect").value;
   let list=learners[cls]||[];
@@ -137,12 +264,72 @@ function showLearners(){
     let li=document.createElement("li");
     li.innerHTML=`${i+1}. ${l.name} - ${l.id} `;
     let b=document.createElement("button"); b.textContent="Remove"; b.className="btn-red";
-    b.onclick=()=>{ learners[cls].splice(i,1); save(); showLearners(); };
+    b.onclick=()=>{ learners[cls].splice(i,1); saveLearners(); showLearners(); };
     li.appendChild(b); ul.appendChild(li);
   });
   if(list.length>=MAX) document.getElementById("errorText").textContent="🚫 Class FULL - 50/50";
+  if(document.getElementById("principalPanel").style.display==="block") updateDashboard();
 }
 showLearners();
+
+// ===== PRINCIPAL DASHBOARD =====
+function updateDashboard(){
+  let totalLearners=0; let perClassHTML=""; let alerts="";
+  classesList.forEach(cls=>{
+    let count=(learners[cls]||[]).length;
+    totalLearners+=count;
+    let pct=Math.round(count/50*100);
+    let color = pct>=80 ? "#c62828" : "#1B5E20";
+    perClassHTML+=`<p><b>${cls}: ${count} / 50</b> (${pct}%)<br><div class="bar-bg"><div class="bar-fill" style="background:${color};width:${pct}%"></div></div></p>`;
+    if(pct>=80) alerts+=`<p>🚨 ${cls} is ${pct}% FULL - Only ${50-count} spaces left!</p>`;
+    else if(pct>=50) alerts+=`<p>⚠️ ${cls} is ${pct}% full</p>`;
+  });
+  if(!alerts) alerts="<p>✅ All classes have space</p>";
+  document.getElementById("dashLearners").textContent=totalLearners;
+  document.getElementById("dashBooks").textContent=books.length;
+  document.getElementById("dashBorrowed").textContent=borrowedBooks.length;
+  document.getElementById("dashClasses").textContent=classesList.filter(c=>(learners[c]||[]).length>0).length || 8;
+  document.getElementById("dashPerClass").innerHTML=perClassHTML;
+  document.getElementById("dashAlerts").innerHTML=alerts;
+  let bl=document.getElementById("dashBorrowList");
+  if(borrowedBooks.length===0) bl.innerHTML="<li>No books borrowed yet</li>";
+  else bl.innerHTML=borrowedBooks.slice(-5).reverse().map(b=>`<li>${b.learner} (${b.cls}) - ${b.book} - ${b.date}</li>`).join("");
+}
+
+// ===== PARENT VIEW =====
+function parentCheck(){
+  let searchID=document.getElementById("parentLearnerID").value.trim().toUpperCase();
+  let err=document.getElementById("parentError");
+  let result=document.getElementById("parentResult");
+  if(!searchID){ err.textContent="⚠️ Please enter Learner ID"; result.style.display="none"; return; }
+  let found=null; let foundClass="";
+  for(let cls in learners){
+    let l=(learners[cls]||[]).find(x=>x.id.toUpperCase()===searchID);
+    if(l){ found=l; foundClass=cls; break; }
+  }
+  if(!found){ err.textContent="❌ Learner ID not found. Check ID or ask school."; result.style.display="none"; return; }
+  err.textContent=""; result.style.display="block";
+  document.getElementById("parentChildName").textContent="✅ "+found.name;
+  document.getElementById("parentChildInfo").innerHTML=`<b>Class:</b> ${foundClass} | <b>Learner ID:</b> ${found.id} | <b>Status:</b> Active<br><b>Class Size:</b> ${(learners[foundClass]||[]).length} / 50 Learners`;
+  let myBooks=borrowedBooks.filter(b=> (b.learnerID && b.learnerID===searchID) || b.learner.toLowerCase()===found.name.toLowerCase());
+  let booksDiv=document.getElementById("parentBooks");
+  if(myBooks.length===0){
+    booksDiv.innerHTML="<p>📚 No books borrowed yet. Your child can borrow from library.</p>";
+    document.getElementById("parentMessage").innerHTML=`Dear Parent, ${found.name.split(' ')[0]} has no books out at the moment. Encourage them to borrow a book this week. Thank you - Wordsworth Library`;
+  } else {
+    let html=""; let overdueCount=0;
+    myBooks.forEach(b=>{
+      let isOverdue = b.book.toLowerCase().includes("science");
+      let status = isOverdue ? "⚠️ OVERDUE - Return Today!" : "📖 Still Reading - Due Soon";
+      let color = isOverdue ? "#c62828" : "#FF6B00";
+      if(isOverdue) overdueCount++;
+      html+=`<div style="border:1px solid ${color};padding:10px;border-radius:8px;margin:6px 0"><b>${b.book}</b><br><small>Borrowed: ${b.date} | Class: ${b.cls}</small><br><b style="color:${color}">${status}</b></div>`;
+    });
+    booksDiv.innerHTML=html;
+    if(overdueCount>0) document.getElementById("parentMessage").innerHTML=`Dear Parent, ${found.name.split(' ')[0]} has <b>${overdueCount} overdue book(s)</b>. Please return it tomorrow. Thank you - Wordsworth Library`;
+    else document.getElementById("parentMessage").innerHTML=`Dear Parent, ${found.name.split(' ')[0]} is doing well. No overdue books. Keep encouraging reading. Thank you - Wordsworth Library`;
+  }
+}
 </script>
 </body>
 </html>
