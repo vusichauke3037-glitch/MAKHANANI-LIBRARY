@@ -4,9 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MAKHANANI - Digital Library</title>
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' https://www.gstatic.com https://cdn.jsdelivr.net https://unpkg.com 'unsafe-inline'; style-src 'self' https: 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://*.firebaseio.com https://*.googleapis.com wss://*.firebaseio.com;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' https://www.gstatic.com https://cdn.jsdelivr.net https://cdn.sheetjs.com https://unpkg.com 'unsafe-inline'; style-src 'self' https: 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://*.firebaseio.com https://*.googleapis.com wss://*.firebaseio.com;">
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <style>
 *{box-sizing:border-box;font-family:Arial,sans-serif}
 body{margin:0;background:#eef2f7}
@@ -71,12 +72,10 @@ th,td{padding:8px;border-bottom:1px solid #eee;text-align:left;text-transform:up
 .selected-learner button{background:#fff;color:#c62828;border:0;border-radius:20px;padding:4px 10px;font-weight:bold;cursor:pointer}
 .school-badge{background:#ffb300;color:#000;padding:6px 12px;border-radius:20px;font-weight:bold;font-size:13px;display:inline-block}
 .admin-badge{background:#111;color:#ffb300;padding:6px 12px;border-radius:20px;font-weight:bold;font-size:13px;display:inline-block}
-.dbe-badge{background:#007A4D;color:#fff;padding:6px 12px;border-radius:20px;font-weight:bold;font-size:12px;display:inline-block}
 @media(max-width:600px){.grid,.grid4{grid-template-columns:1fr 1fr}.logo-img,.logo-fallback{width:48px;height:48px;font-size:24px}}
 </style>
 </head>
 <body>
-
 <div class="header">
   <div class="logo-row">
     <img src="logo.png" class="logo-img" onerror="this.style.display='none';document.getElementById('logoFallback').style.display='flex';">
@@ -85,7 +84,6 @@ th,td{padding:8px;border-bottom:1px solid #eee;text-align:left;text-transform:up
   </div>
   <p class="small" style="margin-top:8px">🏫 SCHOOL: <span id="headerSchoolCode" class="school-badge">MAKHANANI</span> <span id="headerSchoolName" class="small" style="color:#fff"></span> <span id="headerAdminBadge" class="hidden"><span class="admin-badge">👑 ADMIN MODE</span></span> | 🇿🇦 DBE NATIONWIDE | 🔒 SECURED | 📷 SCAN</p>
 </div>
-
 <div class="nav">
   <button class="active" onclick="showTab('home',this)">🏠 HOME</button>
   <button onclick="showTab('issue',this)">📤 ISSUE</button>
@@ -97,19 +95,17 @@ th,td{padding:8px;border-bottom:1px solid #eee;text-align:left;text-transform:up
   <button onclick="showTab('admin',this)" class="admin">👑 ADMIN</button>
   <button onclick="showTab('login',this)">🔐 LOGIN</button>
 </div>
-
 <div class="wrap">
 <div id="tab-home">
   <div class="grid"><div class="stat"><b id="totalBooks">0</b>📚 TOTAL BOOKS</div><div class="stat"><b id="totalLearners">0</b>👩‍🎓 LEARNERS</div><div class="stat"><b id="borrowedCount">0</b>📤 BORROWED</div></div>
-  <div class="card dbe"><h3>🇿🇦 DBE SCHOOLS NATIONWIDE</h3><p>✅ <b><span id="dbeCountHome">21</span> DBE SCHOOLS LOADED</b> — STARTER LIST<br>🔍 Search by Name / EMIS / Town in <b>🔐 LOGIN</b> tab to switch school.<br><span class="small">When full DBE file is uploaded, this becomes 25,000+ schools automatically!</span></p><button class="btn" style="background:#007A4D" onclick="showTab('login',document.querySelectorAll('.nav button')[8])">🔍 FIND MY DBE SCHOOL →</button></div>
+  <div class="card dbe"><h3>🇿🇦 DBE SCHOOLS NATIONWIDE</h3><p>✅ <b><span id="dbeCountHome">21</span> DBE SCHOOLS LOADED</b> — STARTER LIST<br>🔍 Search by Name / EMIS / Town in <b>🔐 LOGIN</b> tab to switch school.<br><span class="small">Admin can upload full 25,000+ list in 👑 ADMIN → UPLOAD LIST!</span></p><button class="btn" style="background:#007A4D" onclick="showTab('login',document.querySelectorAll('.nav button')[8])">🔍 FIND MY DBE SCHOOL →</button></div>
   <div class="card secure"><h3>🛡️ SECURITY STATUS</h3><p id="securityStatus">CHECKING...</p><p class="small">✅ ONLY LIBRARIAN CAN EDIT • ✅ PARENT NEEDS ID + SURNAME (HASHED) • ✅ ADMIN CONTROLS ALL SCHOOLS • ✅ EMIS SEPARATES SCHOOLS</p></div>
-  <div class="card admin"><h3>👑 APP ADMINISTRATOR</h3><p>YOU ARE THE SUPER ADMIN. ADD NEW SCHOOLS FROM DBE LIST, DELETE SCHOOLS, VIEW ALL SCHOOLS.</p><button class="btn black" onclick="showTab('admin',document.querySelectorAll('.nav button')[7])">👑 OPEN ADMIN PANEL →</button><p class="small" style="margin-top:8px">ADMIN PASSCODE: <b>ADMIN@2026</b></p></div>
+  <div class="card admin"><h3>👑 APP ADMINISTRATOR</h3><p>YOU ARE THE SUPER ADMIN. UPLOAD DBE LIST, ADD NEW SCHOOLS, DELETE SCHOOLS, VIEW ALL SCHOOLS.</p><button class="btn black" onclick="showTab('admin',document.querySelectorAll('.nav button')[7])">👑 OPEN ADMIN PANEL →</button><p class="small" style="margin-top:8px">ADMIN PASSCODE: <b>ADMIN@2026</b></p></div>
   <div class="card"><h3>📚 ALL CAPS SUBJECTS</h3><p class="small" id="subjectListDisplay"></p></div>
   <div class="card scan"><h3>📷 QUICK SCAN</h3><button class="btn black" onclick="showTab('issue',document.querySelectorAll('.nav button')[1])">👩‍🎓 PICK LEARNER + 📷 SCAN TO ISSUE →</button><button class="btn orange" onclick="showTab('return',document.querySelectorAll('.nav button')[2])" style="margin-top:8px">📷 SCAN TO RETURN →</button></div>
   <div class="card"><h3>🔍 SEARCH BOOK</h3><input id="searchBook" placeholder="SEARCH TITLE OR BARCODE" oninput="renderBooks()" maxlength="100" style="text-transform:uppercase"><div id="bookList"></div></div>
   <div class="card"><h3>📋 HOW IT WORKS</h3><p>1. <b>LOGIN:</b> 🔍 SEARCH DBE SCHOOL → TAP IT<br>2. <b>PICK LEARNER:</b> TYPE SURNAME → TAP NAME<br>3. <b>SCAN:</b> 📷 CAMERA SCANS BARCODE</p><p class="small">STATUS: <span id="conn">CONNECTING...</span> | <span id="loginStatus">NOT LOGGED IN</span></p></div>
 </div>
-
 <div id="tab-issue" class="hidden">
   <div class="card"><h3>📤 ISSUE BOOK - LIBRARIAN ONLY 🔒</h3>
     <div class="card learner" style="margin:8px 0">
@@ -144,7 +140,6 @@ th,td{padding:8px;border-bottom:1px solid #eee;text-align:left;text-transform:up
     <h3 style="margin-top:14px">📤 CURRENTLY BORROWED</h3><div id="borrowedListIssue"></div>
   </div>
 </div>
-
 <div id="tab-return" class="hidden">
   <div class="card"><h3>📥 RETURN BOOK - LIBRARIAN ONLY 🔒</h3>
     <div class="card scan" style="margin:8px 0">
@@ -162,20 +157,16 @@ th,td{padding:8px;border-bottom:1px solid #eee;text-align:left;text-transform:up
     <h3 style="margin-top:14px">📤 CURRENTLY BORROWED</h3><div id="borrowedList"></div>
   </div>
 </div>
-
 <div id="tab-learners" class="hidden">
   <div class="card"><h3>👩‍🎓 ADD LEARNER 🔒</h3><select id="addGrade"><option value="">GRADE</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select><select id="addClass"><option value="">CLASS</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select><input id="addNumber" type="number" min="1" max="60" placeholder="NUMBER 1-60"><input id="addName" placeholder="FIRST NAME" maxlength="50" style="text-transform:uppercase"><input id="addSurname" placeholder="SURNAME" maxlength="50" style="text-transform:uppercase"><button class="btn" onclick="addLearner()">➕ ADD LEARNER</button><div id="addLearnerMsg"></div></div>
   <div class="card" style="border-left:5px solid #6a1b9a"><h3>⚡ BULK ADD LEARNERS</h3><p class="small">FORMAT: GRADE,CLASS,NUMBER,FIRSTNAME,SURNAME</p><textarea id="bulkLearners" placeholder="GRADE,CLASS,NUMBER,FIRSTNAME,SURNAME&#10;12,D,1,JOHN,MASEKO"></textarea><button class="btn purple" onclick="bulkAddLearners()">⚡ BULK ADD</button><div id="bulkLearnerMsg"></div></div>
   <div class="card" style="border-left:5px solid #c62828"><h3>🗑️ DELETE LEARNER</h3><input id="deleteLearnerId" placeholder="LEARNER ID" maxlength="10" style="text-transform:uppercase"><button class="btn red" onclick="deleteLearner()">🗑️ DELETE</button><div id="deleteLearnerMsg"></div></div>
   <div class="card"><h3>ALL LEARNERS</h3><input id="learnerTabSearch" placeholder="🔍 SEARCH LEARNERS..." oninput="renderLearners()" maxlength="50" style="text-transform:uppercase"><div id="learnerList"></div></div>
 </div>
-
 <div id="tab-books" class="hidden">
   <div class="card"><h3>📚 ADD BOOK - WITH QUANTITY ✅</h3>
     <label style="font-weight:bold">📖 SUBJECT - ALL CAPS ✅</label>
-    <select id="bookCategory">
-      <option value="MAT">MAT - MATHEMATICS</option><option value="MATL">MATL - MATHEMATICAL LITERACY</option><option value="ENG">ENG - ENGLISH HOME LANGUAGE</option><option value="AFR">AFR - AFRIKAANS FIRST ADDITIONAL LANGUAGE</option><option value="ZUL">ZUL - ISIZULU HOME LANGUAGE</option><option value="SEP">SEP - SEPEDI HOME LANGUAGE</option><option value="XHO">XHO - ISIXHOSA HOME LANGUAGE</option><option value="LIFS">LIFS - LIFE SCIENCES</option><option value="PHYS">PHYS - PHYSICAL SCIENCES</option><option value="ACC">ACC - ACCOUNTING</option><option value="BUS">BUS - BUSINESS STUDIES</option><option value="ECO">ECO - ECONOMICS</option><option value="GEO">GEO - GEOGRAPHY</option><option value="HIST">HIST - HISTORY</option><option value="LIFO">LIFO - LIFE ORIENTATION</option><option value="CAT">CAT - COMPUTER APPLICATIONS TECHNOLOGY</option><option value="IT">IT - INFORMATION TECHNOLOGY</option><option value="TOUR">TOUR - TOURISM</option><option value="CONS">CONS - CONSUMER STUDIES</option><option value="AGRI">AGRI - AGRICULTURAL SCIENCES</option><option value="EGD">EGD - ENGINEERING GRAPHICS & DESIGN</option><option value="TECH">TECH - TECHNOLOGY</option>
-    </select>
+    <select id="bookCategory"><option value="MAT">MAT - MATHEMATICS</option><option value="MATL">MATL - MATHEMATICAL LITERACY</option><option value="ENG">ENG - ENGLISH HOME LANGUAGE</option><option value="AFR">AFR - AFRIKAANS FIRST ADDITIONAL LANGUAGE</option><option value="ZUL">ZUL - ISIZULU HOME LANGUAGE</option><option value="SEP">SEP - SEPEDI HOME LANGUAGE</option><option value="XHO">XHO - ISIXHOSA HOME LANGUAGE</option><option value="LIFS">LIFS - LIFE SCIENCES</option><option value="PHYS">PHYS - PHYSICAL SCIENCES</option><option value="ACC">ACC - ACCOUNTING</option><option value="BUS">BUS - BUSINESS STUDIES</option><option value="ECO">ECO - ECONOMICS</option><option value="GEO">GEO - GEOGRAPHY</option><option value="HIST">HIST - HISTORY</option><option value="LIFO">LIFO - LIFE ORIENTATION</option><option value="CAT">CAT - COMPUTER APPLICATIONS TECHNOLOGY</option><option value="IT">IT - INFORMATION TECHNOLOGY</option><option value="TOUR">TOUR - TOURISM</option><option value="CONS">CONS - CONSUMER STUDIES</option><option value="AGRI">AGRI - AGRICULTURAL SCIENCES</option><option value="EGD">EGD - ENGINEERING GRAPHICS & DESIGN</option><option value="TECH">TECH - TECHNOLOGY</option></select>
     <select id="bookGrade"><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select>
     <input id="bookTitle" placeholder="BOOK TITLE E.G. OXFORD MATHEMATICS GRADE 12" maxlength="100" style="text-transform:uppercase">
     <input id="bookBarcode" placeholder="STARTING BARCODE - AUTO IF EMPTY E.G. MAT-001" maxlength="20" style="text-transform:uppercase">
@@ -185,7 +176,6 @@ th,td{padding:8px;border-bottom:1px solid #eee;text-align:left;text-transform:up
   <div class="card" style="border-left:5px solid #6a1b9a"><h3>⚡ BULK ADD BOOKS</h3><p class="small">FORMAT: CATEGORY,GRADE,TITLE,BARCODE — ALL CAPS AUTO ✅</p><textarea id="bulkBooks" placeholder="CATEGORY,GRADE,TITLE,BARCODE&#10;ENG,10,OXFORD ENGLISH GRADE 10,&#10;PHYS,12,PHYSICAL SCIENCES GRADE 12,"></textarea><button class="btn purple" onclick="bulkAddBooks()">⚡ BULK ADD BOOKS</button><div id="bulkBookMsg"></div></div>
   <div class="card" style="border-left:5px solid #111"><h3>🖨️ PRINT BARCODES</h3><button class="btn black" onclick="printAllBarcodes()">🖨️ PRINT ALL BARCODES</button><div style="margin-top:10px"><input id="printOneBarcode" placeholder="OR TYPE ONE BARCODE" maxlength="20" style="text-transform:uppercase"><button class="btn" onclick="printSingleFromInput()" style="margin-top:6px">🖨️ PRINT THIS ONE</button></div><div id="printMsg"></div></div>
 </div>
-
 <div id="tab-principal" class="hidden">
   <div class="card gold"><h3>👔 PRINCIPAL DASHBOARD 🔒</h3><p class="small" id="principalDate">LOADING...</p><button class="btn gold" onclick="renderPrincipal()">🔄 REFRESH</button> <button class="btn black" onclick="printPrincipalReport()" style="margin-top:8px">🖨️ PRINT PRINCIPAL REPORT</button></div>
   <div class="grid4"><div class="stat gold"><b id="pTotalBooks">0</b>📚 TOTAL BOOKS</div><div class="stat"><b id="pTotalLearners">0</b>👩‍🎓 LEARNERS</div><div class="stat red"><b id="pBorrowed">0</b>📤 BORROWED</div><div class="stat green"><b id="pAvailable">0</b>✅ AVAILABLE</div></div>
@@ -197,11 +187,9 @@ th,td{padding:8px;border-bottom:1px solid #eee;text-align:left;text-transform:up
   <div class="card green"><h3>✅ RECENTLY RETURNED</h3><div id="pReturnedList">LOGIN TO VIEW</div></div>
   <div class="card"><h3>🏆 TOP BORROWED</h3><div id="pTopBooks"></div></div>
 </div>
-
 <div id="tab-parent" class="hidden">
   <div class="card" style="border-left:5px solid #1a7f37"><h3>👨‍👩‍👧 PARENT CHECK - PROTECTED</h3><p class="small">🔒 SURNAME IS HASHED — 5 WRONG TRIES = LOCKED 5 MINS.</p><input id="parentId" placeholder="LEARNER ID E.G. 8A01" style="text-transform:uppercase" maxlength="10"><input id="parentSurname" placeholder="SURNAME" maxlength="50" style="text-transform:uppercase"><button class="btn green" onclick="checkMyChild()">🔍 CHECK MY CHILD</button><div id="parentResult" style="margin-top:10px"></div><div id="parentAttempts" class="small"></div></div>
 </div>
-
 <div id="tab-admin" class="hidden">
   <div class="card admin"><h3>👑 APP ADMINISTRATOR - FULL CONTROL</h3><p class="small" id="adminStatus">🔒 NOT LOGGED IN AS ADMIN</p>
     <div id="adminLoginBox">
@@ -213,6 +201,22 @@ th,td{padding:8px;border-bottom:1px solid #eee;text-align:left;text-transform:up
     <div id="adminPanel" class="hidden">
       <p style="background:#111;color:#ffb300;padding:10px;border-radius:8px;font-weight:bold;text-align:center">👑 WELCOME SUPER ADMIN — YOU CONTROL ALL SCHOOLS <button class="btn small" style="background:#c62828;color:#fff;margin-left:10px" onclick="adminLogout()">LOGOUT ADMIN</button></p>
       <div class="grid4" style="margin:10px 0"><div class="stat black"><b id="aTotalSchools">0</b>🏫 SCHOOLS</div><div class="stat"><b id="aTotalBooksAll">0</b>📚 ALL BOOKS</div><div class="stat"><b id="aTotalLearnersAll">0</b>👩‍🎓 ALL LEARNERS</div><div class="stat red"><b id="aTotalBorrowedAll">0</b>📤 ALL BORROWED</div></div>
+      <div class="card" style="border-left:5px solid #007A4D;background:#f0fff4">
+        <h3>📎 👑 UPLOAD LIST OF SCHOOLS - ADMIN ONLY</h3>
+        <p class="small">✅ Upload <b>CSV / JSON / EXCEL (.xlsx)</b> from DBE / DataFirst<br>✅ Or paste below. <b>Preview first, then Confirm!</b></p>
+        <button class="btn small" style="background:#007A4D" onclick="downloadSchoolTemplate()">📥 DOWNLOAD TEMPLATE (CSV)</button>
+        <button class="btn small" style="background:#111;margin-left:6px" onclick="downloadCurrentSchoolsAsJSON()">📥 DOWNLOAD CURRENT LIST (JSON)</button>
+        <label style="font-weight:bold;margin-top:10px;display:block">📎 CHOOSE FILE:</label>
+        <input type="file" id="schoolFileInput" accept=".csv,.json,.xlsx,.xls,.txt" onchange="handleSchoolFileUpload(event)" style="background:#fff;border:2px dashed #007A4D;padding:14px">
+        <label style="font-weight:bold;margin-top:10px;display:block">📋 OR PASTE HERE (CSV):</label>
+        <p class="small">FORMAT: <b>EMIS,NAME,TOWN,PROVINCE,DISTRICT</b> — One school per line</p>
+        <textarea id="pasteSchoolsText" placeholder="EMIS,NAME,TOWN,PROVINCE,DISTRICT&#10;700400123,MAKHANANI HIGH SCHOOL,BENONI,GAUTENG,EKURHULENI NORTH&#10;400100001,DURBAN HIGH SCHOOL,DURBAN,KWAZULU-NATAL,UMGUNGUNDLOVU"></textarea>
+        <button class="btn" style="background:#007A4D" onclick="previewPastedSchools()">👀 PREVIEW PASTED LIST</button>
+        <div id="uploadPreviewBox" style="margin-top:10px"></div>
+        <div id="uploadProgress" class="small" style="margin-top:6px"></div>
+        <div id="uploadResult" style="margin-top:8px"></div>
+        <p class="small" style="margin-top:10px">💡 DBE Excel from DataFirst has many columns — App auto-finds EMIS + NAME + TOWN + PROVINCE.</p>
+      </div>
       <div class="card dbe"><h3>🇿🇦 ➕ ADD SCHOOL FROM DBE LIST</h3>
         <input id="adminDBESearch" placeholder="🔍 SEARCH DBE SCHOOL E.G. BENONI HIGH / DURBAN HIGH" oninput="searchDBEForAdmin(this.value)" style="border:2px solid #007A4D;text-transform:uppercase" maxlength="60">
         <div id="adminDBEResults" style="max-height:250px;overflow-y:auto;border:1px solid #cbd5e1;border-radius:8px;background:#fff;margin-top:4px"></div>
@@ -236,7 +240,6 @@ th,td{padding:8px;border-bottom:1px solid #eee;text-align:left;text-transform:up
     </div>
   </div>
 </div>
-
 <div id="tab-login" class="hidden">
   <div class="card dbe"><h3>🇿🇦 CHOOSE YOUR SCHOOL - DBE REGISTERED</h3>
     <p class="small">✅ <b><span id="dbeCountLogin">21</span> DBE SCHOOLS</b> in starter list. Type name / EMIS / town to find yours.</p>
@@ -256,7 +259,6 @@ th,td{padding:8px;border-bottom:1px solid #eee;text-align:left;text-transform:up
   </div>
 </div>
 </div>
-
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
@@ -266,8 +268,6 @@ firebase.initializeApp(firebaseConfig);
 const auth=firebase.auth(); const db=firebase.database();
 const ADMIN_PASSCODE = "ADMIN@2026";
 let isAdmin = sessionStorage.getItem('isAdmin')==='1';
-
-// ✅ DBE STARTER LIST - 21 SCHOOLS - 9 PROVINCES - Auto-replaced by schools.json if you upload full list!
 let dbeSchools = [
   {emis:"MAKHANANI", name:"MAKHANANI HIGH SCHOOL", town:"BENONI", province:"GAUTENG", district:"EKURHULENI NORTH"},
   {emis:"700400123", name:"MAKHANANI HIGH SCHOOL", town:"BENONI", province:"GAUTENG", district:"EKURHULENI NORTH"},
@@ -293,59 +293,34 @@ let dbeSchools = [
 ];
 async function loadDBESchools(){
   try{
+    const snap = await db.ref("schoolsMeta").once("value");
+    const meta = snap.val()||{};
+    const fromFirebase = Object.values(meta).filter(s=>s.emis || s.code).map(s=>({emis: s.emis||s.code, name: s.name, town: s.town||"", province: s.province||"", district: s.district||"", phase: s.phase||"", quintile: s.quintile||""}));
+    if(fromFirebase.length > 0){ const map={}; dbeSchools.forEach(s=>map[s.emis]=s); fromFirebase.forEach(s=>map[s.emis]=s); dbeSchools = Object.values(map); }
+  }catch(e){}
+  try{
     const res = await fetch('schools.json');
-    if(!res.ok) throw new Error('No schools.json');
-    const data = await res.json();
-    if(Array.isArray(data) && data.length > 0){ dbeSchools = data; console.log('✅ FULL DBE LOADED:', dbeSchools.length); }
-  }catch(e){ console.log('Using starter DBE list:', dbeSchools.length); }
+    if(res.ok){ const data = await res.json(); if(Array.isArray(data) && data.length>0){ const map={}; dbeSchools.forEach(s=>map[s.emis]=s); data.forEach(s=>{ if(s.emis && s.name) map[s.emis]=s; }); dbeSchools = Object.values(map); } }
+  }catch(e){}
   updateDBECount();
   const el=document.getElementById('dbeSchoolResults');
   if(el) el.innerHTML=`<p class='small' style='padding:10px'>✅ <b>${dbeSchools.length.toLocaleString()}</b> DBE SCHOOLS LOADED 🇿🇦<br>Type school name above to search...</p>`;
 }
-function updateDBECount(){
-  const c = dbeSchools.length;
-  ['dbeCountHome','dbeCountLogin'].forEach(id=>{ const e=document.getElementById(id); if(e) e.textContent=c.toLocaleString(); });
-}
-function searchDBESchools(q){
-  q=(q||"").trim().toUpperCase();
-  const prov=(document.getElementById('dbeProvinceFilter')?.value||"").toUpperCase();
-  const box=document.getElementById('dbeSchoolResults'); if(!box) return;
-  if(q.length<2){ box.innerHTML=`<p class='small' style='padding:10px'>💡 TYPE AT LEAST 2 LETTERS<br>✅ ${dbeSchools.length.toLocaleString()} DBE SCHOOLS READY<br>CURRENT: <b>${escapeHTML(schoolCode)}</b></p>`; return; }
-  let filtered=dbeSchools.filter(s=>{ const hay=(s.name+" "+s.emis+" "+s.town+" "+s.province+" "+(s.district||"")).toUpperCase(); return hay.includes(q) && (!prov || (s.province||"").toUpperCase()===prov); }).slice(0,50);
-  if(filtered.length===0){ box.innerHTML=`<p class='small' style='padding:10px'>❌ NO DBE SCHOOL FOUND FOR "<b>${escapeHTML(q)}</b>"<br>👑 Ask ADMIN to add it manually in ADMIN tab.</p>`; return; }
-  let html=`<p class='small' style='padding:8px 10px 0'>✅ FOUND ${filtered.length} SCHOOL(S) — TAP TO SELECT 👇</p>`;
-  filtered.forEach(s=>{ html+=`<div class="learner-item" onclick="selectDBESchool('${escapeHTML(s.emis)}')" style="border-left:4px solid #007A4D"><span><b>${escapeHTML(s.name)}</b><br><span class="small">🏫 EMIS: ${escapeHTML(s.emis)} | 📍 ${escapeHTML(s.town||"")} - ${escapeHTML(s.province||"")}<br>${escapeHTML(s.district||"")}</span></span><span>👉 SELECT</span></div>`; });
-  box.innerHTML=html;
-}
-function selectDBESchool(emis){
-  const s=dbeSchools.find(x=>String(x.emis)===String(emis)); if(!s) return;
-  changeSchoolCode(emis);
-  db.ref("schoolsMeta/"+emis).update({code:emis, name:s.name, town:s.town||"", province:s.province||"", district:s.district||"", emis:emis, lastSelected:Date.now()});
-  document.getElementById('dbeSelectedSchool').innerHTML=`<div class="selected-learner" style="background:#007A4D">✅ SELECTED: ${escapeHTML(s.name)}<br>EMIS: ${escapeHTML(s.emis)} | ${escapeHTML(s.town||"")} - ${escapeHTML(s.province||"")}</div>`;
-  document.getElementById('dbeSchoolResults').innerHTML=`<p class='small' style='padding:10px;color:#007A4D'>✅ SCHOOL SELECTED! Now login below with your librarian email 👇</p>`;
-  document.getElementById('dbeSchoolSearch').value=s.name;
-  document.getElementById('currentSchoolNameDisplay').textContent=s.name;
-  document.getElementById('headerSchoolName').textContent=" - "+s.name;
-  try{ document.getElementById('loginSchoolCode').value=emis; }catch(e){}
-  beep();
-}
-function searchDBEForAdmin(q){
-  q=(q||"").trim().toUpperCase(); const box=document.getElementById('adminDBEResults'); if(!box) return;
-  if(q.length<2){ box.innerHTML="<p class='small' style='padding:10px'>Type 2+ letters to search DBE...</p>"; return; }
-  let filtered=dbeSchools.filter(s=>(s.name+" "+s.emis+" "+s.town).toUpperCase().includes(q)).slice(0,20);
-  if(filtered.length===0){ box.innerHTML="<p class='small' style='padding:10px'>❌ Not in starter list - Fill manually below</p>"; return; }
-  let html=""; filtered.forEach(s=>{ html+=`<div class="learner-item" onclick="adminPickDBE('${escapeHTML(s.emis)}')"><span><b>${escapeHTML(s.name)}</b><br><span class="small">EMIS: ${escapeHTML(s.emis)} | ${escapeHTML(s.town||"")} - ${escapeHTML(s.province||"")}</span></span><span>👉 USE</span></div>`; });
-  box.innerHTML=html;
-}
-function adminPickDBE(emis){
-  const s=dbeSchools.find(x=>String(x.emis)===String(emis)); if(!s) return;
-  document.getElementById('newSchoolCode').value=s.emis;
-  document.getElementById('newSchoolName').value=s.name;
-  document.getElementById('newSchoolTown').value=(s.town||"")+", "+(s.province||"");
-  document.getElementById('adminDBEResults').innerHTML=`<p class='small' style='padding:10px;color:#1a7f37'>✅ PICKED: ${escapeHTML(s.name)} — Now tap CREATE NEW SCHOOL ✅</p>`;
-  beep();
-}
-
+function updateDBECount(){ const c=dbeSchools.length; ['dbeCountHome','dbeCountLogin'].forEach(id=>{ const e=document.getElementById(id); if(e) e.textContent=c.toLocaleString(); }); }
+function searchDBESchools(q){ q=(q||"").trim().toUpperCase(); const prov=(document.getElementById('dbeProvinceFilter')?.value||"").toUpperCase(); const box=document.getElementById('dbeSchoolResults'); if(!box) return; if(q.length<2){ box.innerHTML=`<p class='small' style='padding:10px'>💡 TYPE AT LEAST 2 LETTERS<br>✅ ${dbeSchools.length.toLocaleString()} DBE SCHOOLS READY<br>CURRENT: <b>${escapeHTML(schoolCode)}</b></p>`; return; } let filtered=dbeSchools.filter(s=>{ const hay=(s.name+" "+s.emis+" "+s.town+" "+s.province+" "+(s.district||"")).toUpperCase(); return hay.includes(q) && (!prov || (s.province||"").toUpperCase()===prov); }).slice(0,50); if(filtered.length===0){ box.innerHTML=`<p class='small' style='padding:10px'>❌ NO DBE SCHOOL FOUND FOR "<b>${escapeHTML(q)}</b>"<br>👑 Ask ADMIN to upload it in ADMIN tab.</p>`; return; } let html=`<p class='small' style='padding:8px 10px 0'>✅ FOUND ${filtered.length} SCHOOL(S) — TAP TO SELECT 👇</p>`; filtered.forEach(s=>{ html+=`<div class="learner-item" onclick="selectDBESchool('${escapeHTML(s.emis)}')" style="border-left:4px solid #007A4D"><span><b>${escapeHTML(s.name)}</b><br><span class="small">🏫 EMIS: ${escapeHTML(s.emis)} | 📍 ${escapeHTML(s.town||"")} - ${escapeHTML(s.province||"")}<br>${escapeHTML(s.district||"")}</span></span><span>👉 SELECT</span></div>`; }); box.innerHTML=html; }
+function selectDBESchool(emis){ const s=dbeSchools.find(x=>String(x.emis)===String(emis)); if(!s) return; changeSchoolCode(emis); db.ref("schoolsMeta/"+emis).update({code:emis, name:s.name, town:s.town||"", province:s.province||"", district:s.district||"", emis:emis, lastSelected:Date.now()}); document.getElementById('dbeSelectedSchool').innerHTML=`<div class="selected-learner" style="background:#007A4D">✅ SELECTED: ${escapeHTML(s.name)}<br>EMIS: ${escapeHTML(s.emis)} | ${escapeHTML(s.town||"")} - ${escapeHTML(s.province||"")}</div>`; document.getElementById('dbeSchoolResults').innerHTML=`<p class='small' style='padding:10px;color:#007A4D'>✅ SCHOOL SELECTED! Now login below with your librarian email 👇</p>`; document.getElementById('dbeSchoolSearch').value=s.name; document.getElementById('currentSchoolNameDisplay').textContent=s.name; document.getElementById('headerSchoolName').textContent=" - "+s.name; try{ document.getElementById('loginSchoolCode').value=emis; }catch(e){} beep(); }
+function searchDBEForAdmin(q){ q=(q||"").trim().toUpperCase(); const box=document.getElementById('adminDBEResults'); if(!box) return; if(q.length<2){ box.innerHTML="<p class='small' style='padding:10px'>Type 2+ letters to search DBE...</p>"; return; } let filtered=dbeSchools.filter(s=>(s.name+" "+s.emis+" "+s.town).toUpperCase().includes(q)).slice(0,20); if(filtered.length===0){ box.innerHTML="<p class='small' style='padding:10px'>❌ Not in list - Use UPLOAD above or fill manually below</p>"; return; } let html=""; filtered.forEach(s=>{ html+=`<div class="learner-item" onclick="adminPickDBE('${escapeHTML(s.emis)}')"><span><b>${escapeHTML(s.name)}</b><br><span class="small">EMIS: ${escapeHTML(s.emis)} | ${escapeHTML(s.town||"")} - ${escapeHTML(s.province||"")}</span></span><span>👉 USE</span></div>`; }); box.innerHTML=html; }
+function adminPickDBE(emis){ const s=dbeSchools.find(x=>String(x.emis)===String(emis)); if(!s) return; document.getElementById('newSchoolCode').value=s.emis; document.getElementById('newSchoolName').value=s.name; document.getElementById('newSchoolTown').value=(s.town||"")+", "+(s.province||""); document.getElementById('adminDBEResults').innerHTML=`<p class='small' style='padding:10px;color:#1a7f37'>✅ PICKED: ${escapeHTML(s.name)} — Now tap CREATE NEW SCHOOL ✅</p>`; beep(); }
+let pendingSchoolsToUpload = [];
+function downloadSchoolTemplate(){ const csv="EMIS,NAME,TOWN,PROVINCE,DISTRICT,PHASE,QUINTILE\n700400123,MAKHANANI HIGH SCHOOL,BENONI,GAUTENG,EKURHULENI NORTH,SECONDARY,3\n400100001,DURBAN HIGH SCHOOL,DURBAN,KWAZULU-NATAL,UMGUNGUNDLOVU,SECONDARY,4\n100100001,SACS HIGH SCHOOL,CAPE TOWN,WESTERN CAPE,CAPE TOWN CENTRAL,SECONDARY,5\n"; const blob=new Blob([csv],{type:"text/csv"}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download="SCHOOLS_TEMPLATE.csv"; a.click(); }
+function downloadCurrentSchoolsAsJSON(){ const blob=new Blob([JSON.stringify(dbeSchools,null,2)],{type:"application/json"}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download="schools.json"; a.click(); }
+async function handleSchoolFileUpload(event){ if(!isAdmin) return alert("🔒 ADMIN ONLY"); const file=event.target.files[0]; if(!file) return; const name=file.name.toLowerCase(); document.getElementById('uploadResult').innerHTML="⏳ READING "+escapeHTML(file.name)+"..."; try{ if(name.endsWith('.json')){ const text=await file.text(); const data=JSON.parse(text); const arr=Array.isArray(data)?data:(data.schools||data.data||[]); showSchoolsPreview(normalizeSchools(arr)); } else if(name.endsWith('.xlsx')||name.endsWith('.xls')){ const buf=await file.arrayBuffer(); const wb=XLSX.read(buf,{type:'array'}); const firstSheet=wb.Sheets[wb.SheetNames[0]]; const rows=XLSX.utils.sheet_to_json(firstSheet,{defval:""}); showSchoolsPreview(normalizeSchools(rows)); } else { const text=await file.text(); showSchoolsPreview(parseSchoolsCSV(text)); } }catch(e){ document.getElementById('uploadResult').innerHTML="❌ FAILED: "+escapeHTML(e.message); } event.target.value=""; }
+function previewPastedSchools(){ if(!isAdmin) return alert("🔒 ADMIN ONLY"); const text=document.getElementById('pasteSchoolsText').value.trim(); if(!text) return document.getElementById('uploadResult').innerHTML="⚠️ PASTE SCHOOLS FIRST"; showSchoolsPreview(parseSchoolsCSV(text)); }
+function normalizeSchools(arr){ return arr.map(row=>{ if(typeof row==='string') return null; const keys={}; Object.keys(row).forEach(k=>{ keys[k.toLowerCase().trim()]=row[k]; }); let emis=keys['emis']||keys['natemis']||keys['emis number']||keys['emis_number']||keys['school code']||keys['code']||keys['emis no']||""; let name=keys['name']||keys['school name']||keys['schoolname']||keys['institution name']||keys['school']||""; let town=keys['town']||keys['city']||keys['area']||keys['town/city']||""; let province=keys['province']||keys['prov']||""; let district=keys['district']||keys['district municipality']||keys['education district']||""; let phase=keys['phase']||keys['school phase']||""; let quintile=keys['quintile']||""; emis=String(emis||"").trim().toUpperCase(); name=String(name||"").trim().toUpperCase(); if(!emis||!name) return null; emis=emis.replace(/[^A-Z0-9-]/g,""); return {emis, name, town:String(town||"").trim().toUpperCase(), province:String(province||"").trim().toUpperCase(), district:String(district||"").trim().toUpperCase(), phase:String(phase||"").trim().toUpperCase(), quintile:String(quintile||"")}; }).filter(Boolean); }
+function parseSchoolsCSV(text){ const lines=text.split(/\r?\n/).map(l=>l.trim()).filter(l=>l); if(lines.length===0) return []; let start=0; if(lines[0].toUpperCase().includes('EMIS')||lines[0].toUpperCase().includes('NAME')) start=1; const out=[]; for(let i=start;i<lines.length;i++){ const parts=lines[i].match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g)||lines[i].split(','); const clean=parts.map(p=>p.trim().replace(/^"|"$/g,"")); if(clean.length<2) continue; const [emis,name,town="",province="",district="",phase="",quintile=""]=clean; if(!emis||!name) continue; if(emis.toUpperCase()==="EMIS") continue; out.push({emis:String(emis).trim().toUpperCase().replace(/[^A-Z0-9-]/g,""), name:String(name).trim().toUpperCase(), town:String(town).trim().toUpperCase(), province:String(province).trim().toUpperCase(), district:String(district).trim().toUpperCase(), phase:String(phase).trim().toUpperCase(), quintile:String(quintile).trim()}); } return out; }
+function showSchoolsPreview(list){ pendingSchoolsToUpload=list; const box=document.getElementById('uploadPreviewBox'); const res=document.getElementById('uploadResult'); if(!list||list.length===0){ box.innerHTML=""; res.innerHTML="❌ NO VALID SCHOOLS FOUND.<br><span class='small'>Check format: EMIS,NAME,TOWN,PROVINCE,DISTRICT</span>"; return; } const seen=new Set(); const deduped=[]; list.forEach(s=>{ if(!seen.has(s.emis)){ seen.add(s.emis); deduped.push(s); } }); pendingSchoolsToUpload=deduped; let html=`<div class="card" style="border:2px solid #007A4D;margin:0"><h3>👀 PREVIEW - ${deduped.length} SCHOOLS FOUND</h3>`; html+=`<table><tr><th>EMIS</th><th>NAME</th><th>TOWN</th><th>PROVINCE</th></tr>`; deduped.slice(0,10).forEach(s=>{ html+=`<tr><td><b>${escapeHTML(s.emis)}</b></td><td>${escapeHTML(s.name)}</td><td>${escapeHTML(s.town)}</td><td>${escapeHTML(s.province)}</td></tr>`; }); html+=`</table>`; if(deduped.length>10) html+=`<p class='small'>... + ${deduped.length-10} more schools</p>`; html+=`<p class='small'>⚠️ This will <b>ADD / UPDATE</b> these schools. Existing with same EMIS will be updated.</p>`; html+=`<button class="btn green" onclick="confirmUploadSchools()">✅ CONFIRM - SAVE ${deduped.length} SCHOOLS TO FIREBASE</button> `; html+=`<button class="btn red" onclick="cancelUploadSchools()">❌ CANCEL</button>`; html+=`<label style="font-size:13px;display:block;margin-top:8px"><input type="checkbox" id="replaceAllSchoolsCheck" style="width:auto"> 🗑️ REPLACE ALL? Tick to DELETE old list first (use with care!)</label>`; html+=`</div>`; box.innerHTML=html; res.innerHTML=""; box.scrollIntoView({behavior:"smooth"}); }
+function cancelUploadSchools(){ pendingSchoolsToUpload=[]; document.getElementById('uploadPreviewBox').innerHTML=""; document.getElementById('uploadResult').innerHTML="❌ CANCELLED"; }
+async function confirmUploadSchools(){ if(!isAdmin) return alert("🔒 ADMIN ONLY"); if(pendingSchoolsToUpload.length===0) return; const replaceAll=document.getElementById('replaceAllSchoolsCheck')?.checked; if(replaceAll){ if(!confirm(`⚠️ REPLACE ALL? This will delete ${dbeSchools.length} old schools and replace with ${pendingSchoolsToUpload.length} new ones. Continue?`)) return; } const prog=document.getElementById('uploadProgress'); const res=document.getElementById('uploadResult'); prog.textContent="⏳ UPLOADING 0 / "+pendingSchoolsToUpload.length+"..."; try{ if(replaceAll){ const snap=await db.ref("schoolsMeta").once("value"); const old=snap.val()||{}; for(let code of Object.keys(old)){ if(code!=="MAKHANANI") await db.ref("schoolsMeta/"+code).remove(); } } let uploaded=0; for(let s of pendingSchoolsToUpload){ await db.ref("schoolsMeta/"+s.emis).set({code:s.emis, emis:s.emis, name:s.name, town:s.town||"", province:s.province||"", district:s.district||"", phase:s.phase||"", quintile:s.quintile||"", updatedAt:Date.now(), updatedBy:"ADMIN_UPLOAD"}); uploaded++; if(uploaded%20===0||uploaded===pendingSchoolsToUpload.length){ prog.textContent=`⏳ UPLOADING ${uploaded} / ${pendingSchoolsToUpload.length}... (${Math.round(uploaded/pendingSchoolsToUpload.length*100)}%)`; await new Promise(r=>setTimeout(r,10)); } } const map={}; dbeSchools.forEach(s=>map[s.emis]=s); pendingSchoolsToUpload.forEach(s=>map[s.emis]=s); dbeSchools=Object.values(map); updateDBECount(); try{ localStorage.setItem('dbeSchoolsBackup', JSON.stringify(dbeSchools.slice(0,500))); }catch(e){} document.getElementById('uploadPreviewBox').innerHTML=""; document.getElementById('pasteSchoolsText').value=""; prog.textContent=""; res.innerHTML=`<div class="msg ok">✅ SUCCESS! ${uploaded} SCHOOLS SAVED TO FIREBASE! 🎉<br>🇿🇦 Total DBE schools now: <b>${dbeSchools.length.toLocaleString()}</b><br>👉 Go to LOGIN → Search any school name to test!</div>`; pendingSchoolsToUpload=[]; loadAllSchoolsAdmin(); beep(); }catch(e){ res.innerHTML="❌ UPLOAD FAILED: "+escapeHTML(e.message); } }
 const SUBJECTS = { "MAT":"MATHEMATICS","MATL":"MATHEMATICAL LITERACY","ENG":"ENGLISH HOME LANGUAGE","AFR":"AFRIKAANS FIRST ADDITIONAL LANGUAGE","ZUL":"ISIZULU HOME LANGUAGE","SEP":"SEPEDI HOME LANGUAGE","XHO":"ISIXHOSA HOME LANGUAGE","LIFS":"LIFE SCIENCES","PHYS":"PHYSICAL SCIENCES","ACC":"ACCOUNTING","BUS":"BUSINESS STUDIES","ECO":"ECONOMICS","GEO":"GEOGRAPHY","HIST":"HISTORY","LIFO":"LIFE ORIENTATION","CAT":"COMPUTER APPLICATIONS TECHNOLOGY","IT":"INFORMATION TECHNOLOGY","TOUR":"TOURISM","CONS":"CONSUMER STUDIES","AGRI":"AGRICULTURAL SCIENCES","EGD":"ENGINEERING GRAPHICS & DESIGN","TECH":"TECHNOLOGY" };
 function subjectName(code){ return SUBJECTS[code] || code; }
 document.getElementById('subjectListDisplay').innerHTML = Object.entries(SUBJECTS).map(([c,n])=>`<b>${c}</b> - ${n}`).join(' • ');
