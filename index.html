@@ -17,9 +17,10 @@ body{margin:0;background:#eef2f7}
 .wrap{max-width:1000px;margin:auto;padding:12px}
 .card{background:#fff;padding:14px;border-radius:12px;margin-bottom:12px;box-shadow:0 2px 6px #0001;border-left:5px solid #174ea6}
 .card h3{margin:0 0 8px}
-input,select{width:100%;padding:11px;margin:6px 0;border:1px solid #cbd5e1;border-radius:8px;font-size:15px}
+input,select,textarea{width:100%;padding:11px;margin:6px 0;border:1px solid #cbd5e1;border-radius:8px;font-size:15px}
+textarea{min-height:120px;font-family:monospace}
 .btn{width:100%;padding:13px;border:0;border-radius:8px;background:#174ea6;color:#fff;font-weight:bold;cursor:pointer;font-size:15px}
-.btn.green{background:#1a7f37}.btn.red{background:#c62828}.btn.orange{background:#ef6c00}
+.btn.green{background:#1a7f37}.btn.red{background:#c62828}.btn.orange{background:#ef6c00}.btn.purple{background:#6a1b9a}
 .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
 .stat{background:#fff;padding:14px;border-radius:12px;text-align:center;box-shadow:0 2px 6px #0001}
 .stat b{font-size:22px;display:block}
@@ -71,7 +72,8 @@ th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
     <p>1. <b>Learner ID Auto:</b> 8A01 - 8A60, 9B01, 10C01... Grade + Class + Number<br>
     2. <b>Barcode Auto:</b> MAT = Maths, MATL = Maths Lit, LIFO = Life Sciences, LIFS = Life Orientation<br>
     3. <b>Grade Rule:</b> Grade 8 can only take Grade 8 books<br>
-    4. <b>Issuer / Retriever:</b> Librarian name saved on every Issue / Return</p>
+    4. <b>Issuer / Retriever:</b> Librarian name saved on every Issue / Return<br>
+    5. <b>Bulk Add:</b> Paste many learners / books at once in Learners / Books tab</p>
     <p class="small">Status: <span id="conn">Connecting to Firebase...</span> | <span id="loginStatus">Not Logged In - Parent Mode</span></p>
   </div>
 </div>
@@ -111,7 +113,7 @@ th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
 
 <div id="tab-learners" class="hidden">
   <div class="card">
-    <h3>👩‍🎓 Add Learner - Librarian Only</h3>
+    <h3>👩‍🎓 Add Learner - One By One</h3>
     <select id="addGrade"><option value="">Grade</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select>
     <select id="addClass"><option value="">Class</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select>
     <input id="addNumber" type="number" min="1" max="60" placeholder="Number 1-60">
@@ -120,18 +122,32 @@ th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
     <button class="btn" onclick="addLearner()">➕ Add Learner (Auto ID)</button>
     <div id="addLearnerMsg"></div>
   </div>
+  <div class="card" style="border-left:5px solid #6a1b9a">
+    <h3>⚡ BULK ADD LEARNERS - Paste Many At Once</h3>
+    <p class="small">Format per line: <b>Grade,Class,Number,FirstName,Surname</b><br>Example:<br>12,D,1,John,Maseko<br>12,D,2,Sipho,Chauke<br>8,A,1,Lerato,Mokoena<br><br>💡 Tip: Copy from Excel! In Excel, make 5 columns Grade | Class | Number | Name | Surname, then copy-paste here. Excel commas become commas automatically.</p>
+    <textarea id="bulkLearners" placeholder="12,D,1,John,Maseko&#10;12,D,2,Sipho,Chauke&#10;8,A,1,Lerato,Mokoena"></textarea>
+    <button class="btn purple" onclick="bulkAddLearners()">⚡ BULK ADD LEARNERS</button>
+    <div id="bulkLearnerMsg"></div>
+  </div>
   <div class="card"><h3>All Learners (Librarian Only)</h3><div id="learnerList"></div></div>
 </div>
 
 <div id="tab-books" class="hidden">
   <div class="card">
-    <h3>📚 Add Book - Librarian Only</h3>
+    <h3>📚 Add Book - One By One</h3>
     <select id="bookCategory"><option value="MAT">MAT - Maths</option><option value="MATL">MATL - Maths Lit</option><option value="LIFO">LIFO - Life Sciences</option><option value="LIFS">LIFS - Life Orientation</option></select>
     <select id="bookGrade"><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select>
     <input id="bookTitle" placeholder="Book Title e.g. Maths Grade 8">
     <input id="bookBarcode" placeholder="Barcode - Auto if empty e.g. MAT-001">
     <button class="btn" onclick="addBook()">➕ Add Book</button>
     <div id="bookMsg"></div>
+  </div>
+  <div class="card" style="border-left:5px solid #6a1b9a">
+    <h3>⚡ BULK ADD BOOKS - Paste Many At Once</h3>
+    <p class="small">Format per line: <b>Category,Grade,Title,Barcode (optional)</b><br>Example:<br>LIFO,12,Oxford Grade 12,<br>MAT,8,Maths Grade 8,MAT-001<br>LIFS,10,Life Orientation Grade 10,<br><br>Leave barcode empty = Auto barcode LIFO-002, LIFO-003...</p>
+    <textarea id="bulkBooks" placeholder="LIFO,12,Oxford Grade 12,&#10;MAT,8,Maths Grade 8,MAT-001&#10;LIFS,10,Life Orientation Grade 10,"></textarea>
+    <button class="btn purple" onclick="bulkAddBooks()">⚡ BULK ADD BOOKS</button>
+    <div id="bulkBookMsg"></div>
   </div>
 </div>
 
@@ -143,7 +159,7 @@ th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
     <input id="parentSurname" placeholder="Surname e.g. Chauke">
     <button class="btn green" onclick="checkMyChild()">🔍 Check My Child</button>
     <div id="parentResult" style="margin-top:10px"></div>
-    <p class="small">🔒 Safe: Wrong surname = No data shown. We never show other children.<br>⚠️ If you see "Permission Denied" - Librarian must fix Firebase Rules: publicParent must be .read = true</p>
+    <p class="small">🔒 Safe: Wrong surname = No data shown. We never show other children.</p>
   </div>
 </div>
 
@@ -203,7 +219,7 @@ async function doLogin(){
 }
 async function doLogout(){ await auth.signOut(); loginMsg.textContent="Logged out"; }
 function loadData(){
-  db.ref("books").on("value", s=>{ allBooks = s.val()||{}; renderBooks(); updateStats(); }, e=>{ console.log("books read denied", e); });
+  db.ref("books").on("value", s=>{ allBooks = s.val()||{}; renderBooks(); updateStats(); });
   if(currentUser){
     db.ref("learners").on("value", s=>{ allLearners = s.val()||{}; renderLearners(); updateStats(); });
     db.ref("loans").on("value", s=>{ allLoans = s.val()||{}; renderBorrowed(); updateStats(); });
@@ -225,8 +241,8 @@ function renderBooks(){
 function renderLearners(){
   if(!currentUser){ learnerList.innerHTML="🔒 Login as Librarian to see learners"; return; }
   let html="<table><tr><th>ID</th><th>Name</th><th>Class</th></tr>";
-  Object.values(allLearners).forEach(l=>{ html+=`<tr><td>${l.learnerId}</td><td>${l.name} ${l.surname}</td><td>${l.grade}${l.className}</td></tr>`; });
-  html+="</table>"; learnerList.innerHTML=html;
+  Object.values(allLearners).slice(0,100).forEach(l=>{ html+=`<tr><td>${l.learnerId}</td><td>${l.name} ${l.surname}</td><td>${l.grade}${l.className}</td></tr>`; });
+  html+="</table><p class='small'>Showing first 100. Total: "+Object.keys(allLearners).length+"</p>"; learnerList.innerHTML=html;
 }
 function renderBorrowed(){
   if(!currentUser){ borrowedList.innerHTML="🔒 Login to see borrowed"; if(document.getElementById('borrowedListIssue')) document.getElementById('borrowedListIssue').innerHTML="🔒 Login to see borrowed"; return; }
@@ -251,6 +267,72 @@ async function addLearner(){
   await db.ref("learners/"+id).set({learnerId:id, grade, className:cls, number:num, name:addName.value.trim(), surname:addSurname.value.trim(), createdAt:Date.now()});
   await db.ref("publicParent/"+id).update({learnerId:id, surnameHash, lastUpdated:Date.now()});
   addLearnerMsg.textContent="✅ Added "+id+" - "+addName.value+" "+addSurname.value;
+}
+// ⚡ BULK LEARNERS
+async function bulkAddLearners(){
+  if(!currentUser) return alert("🔒 Login as Librarian first");
+  const text = document.getElementById('bulkLearners').value.trim();
+  if(!text) return bulkLearnerMsg.textContent="⚠️ Paste learners first. Format: Grade,Class,Number,FirstName,Surname";
+  const lines = text.split("\n");
+  let added=0, failed=[];
+  document.getElementById('bulkLearnerMsg').textContent="⏳ Adding "+lines.length+" learners... Please wait...";
+  for(let line of lines){
+    line=line.trim(); if(!line) continue;
+    // Support tab (from Excel) or comma
+    const parts = line.split(/[\t,;]/).map(p=>p.trim()).filter(p=>p!=="");
+    // Also support: 12D01,John,Maseko format
+    if(parts.length===3 && /^[0-9]{1,2}[A-H][0-9]{2}$/i.test(parts[0])){
+      const m = parts[0].toUpperCase().match(/^([0-9]{1,2})([A-H])([0-9]{2})$/);
+      parts.unshift(m[1], m[2], String(parseInt(m[3])));
+      parts.splice(3,1);
+    }
+    if(parts.length<5){ failed.push(line); continue; }
+    const [grade, cls, num, firstName, surname] = parts;
+    if(!grade||!cls||!num||!firstName||!surname){ failed.push(line); continue; }
+    try{
+      const id = makeLearnerId(grade, cls.toUpperCase(), num);
+      const surnameHash = await hashSurname(surname);
+      await db.ref("learners/"+id).set({learnerId:id, grade:String(grade), className:cls.toUpperCase(), number:String(num), name:firstName, surname:surname, createdAt:Date.now()});
+      await db.ref("publicParent/"+id).update({learnerId:id, surnameHash, lastUpdated:Date.now()});
+      added++;
+    }catch(e){ failed.push(line+" ("+e.message+")"); }
+  }
+  document.getElementById('bulkLearnerMsg').innerHTML="✅ Added <b>"+added+"</b> learners!"+(failed.length? "<br>❌ Failed "+failed.length+":<br>"+failed.join("<br>"):"")+"<br>Check Home - Total Learners updated.";
+  document.getElementById('bulkLearners').value="";
+}
+// ⚡ BULK BOOKS
+async function bulkAddBooks(){
+  if(!currentUser) return alert("🔒 Login first");
+  const text = document.getElementById('bulkBooks').value.trim();
+  if(!text) return bulkBookMsg.textContent="⚠️ Paste books first. Format: Category,Grade,Title,Barcode";
+  const lines = text.split("\n");
+  let added=0, failed=[];
+  document.getElementById('bulkBookMsg').textContent="⏳ Adding "+lines.length+" books... Please wait...";
+  // Get current counts for auto barcode
+  let counts = {};
+  Object.values(allBooks).forEach(b=>{ counts[b.category]=(counts[b.category]||0)+1; });
+  for(let line of lines){
+    line=line.trim(); if(!line) continue;
+    const parts = line.split(/[\t,;]/).map(p=>p.trim());
+    if(parts.length<3){ failed.push(line); continue; }
+    let [cat, grade, title, barcode] = parts;
+    cat=(cat||"MAT").toUpperCase(); title=title||"";
+    if(!title){ failed.push(line); continue; }
+    try{
+      if(!barcode){
+        counts[cat]=(counts[cat]||0)+1;
+        barcode = cat + "-" + String(counts[cat]).padStart(3,'0');
+        // Avoid duplicate if already exists
+        while(allBooks[barcode.replace(/[^A-Z0-9-]/g,'_')]){ counts[cat]++; barcode = cat + "-" + String(counts[cat]).padStart(3,'0'); }
+      } else barcode=barcode.toUpperCase();
+      const key = barcode.replace(/[^A-Z0-9-]/g,'_');
+      await db.ref("books/"+key).set({barcode, title, category:cat, grade:String(grade), status:"Available", createdAt:Date.now()});
+      allBooks[key]={barcode,title,category:cat,grade};
+      added++;
+    }catch(e){ failed.push(line+" ("+e.message+")"); }
+  }
+  document.getElementById('bulkBookMsg').innerHTML="✅ Added <b>"+added+"</b> books!"+(failed.length? "<br>❌ Failed "+failed.length+":<br>"+failed.join("<br>"):"");
+  document.getElementById('bulkBooks').value="";
 }
 async function addBook(){
   if(!currentUser) return alert("🔒 Login first");
@@ -311,7 +393,6 @@ async function syncToParent(learnerId, learnerSurname, bookTitle, barcode, dueDa
   await db.ref("publicParent/"+learnerId).update({learnerId, surnameHash, lastUpdated:Date.now()});
   await db.ref("publicParent/"+learnerId+"/books/"+barcode.replace(/[^A-Z0-9-]/g,'_')).set({bookTitle, barcode, dueDate, status:"Borrowed"});
 }
-// ✅ FIXED PARENT CHECK - SHOWS REAL ERROR
 async function checkMyChild(){
   const id = document.getElementById('parentId').value.trim().toUpperCase();
   const surname = document.getElementById('parentSurname').value.trim();
@@ -322,26 +403,17 @@ async function checkMyChild(){
   try{
     const snap = await db.ref("publicParent/"+id).once("value");
     const data = snap.val();
-    if(!data){
-      // ⚠️ IMPORTANT: 12D01 was issued BEFORE the surname lock existed in old code?
-      // If data is empty, it means learner was never added via Add Learner, only via Issue with different surname hash
-      // Try to rebuild from loans is NOT allowed for parents - so show clear message
-      box.innerHTML="❌ No books found for "+id+".<br><br>💡 If this learner was issued a book but Parent shows nothing:<br>1. Librarian must re-Issue the book once with correct Surname (Maseko)<br>2. OR Librarian must add learner in Learners tab: 12-D-1 Maseko";
-      return;
-    }
+    if(!data){ box.innerHTML="❌ No books found for "+id+".<br><br>💡 Librarian must add learner in Learners tab OR re-Issue with correct Surname."; return; }
     const inputHash = await hashSurname(surname);
-    if(data.surnameHash !== inputHash){ box.innerHTML="❌ No books found. Check ID + Surname spelling. Surname must match EXACTLY what librarian typed on Issue (e.g. Maseko vs maseko)."; return; }
+    if(data.surnameHash !== inputHash){ box.innerHTML="❌ No books found. Check ID + Surname spelling."; return; }
     let html=`<b>✅ Found for ${id}</b><br>`;
     if(data.books){ Object.values(data.books).forEach(b=>{ html+=`📚 ${b.bookTitle} - ${b.barcode}<br>Due: ${b.dueDate} - ${b.status}<br><hr>`; }); }
     else html+="✅ No books currently borrowed.";
     box.innerHTML=html;
   }catch(e){
-    // ✅ NOW SHOWS REAL REASON - NOT "Check internet"
     if(e.code==="PERMISSION_DENIED" || (e.message||"").includes("permission")){
       box.innerHTML="❌ PERMISSION DENIED - Firebase Rules Block Parent!<br><br>🔧 Librarian Fix:<br>Firebase → Realtime Database → Rules → Set <b>publicParent .read = true</b> → Publish → Try again.";
-    } else {
-      box.innerHTML="❌ Error: "+e.message+"<br>Code: "+(e.code||"unknown");
-    }
+    } else { box.innerHTML="❌ Error: "+e.message; }
   }
 }
 </script>
