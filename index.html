@@ -102,6 +102,7 @@ th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
     <div id="returnMsg"></div>
     <h3 style="margin-top:14px">📤 Currently Borrowed</h3>
     <div id="borrowedList"></div>
+    <p class="small">💡 If a book says "Borrowed" but no loan shows, tap Return - it will auto-fix the stuck book.</p>
   </div>
 </div>
 
@@ -279,7 +280,7 @@ async function issueBook(){
   const bookSnap = await db.ref("books/"+barcode.replace(/[^A-Z0-9-]/g,'_')).once("value");
   const book = bookSnap.val();
   if(!book) return issueMsg.textContent="❌ Book not found: "+barcode;
-  if(book.status==="Borrowed") return issueMsg.textContent="❌ Book already borrowed";
+  if(book.status==="Borrowed") return issueMsg.textContent="❌ Book already borrowed - Go to Return tab and return it first, or use another barcode";
   const lGrade = parseInt(learnerId);
   if(parseInt(book.grade) !== lGrade) return issueMsg.textContent=`❌ Grade Rule: Grade ${lGrade} learner cannot take Grade ${book.grade} book`;
   const due = issueDue.value || new Date(Date.now()+14*86400000).toISOString().slice(0,10);
@@ -289,17 +290,25 @@ async function issueBook(){
   issueMsg.textContent="✅ Issued "+barcode+" to "+learnerId+" Due "+due;
 }
 
-// RETURN
+// RETURN - ✅ FIXED: AUTO-FIX STUCK BOOKS
 async function returnBook(){
   if(!currentUser) return alert("🔒 Login first");
   const barcode = returnBarcode.value.trim().toUpperCase();
   if(!barcode||!retrieverName.value) return returnMsg.textContent="⚠️ Enter Barcode + Retriever";
-  const loanSnap = await db.ref("loans/"+barcode.replace(/[^A-Z0-9-]/g,'_')).once("value");
+  const key = barcode.replace(/[^A-Z0-9-]/g,'_');
+  const loanSnap = await db.ref("loans/"+key).once("value");
   const loan = loanSnap.val();
-  if(!loan) return returnMsg.textContent="❌ No loan for "+barcode;
-  await db.ref("loans/"+barcode.replace(/[^A-Z0-9-]/g,'_')).update({status:"Returned", retriever:retrieverName.value, returnedAt:Date.now()});
-  await db.ref("books/"+barcode.replace(/[^A-Z0-9-]/g,'_')).update({status:"Available", borrowedBy:""});
-  await db.ref("publicParent/"+loan.learnerId+"/books/"+barcode.replace(/[^A-Z0-9-]/g,'_')).update({status:"Returned"});
+
+  // ✅ FIX: If loan is missing but book says Borrowed = STUCK BOOK, just fix book
+  if(!loan){
+    await db.ref("books/"+key).update({status:"Available", borrowedBy:""});
+    returnMsg.textContent="⚠️ Fixed stuck book "+barcode+" - Now Available. Try Issue again.";
+    return;
+  }
+
+  await db.ref("loans/"+key).update({status:"Returned", retriever:retrieverName.value, returnedAt:Date.now()});
+  await db.ref("books/"+key).update({status:"Available", borrowedBy:""});
+  if(loan.learnerId) await db.ref("publicParent/"+loan.learnerId+"/books/"+key).update({status:"Returned"});
   returnMsg.textContent="✅ Returned "+barcode+" from "+loan.learnerId;
 }
 
