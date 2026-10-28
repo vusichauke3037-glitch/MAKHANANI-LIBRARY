@@ -8,8 +8,9 @@
 *{box-sizing:border-box;font-family:Arial,sans-serif}
 body{margin:0;background:#eef2f7}
 .header{background:#174ea6;color:#fff;padding:16px;text-align:center}
-.header h1{margin:0;font-size:22px}
-.header p{margin:4px 0 0;font-size:13px;opacity:.9}
+.header h1{margin:0;font-size:22px;color:#fff}
+.header p{margin:4px 0 0;font-size:13px;color:#fff;opacity:1}
+.header .small{color:#dbeafe !important}
 .nav{display:flex;gap:6px;padding:10px;background:#fff;overflow-x:auto;position:sticky;top:0;z-index:10;box-shadow:0 2px 6px #0001}
 .nav button{flex:1;min-width:90px;padding:10px;border:0;border-radius:8px;background:#e8eefb;font-weight:bold;cursor:pointer}
 .nav button.active{background:#174ea6;color:#fff}
@@ -133,7 +134,7 @@ th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
 </div>
 
 <!-- PARENT -->
-<div id="tab-parent">
+<div id="tab-parent" class="hidden">
   <div class="card" style="border-left:5px solid #1a7f37">
     <h3>👨‍👩‍👧 Parent Check - My Child</h3>
     <p>Parent: Enter <b>Learner ID + Surname</b> to see ONLY your child's books.<br>Example: 8A01 + Chauke</p>
@@ -164,15 +165,15 @@ th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script>
-// ===== PASTE YOUR WORDSWORTH FIREBASE CONFIG HERE =====
+// ===== WORDSWORTH FIREBASE CONFIG - ALREADY FILLED ✅ =====
 const firebaseConfig = {
-  apiKey: "PASTE_YOURS",
-  authDomain: "PASTE_YOURS",
-  databaseURL: "PASTE_YOURS",
-  projectId: "PASTE_YOURS",
-  storageBucket: "PASTE_YOURS",
-  messagingSenderId: "PASTE_YOURS",
-  appId: "PASTE_YOURS"
+  apiKey: "AIzaSyAJyTZ-tmrsY0m-EmN80HSRERSR_tiVX4E",
+  authDomain: "wordsworth-library.firebaseapp.com",
+  databaseURL: "https://wordsworth-library-default-rtdb.firebaseio.com",
+  projectId: "wordsworth-library",
+  storageBucket: "wordsworth-library.firebasestorage.app",
+  messagingSenderId: "236216515385",
+  appId: "1:236216515385:web:9f3e8937f829e9d2bf06e8"
 };
 // =====================================================
 firebase.initializeApp(firebaseConfig);
@@ -186,7 +187,6 @@ function showTab(id, btn){
   document.getElementById('tab-'+id).classList.remove('hidden');
   document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
-  if(id==='parent') document.getElementById('tab-parent').classList.remove('hidden');
 }
 
 // AUTH
@@ -202,7 +202,7 @@ async function doLogin(){
 }
 async function doLogout(){ await auth.signOut(); loginMsg.textContent="Logged out"; }
 
-// DATA LOAD - Librarian sees all, Parent sees only books (learners blocked by rules)
+// DATA LOAD
 function loadData(){
   db.ref("books").on("value", s=>{ allBooks = s.val()||{}; renderBooks(); updateStats(); });
   if(currentUser){
@@ -280,9 +280,6 @@ async function issueBook(){
   const book = bookSnap.val();
   if(!book) return issueMsg.textContent="❌ Book not found: "+barcode;
   if(book.status==="Borrowed") return issueMsg.textContent="❌ Book already borrowed";
-  const learnerGrade = learnerId.replace(/[^0-9]/g,'').charAt(0) + learnerId.replace(/[^0-9]/g,'').charAt(1);
-  // Grade Rule: Grade 8 learner = Grade 8 book only (first digit(s))
-  // Simplified: book grade must match learner grade digit
   const lGrade = parseInt(learnerId);
   if(parseInt(book.grade) !== lGrade) return issueMsg.textContent=`❌ Grade Rule: Grade ${lGrade} learner cannot take Grade ${book.grade} book`;
   const due = issueDue.value || new Date(Date.now()+14*86400000).toISOString().slice(0,10);
