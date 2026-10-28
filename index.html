@@ -1,156 +1,316 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wordsworth Library</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-  <link rel="icon" type="image/png" href="logo.png">
-  <style>
-    body {
-      padding-top: 20px;
-      background-color: #f5f5f5;
-    }
-    .container {
-      max-width: 800px;
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    .logo {
-      max-width: 100px;
-      margin-bottom: 20px;
-    }
-    .form-group {
-      margin-bottom: 20px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wordsworth High School - Digital Library</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' https://www.gstatic.com https://cdn.jsdelivr.net https://unpkg.com 'unsafe-inline'; style-src 'self' https: 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://*.firebaseio.com https://*.googleapis.com wss://*.firebaseio.com;">
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<style>
+*{box-sizing:border-box;font-family:Arial,sans-serif;text-transform:none}
+body{margin:0;background:#eef2f7}
+.header{background:#174ea6;color:#fff;padding:14px;text-align:center}
+.logo-row{display:flex;align-items:center;justify-content:center;gap:12px}
+.logo-img{width:62px;height:62px;object-fit:contain;background:#fff;border-radius:50%;padding:4px;border:3px solid #fff}
+.logo-fallback{width:62px;height:62px;background:#fff;color:#174ea6;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:bold;border:3px solid #fff}
+.header h1{margin:0;font-size:22px}
+.header p{margin:4px 0 0;font-size:13px}
+.header .small{color:#dbeafe !important}
+.nav{display:flex;gap:6px;padding:10px;background:#fff;overflow-x:auto;position:sticky;top:0;z-index:10;box-shadow:0 2px 6px #0001}
+.nav button{flex:1;min-width:90px;padding:10px;border:0;border-radius:8px;background:#e8eefb;font-weight:bold;cursor:pointer;white-space:nowrap}
+.nav button.active{background:#174ea6;color:#fff}
+.nav button.gold{background:#fff3cd;border:2px solid #ffb300}
+.nav button.gold.active{background:#ffb300;color:#000}
+.wrap{max-width:1000px;margin:auto;padding:12px}
+.card{background:#fff;padding:14px;border-radius:12px;margin-bottom:12px;box-shadow:0 2px 6px #0001;border-left:5px solid #174ea6}
+.card h3{margin:0 0 8px;text-transform:uppercase}
+.card.gold{border-left:5px solid #ffb300;background:#fffdf5}
+.card.red{border-left:5px solid #c62828}
+.card.green{border-left:5px solid #1a7f37}
+.card.scan{border-left:5px solid #111;background:#f8f9ff}
+.card.learner{border-left:5px solid #1a7f37;background:#f0fff4}
+.card.secure{border-left:5px solid #111;background:#f0f0f0}
+input,select,textarea{width:100%;padding:11px;margin:6px 0;border:1px solid #cbd5e1;border-radius:8px;font-size:15px}
+select{font-weight:bold;text-transform:uppercase}
+textarea{min-height:120px;font-family:monospace;text-transform:uppercase}
+.btn{width:100%;padding:13px;border:0;border-radius:8px;background:#174ea6;color:#fff;font-weight:bold;cursor:pointer;font-size:15px;text-transform:uppercase}
+.btn.green{background:#1a7f37}.btn.red{background:#c62828}.btn.orange{background:#ef6c00}.btn.purple{background:#6a1b9a}.btn.black{background:#111}.btn.gold{background:#ffb300;color:#000}
+.btn.small{width:auto;padding:6px 12px;font-size:13px;border-radius:20px}
+.btn.half{width:49%;display:inline-block}
+.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px}
+.stat{background:#fff;padding:14px;border-radius:12px;text-align:center;box-shadow:0 2px 6px #0001;border-top:4px solid #174ea6}
+.stat b{font-size:24px;display:block}
+.stat.red{border-top:4px solid #c62828}.stat.red b{color:#c62828}
+.stat.green{border-top:4px solid #1a7f37}.stat.green b{color:#1a7f37}
+.stat.gold{border-top:4px solid #ffb300}.stat.gold b{color:#b88600}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:8px;border-bottom:1px solid #eee;text-align:left;text-transform:uppercase}
+.badge{padding:3px 8px;border-radius:20px;font-size:12px;font-weight:bold}
+.badge.borrowed{background:#ffebee;color:#c62828}.badge.returned{background:#e8f5e9;color:#1a7f37}
+.small{font-size:12px;color:#666}
+.hidden{display:none}
+.msg{padding:12px;border-radius:8px;font-weight:bold;font-size:16px;margin-top:10px;background:#fff3cd;border:1px solid #ffcc00;text-transform:uppercase}
+.msg.ok{background:#e8f5e9;border-color:#1a7f37;color:#1a7f37}
+.msg.err{background:#ffebee;border-color:#c62828;color:#c62828}
+.qty-box{background:#fff8e1;border:2px dashed #ef6c00;border-radius:10px;padding:10px;margin:6px 0}
+.qty-box label{font-weight:bold;color:#ef6c00;font-size:14px}
+.bar{height:18px;background:#e8eefb;border-radius:20px;overflow:hidden;margin:4px 0}
+.bar > div{height:100%;background:#174ea6;color:#fff;font-size:11px;line-height:18px;text-align:right;padding-right:6px;font-weight:bold}
+#reader-issue,#reader-return{width:100%;max-width:400px;margin:10px auto;border-radius:12px;overflow:hidden}
+.learner-item{padding:10px;border-bottom:1px solid #eee;cursor:pointer;display:flex;justify-content:space-between;align-items:center;text-transform:uppercase}
+.learner-item:hover{background:#e8f5e9}
+.learner-pick{max-height:280px;overflow-y:auto;border:1px solid #cbd5e1;border-radius:8px;background:#fff;margin-top:2px}
+.selected-learner{background:#1a7f37;color:#fff;padding:10px;border-radius:8px;font-weight:bold;margin:6px 0;display:flex;justify-content:space-between;align-items:center;text-transform:uppercase}
+.selected-learner button{background:#fff;color:#c62828;border:0;border-radius:20px;padding:4px 10px;font-weight:bold;cursor:pointer}
+.school-badge{background:#ffb300;color:#000;padding:6px 12px;border-radius:20px;font-weight:bold;font-size:13px;display:inline-block}
+@media(max-width:600px){.grid,.grid4{grid-template-columns:1fr 1fr}.logo-img,.logo-fallback{width:48px;height:48px;font-size:24px}}
+</style>
 </head>
 <body>
-  <div class="container">
-    <img src="logo.png" alt="Logo" class="logo">
-    <h1 class="text-center">Wordsworth Library</h1>
-    
-    <!-- Login Form -->
-    <div id="loginForm">
-      <h2>Login</h2>
-      <form>
-        <div class="form-group">
-          <label for="schoolCode">School</label>
-          <select id="schoolCode" class="form-control">
-            <option value="SCH001">Wordsworth High</option>
-            <option value="SCH002">Springfield College</option>
-            <!-- Add more schools -->
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="username">Username</label>
-          <input type="text" id="username" class="form-control">
-        </div>
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input type="password" id="password" class="form-control">
-        </div>
-        <button type="button" id="loginBtn" class="btn btn-primary">Login</button>
-      </form>
-    </div>
-    
-    <!-- Main App -->
-    <div id="app" style="display: none;">
-      <h2>Books</h2>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Barcode</th>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="booksTable">
-          <!-- Books data -->
-        </tbody>
-      </table>
-      
-      <h2>Learners</h2>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Grade</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="learnersTable">
-          <!-- Learners data -->
-        </tbody>
-      </table>
-    </div>
+
+<div class="header">
+  <div class="logo-row">
+    <img src="logo.png" class="logo-img" onerror="this.style.display='none';document.getElementById('logoFallback').style.display='flex';">
+    <div class="logo-fallback" id="logoFallback" style="display:none">W</div>
+    <div style="text-align:left"><h1>WORDSWORTH HIGH SCHOOL</h1><p>📚 DIGITAL LIBRARY | XINTIMANI GROUP | MENTE ET MANU</p></div>
   </div>
-  
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-  <script>
-    // Firebase config
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT.firebaseapp.com",
-      databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
-      projectId: "YOUR_PROJECT",
-      storageBucket: "YOUR_PROJECT.firebasestorage.app"
-    };
-    firebase.initializeApp(firebaseConfig);
-    
-    // Login logic
-    document.getElementById('loginBtn').addEventListener('click', () => {
-      const schoolCode = document.getElementById('schoolCode').value;
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
-      // Auth logic here
-      localStorage.setItem('schoolCode', schoolCode);
-      document.getElementById('loginForm').style.display = 'none';
-      document.getElementById('app').style.display = 'block';
-      loadData();
-    });
-    
-    // Load data
-    function loadData() {
-      const schoolCode = localStorage.getItem('schoolCode');
-      const booksRef = firebase.database().ref(`schools/${schoolCode}/books`);
-      const learnersRef = firebase.database().ref(`schools/${schoolCode}/learners`);
-      
-      booksRef.on('value', snapshot => {
-        const booksTable = document.getElementById('booksTable');
-        booksTable.innerHTML = '';
-        snapshot.forEach(child => {
-          const book = child.val();
-          const row = `<tr>
-            <td>${child.key}</td>
-            <td>${book.title}</td>
-            <td>${book.author}</td>
-            <td><button class="btn btn-sm btn-primary">Issue</button></td>
-          </tr>`;
-          booksTable.innerHTML += row;
-        });
-      });
-      
-      learnersRef.on('value', snapshot => {
-        const learnersTable = document.getElementById('learnersTable');
-        learnersTable.innerHTML = '';
-        snapshot.forEach(child => {
-          const learner = child.val();
-          const row = `<tr>
-            <td>${child.key}</td>
-            <td>${learner.name}</td>
-            <td>${learner.grade}</td>
-            <td><button class="btn btn-sm btn-info">View Loans</button></td>
-          </tr>`;
-          learnersTable.innerHTML += row;
-        });
-      });
-    }
-  </script>
+  <p class="small" style="margin-top:8px">🏫 SCHOOL: <span id="headerSchoolCode" class="school-badge">WORDSWORTH</span> | 🔒 SECURED | 👩‍🎓 PICK LEARNER | 📷 SCAN | 👔 PRINCIPAL</p>
+</div>
+
+<div class="nav">
+  <button class="active" onclick="showTab('home',this)">🏠 HOME</button>
+  <button onclick="showTab('issue',this)">📤 ISSUE</button>
+  <button onclick="showTab('return',this)">📥 RETURN</button>
+  <button onclick="showTab('learners',this)">👩‍🎓 LEARNERS</button>
+  <button onclick="showTab('books',this)">📚 BOOKS</button>
+  <button onclick="showTab('principal',this)" class="gold">👔 PRINCIPAL</button>
+  <button onclick="showTab('parent',this)">👨‍👩‍👧 PARENT</button>
+  <button onclick="showTab('login',this)">🔐 LOGIN</button>
+</div>
+
+<div class="wrap">
+<div id="tab-home">
+  <div class="grid"><div class="stat"><b id="totalBooks">0</b>📚 TOTAL BOOKS</div><div class="stat"><b id="totalLearners">0</b>👩‍🎓 LEARNERS</div><div class="stat"><b id="borrowedCount">0</b>📤 BORROWED</div></div>
+  <div class="card secure"><h3>🛡️ SECURITY STATUS</h3><p id="securityStatus">CHECKING...</p><p class="small">✅ FIREBASE RULES: ONLY LIBRARIAN CAN EDIT • ✅ PARENT NEEDS ID + SURNAME (HASHED) • ✅ XSS BLOCKED • ✅ BRUTE-FORCE LOCK • ✅ SCHOOL CODE SEPARATES SCHOOLS</p></div>
+  <div class="card"><h3>📚 ALL CAPS SUBJECTS IN THIS APP</h3><p class="small" id="subjectListDisplay"></p></div>
+  <div class="card scan"><h3>📷 QUICK SCAN</h3><button class="btn black" onclick="showTab('issue',document.querySelectorAll('.nav button')[1])">👩‍🎓 PICK LEARNER + 📷 SCAN TO ISSUE →</button><button class="btn orange" onclick="showTab('return',document.querySelectorAll('.nav button')[2])" style="margin-top:8px">📷 SCAN TO RETURN →</button></div>
+  <div class="card"><h3>🔍 SEARCH BOOK</h3><input id="searchBook" placeholder="SEARCH TITLE OR BARCODE" oninput="renderBooks()" maxlength="100" style="text-transform:uppercase"><div id="bookList"></div></div>
+  <div class="card"><h3>📋 HOW IT WORKS</h3><p>1. <b>PICK LEARNER:</b> TYPE SURNAME → TAP NAME<br>2. <b>SCAN:</b> 📷 CAMERA SCANS BARCODE<br>3. <b>QUANTITY:</b> ADD 30 COPIES IN 1 CLICK<br>4. <b>SUBJECTS:</b> ALL IN CAPS — MAT, ENG, LIFS, PHYS, ACC, ETC.</p><p class="small">STATUS: <span id="conn">CONNECTING...</span> | <span id="loginStatus">NOT LOGGED IN</span></p></div>
+</div>
+
+<div id="tab-issue" class="hidden">
+  <div class="card"><h3>📤 ISSUE BOOK - LIBRARIAN ONLY 🔒</h3>
+    <div class="card learner" style="margin:8px 0">
+      <label style="font-weight:bold">👩‍🎓 STEP 1 - SELECT LEARNER FROM SAVED LIST</label>
+      <input id="learnerSearch" placeholder="🔍 TYPE NAME / SURNAME / ID E.G. CHAUKE / JOHN / 8A01" oninput="filterLearnersForIssue()" autocomplete="off" style="border:2px solid #1a7f37;font-size:16px;text-transform:uppercase" maxlength="50">
+      <div id="selectedLearnerBox" class="hidden"></div>
+      <div id="learnerPickList" class="learner-pick"></div>
+      <div style="display:flex;gap:6px">
+        <select id="issueGrade"><option value="">GRADE</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select>
+        <select id="issueClass"><option value="">CLASS</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select>
+        <input id="issueNumber" type="number" min="1" max="60" placeholder="NO. 1-60">
+      </div>
+      <input id="issueLearnerId" placeholder="AUTO LEARNER ID" readonly style="background:#e8f5e9;font-weight:bold">
+      <input id="issueSurname" placeholder="SURNAME - AUTO" readonly style="background:#e8f5e9;font-weight:bold">
+      <input id="issueFirstName" placeholder="FIRST NAME - AUTO" readonly style="background:#e8f5e9">
+      <button class="btn" style="background:#666;margin-top:4px" onclick="clearSelectedLearner()">🔄 CLEAR / PICK DIFFERENT LEARNER</button>
+      <div id="learnerBooksInfo" class="small" style="margin-top:6px"></div>
+    </div>
+    <div class="card scan" style="margin:8px 0">
+      <label style="font-weight:bold">📷 STEP 2 - SCAN / TYPE BARCODE</label>
+      <input id="issueBarcode" placeholder="📷 SCAN OR TYPE E.G. MAT-001" style="font-size:18px;font-weight:bold;text-transform:uppercase;border:2px solid #111" maxlength="20">
+      <button class="btn black half" onclick="startScan('issue')">📷 START CAMERA SCAN</button>
+      <button class="btn red half" onclick="stopScan('issue')">⏹️ STOP CAMERA</button>
+      <div id="reader-issue" class="hidden"></div>
+      <p id="scanStatusIssue" class="small" style="text-align:center">💡 SCANNER GUN? JUST SCAN — ENTER = ISSUE.</p>
+      <label style="font-size:13px"><input type="checkbox" id="autoIssue" checked style="width:auto"> ✅ AUTO-ISSUE AFTER SCAN</label>
+    </div>
+    <input id="issuerName" placeholder="ISSUER (LIBRARIAN NAME)" maxlength="50" style="text-transform:uppercase">
+    <input id="issueDue" type="date">
+    <button class="btn green" onclick="issueBook()">✅ ISSUE BOOK TO SELECTED LEARNER</button><div id="issueMsg"></div><div id="lastIssued" style="margin-top:10px"></div>
+    <div id="scanHistoryIssue" style="margin-top:10px"></div>
+    <h3 style="margin-top:14px">📤 CURRENTLY BORROWED</h3><div id="borrowedListIssue"></div>
+  </div>
+</div>
+
+<div id="tab-return" class="hidden">
+  <div class="card"><h3>📥 RETURN BOOK - LIBRARIAN ONLY 🔒</h3>
+    <div class="card scan" style="margin:8px 0">
+      <label style="font-weight:bold">📷 SCAN / TYPE BARCODE</label>
+      <input id="returnBarcode" placeholder="📷 SCAN OR TYPE" style="font-size:18px;font-weight:bold;text-transform:uppercase;border:2px solid #111" maxlength="20">
+      <button class="btn black half" onclick="startScan('return')">📷 START CAMERA SCAN</button>
+      <button class="btn red half" onclick="stopScan('return')">⏹️ STOP CAMERA</button>
+      <div id="reader-return" class="hidden"></div>
+      <label style="font-size:13px"><input type="checkbox" id="autoReturn" checked style="width:auto"> ✅ AUTO-RETURN AFTER SCAN</label>
+    </div>
+    <div id="returnLearnerInfo"></div>
+    <input id="retrieverName" placeholder="RETRIEVER (LIBRARIAN NAME)" maxlength="50" style="text-transform:uppercase">
+    <button class="btn orange" onclick="returnBook()">✅ RETURN BOOK</button><div id="returnMsg"></div>
+    <div id="scanHistoryReturn" style="margin-top:10px"></div>
+    <h3 style="margin-top:14px">📤 CURRENTLY BORROWED</h3><div id="borrowedList"></div>
+  </div>
+</div>
+
+<div id="tab-learners" class="hidden">
+  <div class="card"><h3>👩‍🎓 ADD LEARNER 🔒</h3><select id="addGrade"><option value="">GRADE</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select><select id="addClass"><option value="">CLASS</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select><input id="addNumber" type="number" min="1" max="60" placeholder="NUMBER 1-60"><input id="addName" placeholder="FIRST NAME" maxlength="50" style="text-transform:uppercase"><input id="addSurname" placeholder="SURNAME" maxlength="50" style="text-transform:uppercase"><button class="btn" onclick="addLearner()">➕ ADD LEARNER</button><div id="addLearnerMsg"></div></div>
+  <div class="card" style="border-left:5px solid #6a1b9a"><h3>⚡ BULK ADD LEARNERS</h3><p class="small">FORMAT: GRADE,CLASS,NUMBER,FIRSTNAME,SURNAME — ALL CAPS AUTO</p><textarea id="bulkLearners" placeholder="GRADE,CLASS,NUMBER,FIRSTNAME,SURNAME&#10;12,D,1,JOHN,MASEKO"></textarea><button class="btn purple" onclick="bulkAddLearners()">⚡ BULK ADD</button><div id="bulkLearnerMsg"></div></div>
+  <div class="card" style="border-left:5px solid #c62828"><h3>🗑️ DELETE LEARNER</h3><input id="deleteLearnerId" placeholder="LEARNER ID" maxlength="10" style="text-transform:uppercase"><button class="btn red" onclick="deleteLearner()">🗑️ DELETE</button><div id="deleteLearnerMsg"></div></div>
+  <div class="card"><h3>ALL LEARNERS</h3><input id="learnerTabSearch" placeholder="🔍 SEARCH LEARNERS..." oninput="renderLearners()" maxlength="50" style="text-transform:uppercase"><div id="learnerList"></div></div>
+</div>
+
+<div id="tab-books" class="hidden">
+  <div class="card"><h3>📚 ADD BOOK - WITH QUANTITY ✅</h3>
+    <label style="font-weight:bold">📖 SUBJECT - ALL CAPS ✅</label>
+    <select id="bookCategory">
+      <option value="MAT">MAT - MATHEMATICS</option>
+      <option value="MATL">MATL - MATHEMATICAL LITERACY</option>
+      <option value="ENG">ENG - ENGLISH HOME LANGUAGE</option>
+      <option value="AFR">AFR - AFRIKAANS FIRST ADDITIONAL LANGUAGE</option>
+      <option value="ZUL">ZUL - ISIZULU HOME LANGUAGE</option>
+      <option value="SEP">SEP - SEPEDI HOME LANGUAGE</option>
+      <option value="XHO">XHO - ISIXHOSA HOME LANGUAGE</option>
+      <option value="LIFS">LIFS - LIFE SCIENCES</option>
+      <option value="PHYS">PHYS - PHYSICAL SCIENCES</option>
+      <option value="ACC">ACC - ACCOUNTING</option>
+      <option value="BUS">BUS - BUSINESS STUDIES</option>
+      <option value="ECO">ECO - ECONOMICS</option>
+      <option value="GEO">GEO - GEOGRAPHY</option>
+      <option value="HIST">HIST - HISTORY</option>
+      <option value="LIFO">LIFO - LIFE ORIENTATION</option>
+      <option value="CAT">CAT - COMPUTER APPLICATIONS TECHNOLOGY</option>
+      <option value="IT">IT - INFORMATION TECHNOLOGY</option>
+      <option value="TOUR">TOUR - TOURISM</option>
+      <option value="CONS">CONS - CONSUMER STUDIES</option>
+      <option value="AGRI">AGRI - AGRICULTURAL SCIENCES</option>
+      <option value="EGD">EGD - ENGINEERING GRAPHICS & DESIGN</option>
+      <option value="TECH">TECH - TECHNOLOGY</option>
+    </select>
+    <select id="bookGrade"><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select>
+    <input id="bookTitle" placeholder="BOOK TITLE E.G. OXFORD MATHEMATICS GRADE 12" maxlength="100" style="text-transform:uppercase">
+    <input id="bookBarcode" placeholder="STARTING BARCODE - AUTO IF EMPTY E.G. MAT-001" maxlength="20" style="text-transform:uppercase">
+    <div class="qty-box"><label>🔢 QUANTITY</label><input id="bookQty" type="number" min="1" max="200" value="1"></div>
+    <button class="btn" onclick="addBook()">➕ ADD BOOK(S)</button><div id="bookMsg"></div>
+  </div>
+  <div class="card" style="border-left:5px solid #6a1b9a"><h3>⚡ BULK ADD BOOKS</h3><p class="small">FORMAT: CATEGORY,GRADE,TITLE,BARCODE — ALL CAPS AUTO ✅<br>EXAMPLE: ENG,10,OXFORD ENGLISH GRADE 10,ENG-001<br>EXAMPLE: PHYS,12,PHYSICAL SCIENCES GRADE 12,</p><textarea id="bulkBooks" placeholder="CATEGORY,GRADE,TITLE,BARCODE&#10;ENG,10,OXFORD ENGLISH GRADE 10,&#10;PHYS,12,PHYSICAL SCIENCES GRADE 12,"></textarea><button class="btn purple" onclick="bulkAddBooks()">⚡ BULK ADD BOOKS</button><div id="bulkBookMsg"></div></div>
+  <div class="card" style="border-left:5px solid #111"><h3>🖨️ PRINT BARCODES</h3><button class="btn black" onclick="printAllBarcodes()">🖨️ PRINT ALL BARCODES</button><div style="margin-top:10px"><input id="printOneBarcode" placeholder="OR TYPE ONE BARCODE" maxlength="20" style="text-transform:uppercase"><button class="btn" onclick="printSingleFromInput()" style="margin-top:6px">🖨️ PRINT THIS ONE</button></div><div id="printMsg"></div></div>
+</div>
+
+<div id="tab-principal" class="hidden">
+  <div class="card gold"><h3>👔 PRINCIPAL DASHBOARD 🔒</h3><p class="small" id="principalDate">LOADING...</p><button class="btn gold" onclick="renderPrincipal()">🔄 REFRESH</button> <button class="btn black" onclick="printPrincipalReport()" style="margin-top:8px">🖨️ PRINT PRINCIPAL REPORT</button></div>
+  <div class="grid4"><div class="stat gold"><b id="pTotalBooks">0</b>📚 TOTAL BOOKS</div><div class="stat"><b id="pTotalLearners">0</b>👩‍🎓 LEARNERS</div><div class="stat red"><b id="pBorrowed">0</b>📤 BORROWED</div><div class="stat green"><b id="pAvailable">0</b>✅ AVAILABLE</div></div>
+  <div class="grid" style="margin-top:10px"><div class="stat red"><b id="pOverdue">0</b>🔴 OVERDUE</div><div class="stat"><b id="pDueToday">0</b>📅 DUE TODAY</div><div class="stat gold"><b id="pBorrowRate">0%</b>📊 % BORROWED</div></div>
+  <div class="card"><h3>📚 BY GRADE</h3><div id="pByGrade"></div></div>
+  <div class="card"><h3>📖 BY SUBJECT - ALL CAPS</h3><div id="pBySubject"></div></div>
+  <div class="card red"><h3>🔴 OVERDUE</h3><div id="pOverdueList">LOGIN TO VIEW</div></div>
+  <div class="card"><h3>📤 CURRENTLY BORROWED</h3><div id="pBorrowedList">LOGIN TO VIEW</div></div>
+  <div class="card green"><h3>✅ RECENTLY RETURNED</h3><div id="pReturnedList">LOGIN TO VIEW</div></div>
+  <div class="card"><h3>🏆 TOP BORROWED</h3><div id="pTopBooks"></div></div>
+</div>
+
+<div id="tab-parent" class="hidden">
+  <div class="card" style="border-left:5px solid #1a7f37"><h3>👨‍👩‍👧 PARENT CHECK - PROTECTED</h3><p class="small">🔒 SURNAME IS HASHED — 5 WRONG TRIES = LOCKED 5 MINS.</p><input id="parentId" placeholder="LEARNER ID E.G. 8A01" style="text-transform:uppercase" maxlength="10"><input id="parentSurname" placeholder="SURNAME" maxlength="50" style="text-transform:uppercase"><button class="btn green" onclick="checkMyChild()">🔍 CHECK MY CHILD</button><div id="parentResult" style="margin-top:10px"></div><div id="parentAttempts" class="small"></div></div>
+</div>
+
+<div id="tab-login" class="hidden">
+  <div class="card"><h3>🔐 LIBRARIAN / PRINCIPAL LOGIN</h3>
+    <label style="font-weight:bold">🏫 SCHOOL CODE</label>
+    <select id="loginSchoolCode" onchange="changeSchoolCode(this.value)">
+      <option value="WORDSWORTH">WORDSWORTH - WORDSWORTH HIGH SCHOOL</option>
+      <option value="SCH001">SCH001 - WORDSWORTH HIGH SCHOOL</option>
+      <option value="SCH002">SCH002 - SPRINGFIELD COLLEGE</option>
+      <option value="SCH003">SCH003 - BENONI HIGH SCHOOL</option>
+      <option value="SCH004">SCH004 - DAVEYTON HIGH SCHOOL</option>
+    </select>
+    <input id="loginSchoolCodeCustom" placeholder="OR TYPE YOUR OWN SCHOOL CODE E.G. MY-SCHOOL-01" maxlength="20" style="text-transform:uppercase" oninput="changeSchoolCode(this.value.toUpperCase())">
+    <p class="small">💡 SCHOOL CODE SEPARATES DATA. WORDSWORTH books will NOT show in SCH002. Use SAME code on all devices for your school.</p>
+    <input id="loginEmail" type="email" placeholder="EMAIL" maxlength="100" autocomplete="username"><input id="loginPass" type="password" placeholder="PASSWORD" maxlength="100" autocomplete="current-password"><button class="btn" onclick="doLogin()">LOGIN</button><button class="btn red" onclick="doLogout()" style="margin-top:8px">LOGOUT</button><div id="loginMsg"></div><div id="loginAttempts" class="small"></div>
+    <p class="small" style="margin-top:10px">CURRENT SCHOOL CODE: <b id="currentSchoolDisplay">WORDSWORTH</b></p>
+  </div>
+</div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script>
+const firebaseConfig = { apiKey: "AIzaSyAJyTZ-tmrsY0m-EmN80HSRERSR_tiVX4E", authDomain: "wordsworth-library.firebaseapp.com", databaseURL: "https://wordsworth-library-default-rtdb.firebaseio.com", projectId: "wordsworth-library", storageBucket: "wordsworth-library.firebasestorage.app", messagingSenderId: "236216515385", appId: "1:236216515385:web:9f3e8937f829e9d2bf06e8" };
+firebase.initializeApp(firebaseConfig);
+const auth=firebase.auth(); const db=firebase.database();
+
+// ✅ ALL CAPS SUBJECTS LIST
+const SUBJECTS = {
+  "MAT":"MATHEMATICS","MATL":"MATHEMATICAL LITERACY","ENG":"ENGLISH HOME LANGUAGE","AFR":"AFRIKAANS FIRST ADDITIONAL LANGUAGE","ZUL":"ISIZULU HOME LANGUAGE","SEP":"SEPEDI HOME LANGUAGE","XHO":"ISIXHOSA HOME LANGUAGE","LIFS":"LIFE SCIENCES","PHYS":"PHYSICAL SCIENCES","ACC":"ACCOUNTING","BUS":"BUSINESS STUDIES","ECO":"ECONOMICS","GEO":"GEOGRAPHY","HIST":"HISTORY","LIFO":"LIFE ORIENTATION","CAT":"COMPUTER APPLICATIONS TECHNOLOGY","IT":"INFORMATION TECHNOLOGY","TOUR":"TOURISM","CONS":"CONSUMER STUDIES","AGRI":"AGRICULTURAL SCIENCES","EGD":"ENGINEERING GRAPHICS & DESIGN","TECH":"TECHNOLOGY"
+};
+function subjectName(code){ return SUBJECTS[code] || code; }
+document.getElementById('subjectListDisplay').innerHTML = Object.entries(SUBJECTS).map(([c,n])=>`<b>${c}</b> - ${n}`).join(' • ');
+
+// ✅ SCHOOL CODE
+let schoolCode = localStorage.getItem('schoolCode') || 'WORDSWORTH';
+function changeSchoolCode(code){ code=(code||"").trim().toUpperCase().replace(/[^A-Z0-9-]/g,""); if(!code) return; schoolCode=code; localStorage.setItem('schoolCode',code); document.getElementById('headerSchoolCode').textContent=code; document.getElementById('currentSchoolDisplay').textContent=code; loadData(); }
+function basePath(p){ return "schools/"+schoolCode+"/"+p; }
+document.getElementById('headerSchoolCode').textContent=schoolCode; document.getElementById('currentSchoolDisplay').textContent=schoolCode;
+
+// ✅ SECURITY HELPERS + ALL CAPS
+function escapeHTML(s){ if(s==null) return ""; return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;"); }
+function cleanID(s){ return String(s||"").trim().toUpperCase().replace(/[^A-Z0-9-]/g,"").slice(0,20); }
+function cleanText(s){ return String(s||"").trim().toUpperCase().replace(/[<>"';`\\]/g,"").slice(0,100); }
+function cleanName(s){ return String(s||"").trim().toUpperCase().replace(/[^A-Z \-']/g,"").slice(0,50); }
+let parentFailCount=0, parentLockedUntil=0, loginFailCount=0, lastActivity=Date.now();
+function resetActivity(){ lastActivity=Date.now(); }
+document.addEventListener('click',resetActivity); document.addEventListener('keydown',resetActivity);
+setInterval(()=>{ if(currentUser && Date.now()-lastActivity > 2*60*60*1000){ auth.signOut(); alert("🔒 AUTO-LOGGED OUT AFTER 2 HOURS INACTIVE"); } }, 60000);
+
+let currentUser=null; let allBooks={}, allLearners={}, allLoans={};
+let scanners={}; let lastScanned={issue:"", return:""}; let scanCooldown=false; let selectedLearner=null;
+function showTab(id,btn){ document.querySelectorAll('[id^="tab-"]').forEach(d=>d.classList.add('hidden')); document.getElementById('tab-'+id).classList.remove('hidden'); document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active')); if(btn) btn.classList.add('active'); if(id==='principal') renderPrincipal(); if(id==='issue'){ filterLearnersForIssue(); } if(id==='return'){ setTimeout(()=>document.getElementById('returnBarcode').focus(),300); } }
+function setMsg(el,t,ok){ el.className="msg "+(ok?"ok":"err"); el.textContent=t; el.scrollIntoView({behavior:"smooth",block:"center"}); }
+function beep(){ try{ const ctx=new (window.AudioContext||window.webkitAudioContext)(); const o=ctx.createOscillator(); const g=ctx.createGain(); o.connect(g); g.connect(ctx.destination); o.frequency.value=880; o.type='sine'; g.gain.value=0.2; o.start(); o.stop(ctx.currentTime+0.15); }catch(e){} if(navigator.vibrate) navigator.vibrate(100); }
+auth.onAuthStateChanged(u=>{ currentUser=u; document.getElementById('loginStatus').textContent=u?"LOGGED IN: "+u.email+" ✅":"NOT LOGGED IN"; document.getElementById('conn').textContent="FIREBASE CONNECTED ✅"; document.getElementById('securityStatus').innerHTML=u? "✅ <b>LOGGED IN AS LIBRARIAN</b> - SCHOOL: "+escapeHTML(schoolCode) : "✅ <b>PUBLIC MODE</b> - SCHOOL: "+escapeHTML(schoolCode)+" - CAN SEARCH BOOKS + PARENT CHECK ONLY."; loadData(); });
+async function doLogin(){ if(loginFailCount>=5){ loginMsg.textContent="🔒 TOO MANY TRIES. WAIT 1 MIN + REFRESH."; return; } try{ changeSchoolCode(document.getElementById('loginSchoolCode').value); await auth.signInWithEmailAndPassword(loginEmail.value.trim(),loginPass.value); loginFailCount=0; loginMsg.textContent="✅ LOGIN SUCCESS - SCHOOL: "+schoolCode; }catch(e){ loginFailCount++; loginMsg.textContent="❌ WRONG EMAIL / PASSWORD. "+(5-loginFailCount)+" LEFT."; } }
+async function doLogout(){ await auth.signOut(); loginMsg.textContent="LOGGED OUT ✅"; }
+let listeners={};
+function loadData(){
+  Object.values(listeners).forEach(off=>{ try{off();}catch(e){} }); listeners={};
+  // Books - public for this school
+  db.ref(basePath("books")).on("value",s=>{ allBooks=s.val()||{}; renderBooks(); updateStats(); renderPrincipal(); });
+  if(currentUser){
+    db.ref(basePath("learners")).on("value",s=>{ allLearners=s.val()||{}; renderLearners(); filterLearnersForIssue(); updateStats(); renderPrincipal(); });
+    db.ref(basePath("loans")).on("value",s=>{ allLoans=s.val()||{}; renderBorrowed(); updateStats(); renderPrincipal(); });
+  } else { allLearners={}; allLoans={}; renderPrincipal(); renderLearners(); renderBorrowed(); }
+}
+function updateStats(){ totalBooks.textContent=Object.keys(allBooks).length; totalLearners.textContent=currentUser?Object.keys(allLearners).length:"🔒"; borrowedCount.textContent=currentUser?Object.values(allLoans).filter(l=>l.status==="Borrowed").length:"🔒"; }
+function filterLearnersForIssue(){ const q=(document.getElementById('learnerSearch').value||"").toUpperCase().trim(); const listEl=document.getElementById('learnerPickList'); if(!currentUser){ listEl.innerHTML="<p class='small' style='padding:10px'>🔒 LOGIN AS LIBRARIAN TO SEE LEARNERS</p>"; return; } let arr=Object.values(allLearners); if(q) arr=arr.filter(l=>(l.learnerId+" "+l.name+" "+l.surname+" "+l.grade+l.className).toUpperCase().includes(q)); arr.sort((a,b)=>a.learnerId.localeCompare(b.learnerId)); if(arr.length===0){ listEl.innerHTML="<p class='small' style='padding:10px'>❌ NO LEARNER FOUND</p>"; return; } let html=`<p class='small' style='padding:8px 10px 0'>SHOWING ${Math.min(arr.length,30)} OF ${arr.length} — TAP TO SELECT 👇</p>`; arr.slice(0,30).forEach(l=>{ const bc=Object.values(allLoans).filter(x=>x.learnerId===l.learnerId && x.status==="Borrowed").length; html+=`<div class="learner-item" onclick="selectLearnerForIssue('${escapeHTML(l.learnerId)}')"><span><b>${escapeHTML(l.learnerId)}</b> - ${escapeHTML(l.name)} ${escapeHTML(l.surname)} <span class="small">(${escapeHTML(l.grade)}${escapeHTML(l.className)})</span><br><span class="small">${bc? "📤 HAS "+bc+" BOOK(S) OUT" : "✅ NO BOOKS OUT"}</span></span><span>👉 SELECT</span></div>`; }); listEl.innerHTML=html; }
+function selectLearnerForIssue(id){ const l=allLearners[cleanID(id)]; if(!l) return; selectedLearner=l; document.getElementById('issueGrade').value=l.grade; document.getElementById('issueClass').value=l.className; document.getElementById('issueNumber').value=l.number; document.getElementById('issueLearnerId').value=l.learnerId; document.getElementById('issueSurname').value=l.surname; document.getElementById('issueFirstName').value=l.name; document.getElementById('learnerSearch').value=l.learnerId+" - "+l.name+" "+l.surname; document.getElementById('selectedLearnerBox').classList.remove('hidden'); document.getElementById('selectedLearnerBox').innerHTML=`<div class="selected-learner"><span>✅ SELECTED: ${escapeHTML(l.learnerId)} - ${escapeHTML(l.name)} ${escapeHTML(l.surname)}</span><button onclick="clearSelectedLearner()">✕ CHANGE</button></div>`; document.getElementById('learnerPickList').innerHTML="<p class='small' style='padding:10px;color:#1a7f37'>✅ LEARNER SELECTED! NOW SCAN BOOK BELOW 👇</p>"; const borrowed=Object.values(allLoans).filter(x=>x.learnerId===l.learnerId && x.status==="Borrowed"); document.getElementById('learnerBooksInfo').innerHTML= borrowed.length? `<b style="color:#c62828">📤 HAS ${borrowed.length} BOOK(S):</b><br>`+borrowed.map(b=>`• ${escapeHTML(b.bookTitle)} (${escapeHTML(b.barcode)}) - DUE ${escapeHTML(b.dueDate)}`).join('<br>') : `<span style="color:#1a7f37">✅ NO BOOKS CURRENTLY BORROWED</span>`; beep(); }
+function clearSelectedLearner(){ selectedLearner=null; document.getElementById('issueGrade').value=""; document.getElementById('issueClass').value=""; document.getElementById('issueNumber').value=""; document.getElementById('issueLearnerId').value=""; document.getElementById('issueSurname').value=""; document.getElementById('issueFirstName').value=""; document.getElementById('learnerSearch').value=""; document.getElementById('selectedLearnerBox').classList.add('hidden'); document.getElementById('learnerBooksInfo').innerHTML=""; filterLearnersForIssue(); }
+function quickIssueToLearner(id){ showTab('issue', document.querySelectorAll('.nav button')[1]); setTimeout(()=>selectLearnerForIssue(id),300); }
+async function startScan(mode){ if(!currentUser){ alert("🔒 LOGIN FIRST"); return; } const readerId = mode==='issue' ? 'reader-issue' : 'reader-return'; const el = document.getElementById(readerId); el.classList.remove('hidden'); if(scanners[mode]){ try{ await scanners[mode].stop(); }catch(e){} } const scanner = new Html5Qrcode(readerId); scanners[mode]=scanner; try{ await scanner.start({facingMode:"environment"}, {fps:10, qrbox:{width:280,height:140}}, (t)=>onBarcodeScanned(mode,t), ()=>{}); }catch(e){ try{ await scanner.start({facingMode:"user"}, {fps:10, qrbox:{width:280,height:140}}, (t)=>onBarcodeScanned(mode,t), ()=>{}); }catch(e2){ alert("❌ CAMERA FAILED"); } } }
+async function stopScan(mode){ const readerId = mode==='issue' ? 'reader-issue' : 'reader-return'; if(scanners[mode]){ try{ await scanners[mode].stop(); await scanners[mode].clear(); }catch(e){} scanners[mode]=null; } document.getElementById(readerId).classList.add('hidden'); document.getElementById(readerId).innerHTML=""; }
+async function onBarcodeScanned(mode, code){ code=cleanID(code); if(!code) return; if(scanCooldown && lastScanned[mode]===code) return; lastScanned[mode]=code; scanCooldown=true; setTimeout(()=>scanCooldown=false,2500); beep(); if(mode==='issue'){ document.getElementById('issueBarcode').value=code; const book=Object.values(allBooks).find(b=>b.barcode===code); document.getElementById('scanHistoryIssue').innerHTML=`<div class="msg ok">📷 SCANNED: <b>${escapeHTML(code)}</b> ${book? " - "+escapeHTML(book.title):""}</div>`; if(document.getElementById('autoIssue').checked){ if(!selectedLearner || !issuerName.value){ document.getElementById('scanStatusIssue').textContent="⚠️ SCANNED "+code+" - SELECT LEARNER + ISSUER FIRST"; } else { await stopScan('issue'); await issueBook(); } } } else { document.getElementById('returnBarcode').value=code; document.getElementById('scanHistoryReturn').innerHTML=`<div class="msg ok">📷 SCANNED: <b>${escapeHTML(code)}</b></div>`; if(document.getElementById('autoReturn').checked){ if(!retrieverName.value){ alert("⚠️ ENTER RETRIEVER FIRST"); return; } await stopScan('return'); await returnBook(); } } }
+document.addEventListener('DOMContentLoaded', ()=>{ document.getElementById('issueBarcode').addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); issueBook(); } }); document.getElementById('returnBarcode').addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); returnBook(); } }); });
+function daysLate(due){ const today=new Date(); today.setHours(0,0,0,0); const d=new Date(due); d.setHours(0,0,0,0); return Math.floor((today-d)/86400000); }
+function renderPrincipal(){ document.getElementById('principalDate').textContent="📅 REPORT: "+new Date().toLocaleDateString('en-ZA',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+" | SCHOOL: "+schoolCode; const books=Object.values(allBooks); const learners=Object.values(allLearners); const loans=Object.values(allLoans); const borrowed=loans.filter(l=>l.status==="Borrowed"); const returned=loans.filter(l=>l.status==="Returned").sort((a,b)=>(b.returnedAt||0)-(a.returnedAt||0)).slice(0,15); const todayStr=new Date().toISOString().slice(0,10); const overdue=borrowed.filter(l=>l.dueDate && l.dueDate < todayStr); const dueToday=borrowed.filter(l=>l.dueDate===todayStr); const total=books.length; const avail=books.filter(b=>b.status!=="Borrowed").length; const rate=total?Math.round(borrowed.length/total*100):0; document.getElementById('pTotalBooks').textContent=total; document.getElementById('pTotalLearners').textContent=currentUser?learners.length:"🔒"; document.getElementById('pBorrowed').textContent=currentUser?borrowed.length:"🔒"; document.getElementById('pAvailable').textContent=avail; document.getElementById('pOverdue').textContent=currentUser?overdue.length:"🔒"; document.getElementById('pDueToday').textContent=currentUser?dueToday.length:"🔒"; document.getElementById('pBorrowRate').textContent=rate+"%"; let gHtml="<table><tr><th>GRADE</th><th>📚 BOOKS</th><th>📤 BORROWED</th><th>👩‍🎓 LEARNERS</th><th>USAGE</th></tr>"; ["8","9","10","11","12"].forEach(g=>{ const gb=books.filter(b=>String(b.grade)===g).length; const gbor=borrowed.filter(l=>l.learnerId && l.learnerId.startsWith(g)).length; const gl=currentUser?learners.filter(l=>String(l.grade)===g).length:"—"; const pct=gb?Math.round(gbor/gb*100):0; gHtml+=`<tr><td><b>GRADE ${g}</b></td><td>${gb}</td><td>${currentUser?gbor:"🔒"}</td><td>${gl}</td><td style="min-width:120px"><div class="bar"><div style="width:${pct}%">${pct}%</div></div></td></tr>`; }); gHtml+="</table>"; document.getElementById('pByGrade').innerHTML=gHtml; let sHtml="<table><tr><th>SUBJECT</th><th>BOOKS</th><th>BORROWED</th><th>AVAILABLE</th></tr>"; Object.keys(SUBJECTS).forEach(code=>{ const cb=books.filter(b=>b.category===code); if(cb.length===0) return; const cbor=cb.filter(b=>b.status==="Borrowed").length; sHtml+=`<tr><td><b>${code}</b> - ${subjectName(code)}</td><td>${cb.length}</td><td>${cbor}</td><td>${cb.length-cbor}</td></tr>`; }); sHtml+="</table>"; document.getElementById('pBySubject').innerHTML=sHtml; if(!currentUser){ document.getElementById('pOverdueList').innerHTML="🔒 LOGIN"; document.getElementById('pBorrowedList').innerHTML="🔒 LOGIN"; document.getElementById('pReturnedList').innerHTML="🔒 LOGIN"; } else { if(overdue.length===0) document.getElementById('pOverdueList').innerHTML="✅ NO OVERDUE!"; else { let h="<table><tr><th>LEARNER</th><th>BOOK</th><th>DUE</th><th>DAYS LATE</th></tr>"; overdue.sort((a,b)=>daysLate(b.dueDate)-daysLate(a.dueDate)).forEach(l=>{ h+=`<tr><td><b>${escapeHTML(l.learnerId)}</b></td><td>${escapeHTML(l.bookTitle)} (${escapeHTML(l.barcode)})</td><td>${escapeHTML(l.dueDate)}</td><td style="color:#c62828;font-weight:bold">${daysLate(l.dueDate)} DAYS</td></tr>`; }); h+="</table>"; document.getElementById('pOverdueList').innerHTML=h; } if(borrowed.length===0) document.getElementById('pBorrowedList').innerHTML="NO BOOKS BORROWED"; else { let h="<table><tr><th>LEARNER</th><th>BOOK</th><th>DUE</th></tr>"; borrowed.slice(0,50).forEach(l=>{ h+=`<tr><td>${escapeHTML(l.learnerId)}</td><td>${escapeHTML(l.bookTitle)} (${escapeHTML(l.barcode)})</td><td>${escapeHTML(l.dueDate)}</td></tr>`; }); h+="</table>"; document.getElementById('pBorrowedList').innerHTML=h; } if(returned.length===0) document.getElementById('pReturnedList').innerHTML="NO RETURNS YET"; else { let h="<table><tr><th>LEARNER</th><th>BOOK</th><th>RETURNED</th></tr>"; returned.forEach(l=>{ h+=`<tr><td>${escapeHTML(l.learnerId)}</td><td>${escapeHTML(l.bookTitle)} (${escapeHTML(l.barcode)})</td><td>${l.returnedAt?new Date(l.returnedAt).toLocaleDateString('en-ZA'):"-"}</td></tr>`; }); h+="</table>"; document.getElementById('pReturnedList').innerHTML=h; } } let counts={}; loans.forEach(l=>{ counts[l.bookTitle]=(counts[l.bookTitle]||0)+1; }); let top=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,5); if(top.length===0) document.getElementById('pTopBooks').innerHTML="NO HISTORY YET"; else { let h="<table><tr><th>#</th><th>TITLE</th><th>TIMES</th></tr>"; top.forEach(([t,c],i)=>{ h+=`<tr><td>${i+1}</td><td>${escapeHTML(t)}</td><td><b>${c}</b></td></tr>`; }); h+="</table>"; document.getElementById('pTopBooks').innerHTML=h; } }
+function printPrincipalReport(){ const w=window.open('','_blank','width=900,height=700'); const content=document.getElementById('tab-principal').innerHTML; w.document.write(`<html><head><title>PRINCIPAL REPORT - ${schoolCode}</title><style>body{font-family:Arial;padding:20px} table{width:100%;border-collapse:collapse} th,td{padding:8px;border:1px solid #ddd} button{display:none}</style></head><body><h1>🏫 WORDSWORTH HIGH SCHOOL - ${schoolCode}</h1><h2>👔 PRINCIPAL REPORT - ${new Date().toLocaleDateString('en-ZA')}</h2><hr>${content}<script>window.onload=function(){window.print()}<\/script></body></html>`); w.document.close(); }
+function renderBooks(){ const q=(searchBook.value||"").toUpperCase(); let html="<table><tr><th>BARCODE</th><th>TITLE</th><th>SUBJECT</th><th>GRADE</th><th>STATUS</th><th>PRINT</th></tr>"; Object.values(allBooks).filter(b=>(b.title+" "+b.barcode+" "+subjectName(b.category)).toUpperCase().includes(q)).slice(0,100).forEach(b=>{ html+=`<tr><td><b>${escapeHTML(b.barcode)}</b></td><td>${escapeHTML(b.title)}</td><td><b>${escapeHTML(b.category)}</b><br><span class="small">${escapeHTML(subjectName(b.category))}</span></td><td>${escapeHTML(b.grade)}</td><td><span class="badge ${b.status==='Borrowed'?'borrowed':'returned'}">${escapeHTML(b.status||'AVAILABLE')}</span></td><td><button class="btn small black" onclick="printBarcode('${escapeHTML(b.barcode)}','${escapeHTML(b.title).replace(/'/g,"")}','${escapeHTML(b.grade)}')">🖨️ PRINT</button></td></tr>`; }); html+="</table><p class='small'>TOTAL: "+Object.keys(allBooks).length+" | SCHOOL: "+escapeHTML(schoolCode)+"</p>"; bookList.innerHTML=html; }
+function renderLearners(){ if(!currentUser){ learnerList.innerHTML="🔒 LOGIN AS LIBRARIAN TO SEE LEARNERS"; return; } const q=((document.getElementById('learnerTabSearch')||{}).value||"").toUpperCase(); let arr=Object.values(allLearners).filter(l=>(l.learnerId+" "+l.name+" "+l.surname).toUpperCase().includes(q)).sort((a,b)=>a.learnerId.localeCompare(b.learnerId)); let html="<table><tr><th>ID</th><th>NAME</th><th>CLASS</th><th>ACTION</th></tr>"; arr.slice(0,100).forEach(l=>{ html+=`<tr><td><b>${escapeHTML(l.learnerId)}</b></td><td>${escapeHTML(l.name)} ${escapeHTML(l.surname)}</td><td>${escapeHTML(l.grade)}${escapeHTML(l.className)}</td><td><button class="btn small green" onclick="quickIssueToLearner('${escapeHTML(l.learnerId)}')">📤 ISSUE →</button></td></tr>`; }); html+="</table>"; learnerList.innerHTML=html; }
+function renderBorrowed(){ if(!currentUser){ borrowedList.innerHTML="🔒 LOGIN"; if(document.getElementById('borrowedListIssue')) document.getElementById('borrowedListIssue').innerHTML="🔒 LOGIN"; return; } let rows=Object.values(allLoans).filter(l=>l.status==="Borrowed"); let html="<table><tr><th>LEARNER</th><th>BOOK</th><th>DUE</th><th>RETURN</th></tr>"; if(rows.length===0) html+="<tr><td colspan='4'>NO BOOKS BORROWED</td></tr>"; rows.forEach(l=>{ const learner=allLearners[l.learnerId]; html+=`<tr><td>${escapeHTML(l.learnerId)} ${learner? "<br><span class='small'>"+escapeHTML(learner.name)+" "+escapeHTML(learner.surname)+"</span>":""}</td><td>${escapeHTML(l.bookTitle)} (${escapeHTML(l.barcode)})</td><td>${escapeHTML(l.dueDate)}</td><td><button class="btn small orange" onclick="quickReturn('${escapeHTML(l.barcode)}')">📥 RETURN</button></td></tr>`; }); html+="</table>"; borrowedList.innerHTML=html; if(document.getElementById('borrowedListIssue')) document.getElementById('borrowedListIssue').innerHTML=html; }
+function quickReturn(barcode){ showTab('return', document.querySelectorAll('.nav button')[2]); setTimeout(()=>{ document.getElementById('returnBarcode').value=cleanID(barcode); },300); }
+function makeLearnerId(g,c,n){ return g+c+String(n).padStart(2,'0'); }
+async function addLearner(){ if(!currentUser) return alert("🔒 LOGIN"); const g=addGrade.value,c=addClass.value,n=addNumber.value; if(!g||!c||!n||!addName.value||!addSurname.value) return addLearnerMsg.textContent="⚠️ FILL ALL"; const id=makeLearnerId(g,c,n); const h=await hashSurname(addSurname.value); await db.ref(basePath("learners/"+id)).set({learnerId:id,grade:g,className:c,number:n,name:cleanName(addName.value),surname:cleanName(addSurname.value),schoolCode:schoolCode,createdAt:Date.now()}); await db.ref(basePath("publicParent/"+id)).update({learnerId:id,surnameHash:h,schoolCode:schoolCode,lastUpdated:Date.now()}); addLearnerMsg.textContent="✅ ADDED "+id+" - SCHOOL: "+schoolCode; }
+async function deleteLearner(){ if(!currentUser) return alert("🔒 LOGIN"); const id=cleanID(document.getElementById('deleteLearnerId').value); if(!id) return deleteLearnerMsg.textContent="⚠️ ENTER ID"; if(!confirm("DELETE "+id+"?")) return; await db.ref(basePath("learners/"+id)).remove(); await db.ref(basePath("publicParent/"+id)).remove(); deleteLearnerMsg.textContent="✅ DELETED "+id; }
+async function bulkAddLearners(){ if(!currentUser) return alert("🔒 LOGIN"); const text=document.getElementById('bulkLearners').value.trim(); if(!text) return bulkLearnerMsg.textContent="⚠️ PASTE FIRST"; let added=0; for(let line of text.split("\n")){ line=line.trim(); if(!line) continue; if(line.toUpperCase().includes("GRADE")) continue; const parts=line.split(/[\t,;]/).map(p=>p.trim()).filter(p=>p!==""); if(parts.length<5) continue; const [grade,cls,num,fn,sn]=parts; if(isNaN(parseInt(grade))) continue; try{ const id=makeLearnerId(grade,cls.toUpperCase(),num); const h=await hashSurname(sn); await db.ref(basePath("learners/"+id)).set({learnerId:id,grade:String(grade),className:cls.toUpperCase(),number:String(num),name:cleanName(fn),surname:cleanName(sn),schoolCode:schoolCode,createdAt:Date.now()}); await db.ref(basePath("publicParent/"+id)).update({learnerId:id,surnameHash:h,schoolCode:schoolCode,lastUpdated:Date.now()}); added++; }catch(e){} } document.getElementById('bulkLearnerMsg').innerHTML="✅ ADDED <b>"+added+"</b> - ALL CAPS ✅"; document.getElementById('bulkLearners').value=""; }
+async function bulkAddBooks(){ if(!currentUser) return alert("🔒 LOGIN"); const text=document.getElementById('bulkBooks').value.trim(); if(!text) return bulkBookMsg.textContent="⚠️ PASTE"; let added=0; let counts={}; Object.values(allBooks).forEach(b=>{counts[b.category]=(counts[b.category]||0)+1;}); for(let line of text.split("\n")){ line=line.trim(); if(!line) continue; if(line.toUpperCase().includes("CATEGORY")) continue; const parts=line.split(/[\t,;]/).map(p=>p.trim()); if(parts.length<3) continue; let [cat,grade,title,barcode]=parts; cat=(cat||"MAT").toUpperCase().replace(/[^A-Z]/g,""); if(!SUBJECTS[cat]) cat="MAT"; if(!title||isNaN(parseInt(grade))) continue; try{ if(!barcode){counts[cat]=(counts[cat]||0)+1; barcode=cat+"-"+String(counts[cat]).padStart(3,'0');} else barcode=cleanID(barcode); const key=barcode.replace(/[^A-Z0-9-]/g,'_'); await db.ref(basePath("books/"+key)).set({barcode,title:cleanText(title),category:cat,subjectName:subjectName(cat),grade:String(grade),status:"AVAILABLE",schoolCode:schoolCode,createdAt:Date.now()}); allBooks[key]={barcode,title:cleanText(title),category:cat,grade}; added++; }catch(e){} } document.getElementById('bulkBookMsg').innerHTML="✅ ADDED <b>"+added+"</b> BOOKS! ALL CAPS ✅"; document.getElementById('bulkBooks').value=""; }
+async function addBook(){ if(!currentUser) return alert("🔒 LOGIN"); const cat=bookCategory.value,grade=bookGrade.value,title=cleanText(bookTitle.value); if(!title) return bookMsg.textContent="⚠️ ENTER TITLE"; let qty=parseInt(document.getElementById('bookQty').value)||1; if(qty<1) qty=1; if(qty>200) qty=200; let startBarcode=cleanID(bookBarcode.value); let startNum=1; if(startBarcode){ const m=startBarcode.match(/(\d+)$/); if(m) startNum=parseInt(m[0]); } else { let max=0; Object.values(allBooks).forEach(b=>{ if(b.category===cat){ const mm=b.barcode.match(/(\d+)$/); if(mm) max=Math.max(max,parseInt(mm[0])); } }); startNum=max+1; } bookMsg.textContent="⏳ ADDING "+qty+" COPIES..."; let created=[]; for(let i=0;i<qty;i++){ let num=startNum+i; let barcode=cat+"-"+String(num).padStart(3,'0'); let key=barcode.replace(/[^A-Z0-9-]/g,'_'); if(allBooks[key]) continue; await db.ref(basePath("books/"+key)).set({barcode,title,category:cat,subjectName:subjectName(cat),grade,status:"AVAILABLE",schoolCode:schoolCode,createdAt:Date.now()}); allBooks[key]={barcode,title,category:cat,grade}; created.push(barcode); } if(created.length===0){ bookMsg.textContent="❌ ALL EXIST."; return; } bookMsg.innerHTML=`✅ ADDED <b>${created.length} COPIES</b> OF <b>${escapeHTML(title)}</b> - ${cat} - ${subjectName(cat)}<br>📚 ${escapeHTML(created[0])} ${created.length>1?"TO "+escapeHTML(created[created.length-1]):""}`; bookTitle.value=""; bookBarcode.value=""; document.getElementById('bookQty').value=1; }
+async function issueBook(){ if(!currentUser){ setMsg(issueMsg,"🔒 LOGIN",false); return; } const learnerId=cleanID(issueLearnerId.value); const barcode=cleanID(issueBarcode.value); const surname=cleanName(issueSurname.value); if(!learnerId||!barcode||!surname||!issuerName.value){ setMsg(issueMsg,"⚠️ SELECT LEARNER + SCAN BARCODE + ISSUER",false); return; } const key=barcode.replace(/[^A-Z0-9-]/g,'_'); const book=(await db.ref(basePath("books/"+key)).once("value")).val(); if(!book){ setMsg(issueMsg,"❌ BOOK NOT FOUND: "+barcode,false); return; } if(book.status==="Borrowed"){ setMsg(issueMsg,"❌ ALREADY BORROWED",false); return; } const lGrade=parseInt(learnerId.match(/^\d+/)[0]); if(parseInt(book.grade)!==lGrade){ setMsg(issueMsg,`❌ GRADE RULE: LEARNER ${lGrade} BUT BOOK GRADE ${book.grade}`,false); return; } const due=issueDue.value||new Date(Date.now()+14*86400000).toISOString().slice(0,10); const firstName=cleanName(document.getElementById('issueFirstName').value); await db.ref(basePath("loans/"+key)).set({learnerId,learnerName:firstName+" "+surname,barcode,bookTitle:book.title,category:book.category,subjectName:subjectName(book.category),dueDate:due,status:"Borrowed",issuer:cleanText(issuerName.value),schoolCode:schoolCode,issuedAt:Date.now()}); await db.ref(basePath("books/"+key)).update({status:"Borrowed",borrowedBy:learnerId}); await syncToParent(learnerId,surname,book.title,barcode,due); setMsg(issueMsg,"✅ ISSUED "+barcode+" ("+book.title+") TO "+learnerId+" DUE "+due,true); document.getElementById('lastIssued').innerHTML=`<div class="msg ok">✅ LAST: ${escapeHTML(barcode)} → ${escapeHTML(learnerId)} DUE ${escapeHTML(due)}<br><span class='small'>LEARNER STAYS SELECTED - SCAN NEXT BOOK!</span></div>`; document.getElementById('issueBarcode').value=""; document.getElementById('issueBarcode').focus(); filterLearnersForIssue(); }
+async function returnBook(){ if(!currentUser) return alert("🔒 LOGIN"); const barcode=cleanID(returnBarcode.value); if(!barcode||!retrieverName.value){ returnMsg.textContent="⚠️ ENTER BARCODE + RETRIEVER"; return; } const key=barcode.replace(/[^A-Z0-9-]/g,'_'); const loan=(await db.ref(basePath("loans/"+key)).once("value")).val(); if(!loan){ await db.ref(basePath("books/"+key)).update({status:"AVAILABLE",borrowedBy:""}); returnMsg.textContent="⚠️ FIXED STUCK "+barcode; document.getElementById('returnBarcode').value=""; return; } await db.ref(basePath("loans/"+key)).update({status:"RETURNED",retriever:cleanText(retrieverName.value),returnedAt:Date.now()}); await db.ref(basePath("books/"+key)).update({status:"AVAILABLE",borrowedBy:""}); if(loan.learnerId) await db.ref(basePath("publicParent/"+loan.learnerId+"/books/"+key)).update({status:"RETURNED"}); returnMsg.textContent="✅ RETURNED "+barcode+" FROM "+loan.learnerId; document.getElementById('returnBarcode').value=""; document.getElementById('returnLearnerInfo').innerHTML=""; document.getElementById('returnBarcode').focus(); }
+async function hashSurname(s){ s=String(s||"").trim().toLowerCase(); const buf=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s)); return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('').slice(0,16); }
+async function syncToParent(id,sn,title,barcode,due){ const h=await hashSurname(sn); await db.ref(basePath("publicParent/"+id)).update({learnerId:id,surnameHash:h,schoolCode:schoolCode,lastUpdated:Date.now()}); await db.ref(basePath("publicParent/"+id+"/books/"+barcode.replace(/[^A-Z0-9-]/g,'_'))).set({bookTitle:title,barcode,dueDate:due,status:"Borrowed"}); }
+async function checkMyChild(){ if(Date.now()<parentLockedUntil){ const mins=Math.ceil((parentLockedUntil-Date.now())/60000); document.getElementById('parentResult').innerHTML="🔒 LOCKED FOR "+mins+" MIN"; return; } const id=cleanID(document.getElementById('parentId').value); const sn=cleanName(document.getElementById('parentSurname').value); const box=document.getElementById('parentResult'); if(!id||!sn){ box.innerHTML="⚠️ ENTER ID + SURNAME"; return; } box.innerHTML="🔍 CHECKING..."; try{ const data=(await db.ref(basePath("publicParent/"+id)).once("value")).val(); if(!data){ parentFailCount++; if(parentFailCount>=5){ parentLockedUntil=Date.now()+5*60*1000; box.innerHTML="🔒 TOO MANY TRIES - LOCKED 5 MINS"; return; } box.innerHTML="❌ NO BOOKS FOR "+id+" IN SCHOOL "+schoolCode; return; } if(data.surnameHash!==await hashSurname(sn)){ parentFailCount++; if(parentFailCount>=5){ parentLockedUntil=Date.now()+5*60*1000; box.innerHTML="🔒 TOO MANY TRIES - LOCKED 5 MINS"; return; } box.innerHTML="❌ WRONG SURNAME. ("+(5-parentFailCount)+" TRIES LEFT)"; return; } parentFailCount=0; let html=`<b>✅ FOUND FOR ${escapeHTML(id)} - SCHOOL ${escapeHTML(schoolCode)}</b><br>`; if(data.books) Object.values(data.books).forEach(b=>{ html+=`📚 ${escapeHTML(b.bookTitle)} - ${escapeHTML(b.barcode)}<br>DUE: ${escapeHTML(b.dueDate)} - ${escapeHTML(b.status)}<br><hr>`; }); else html+="✅ NO BOOKS BORROWED."; box.innerHTML=html; }catch(e){ box.innerHTML="❌ "+escapeHTML(e.message); } }
+function openPrintWindow(innerHTML,title){ const w=window.open('','_blank','width=800,height=600'); w.document.write(`<html><head><title>${escapeHTML(title)}</title><style>body{font-family:Arial;text-align:center;padding:10px} .label{border:2px dashed #000;padding:14px;margin:10px;display:inline-block;width:280px} .label b{font-size:15px;display:block} svg{width:100%;height:70px} @media print{.no-print{display:none}} button{padding:12px 20px;background:#174ea6;color:#fff;border:0;border-radius:8px;cursor:pointer;margin:10px}</style><script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script></head><body><div class="no-print"><button onclick="window.print()">🖨️ PRINT NOW</button></div>${innerHTML}<script>window.onload=function(){ document.querySelectorAll('svg[data-barcode]').forEach(el=>{ try{ JsBarcode(el, el.getAttribute('data-barcode'), {format:'CODE128', displayValue:true, fontSize:16, height:55, margin:5}); }catch(e){} }); }<\/script></body></html>`); w.document.close(); }
+function printBarcode(barcode,title,grade){ const html=`<div class="label"><small>🏫 WORDSWORTH HIGH SCHOOL - ${escapeHTML(schoolCode)}</small><b>${escapeHTML(title)}</b><small>GRADE ${escapeHTML(grade)} | MENTE ET MANU</small><svg data-barcode="${escapeHTML(barcode)}"></svg><b>${escapeHTML(barcode)}</b></div>`; openPrintWindow(html,'BARCODE '+barcode); }
+function printSingleFromInput(){ const code=cleanID(document.getElementById('printOneBarcode').value); if(!code) return printMsg.textContent="⚠️ TYPE BARCODE"; const key=code.replace(/[^A-Z0-9-]/g,'_'); const b=allBooks[key]||Object.values(allBooks).find(x=>x.barcode===code); if(b) printBarcode(b.barcode,b.title,b.grade); else printBarcode(code,code,'?'); printMsg.textContent="✅ OPENED PRINT FOR "+code; }
+function printAllBarcodes(){ const list=Object.values(allBooks); if(list.length===0){ printMsg.textContent="❌ NO BOOKS YET"; return; } let html=`<h2>🏫 WORDSWORTH - ALL BARCODES (${list.length}) - SCHOOL ${escapeHTML(schoolCode)}</h2>`; list.forEach(b=>{ html+=`<div class="label"><small>🏫 WORDSWORTH HIGH SCHOOL - ${escapeHTML(schoolCode)}</small><b>${escapeHTML(b.title)}</b><small>${escapeHTML(b.category)} - ${escapeHTML(subjectName(b.category))} | GRADE ${escapeHTML(b.grade)}</small><svg data-barcode="${escapeHTML(b.barcode)}"></svg><b>${escapeHTML(b.barcode)}</b></div>`; }); openPrintWindow(html,'ALL BARCODES'); printMsg.textContent="✅ OPENED "+list.length+" BARCODES"; }
+</script>
 </body>
 </html>
