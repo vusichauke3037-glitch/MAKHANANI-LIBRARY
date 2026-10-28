@@ -2,467 +2,340 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Wordsworth High - Digital Library | Vukona Press</title>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0B1A2E">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Wordsworth Library">
-<link rel="apple-touch-icon" href="icon-192.png">
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wordsworth High School - Digital Library</title>
 <style>
-body{font-family:Arial,sans-serif;margin:0;background:#f2f6ff;color:#222}
-.header{background:#0B1A2E;color:white;padding:20px;text-align:center}
-.header b{color:#FFD700}.header p{margin:5px 0}
-.card{background:white;margin:15px;padding:15px;border-radius:12px;box-shadow:0 2px 8px #ccc}
-.green{border-left:6px solid #1B5E20}.blue{border-left:6px solid #0B3D91}.red{border-left:6px solid #c62828}.dark{border-left:6px solid #0B1A2E}.orange{border-left:6px solid #FF6B00}.purple{border-left:6px solid #6A1B9A}
-input,select{width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-radius:8px;font-size:16px;box-sizing:border-box}
-button{padding:12px 18px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;font-size:15px}
-.btn-green{background:#1B5E20;color:white;width:100%}.btn-red{background:#c62828;color:white;padding:6px 10px;font-size:13px}.btn-blue{background:#0B3D91;color:white}.btn-blue-full{background:#0B3D91;color:white;width:100%}
-.progress{background:#ddd;height:18px;border-radius:10px;overflow:hidden}.progress div{background:#1B5E20;height:100%;width:0%}
-.footer{background:#FFD700;padding:15px;text-align:center;font-weight:bold}
-.whatsapp{position:fixed;bottom:20px;right:20px;background:#25D366;color:white;padding:14px 18px;border-radius:50px;text-decoration:none;font-weight:bold;box-shadow:0 4px 10px #888;z-index:99}
-.book{border:1px solid #ddd;padding:10px;border-radius:10px;margin:8px 0}
-.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{padding:15px;border-radius:10px;text-align:center}
-.bar-bg{background:#ddd;height:14px;border-radius:7px;overflow:hidden}.bar-fill{height:100%}
-#printArea{display:none}
-.barcode-sticker{border:2px solid #000;padding:10px;margin:6px;text-align:center;display:inline-block;width:210px;vertical-align:top;page-break-inside:avoid;background:white}
-.barcode-bars{font-family:'Courier New',monospace;font-size:28px;letter-spacing:-1px;line-height:1;overflow:hidden;white-space:nowrap}
-.barcode-num{font-size:18px;font-weight:bold;letter-spacing:3px;margin:4px 0}
-@media print{ body *{visibility:hidden} #printArea, #printArea *{visibility:visible} #printArea{display:block;position:absolute;left:0;top:0;width:100%} .barcode-sticker{width:31%;margin:4px} }
+*{box-sizing:border-box;font-family:Arial,sans-serif}
+body{margin:0;background:#eef2f7}
+.header{background:#174ea6;color:#fff;padding:16px;text-align:center}
+.header h1{margin:0;font-size:22px}
+.header p{margin:4px 0 0;font-size:13px;opacity:.9}
+.nav{display:flex;gap:6px;padding:10px;background:#fff;overflow-x:auto;position:sticky;top:0;z-index:10;box-shadow:0 2px 6px #0001}
+.nav button{flex:1;min-width:90px;padding:10px;border:0;border-radius:8px;background:#e8eefb;font-weight:bold;cursor:pointer}
+.nav button.active{background:#174ea6;color:#fff}
+.wrap{max-width:1000px;margin:auto;padding:12px}
+.card{background:#fff;padding:14px;border-radius:12px;margin-bottom:12px;box-shadow:0 2px 6px #0001;border-left:5px solid #174ea6}
+.card h3{margin:0 0 8px}
+input,select{width:100%;padding:11px;margin:6px 0;border:1px solid #cbd5e1;border-radius:8px;font-size:15px}
+.btn{width:100%;padding:13px;border:0;border-radius:8px;background:#174ea6;color:#fff;font-weight:bold;cursor:pointer;font-size:15px}
+.btn.green{background:#1a7f37}.btn.red{background:#c62828}.btn.orange{background:#ef6c00}
+.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.stat{background:#fff;padding:14px;border-radius:12px;text-align:center;box-shadow:0 2px 6px #0001}
+.stat b{font-size:22px;display:block}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
+.badge{padding:3px 8px;border-radius:20px;font-size:12px;font-weight:bold}
+.badge.borrowed{background:#ffebee;color:#c62828}.badge.returned{background:#e8f5e9;color:#1a7f37}
+.small{font-size:12px;color:#666}
+.hidden{display:none}
+@media(max-width:600px){.grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 
 <div class="header">
-<h2 style="margin:0">WORDSWORTH HIGH SCHOOL</h2>
-<p><b>DIGITAL LIBRARY - Powered by Vukona Press | Xintimani Group</b></p>
-<p>SACE Registered Educator | SACE No: 12275145</p>
-<p>078 023 3263 | vusichauke3037@gmail.com</p>
-<p id="firebaseStatus" style="font-size:12px;color:#FFD700;font-weight:bold">☁️ Connecting to Google Sync...</p>
-<p style="font-size:13px">40 Classes A-H | Max 60 Per Class | 2,400 Learners | Auto ID 8A01-8A60 | Auto Barcode MAT / MATL / LIFO / LIFS | Grade Rule | Issuer / Retriever | Barcode Print | Scan | Firebase Live Sync | Install As App</p>
-<button id="installBtn" style="display:none;background:#FFD700;color:#0B1A2E;width:100%;margin-top:10px" onclick="installApp()">📱 Install As App On This Phone</button>
+  <h1>🏫 WORDSWORTH HIGH SCHOOL</h1>
+  <p>📚 Digital Library | Xintimani Group | 40 Classes A-H | Max 60 Per Class</p>
+  <p class="small">Library Office Only | 🔒 Safe - Parent Check Needs ID + Surname</p>
 </div>
 
-<div class="card blue">
-<h3>👨‍👩‍👧 Parent Check - My Child</h3>
-<p style="font-size:14px;color:#555">Parent: Enter your child's Learner ID to see ONLY your child's books. Example: 8A01</p>
-<input type="text" id="parentLearnerID" placeholder="Enter Learner ID e.g. 8A01">
-<button class="btn-blue-full" onclick="parentCheck()">🔍 Check My Child</button>
-<p id="parentError" style="color:red;font-weight:bold"></p>
-<div id="parentResult" style="display:none;margin-top:15px">
-<h4 id="parentChildName" style="color:#1B5E20;margin:0"></h4>
-<p id="parentChildInfo"></p>
-<h4>📖 Books My Child Borrowed</h4>
-<div id="parentBooks"></div>
-<h4>📢 Message From School</h4>
-<div id="parentMessage" style="background:#FFF8E1;padding:12px;border-radius:8px"></div>
-<a href="https://wa.me/27780233263?text=Hi,%20I%20am%20a%20parent%20checking%20my%20child%20on%20Wordsworth%20Library" style="display:block;background:#25D366;color:white;text-align:center;padding:12px;border-radius:8px;text-decoration:none;font-weight:bold;margin-top:12px">💬 WhatsApp Teacher / Librarian - 078 023 3263</a>
-<p style="font-size:12px;color:#888;margin-top:10px">🔒 Privacy: You only see YOUR child. POPIA Compliant.</p>
-</div>
+<div class="nav">
+  <button class="active" onclick="showTab('home',this)">🏠 Home</button>
+  <button onclick="showTab('issue',this)">📤 Issue</button>
+  <button onclick="showTab('return',this)">📥 Return</button>
+  <button onclick="showTab('learners',this)">👩‍🎓 Learners</button>
+  <button onclick="showTab('books',this)">📚 Books</button>
+  <button onclick="showTab('parent',this)">👨‍👩‍👧 Parent</button>
+  <button onclick="showTab('login',this)">🔐 Login</button>
 </div>
 
-<div class="card blue">
-<h3>🔍 Search Books</h3>
-<input type="text" id="searchBox" placeholder="Search: Maths, Science, English, Barcode MAT-001, LIFS-001..." onkeyup="searchBooks()">
-<button style="background:#0B3D91;color:white;width:100%;margin-top:4px" onclick="startScan('search','Search Book')">📷 SCAN Barcode To Search Book</button>
-<div id="bookList"></div>
+<div class="wrap">
+
+<!-- HOME -->
+<div id="tab-home">
+  <div class="grid">
+    <div class="stat"><b id="totalBooks">0</b>📚 Total Books</div>
+    <div class="stat"><b id="totalLearners">0</b>👩‍🎓 Learners</div>
+    <div class="stat"><b id="borrowedCount">0</b>📤 Borrowed</div>
+  </div>
+  <div class="card">
+    <h3>🔍 Search Book (Everyone Can Search)</h3>
+    <input id="searchBook" placeholder="Search title or barcode e.g. MAT-001" oninput="renderBooks()">
+    <div id="bookList"></div>
+  </div>
+  <div class="card">
+    <h3>📋 How It Works</h3>
+    <p>1. <b>Learner ID Auto:</b> 8A01 - 8A60, 9B01, 10C01... Grade + Class + Number<br>
+    2. <b>Barcode Auto:</b> MAT = Maths, MATL = Maths Lit, LIFO = Life Sciences, LIFS = Life Orientation<br>
+    3. <b>Grade Rule:</b> Grade 8 can only take Grade 8 books<br>
+    4. <b>Issuer / Retriever:</b> Librarian name saved on every Issue / Return</p>
+    <p class="small">Status: <span id="conn">Connecting to Firebase...</span> | <span id="loginStatus">Not Logged In - Parent Mode</span></p>
+  </div>
 </div>
 
-<div class="card red">
-<h3>🔐 Educator / Issuer / Coordinator / Principal Login</h3>
-<p id="loginStatus" style="font-weight:bold;color:#c62828">🔒 Locked - Learners & Parents can only view</p>
-<div id="loginBox">
-<label>Role:</label>
-<select id="roleSelect">
-<option value="Educator">Educator (Default)</option>
-<option value="Issuer">📚 Textbook Issuer / Retriever</option>
-<option value="Coordinator">Coordinator</option>
-<option value="Principal">Principal</option>
-</select>
-<input type="password" id="pinInput" placeholder="Enter PIN" maxlength="4">
-<button class="btn-blue-full" onclick="login()">🔓 Login</button>
-<p style="font-size:13px;color:#666">Demo PINs - Educator: 1234 | Issuer: 4321 | Coordinator: 5678 | Principal: 9999<br>⚠️ Change PINs after first login. Wrong PIN 3x = Locked 1 min.</p>
-<p id="loginError" style="color:red;font-weight:bold"></p>
-</div>
-<button id="logoutBtn" style="display:none;background:#c62828;color:white;width:100%" onclick="logout()">🚪 Logout</button>
-</div>
-
-<div class="card green" id="educatorPanel" style="display:none">
-<h3>👩🏾‍🏫 Educator / Coordinator - Add Learners</h3>
-<p>Logged in as: <b id="loggedRole"></b> | <b>Max 60 Per Class | 40 Classes A-H | Auto ID</b></p>
-<label>Select Class:</label>
-<select id="classSelect" onchange="showLearners()"></select>
-<input type="text" id="learnerName" placeholder="Learner Full Name">
-<div style="background:#E3F2FD;padding:12px;border-radius:8px;border:2px solid #0B3D91;margin:6px 0">
-<b>🆔 Next Auto Learner ID:</b> <span id="nextLearnerID" style="font-size:20px;color:#0B3D91">8A01</span><br>
-<small style="color:#555">Auto-generated from Class + Number. No typing needed. No duplicates. Example: 8A01 to 8A60</small>
-</div>
-<input type="hidden" id="learnerID">
-<button class="btn-green" onclick="addLearner()">+ Add Learner</button>
-<p id="countText" style="font-weight:bold"></p>
-<div class="progress"><div id="progressBar"></div></div>
-<p id="errorText" style="color:red;font-weight:bold"></p>
-<ul id="learnerList"></ul>
-<hr>
-<h4>🔑 Change My PIN</h4>
-<input type="password" id="newPin" placeholder="New 4-digit PIN" maxlength="4">
-<button class="btn-blue" onclick="changePin()">Change My PIN</button>
+<!-- ISSUE -->
+<div id="tab-issue" class="hidden">
+  <div class="card">
+    <h3>📤 Issue Book - Librarian Only</h3>
+    <p class="small">Login required. Auto ID + Auto Barcode + Grade Rule active.</p>
+    <select id="issueGrade"><option value="">Select Grade</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select>
+    <select id="issueClass"><option value="">Select Class A-H</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select>
+    <input id="issueNumber" type="number" min="1" max="60" placeholder="Learner Number 1-60 e.g. 1">
+    <input id="issueLearnerId" placeholder="Auto Learner ID - Will Fill" readonly>
+    <input id="issueSurname" placeholder="Learner Surname e.g. Chauke (for Parent Check lock)">
+    <input id="issueBarcode" placeholder="Scan / Type Barcode e.g. MAT-001">
+    <input id="issuerName" placeholder="Issuer (Librarian Name)">
+    <input id="issueDue" type="date">
+    <button class="btn green" onclick="issueBook()">✅ Issue Book</button>
+    <div id="issueMsg"></div>
+  </div>
 </div>
 
-<div class="card blue" id="globalLearnerPanel" style="display:none;border-left:6px solid #0B3D91">
-<h3>🔍 Find Any Learner - School Pool</h3>
-<p>Any learner added by ANY educator is here. Search by Name or ID. Select to Borrow / Move / Check. Learners belong to SCHOOL, not to one educator.</p>
-<input type="text" id="globalLearnerSearch" placeholder="Search ANY learner: Name or ID e.g. Thabo or 8A01" onkeyup="searchGlobalLearners()">
-<p style="font-size:13px;color:#555">Total Learners in School: <b id="globalLearnerCount">0</b> | <span id="selectedLearnerInfo" style="color:#1B5E20;font-weight:bold">No learner selected</span></p>
-<div id="globalLearnerResults"></div>
-<div id="selectedLearnerActions" style="display:none;margin-top:12px;background:#E8F5E9;padding:12px;border-radius:8px">
-<h4 id="selectedLearnerTitle" style="margin:0"></h4>
-<p id="selectedLearnerDetails" style="margin:5px 0"></p>
-<button class="btn-blue" onclick="borrowForSelected()">📚 Borrow Book For This Learner</button>
-<button style="background:#FF6B00;color:white;margin-top:8px" onclick="moveSelectedLearner()">🔄 Move To Another Class</button>
-<button style="background:#0B3D91;color:white;margin-top:8px" onclick="checkSelectedLearner()">👨‍👩‍👧 View As Parent Would See</button>
-</div>
+<!-- RETURN -->
+<div id="tab-return" class="hidden">
+  <div class="card">
+    <h3>📥 Return Book - Librarian Only</h3>
+    <input id="returnBarcode" placeholder="Scan / Type Barcode e.g. MAT-001">
+    <input id="retrieverName" placeholder="Retriever (Librarian Name)">
+    <button class="btn orange" onclick="returnBook()">✅ Return Book</button>
+    <div id="returnMsg"></div>
+    <h3 style="margin-top:14px">📤 Currently Borrowed</h3>
+    <div id="borrowedList"></div>
+  </div>
 </div>
 
-<div class="card" id="issuerPanel" style="display:none;border-left:6px solid #1B5E20">
-<h3>📚 Textbook Issuer / Retriever - Issue & Return</h3>
-<p>Logged in as: <b id="issuerName">Issuer</b> | You are responsible for ALL textbooks leaving and returning to library.</p>
-<div style="background:#E8F5E9;padding:12px;border-radius:8px">
-<h4 style="margin:0">📤 1. ISSUE Textbook To Learner</h4>
-<input type="text" id="issueBarcode" placeholder="📷 SCAN / Type Barcode e.g. MAT-001">
-<button style="background:#0B3D91;color:white;width:100%;margin:4px 0" onclick="startScan('issue','ISSUE Book')">📷 SCAN Book To ISSUE</button>
-<input type="text" id="issueLearnerID" placeholder="Learner ID e.g. 8A01">
-<button class="btn-green" onclick="issueBook()">📤 ISSUE Book To Learner (After Scan)</button>
-<button style="background:#0B3D91;color:white;width:100%;margin-top:6px" onclick="scanAndIssue()">📷 📤 SCAN + ISSUE - 1 Tap</button>
-<p id="issueMsg" style="font-weight:bold"></p>
-</div>
-<div style="background:#FFF3E0;padding:12px;border-radius:8px;margin-top:12px">
-<h4 style="margin:0">📥 2. RETRIEVE (Return) Textbook From Learner</h4>
-<input type="text" id="retrieveBarcode" placeholder="📷 SCAN / Type Barcode e.g. MAT-001">
-<button style="background:#0B3D91;color:white;width:100%;margin:4px 0" onclick="startScan('retrieve','RETRIEVE / Return Book')">📷 SCAN Book To RETRIEVE / Return</button>
-<label>Condition on Return:</label>
-<select id="retrieveCondition">
-<option value="Good">✅ Good - Clean, No Damage</option>
-<option value="Damaged">⚠️ Damaged - Torn / Writing Inside</option>
-<option value="Lost">🚫 Lost - Learner Cannot Find It</option>
-<option value="Wet / Dirty">💧 Wet / Dirty</option>
-</select>
-<button style="background:#FF6B00;color:white;width:100%" onclick="retrieveBook()">📥 RETRIEVE / Return Book (After Scan)</button>
-<button style="background:#0B3D91;color:white;width:100%;margin-top:6px" onclick="scanAndRetrieve()">📷 📥 SCAN + RETRIEVE - 1 Tap</button>
-<p id="retrieveMsg" style="font-weight:bold"></p>
-</div>
-<h4>📋 Issue / Retrieve Log (<span id="issuerLogCount">0</span>)</h4>
-<div id="issuerLog"></div>
-<button style="background:#0B3D91;color:white;width:100%;margin-top:8px" onclick="window.print()">🖨️ Print Issue Log For Principal</button>
+<!-- LEARNERS -->
+<div id="tab-learners" class="hidden">
+  <div class="card">
+    <h3>👩‍🎓 Add Learner - Librarian Only</h3>
+    <select id="addGrade"><option value="">Grade</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select>
+    <select id="addClass"><option value="">Class</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select>
+    <input id="addNumber" type="number" min="1" max="60" placeholder="Number 1-60">
+    <input id="addName" placeholder="First Name">
+    <input id="addSurname" placeholder="Surname">
+    <button class="btn" onclick="addLearner()">➕ Add Learner (Auto ID)</button>
+    <div id="addLearnerMsg"></div>
+  </div>
+  <div class="card"><h3>All Learners (Librarian Only)</h3><div id="learnerList"></div></div>
 </div>
 
-<div class="card orange" id="bookManagePanel" style="display:none">
-<h3>📚 Coordinator - Add Books + Auto Barcode</h3>
-<p>Only Coordinator & Principal can add books. <b>Barcode Auto-Generated from Subject. No Duplicate Ever.</b></p>
-<input type="text" id="newBookName" placeholder="Book Name e.g. Maths Grade 10">
-<p style="font-size:12px;color:#c62828;font-weight:bold">⚠️ IMPORTANT: Book Name MUST include Grade! Example: "Maths Grade 10" or "Life Sciences Grade 8". System uses this to block wrong-grade borrowing.</p>
-<input type="text" id="newBookSubject" placeholder="Subject e.g. Mathematics, Mathematical Literacy, Life Sciences, Life Orientation" oninput="updateBarcodePreview()">
-<input type="text" id="newBookAuthor" placeholder="Author / Publisher e.g. DBE">
-<div style="background:#E3F2FD;padding:12px;border-radius:8px;border:2px solid #0B3D91;margin:6px 0">
-<b>📷 Auto Barcode Preview:</b> <span id="barcodePreview" style="font-size:20px;color:#0B3D91;font-weight:bold">MAT-001</span><br>
-<small style="color:#555">Auto-generated from Subject. Unique per subject.</small><br>
-<small id="barcodeRange" style="color:#1B5E20;font-weight:bold"></small>
-</div>
-<button style="background:#0B3D91;color:white;width:100%;margin:6px 0" onclick="startScan('add','Add Book - Scan ISBN On Back')">📷 SCAN ISBN / Barcode On Back Of Book To Add</button>
-<input type="number" id="newBookQty" placeholder="📦 Total Number of Textbooks for this Title e.g. 120" min="1" max="500" value="1" style="border:2px solid #FF6B00;font-weight:bold;font-size:18px" oninput="updateBarcodePreview()">
-<p style="font-size:12px;color:#666">💡 Example: Subject = Mathematics, Qty = 120 → System creates <b>MAT-001 to MAT-120</b> automatically.<br>
-<b>Codes:</b> Mathematics=MAT, Mathematical Literacy=MATL, Life Orientation=LIFO, Life Sciences=LIFS, Physical Science=PHYS</p>
-<input type="hidden" id="newBookBarcode">
-<button style="background:#FF6B00;color:white;width:100%" onclick="addBook()">+ Add Book To Library</button>
-<p id="bookMsg" style="font-weight:bold"></p>
-<div style="background:#FFF8E1;padding:12px;border-radius:8px;border:2px dashed #FF6B00;margin-top:12px">
-<h4 style="margin:0">🖨️ Print Barcodes - Coordinator</h4>
-<p style="font-size:13px;margin:5px 0">Print stickers to stick on books. 1 book = 1 barcode.</p>
-<button style="background:#0B3D91;color:white;width:100%;margin-bottom:8px" onclick="printAllBarcodes()">🖨️ Print ALL Barcodes (Full Library)</button>
-<div style="display:flex;gap:8px">
-<select id="printSubjectSelect" style="flex:1">
-<option value="Mathematics">Mathematics</option>
-<option value="Mathematical Literacy">Mathematical Literacy</option>
-<option value="Life Sciences">Life Sciences</option>
-<option value="Life Orientation">Life Orientation</option>
-<option value="Physical Science">Physical Science</option>
-<option value="English Home Language">English Home Language</option>
-</select>
-<button style="background:#FF6B00;color:white;flex:1" onclick="printBarcodesBySubject(document.getElementById('printSubjectSelect').value)">Print By Subject</button>
-</div>
-<div style="display:flex;gap:8px;margin-top:8px">
-<select id="printGradeSelect" style="flex:1">
-<option value="8">Grade 8</option>
-<option value="9">Grade 9</option>
-<option value="10">Grade 10</option>
-<option value="11">Grade 11</option>
-<option value="12">Grade 12</option>
-</select>
-<button style="background:#1B5E20;color:white;flex:1" onclick="printBarcodesByGrade(document.getElementById('printGradeSelect').value)">Print By Grade</button>
-</div>
-</div>
-<h4>📖 Current Books (<span id="bookCount">0</span> copies total)</h4>
-<div id="manageBookList"></div>
+<!-- BOOKS -->
+<div id="tab-books" class="hidden">
+  <div class="card">
+    <h3>📚 Add Book - Librarian Only</h3>
+    <select id="bookCategory"><option value="MAT">MAT - Maths</option><option value="MATL">MATL - Maths Lit</option><option value="LIFO">LIFO - Life Sciences</option><option value="LIFS">LIFS - Life Orientation</option></select>
+    <select id="bookGrade"><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select>
+    <input id="bookTitle" placeholder="Book Title e.g. Maths Grade 8">
+    <input id="bookBarcode" placeholder="Barcode - Auto if empty e.g. MAT-001">
+    <button class="btn" onclick="addBook()">➕ Add Book</button>
+    <div id="bookMsg"></div>
+  </div>
 </div>
 
-<div class="card purple" id="educatorManagePanel" style="display:none">
-<h3>👩🏾‍🏫 Coordinator - Add More Educators</h3>
-<p>Coordinator creates new Educator accounts. Each Educator gets own Name + PIN. Max 20 Educators.</p>
-<input type="text" id="newEducatorName" placeholder="Educator Full Name e.g. Ms. Ndlovu">
-<input type="text" id="newEducatorUser" placeholder="Username e.g. ndlovu">
-<input type="password" id="newEducatorPin" placeholder="PIN - 4 numbers e.g. 2468" maxlength="4">
-<button style="background:#6A1B9A;color:white;width:100%" onclick="addEducator()">+ Add Educator</button>
-<p id="educatorMsg" style="color:green;font-weight:bold"></p>
-<h4>👥 Current Educators (<span id="educatorCount">0</span>)</h4>
-<div id="educatorListManage"></div>
+<!-- PARENT -->
+<div id="tab-parent">
+  <div class="card" style="border-left:5px solid #1a7f37">
+    <h3>👨‍👩‍👧 Parent Check - My Child</h3>
+    <p>Parent: Enter <b>Learner ID + Surname</b> to see ONLY your child's books.<br>Example: 8A01 + Chauke</p>
+    <input id="parentId" placeholder="Learner ID e.g. 8A01" style="text-transform:uppercase">
+    <input id="parentSurname" placeholder="Surname e.g. Chauke">
+    <button class="btn green" onclick="checkMyChild()">🔍 Check My Child</button>
+    <div id="parentResult" style="margin-top:10px"></div>
+    <p class="small">🔒 Safe: Wrong surname = No data shown. We never show other children.</p>
+  </div>
 </div>
 
-<div class="card dark" id="principalPanel" style="display:none">
-<h3>🏫 Principal Admin Dashboard - LIVE</h3>
-<p>Welcome Principal | Wordsworth High School | 40 Classes A-H</p>
-<div class="stat-grid">
-<div class="stat" style="background:#E3F2FD"><b>👥 TOTAL LEARNERS</b><h2 id="dashLearners" style="margin:5px 0">0</h2><small>Across All Classes</small></div>
-<div class="stat" style="background:#E8F5E9"><b>📚 TOTAL BOOKS</b><h2 id="dashBooks" style="margin:5px 0">0</h2><small>Copies In Library</small></div>
-<div class="stat" style="background:#FFF3E0"><b>📖 BORROWED</b><h2 id="dashBorrowed" style="margin:5px 0">0</h2><small>Currently Out</small></div>
-<div class="stat" style="background:#F3E5F5"><b>🏫 CLASSES</b><h2 id="dashClasses" style="margin:5px 0">40</h2><small>Grade 8-12 A-H</small></div>
-</div>
-<h4>📊 Learners Per Class (Max 60)</h4>
-<div id="dashPerClass"></div>
-<h4>📖 Recent Borrowed Books</h4>
-<ul id="dashBorrowList"></ul>
-<h4 style="color:#c62828">⚠️ Alerts</h4>
-<div id="dashAlerts"></div>
-<button style="background:#0B3D91;color:white;width:100%;margin-top:10px" onclick="alert('Report Ready - Use Print button to give to SGB / District')">📥 Download Report for SGB</button>
-<button style="background:#1B5E20;color:white;width:100%;margin-top:8px" onclick="window.print()">🖨️ Print Dashboard</button>
+<!-- LOGIN -->
+<div id="tab-login" class="hidden">
+  <div class="card">
+    <h3>🔐 Librarian Login</h3>
+    <input id="loginEmail" type="email" placeholder="Librarian Email">
+    <input id="loginPass" type="password" placeholder="Password">
+    <button class="btn" onclick="doLogin()">Login</button>
+    <button class="btn red" onclick="doLogout()" style="margin-top:8px">Logout</button>
+    <div id="loginMsg"></div>
+    <p class="small">Only librarian can Issue / Return / Add Learners / Add Books. Parents can only Search Books + Parent Check.</p>
+  </div>
 </div>
 
-<div class="card" id="syncPanel" style="display:none;border-left:6px solid #0B1A2E">
-<h3>🔄 Synchronize - Backup / Restore / Live Sync Status</h3>
-<p style="font-size:13px;color:#555">🔥 Firebase Live Sync is ON — Changes sync automatically to all phones in seconds.<br>Use Export / Import below only as BACKUP if you lose internet or change phones.</p>
-<div style="background:#E3F2FD;padding:12px;border-radius:8px">
-<b>📊 Current Data On THIS Phone:</b>
-<p id="syncStats" style="margin:5px 0"></p>
-<p style="font-size:12px;color:#666">Last Sync: <span id="lastSyncText">Never</span> | Device: <span id="deviceID"></span></p>
-<button style="background:#0B3D91;color:white;width:100%" onclick="refreshSyncStats()">🔄 Refresh Stats</button>
-<button style="background:#1B5E20;color:white;width:100%;margin-top:6px" onclick="pushToFirebase();alert('☁️ Pushed to Google Firebase!')">☁️ Force Push To Google Now</button>
-</div>
-<div style="background:#E8F5E9;padding:12px;border-radius:8px;margin-top:10px">
-<h4 style="margin:0">📤 EXPORT - Backup</h4>
-<button style="background:#1B5E20;color:white;width:100%" onclick="exportBackupFile()">📥 Download Backup File (.json)</button>
-<button style="background:#FF6B00;color:white;width:100%;margin-top:6px" onclick="copySyncCode()">📋 Copy Sync Code For WhatsApp</button>
-<button style="background:#25D366;color:white;width:100%;margin-top:6px" onclick="shareViaWhatsApp()">💬 Share Backup Via WhatsApp</button>
-<textarea id="syncCodeOut" readonly placeholder="Sync Code will appear here after you tap Copy..." style="height:70px;font-size:11px;margin-top:8px"></textarea>
-</div>
-<div style="background:#FFF3E0;padding:12px;border-radius:8px;margin-top:10px">
-<h4 style="margin:0">📥 IMPORT - Restore</h4>
-<textarea id="syncCodeIn" placeholder="Paste Sync Code here from WhatsApp..." style="height:70px;font-size:11px"></textarea>
-<button style="background:#0B3D91;color:white;width:100%" onclick="importSyncCode()">📥 IMPORT Sync Code - Overwrite This Phone</button>
-<p style="text-align:center;margin:6px 0">OR</p>
-<input type="file" id="backupFileInput" accept=".json" style="background:white">
-<button style="background:#6A1B9A;color:white;width:100%;margin-top:6px" onclick="importBackupFile()">📂 IMPORT Backup File</button>
-<p id="syncMsg" style="font-weight:bold"></p>
-</div>
-<div style="background:#FFEBEE;padding:12px;border-radius:8px;margin-top:10px">
-<h4 style="margin:0;color:#c62828">⚠️ Danger Zone</h4>
-<button style="background:#c62828;color:white;width:100%" onclick="clearAllData()">🗑️ Clear ALL Data On This Phone (After Backup!)</button>
-</div>
 </div>
 
-<div class="card">
-<h3>ℹ️ How To Use</h3>
-<p><b>Parent:</b> Type Learner ID e.g. 8A01 → See your child only<br>
-<b>Learner:</b> Search books by Title or Barcode e.g. MAT-001 → Borrow<br>
-<b>Educator:</b> Login (1234) → Add learners, Auto ID 8A01-8A60, Find ANY learner in School Pool<br>
-<b>Issuer / Retriever:</b> Login (4321) → SCAN book → ISSUE / RETRIEVE + Condition Good/Damaged/Lost<br>
-<b>Coordinator:</b> Login (5678) → Add Books + SCAN ISBN + Print Barcodes Per Title / Grade / Subject + Add Educators<br>
-<b>Principal:</b> Login (9999) → See Dashboard + Print for SGB</p>
-<p><b>Live Sync:</b> All phones sync via Google Firebase (R0). Add on 1 phone → Appears on all phones in seconds. Offline → Syncs when back online.<br>
-<b>Grade Rule:</b> Grade 8 learner ONLY gets Grade 8 books. System blocks mismatch.<br>
-<b>Barcode Codes:</b> Mathematics=MAT, Mathematical Literacy=MATL, Life Orientation=LIFO, Life Sciences=LIFS, Physical Science=PHYS</p>
-</div>
-
-<div class="footer">
-✅ Built & Secured by Vusi Chauke<br>
-SACE No: 12275145 | ND Chem Eng | PGCE | NC IT NQF 5<br>
-Xintimani Group | 078 023 3263 | vusichauke3037@gmail.com
-</div>
-
-<a class="whatsapp" href="https://wa.me/27780233263?text=Hi%20Vusi,%20I%20need%20help%20with%20Wordsworth%20Library">💬 WhatsApp</a>
-<div id="printArea"></div>
-
-<div id="scanModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:9999;text-align:center;padding-top:20px">
-<h3 style="color:white;margin:0">📷 Point Camera At Barcode</h3>
-<p id="scanTargetText" style="color:#FFD700;font-weight:bold">Scanning for: Issue Book</p>
-<video id="scanVideo" autoplay playsinline style="width:90%;max-width:400px;border:4px solid #FFD700;border-radius:12px;margin:10px 0"></video>
-<p style="color:white;font-size:13px">Hold steady 10-15cm away • Good light • Barcode flat</p>
-<p id="scanStatus" style="color:white;font-weight:bold">📷 Starting camera...</p>
-<button style="background:#25D366;color:white;width:85%;margin:5px" onclick="manualScanFallback()">⌨️ Type Barcode Instead</button>
-<button style="background:#c62828;color:white;width:85%" onclick="stopScan()">❌ Close Camera</button>
-<p style="color:#aaa;font-size:11px;margin-top:10px">Camera stays on YOUR phone only. No photo is saved or sent anywhere.</p>
-</div>
-
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script>
-let deferredPrompt=null;
-window.addEventListener('beforeinstallprompt',(e)=>{ e.preventDefault(); deferredPrompt=e; document.getElementById('installBtn').style.display='block'; });
-function installApp(){ if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt.userChoice.then(()=>{ deferredPrompt=null; document.getElementById('installBtn').style.display='none'; }); } else { alert('📱 To Install:\n\nAndroid Chrome: Tap ⋮ (top right) → Add to Home Screen\n\niPhone Safari: Tap Share ⬆️ → Add to Home Screen\n\nThen open it like an App from home screen.'); } }
-if('serviceWorker' in navigator){ window.addEventListener('load',()=>{ navigator.serviceWorker.register('sw.js').then(()=>{ console.log('SW registered'); }).catch(()=>{}); }); }
-
-// ===== 🔥 FIREBASE SYNC V13 - YOUR REAL CONFIG =====
+// ===== PASTE YOUR WORDSWORTH FIREBASE CONFIG HERE =====
 const firebaseConfig = {
-  apiKey: "AIzaSyAJyTZ-tmrsY0m-EmN80HSRERSR_tiVX4E",
-  authDomain: "wordsworth-library.firebaseapp.com",
-  databaseURL: "https://wordsworth-library-default-rtdb.firebaseio.com",
-  projectId: "wordsworth-library",
-  storageBucket: "wordsworth-library.firebasestorage.app",
-  messagingSenderId: "236216515385",
-  appId: "1:236216515385:web:9f3e8937f829e9d2bf06e8",
-  measurementId: "G-TRNF5K8XKM"
+  apiKey: "PASTE_YOURS",
+  authDomain: "PASTE_YOURS",
+  databaseURL: "PASTE_YOURS",
+  projectId: "PASTE_YOURS",
+  storageBucket: "PASTE_YOURS",
+  messagingSenderId: "PASTE_YOURS",
+  appId: "PASTE_YOURS"
 };
-let firebaseDB = null;
-let firebaseSchoolKey = document.title.includes("George Sonto") ? "georgesonto" : "wordsworth";
-let isApplyingFirebase = false;
-try{
-  firebase.initializeApp(firebaseConfig);
-  firebaseDB = firebase.database();
-  firebaseDB.goOnline();
-  console.log("🔥 Firebase Connected - School: " + firebaseSchoolKey);
-}catch(e){ console.log("Firebase init failed", e); }
-function getSchoolPrefix(){ if(document.title.includes("George Sonto")) return "georgesonto_"; return "wordsworth_"; }
-function getSchoolNameShort(){ if(document.title.includes("George Sonto")) return "GEORGE SONTO"; return "WORDSWORTH"; }
-function pushToFirebase(){
-  if(!firebaseDB) return;
+// =====================================================
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.database();
+let currentUser = null;
+let allBooks = {}, allLearners = {}, allLoans = {};
+
+function showTab(id, btn){
+  document.querySelectorAll('[id^="tab-"]').forEach(d=>d.classList.add('hidden'));
+  document.getElementById('tab-'+id).classList.remove('hidden');
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  if(id==='parent') document.getElementById('tab-parent').classList.remove('hidden');
+}
+
+// AUTH
+auth.onAuthStateChanged(u=>{
+  currentUser = u;
+  document.getElementById('loginStatus').textContent = u ? "Logged In: "+u.email+" ✅" : "Not Logged In - Parent Mode";
+  document.getElementById('conn').textContent = "Firebase Connected ✅";
+  loadData();
+});
+async function doLogin(){
+  try{ await auth.signInWithEmailAndPassword(loginEmail.value, loginPass.value); loginMsg.textContent="✅ Login Success"; }
+  catch(e){ loginMsg.textContent="❌ "+e.message; }
+}
+async function doLogout(){ await auth.signOut(); loginMsg.textContent="Logged out"; }
+
+// DATA LOAD - Librarian sees all, Parent sees only books (learners blocked by rules)
+function loadData(){
+  db.ref("books").on("value", s=>{ allBooks = s.val()||{}; renderBooks(); updateStats(); });
+  if(currentUser){
+    db.ref("learners").on("value", s=>{ allLearners = s.val()||{}; renderLearners(); updateStats(); });
+    db.ref("loans").on("value", s=>{ allLoans = s.val()||{}; renderBorrowed(); updateStats(); });
+  }
+}
+function updateStats(){
+  totalBooks.textContent = Object.keys(allBooks).length;
+  totalLearners.textContent = Object.keys(allLearners).length;
+  borrowedCount.textContent = Object.values(allLoans).filter(l=>l.status==="Borrowed").length;
+}
+function renderBooks(){
+  const q = (searchBook.value||"").toLowerCase();
+  let html = "<table><tr><th>Barcode</th><th>Title</th><th>Grade</th><th>Status</th></tr>";
+  Object.values(allBooks).filter(b=>(b.title+" "+b.barcode).toLowerCase().includes(q)).slice(0,50).forEach(b=>{
+    html+=`<tr><td>${b.barcode}</td><td>${b.title}</td><td>${b.grade}</td><td><span class="badge ${b.status==='Borrowed'?'borrowed':'returned'}">${b.status||'Available'}</span></td></tr>`;
+  });
+  html+="</table>"; bookList.innerHTML = html;
+}
+function renderLearners(){
+  if(!currentUser){ learnerList.innerHTML="🔒 Login as Librarian to see learners"; return; }
+  let html="<table><tr><th>ID</th><th>Name</th><th>Class</th></tr>";
+  Object.values(allLearners).forEach(l=>{ html+=`<tr><td>${l.learnerId}</td><td>${l.name} ${l.surname}</td><td>${l.grade}${l.className}</td></tr>`; });
+  html+="</table>"; learnerList.innerHTML=html;
+}
+function renderBorrowed(){
+  if(!currentUser){ borrowedList.innerHTML="🔒 Login to see borrowed"; return; }
+  let html="<table><tr><th>Learner</th><th>Book</th><th>Due</th></tr>";
+  Object.values(allLoans).filter(l=>l.status==="Borrowed").forEach(l=>{ html+=`<tr><td>${l.learnerId}</td><td>${l.bookTitle} (${l.barcode})</td><td>${l.dueDate}</td></tr>`; });
+  html+="</table>"; borrowedList.innerHTML=html;
+}
+
+// AUTO ID
+function makeLearnerId(grade, cls, num){ return grade + cls + String(num).padStart(2,'0'); }
+issueGrade.onchange = issueClass.onchange = issueNumber.oninput = ()=>{
+  if(issueGrade.value && issueClass.value && issueNumber.value) issueLearnerId.value = makeLearnerId(issueGrade.value, issueClass.value, issueNumber.value);
+};
+
+// ADD LEARNER
+async function addLearner(){
+  if(!currentUser) return alert("🔒 Login as Librarian first");
+  const grade=addGrade.value, cls=addClass.value, num=addNumber.value;
+  if(!grade||!cls||!num||!addName.value||!addSurname.value) return addLearnerMsg.textContent="⚠️ Fill all fields";
+  if(num<1||num>60) return addLearnerMsg.textContent="⚠️ Number must be 1-60";
+  const id = makeLearnerId(grade, cls, num);
+  const surnameHash = await hashSurname(addSurname.value);
+  await db.ref("learners/"+id).set({learnerId:id, grade, className:cls, number:num, name:addName.value.trim(), surname:addSurname.value.trim(), createdAt:Date.now()});
+  await db.ref("publicParent/"+id).update({learnerId:id, surnameHash, lastUpdated:Date.now()});
+  addLearnerMsg.textContent="✅ Added "+id+" - "+addName.value+" "+addSurname.value;
+}
+
+// ADD BOOK
+async function addBook(){
+  if(!currentUser) return alert("🔒 Login first");
+  const cat=bookCategory.value, grade=bookGrade.value, title=bookTitle.value.trim();
+  if(!title) return bookMsg.textContent="⚠️ Enter title";
+  let barcode = bookBarcode.value.trim().toUpperCase();
+  if(!barcode){
+    const count = Object.values(allBooks).filter(b=>b.category===cat).length + 1;
+    barcode = cat + "-" + String(count).padStart(3,'0');
+  }
+  await db.ref("books/"+barcode.replace(/[^A-Z0-9-]/g,'_')).set({barcode, title, category:cat, grade, status:"Available", createdAt:Date.now()});
+  bookMsg.textContent="✅ Added "+barcode+" - "+title;
+}
+
+// ISSUE
+async function issueBook(){
+  if(!currentUser) return alert("🔒 Login as Librarian first");
+  const learnerId = issueLearnerId.value.trim().toUpperCase();
+  const barcode = issueBarcode.value.trim().toUpperCase();
+  const surname = issueSurname.value.trim();
+  if(!learnerId||!barcode||!surname||!issuerName.value) return issueMsg.textContent="⚠️ Fill ID, Barcode, Surname, Issuer";
+  const bookSnap = await db.ref("books/"+barcode.replace(/[^A-Z0-9-]/g,'_')).once("value");
+  const book = bookSnap.val();
+  if(!book) return issueMsg.textContent="❌ Book not found: "+barcode;
+  if(book.status==="Borrowed") return issueMsg.textContent="❌ Book already borrowed";
+  const learnerGrade = learnerId.replace(/[^0-9]/g,'').charAt(0) + learnerId.replace(/[^0-9]/g,'').charAt(1);
+  // Grade Rule: Grade 8 learner = Grade 8 book only (first digit(s))
+  // Simplified: book grade must match learner grade digit
+  const lGrade = parseInt(learnerId);
+  if(parseInt(book.grade) !== lGrade) return issueMsg.textContent=`❌ Grade Rule: Grade ${lGrade} learner cannot take Grade ${book.grade} book`;
+  const due = issueDue.value || new Date(Date.now()+14*86400000).toISOString().slice(0,10);
+  await db.ref("loans/"+barcode.replace(/[^A-Z0-9-]/g,'_')).set({learnerId, barcode, bookTitle:book.title, dueDate:due, status:"Borrowed", issuer:issuerName.value, issuedAt:Date.now()});
+  await db.ref("books/"+barcode.replace(/[^A-Z0-9-]/g,'_')).update({status:"Borrowed", borrowedBy:learnerId});
+  await syncToParent(learnerId, surname, book.title, barcode, due);
+  issueMsg.textContent="✅ Issued "+barcode+" to "+learnerId+" Due "+due;
+}
+
+// RETURN
+async function returnBook(){
+  if(!currentUser) return alert("🔒 Login first");
+  const barcode = returnBarcode.value.trim().toUpperCase();
+  if(!barcode||!retrieverName.value) return returnMsg.textContent="⚠️ Enter Barcode + Retriever";
+  const loanSnap = await db.ref("loans/"+barcode.replace(/[^A-Z0-9-]/g,'_')).once("value");
+  const loan = loanSnap.val();
+  if(!loan) return returnMsg.textContent="❌ No loan for "+barcode;
+  await db.ref("loans/"+barcode.replace(/[^A-Z0-9-]/g,'_')).update({status:"Returned", retriever:retrieverName.value, returnedAt:Date.now()});
+  await db.ref("books/"+barcode.replace(/[^A-Z0-9-]/g,'_')).update({status:"Available", borrowedBy:""});
+  await db.ref("publicParent/"+loan.learnerId+"/books/"+barcode.replace(/[^A-Z0-9-]/g,'_')).update({status:"Returned"});
+  returnMsg.textContent="✅ Returned "+barcode+" from "+loan.learnerId;
+}
+
+// --- PARENT CHECK DOUBLE LOCK ---
+async function hashSurname(surname){
+  surname = surname.trim().toLowerCase();
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(surname));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('').slice(0,16);
+}
+async function syncToParent(learnerId, learnerSurname, bookTitle, barcode, dueDate){
+  const surnameHash = await hashSurname(learnerSurname);
+  await db.ref("publicParent/"+learnerId).update({learnerId, surnameHash, lastUpdated:Date.now()});
+  await db.ref("publicParent/"+learnerId+"/books/"+barcode.replace(/[^A-Z0-9-]/g,'_')).set({bookTitle, barcode, dueDate, status:"Borrowed"});
+}
+async function checkMyChild(){
+  const id = document.getElementById('parentId').value.trim().toUpperCase();
+  const surname = document.getElementById('parentSurname').value.trim();
+  const box = document.getElementById('parentResult');
+  if(!id||!surname){ box.innerHTML="⚠️ Please enter BOTH Learner ID and Surname."; return; }
+  if(!/^[0-9]{1,2}[A-H][0-9]{2}$/.test(id)){ box.innerHTML="⚠️ ID format wrong. Example: 8A01"; return; }
+  box.innerHTML="🔍 Checking...";
   try{
-    let p = getSchoolPrefix();
-    let data = { learners: JSON.parse(localStorage.getItem(p+"learners")||"{}"), borrowed: JSON.parse(localStorage.getItem(p+"borrowed")||"[]"), books: JSON.parse(localStorage.getItem(p+"books")||"null") || books, pins: JSON.parse(localStorage.getItem(p+"pins")||"{}"), educators: JSON.parse(localStorage.getItem(p+"educators")||"[]"), issueLog: JSON.parse(localStorage.getItem(p+"issueLog")||"[]"), lastSync: new Date().toISOString(), lastSyncBy: currentRole || "System" };
-    firebaseDB.ref("schools/"+firebaseSchoolKey).set(data);
-    let el = document.getElementById("lastSyncText"); if(el) el.textContent = new Date().toLocaleString() + " - ☁️ Synced to Google";
-  }catch(e){ console.log("Push failed", e); }
+    const snap = await db.ref("publicParent/"+id).once("value");
+    const data = snap.val();
+    if(!data){ box.innerHTML="❌ No books found for "+id+". Check ID spelling."; return; }
+    const inputHash = await hashSurname(surname);
+    if(data.surnameHash !== inputHash){ box.innerHTML="❌ No books found. Check ID + Surname spelling."; return; }
+    let html=`<b>✅ Found for ${id}</b><br>`;
+    if(data.books){ Object.values(data.books).forEach(b=>{ html+=`📚 ${b.bookTitle} - ${b.barcode}<br>Due: ${b.dueDate} - ${b.status}<br><hr>`; }); }
+    else html+="✅ No books currently borrowed.";
+    box.innerHTML=html;
+  }catch(e){ box.innerHTML="❌ Could not check. Check internet."; }
 }
-function startFirebaseListener(){
-  if(!firebaseDB) return;
-  firebaseDB.ref("schools/"+firebaseSchoolKey).on("value", (snapshot)=>{
-    let data = snapshot.val(); if(!data) return;
-    if(isApplyingFirebase) return;
-    let p = getSchoolPrefix();
-    let localBooks = localStorage.getItem(p+"books")||"";
-    let cloudBooks = JSON.stringify(data.books||[]);
-    if(localBooks === cloudBooks && localStorage.getItem(p+"learners")===JSON.stringify(data.learners||{})) return;
-    isApplyingFirebase = true;
-    localStorage.setItem(p+"learners", JSON.stringify(data.learners||{}));
-    localStorage.setItem(p+"borrowed", JSON.stringify(data.borrowed||[]));
-    localStorage.setItem(p+"books", JSON.stringify(data.books||[]));
-    if(data.pins) localStorage.setItem(p+"pins", JSON.stringify(data.pins));
-    if(data.educators) localStorage.setItem(p+"educators", JSON.stringify(data.educators));
-    if(data.issueLog) localStorage.setItem(p+"issueLog", JSON.stringify(data.issueLog));
-    learners = data.learners||{}; borrowedBooks = data.borrowed||[]; books = data.books||books;
-    if(data.pins) PINS = data.pins; if(data.educators) educators = data.educators; if(data.issueLog) issueLog = data.issueLog;
-    try{ searchBooks(); showManageBooks(); showLearners(); searchGlobalLearners(); showIssueLog(); if(document.getElementById("principalPanel").style.display==="block") updateDashboard(); if(typeof refreshSyncStats==="function") refreshSyncStats(); }catch(e){}
-    let el = document.getElementById("lastSyncText"); if(el) el.textContent = new Date().toLocaleString() + " - ☁️ Updated from " + (data.lastSyncBy||"Other Phone");
-    setTimeout(()=>{ isApplyingFirebase=false; }, 500);
-  });
-  firebaseDB.ref(".info/connected").on("value", (snap)=>{
-    let online = snap.val(); let status = document.getElementById("firebaseStatus");
-    if(status){ status.textContent = online ? "☁️ LIVE SYNC ON - Google Connected ✅" : "📴 Offline - Will Sync When Back Online"; status.style.color = online ? "#FFD700" : "orange"; }
-  });
-}
-setTimeout(startFirebaseListener, 1000);
-
-const MAX = 60;
-let learners = JSON.parse(localStorage.getItem("wordsworth_learners")||"{}");
-let borrowedBooks = JSON.parse(localStorage.getItem("wordsworth_borrowed")||"[]");
-let PINS = JSON.parse(localStorage.getItem("wordsworth_pins")||'{"Educator":"1234","Issuer":"4321","Coordinator":"5678","Principal":"9999"}');
-let educators = JSON.parse(localStorage.getItem("wordsworth_educators")||'[{"name":"Default Educator","user":"educator","pin":"1234"}]');
-let issueLog = JSON.parse(localStorage.getItem("wordsworth_issueLog")||"[]");
-let failedAttempts = 0; let lockUntil = 0; let currentRole = "";
-let selectedLearner = null;
-let grades = ["Grade 8","Grade 9","Grade 10","Grade 11","Grade 12"];
-let letters = ["A","B","C","D","E","F","G","H"];
-let classesList = [];
-grades.forEach(g=>{ letters.forEach(l=>{ classesList.push(g+l); }); });
-let classSelect = document.getElementById("classSelect");
-classesList.forEach(c=>{ let opt=document.createElement("option"); opt.value=c; opt.textContent=c; classSelect.appendChild(opt); });
-function getGradeFromText(text){ if(!text) return null; let m = text.match(/Grade\s*(\d{1,2})/i) || text.match(/Gr\s*(\d{1,2})/i) || text.match(/^(\d{1,2})[A-H]/); if(m) return parseInt(m[1]); return null; }
-function getLearnerGrade(learnerObjOrCls){ let cls = typeof learnerObjOrCls === "string" ? learnerObjOrCls : learnerObjOrCls.cls; return getGradeFromText(cls); }
-function getBookGrade(book){ if(book.grade) return parseInt(book.grade); return getGradeFromText(book.name + " " + (book.subject||"")); }
-function checkGradeMatch(learnerObj, book){ let learnerGrade = getLearnerGrade(learnerObj); let bookGrade = getBookGrade(book); if(bookGrade===null) return {ok:true, reason:"General", learnerGrade:learnerGrade, bookGrade:null}; if(learnerGrade===null) return {ok:true, reason:"No learner grade", learnerGrade:null, bookGrade:bookGrade}; if(learnerGrade===bookGrade) return {ok:true, learnerGrade:learnerGrade, bookGrade:bookGrade}; return {ok:false, learnerGrade:learnerGrade, bookGrade:bookGrade}; }
-function getSubjectCode(subject){ let s = subject.trim().toUpperCase().replace(/[^A-Z ]/g,"").trim(); if(s==="MATHEMATICAL LITERACY" || s==="MATHS LITERACY" || s==="MATH LITERACY") return "MATL"; if(s==="LIFE ORIENTATION") return "LIFO"; if(s==="LIFE SCIENCES" || s==="LIFE SCIENCE") return "LIFS"; if(s==="PHYSICAL SCIENCE" || s==="PHYSICAL SCIENCES") return "PHYS"; if(s==="NATURAL SCIENCE" || s==="NATURAL SCIENCES") return "NATS"; if(s==="ENGLISH HOME LANGUAGE") return "ENGH"; if(s==="ENGLISH FIRST ADDITIONAL LANGUAGE") return "ENGF"; if(s==="MATHEMATICS" || s==="MATHS" || s==="MATH") return "MAT"; let words = s.split(" ").filter(w=>w.length>0); if(words.length===1){ return words[0].substring(0,3); } else { return words[0].substring(0,3) + words[1].substring(0,1); } }
-function getNextBarcodeNumber(subjectCode){ let max = 0; books.forEach(b=>{ if(!b.barcode) return; let parts = b.barcode.split("-"); if(parts.length>=2 && parts[0]===subjectCode){ let num = parseInt(parts[1]); if(!isNaN(num) && num>max) max=num; } }); return max + 1; }
-function drawBarcodeBars(code){ let seed = 0; for(let i=0;i<code.length;i++) seed += code.charCodeAt(i) * (i+1); let bars = ""; let patterns = ["||| ","|| ","|||| ","| || ","|| | ","|||  ","|  ||","||  |","| ||| "]; for(let i=0;i<14;i++){ let p = patterns[(seed + i*7) % patterns.length]; bars += p; } return bars; }
-function barcodeStickerHTML(book){ let grade = getBookGrade(book); let gradeText = grade ? "GRADE "+grade : "GENERAL"; let school = document.title.includes("George Sonto") ? "GEORGE SONTO HIGH" : "WORDSWORTH HIGH"; return `<div class="barcode-sticker"><div style="font-size:11px;font-weight:bold">${school}</div><div style="font-size:11px">${book.name}</div><div style="font-size:10px">${book.subject} | ${gradeText}</div><div class="barcode-bars">${drawBarcodeBars(book.barcode)}</div><div class="barcode-num">${book.barcode}</div><div style="font-size:10px">Vukona Press | Scan to Issue</div></div>`; }
-let scanStream = null; let scanTarget = ""; let scanRaf = null;
-async function startScan(target, label){ scanTarget = target; document.getElementById("scanTargetText").textContent = "Scanning for: " + (label||target); document.getElementById("scanModal").style.display = "block"; document.getElementById("scanStatus").textContent = "📷 Starting camera..."; if(!("BarcodeDetector" in window)){ document.getElementById("scanStatus").textContent = "⚠️ Your browser does not support auto-scan. Use manual entry."; setTimeout(()=>{ manualScanFallback(); }, 800); return; } if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){ document.getElementById("scanStatus").textContent = "⚠️ Camera not available."; manualScanFallback(); return; } try{ scanStream = await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}}); let video = document.getElementById("scanVideo"); video.srcObject = scanStream; await video.play(); document.getElementById("scanStatus").textContent = "✅ Camera ON - Point at barcode..."; scanLoop(); }catch(e){ document.getElementById("scanStatus").textContent = "❌ Camera blocked. Allow camera permission, or type manually."; alert("❌ Camera blocked.\nAllow camera in browser settings, or tap 'Type Barcode Instead'."); } }
-async function scanLoop(){ if(!scanStream) return; try{ let detector = new BarcodeDetector({formats:["code_128","code_39","ean_13","ean_8","upc_a","upc_e","qr_code"]}); let video = document.getElementById("scanVideo"); let codes = await detector.detect(video); if(codes && codes.length>0){ let raw = codes[0].rawValue.trim().toUpperCase(); document.getElementById("scanStatus").textContent = "✅ Scanned: " + raw; try{ let ctx = new (window.AudioContext||window.webkitAudioContext)(); let o=ctx.createOscillator(); o.connect(ctx.destination); o.frequency.value=880; o.start(); o.stop(ctx.currentTime+0.15); }catch(e){} stopScan(); onBarcodeScanned(raw); return; } }catch(e){} scanRaf = requestAnimationFrame(()=>{ setTimeout(scanLoop, 150); }); }
-function onBarcodeScanned(code){ let clean = code.replace(/[^A-Z0-9\-]/g,""); if(scanTarget==="issue"){ document.getElementById("issueBarcode").value = clean; document.getElementById("issueMsg").textContent = "📷 Scanned: " + clean + " - Now enter Learner ID and tap ISSUE"; document.getElementById("issueMsg").style.color = "green"; document.getElementById("issueLearnerID").focus(); alert("📷 Scanned: " + clean + "\n\nNow enter Learner ID (e.g. 8A01) and tap ISSUE."); } else if(scanTarget==="retrieve"){ document.getElementById("retrieveBarcode").value = clean; document.getElementById("retrieveMsg").textContent = "📷 Scanned: " + clean + " - Select Condition and tap RETRIEVE"; document.getElementById("retrieveMsg").style.color = "green"; } else if(scanTarget==="search"){ document.getElementById("searchBox").value = clean; searchBooks(); document.getElementById("bookList").scrollIntoView({behavior:"smooth"}); } else if(scanTarget==="add"){ document.getElementById("newBookBarcode").value = clean; let exists = books.find(b=>(b.barcode||"").toUpperCase()===clean); if(exists){ alert("📷 Scanned: "+clean+"\n\n⚠️ This book ALREADY exists:\n"+exists.name+" ("+exists.barcode+")"); } else { alert("📷 Scanned ISBN / Barcode: "+clean+"\n\nNow type Book Name (e.g. Maths Grade 10) + Subject + Qty and tap Add Book."); } document.getElementById("newBookName").focus(); } }
-function manualScanFallback(){ stopScan(); let code = prompt("⌨️ Type Barcode Manually:\n\nExample: MAT-001 / LIFS-005 / PHYS-002"); if(code) onBarcodeScanned(code.trim().toUpperCase()); }
-function stopScan(){ document.getElementById("scanModal").style.display = "none"; if(scanRaf) cancelAnimationFrame(scanRaf); if(scanStream){ scanStream.getTracks().forEach(t=>t.stop()); scanStream=null; } let video = document.getElementById("scanVideo"); if(video) video.srcObject = null; }
-function scanAndIssue(){ startScan("issue", "ISSUE Book - Scan Book First"); }
-function scanAndRetrieve(){ startScan("retrieve", "RETRIEVE Book - Scan Returned Book"); }
-function collectAllData(){ let p = getSchoolPrefix(); return { app:"Vukona Press Library", school:getSchoolNameShort(), version:"V13", exportedAt:new Date().toISOString(), exportedBy:currentRole||"Unknown", learners:JSON.parse(localStorage.getItem(p+"learners")||"{}"), borrowed:JSON.parse(localStorage.getItem(p+"borrowed")||"[]"), books:JSON.parse(localStorage.getItem(p+"books")||"null")||books, pins:JSON.parse(localStorage.getItem(p+"pins")||"{}"), educators:JSON.parse(localStorage.getItem(p+"educators")||"[]"), issueLog:JSON.parse(localStorage.getItem(p+"issueLog")||"[]") }; }
-function applyAllData(data){ let p = getSchoolPrefix(); if(!data||!data.learners||!data.books){ alert("❌ Invalid backup."); return false; } if(data.school && data.school!==getSchoolNameShort()){ if(!confirm("⚠️ Backup from "+data.school+" but this is "+getSchoolNameShort()+". Import anyway?")) return false; } localStorage.setItem(p+"learners", JSON.stringify(data.learners)); localStorage.setItem(p+"borrowed", JSON.stringify(data.borrowed||[])); localStorage.setItem(p+"books", JSON.stringify(data.books||[])); if(data.pins) localStorage.setItem(p+"pins", JSON.stringify(data.pins)); if(data.educators) localStorage.setItem(p+"educators", JSON.stringify(data.educators)); if(data.issueLog) localStorage.setItem(p+"issueLog", JSON.stringify(data.issueLog)); localStorage.setItem(p+"lastSync", new Date().toISOString()); pushToFirebase(); return true; }
-function refreshSyncStats(){ let d = collectAllData(); let total=0; for(let k in d.learners) total+=(d.learners[k]||[]).length; document.getElementById("syncStats").innerHTML=`👥 Learners: <b>${total}</b> | 📚 Books: <b>${d.books.length}</b> | 📖 Borrowed: <b>${d.borrowed.filter(b=>!b.returned).length}</b><br>👩🏾‍🏫 Educators: <b>${d.educators.length}</b> | 📋 Log: <b>${d.issueLog.length}</b>`; let last=localStorage.getItem(getSchoolPrefix()+"lastSync"); document.getElementById("lastSyncText").textContent = last ? new Date(last).toLocaleString() : "Never"; let dev=localStorage.getItem(getSchoolPrefix()+"deviceID"); if(!dev){ dev="PHONE-"+Math.random().toString(36).substring(2,7).toUpperCase(); localStorage.setItem(getSchoolPrefix()+"deviceID", dev); } document.getElementById("deviceID").textContent=dev; }
-function exportBackupFile(){ let data=collectAllData(); let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}); let url=URL.createObjectURL(blob); let a=document.createElement("a"); let date=new Date().toISOString().slice(0,10); a.href=url; a.download=getSchoolNameShort().replace(" ","_")+"_LIBRARY_BACKUP_"+date+".json"; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); alert("✅ Backup Downloaded!\n\nSend this file via WhatsApp to other phones."); }
-function copySyncCode(){ let data=collectAllData(); let code=btoa(unescape(encodeURIComponent(JSON.stringify(data)))); document.getElementById("syncCodeOut").value=code; document.getElementById("syncCodeOut").select(); try{document.execCommand("copy");}catch(e){} if(navigator.clipboard) navigator.clipboard.writeText(code).catch(()=>{}); alert("✅ Sync Code Copied! Paste in WhatsApp."); return code; }
-function shareViaWhatsApp(){ let code=copySyncCode(); let text=encodeURIComponent("📚 "+getSchoolNameShort()+" LIBRARY SYNC CODE\n\nCODE:\n"+code); window.open("https://wa.me/?text="+text,"_blank"); }
-function importSyncCode(){ let code=document.getElementById("syncCodeIn").value.trim(); if(!code){ alert("⚠️ Paste Sync Code first."); return; } if(!confirm("⚠️ IMPORT will OVERWRITE all data on THIS phone. Continue?")) return; try{ let data=JSON.parse(decodeURIComponent(escape(atob(code)))); if(applyAllData(data)){ alert("✅ SYNC SUCCESS! Reloading..."); location.reload(); } }catch(e){ alert("❌ Invalid Sync Code."); } }
-function importBackupFile(){ let file=document.getElementById("backupFileInput").files[0]; if(!file){ alert("⚠️ Select Backup File first."); return; } if(!confirm("⚠️ IMPORT will OVERWRITE all data. Continue?")) return; let r=new FileReader(); r.onload=function(e){ try{ let data=JSON.parse(e.target.result); if(applyAllData(data)){ alert("✅ Backup Restored! Reloading..."); location.reload(); } }catch(err){ alert("❌ Invalid Backup File."); } }; r.readAsText(file); }
-function clearAllData(){ if(!confirm("🚨 DELETE ALL DATA ON THIS PHONE? Did you EXPORT backup first?")) return; if(!confirm("Last chance - Tap OK again to DELETE.")) return; let p=getSchoolPrefix(); ["learners","borrowed","books","pins","educators","issueLog","lastSync"].forEach(k=>localStorage.removeItem(p+k)); alert("🗑️ Cleared. Reloading..."); location.reload(); }
-function showSyncPanel(){ document.getElementById("syncPanel").style.display="block"; try{ refreshSyncStats(); }catch(e){} }
-
-let books=[
-{name:"Maths Grade 10",author:"DBE",subject:"Mathematics",grade:10,barcode:"MAT-001",baseBarcode:"MAT",subjectCode:"MAT",status:"Available"},
-{name:"Physical Science Grade 11",author:"DBE",subject:"Physical Science",grade:11,barcode:"PHYS-001",baseBarcode:"PHYS",subjectCode:"PHYS",status:"Available"},
-{name:"English Home Language Grade 12",author:"DBE",subject:"English Home Language",grade:12,barcode:"ENGH-001",baseBarcode:"ENGH",subjectCode:"ENGH",status:"Available"},
-{name:"Life Sciences Grade 10",author:"DBE",subject:"Life Sciences",grade:10,barcode:"LIFS-001",baseBarcode:"LIFS",subjectCode:"LIFS",status:"Available"},
-{name:"Mathematical Literacy Grade 11",author:"DBE",subject:"Mathematical Literacy",grade:11,barcode:"MATL-001",baseBarcode:"MATL",subjectCode:"MATL",status:"Available"},
-{name:"Life Orientation Grade 10",author:"DBE",subject:"Life Orientation",grade:10,barcode:"LIFO-001",baseBarcode:"LIFO",subjectCode:"LIFO",status:"Available"},
-];
-let savedBooks = JSON.parse(localStorage.getItem("wordsworth_books")||"null");
-if(savedBooks) books = savedBooks;
-function saveBooks(){ localStorage.setItem("wordsworth_books", JSON.stringify(books)); searchBooks(); showManageBooks(); if(document.getElementById("principalPanel").style.display==="block") updateDashboard(); pushToFirebase(); }
-function searchBooks(){ let q=document.getElementById("searchBox").value.toLowerCase(); let filtered=books.filter(b=>(b.name+" "+b.subject+" "+(b.barcode||"")).toLowerCase().includes(q)); let html=""; filtered.forEach(b=>{ let bg = getBookGrade(b); let gradeLabel = bg ? "🎓 Grade "+bg+" ONLY" : "🌍 General - All Grades"; html+=`<div class="book"><b>${b.name}</b><br>${b.subject} | ${b.author}<br><b>📷 ${b.barcode||""}</b> | ${b.status||"Available"}<br><b style="color:#0B3D91">${gradeLabel}</b><br><button class="btn-blue" onclick="borrowBook('${b.name}','${b.barcode||""}')">📚 Borrow</button></div>`; }); document.getElementById("bookList").innerHTML=html||"<p>No books found</p>"; }
-searchBooks();
-function borrowBook(bookName, barcode){ let alreadyOut = borrowedBooks.find(b=> b.barcode===barcode && barcode!=="" && !b.returned); if(alreadyOut){ alert("🚫 This textbook is ALREADY BORROWED!\nBarcode: "+barcode+"\nBorrowed by: "+alreadyOut.learner); return; } let book = books.find(b=>b.barcode===barcode) || {name:bookName, barcode:barcode}; let learnerIDInput = prompt("Learner ID (e.g. 8A01, 10B05):"); if(!learnerIDInput) return; learnerIDInput = learnerIDInput.trim().toUpperCase(); let foundLearner = null; let foundClass = ""; for(let cls in learners){ let l = (learners[cls]||[]).find(x=>x.id.toUpperCase()===learnerIDInput); if(l){ foundLearner=l; foundClass=cls; break; } } let learnerName, learnerCls; if(foundLearner){ learnerName = foundLearner.name; learnerCls = foundClass; } else { alert("⚠️ Learner ID "+learnerIDInput+" not found. Add learner first."); learnerName = prompt("Learner Name:"); if(!learnerName) return; learnerCls = prompt("Class (e.g. Grade 8A):") || ""; } let check = checkGradeMatch({cls:learnerCls}, book); if(!check.ok){ alert("🚫 GRADE MISMATCH - CANNOT ISSUE!\nLearner: "+learnerName+" Grade "+check.learnerGrade+"\nBook: "+book.name+" Grade "+check.bookGrade); return; } borrowedBooks.push({learner:learnerName, learnerID:learnerIDInput, cls:learnerCls, book:bookName, barcode:barcode||"", date:new Date().toLocaleDateString(), returned:false, issuedBy:currentRole||"Educator"}); localStorage.setItem("wordsworth_borrowed", JSON.stringify(borrowedBooks)); pushToFirebase(); if(document.getElementById("principalPanel").style.display==="block") updateDashboard(); alert("✅ Borrowed: "+bookName+"\nBy: "+learnerName+" ("+learnerIDInput+")\nGrade Check: ✅"); }
-function addBook(){ let name=document.getElementById("newBookName").value.trim(); let subject=document.getElementById("newBookSubject").value.trim()||"General"; let author=document.getElementById("newBookAuthor").value.trim()||"DBE"; let qty=parseInt(document.getElementById("newBookQty").value) || 1; if(!name){ alert("⚠️ Enter Book Name"); return; } if(qty<1 || qty>500){ alert("⚠️ Quantity must be 1 to 500"); return; } let bookGrade = getGradeFromText(name); if(!bookGrade && !name.toLowerCase().includes("general")){ if(!confirm("⚠️ No Grade found in Book Name: '"+name+"'\nThis will be GENERAL.\nOK = Keep as GENERAL\nCancel = Fix Name")){ return; } } let subjectCode = getSubjectCode(subject); let startNum = getNextBarcodeNumber(subjectCode); let endNum = startNum + qty - 1; for(let i=startNum; i<=endNum; i++){ let bc = subjectCode + "-" + String(i).padStart(3,"0"); if(books.find(b=>(b.barcode||"")===bc)){ alert("🚫 DUPLICATE BLOCKED: "+bc); return; } } for(let i=startNum; i<=endNum; i++){ let fullBarcode = subjectCode + "-" + String(i).padStart(3,"0"); books.push({name:name, subject:subject, author:author, grade:bookGrade||null, barcode:fullBarcode, baseBarcode:subjectCode, subjectCode:subjectCode, copyNo:i, totalQty:qty, status:"Available"}); } saveBooks(); document.getElementById("newBookName").value=""; document.getElementById("newBookSubject").value=""; document.getElementById("newBookAuthor").value=""; document.getElementById("newBookQty").value="1"; updateBarcodePreview(); document.getElementById("bookMsg").textContent="✅ Added: "+name+" | "+subjectCode+"-"+String(startNum).padStart(3,"0")+" to "+subjectCode+"-"+String(endNum).padStart(3,"0"); alert("✅ SUCCESS!\nTitle: "+name+"\nQty: "+qty+"\nBarcodes: "+subjectCode+"-"+String(startNum).padStart(3,"0")+" to "+subjectCode+"-"+String(endNum).padStart(3,"0")); }
-function updateBarcodePreview(){ let subject = document.getElementById("newBookSubject").value.trim() || "Mathematics"; let qty = parseInt(document.getElementById("newBookQty").value) || 1; let code = getSubjectCode(subject); let start = getNextBarcodeNumber(code); let end = start + qty - 1; let previewEl = document.getElementById("barcodePreview"); let rangeEl = document.getElementById("barcodeRange"); if(previewEl) previewEl.textContent = code + "-" + String(start).padStart(3,"0"); if(rangeEl) rangeEl.textContent = "Will create: " + code + "-" + String(start).padStart(3,"0") + " to " + code + "-" + String(end).padStart(3,"0") + " (" + qty + " copies)"; }
-function showManageBooks(){ document.getElementById("bookCount").textContent=books.length; let div=document.getElementById("manageBookList"); div.innerHTML=""; let grouped={}; books.forEach((b,i)=>{ let key = b.name + "|" + (b.baseBarcode||b.barcode); if(!grouped[key]) grouped[key]={title:b.name, subject:b.subject, author:b.author, base:b.baseBarcode||b.barcode, copies:[], indexes:[]}; grouped[key].copies.push(b); grouped[key].indexes.push(i); }); Object.values(grouped).forEach(g=>{ let available = g.copies.filter(c=>c.status==="Available").length; let borrowed = g.copies.length - available; let gg = getBookGrade(g.copies[0]); let glabel = gg ? "🎓 Grade "+gg+" ONLY" : "🌍 General - All Grades"; div.innerHTML+=`<div class="book" style="border-left:4px solid #FF6B00"><b>${g.title}</b> (${g.subject} | ${g.author})<br><b style="color:#0B3D91">${glabel}</b><br><b style="color:#0B3D91">📷 ${g.base} | ${g.copies[0].barcode} to ${g.copies[g.copies.length-1].barcode}</b><br><b>📦 Total: ${g.copies.length}</b> | ✅ Available: ${available} | 📖 Borrowed: ${borrowed}<br><button style="background:#0B3D91;color:white;padding:8px 12px" onclick="printBarcodesForTitle('${g.title.replace(/'/g,"")}','${g.base}')">🖨️ Print ${g.copies.length} Barcodes For This Title</button> <button class="btn-red" onclick="removeBookTitle('${g.title.replace(/'/g,"")}','${g.base}')">🗑️ Remove ALL ${g.copies.length} Copies</button></div>`; }); if(books.length===0) div.innerHTML="<p>No books yet.</p>"; }
-function removeBookTitle(title, base){ if(!confirm("Remove ALL copies: "+title+" ("+base+")?")) return; books = books.filter(b=> !(b.name===title && (b.baseBarcode||b.barcode)===base)); saveBooks(); }
-function printBarcodesForTitle(title, base){ let copies = books.filter(b=> b.name===title && (b.baseBarcode||b.barcode)===base); if(copies.length===0){ alert("No copies found"); return; } copies.sort((a,b)=> (a.barcode||"").localeCompare(b.barcode||"")); let first = copies[0]; let grade = getBookGrade(first); let printDiv = document.getElementById("printArea"); let school = document.title.includes("George Sonto") ? "GEORGE SONTO HIGH SCHOOL" : "WORDSWORTH HIGH SCHOOL"; let header = `<div style="text-align:center;border-bottom:3px solid #000;padding:10px;margin-bottom:10px"><h2 style="margin:0">${school}</h2><p style="margin:2px 0"><b>${title}</b> | ${first.subject} | ${grade ? "Grade "+grade : "General"} | Subject Code: ${base}</p><p style="margin:2px 0">Total Copies: ${copies.length} | Barcodes: ${copies[0].barcode} to ${copies[copies.length-1].barcode} | Print Date: ${new Date().toLocaleDateString()} | Printed by: ${currentRole}</p><p style="margin:2px 0;font-size:12px">✂️ Cut along lines - Stick 1 barcode on front cover of each book - 1 book = 1 barcode</p></div>`; let stickers = copies.map(b=> barcodeStickerHTML(b)).join(""); printDiv.innerHTML = header + stickers + `<div style="text-align:center;margin-top:15px;font-size:12px">--- End - ${copies.length} Barcodes Printed - Vukona Press | Xintimani Group | 078 023 3263 ---</div>`; window.print(); }
-function printAllBarcodes(){ if(books.length===0){ alert("No books to print"); return; } let grouped = {}; books.forEach(b=>{ let key = (b.subject||"General") + " | Grade " + (getBookGrade(b)||"General"); if(!grouped[key]) grouped[key]=[]; grouped[key].push(b); }); let printDiv = document.getElementById("printArea"); let html = `<div style="text-align:center;border-bottom:3px solid #000;padding:10px"><h2>ALL BARCODES - FULL LIBRARY</h2><p>Total: ${books.length} copies | Printed: ${new Date().toLocaleDateString()} | By: ${currentRole}</p></div>`; for(let key in grouped){ let copies = grouped[key].sort((a,b)=>(a.barcode||"").localeCompare(b.barcode||"")); html += `<h3 style="page-break-before:always;border-bottom:2px solid #000;padding:5px">📚 ${key} - ${copies.length} copies - ${copies[0].barcode} to ${copies[copies.length-1].barcode}</h3>`; html += copies.map(b=> barcodeStickerHTML(b)).join(""); } printDiv.innerHTML = html; window.print(); }
-function printBarcodesBySubject(subjectFilter){ let copies = books.filter(b=> (b.subject||"").toLowerCase() === subjectFilter.toLowerCase()); if(copies.length===0){ alert("No books for subject: "+subjectFilter); return; } copies.sort((a,b)=>(a.barcode||"").localeCompare(b.barcode||"")); let printDiv = document.getElementById("printArea"); printDiv.innerHTML = `<div style="text-align:center;border-bottom:3px solid #000;padding:10px"><h2>${subjectFilter.toUpperCase()} - ALL GRADES</h2><p>Total: ${copies.length} copies | ${copies[0].barcode} to ${copies[copies.length-1].barcode}</p></div>` + copies.map(b=> barcodeStickerHTML(b)).join(""); window.print(); }
-function printBarcodesByGrade(gradeNum){ let copies = books.filter(b=> getBookGrade(b)===parseInt(gradeNum)); if(copies.length===0){ alert("No books for Grade "+gradeNum); return; } copies.sort((a,b)=>(a.barcode||"").localeCompare(b.barcode||"")); let printDiv = document.getElementById("printArea"); printDiv.innerHTML = `<div style="text-align:center;border-bottom:3px solid #000;padding:10px"><h2>GRADE ${gradeNum} - ALL SUBJECTS</h2><p>Total: ${copies.length} copies | Printed: ${new Date().toLocaleDateString()}</p></div>` + copies.map(b=> barcodeStickerHTML(b)).join(""); window.print(); }
-showManageBooks(); updateBarcodePreview();
-function saveEducators(){ localStorage.setItem("wordsworth_educators", JSON.stringify(educators)); showEducators(); pushToFirebase(); }
-function addEducator(){ let name=document.getElementById("newEducatorName").value.trim(); let user=document.getElementById("newEducatorUser").value.trim().toLowerCase(); let pin=document.getElementById("newEducatorPin").value.trim(); if(!name||!user||!pin){ alert("⚠️ Fill Name + Username + PIN"); return; } if(pin.length!==4||isNaN(pin)){ alert("⚠️ PIN must be 4 numbers"); return; } if(educators.find(e=>e.user===user)){ alert("⚠️ Username already exists"); return; } if(educators.length>=20){ alert("🚫 Max 20 Educators"); return; } educators.push({name:name,user:user,pin:pin}); saveEducators(); document.getElementById("newEducatorName").value=""; document.getElementById("newEducatorUser").value=""; document.getElementById("newEducatorPin").value=""; document.getElementById("educatorMsg").textContent="✅ Added Educator: "+name+" | "+user+" | "+pin; alert("✅ Educator Added:\n"+name+"\nUsername: "+user+"\nPIN: "+pin); }
-function showEducators(){ document.getElementById("educatorCount").textContent=educators.length; let div=document.getElementById("educatorListManage"); div.innerHTML=""; educators.forEach((e,i)=>{ div.innerHTML+=`<div class="book"><b>${e.name}</b><br>Username: ${e.user} | PIN: ${e.pin} <button class="btn-red" onclick="removeEducator(${i})">Remove</button></div>`; }); let roleSel=document.getElementById("roleSelect"); roleSel.innerHTML=`<option value="Educator">Educator (Default)</option><option value="Issuer">📚 Textbook Issuer / Retriever</option><option value="Coordinator">Coordinator</option><option value="Principal">Principal</option>`; educators.forEach(e=>{ if(e.user!=="educator"){ let o=document.createElement("option"); o.value="EDU:"+e.user; o.textContent="Educator - "+e.name+" ("+e.user+")"; roleSel.appendChild(o); } }); }
-function removeEducator(index){ if(educators[index].user==="educator"){ alert("⚠️ Cannot remove Default Educator"); return; } if(!confirm("Remove educator: "+educators[index].name+"?")) return; educators.splice(index,1); saveEducators(); }
-showEducators();
-function login(){ let now=Date.now(); if(now<lockUntil){ document.getElementById("loginError").textContent="🚫 Too many wrong attempts. Try again in 1 minute."; return; } let roleVal=document.getElementById("roleSelect").value; let pin=document.getElementById("pinInput").value.trim(); let loginOK=false; let displayRole=""; if(roleVal.startsWith("EDU:")){ let uname=roleVal.replace("EDU:",""); let edu=educators.find(e=>e.user===uname); if(edu&&pin===edu.pin){ loginOK=true; displayRole="Educator - "+edu.name; } } else { if(pin===PINS[roleVal]){ loginOK=true; displayRole=roleVal; } } if(loginOK){ failedAttempts=0; currentRole=displayRole; document.getElementById("educatorPanel").style.display="block"; document.getElementById("globalLearnerPanel").style.display="block"; document.getElementById("issuerPanel").style.display="block"; showSyncPanel(); document.getElementById("issuerName").textContent = displayRole; document.getElementById("loginBox").style.display="none"; document.getElementById("logoutBtn").style.display="block"; document.getElementById("loggedRole").textContent=displayRole; document.getElementById("loginStatus").textContent="✅ Logged in as "+displayRole; document.getElementById("loginStatus").style.color="green"; document.getElementById("loginError").textContent=""; showLearners(); searchGlobalLearners(); showIssueLog(); let isCoord=(roleVal==="Coordinator"||roleVal==="Principal"); document.getElementById("bookManagePanel").style.display=isCoord?"block":"none"; document.getElementById("educatorManagePanel").style.display=isCoord?"block":"none"; if(roleVal==="Principal"){ document.getElementById("principalPanel").style.display="block"; updateDashboard(); } else { document.getElementById("principalPanel").style.display="none"; } alert("✅ Welcome "+displayRole); } else { failedAttempts++; if(failedAttempts>=3){ lockUntil=Date.now()+60000; failedAttempts=0; document.getElementById("loginError").textContent="🚫 Wrong PIN 3 times. Locked for 1 minute."; } else { document.getElementById("loginError").textContent="❌ Wrong PIN. Attempt "+failedAttempts+"/3"; } } }
-function logout(){ currentRole=""; selectedLearner=null; document.getElementById("educatorPanel").style.display="none"; document.getElementById("globalLearnerPanel").style.display="none"; document.getElementById("issuerPanel").style.display="none"; document.getElementById("principalPanel").style.display="none"; document.getElementById("bookManagePanel").style.display="none"; document.getElementById("educatorManagePanel").style.display="none"; document.getElementById("syncPanel").style.display="none"; document.getElementById("loginBox").style.display="block"; document.getElementById("logoutBtn").style.display="none"; document.getElementById("pinInput").value=""; document.getElementById("loginStatus").textContent="🔒 Locked - Learners & Parents can only view"; document.getElementById("loginStatus").style.color="#c62828"; alert("Logged out"); }
-function changePin(){ let newPin=document.getElementById("newPin").value.trim(); if(newPin.length!==4||isNaN(newPin)){ alert("⚠️ PIN must be 4 numbers"); return; } PINS[currentRole]=newPin; localStorage.setItem("wordsworth_pins", JSON.stringify(PINS)); pushToFirebase(); document.getElementById("newPin").value=""; alert("✅ PIN Changed for "+currentRole+" to: "+newPin); }
-function getClassPrefix(cls){ return cls.replace("Grade ","").trim().toUpperCase(); }
-function getNextLearnerID(cls){ let prefix = getClassPrefix(cls); let list = learners[cls] || []; for(let n=1; n<=MAX; n++){ let id = prefix + String(n).padStart(2,"0"); if(!list.find(l=>l.id===id)) return id; } return null; }
-function updateNextIDDisplay(){ let cls = document.getElementById("classSelect").value; let nextID = getNextLearnerID(cls); let el = document.getElementById("nextLearnerID"); if(el){ el.textContent = nextID ? nextID : "FULL - 60/60"; } }
-function saveLearners(){ localStorage.setItem("wordsworth_learners", JSON.stringify(learners)); pushToFirebase(); }
-function addLearner(){ let cls=document.getElementById("classSelect").value; let name=document.getElementById("learnerName").value.trim(); let err=document.getElementById("errorText"); if(!name){ err.textContent="⚠️ Enter Learner Full Name"; return; } if(!learners[cls]) learners[cls]=[]; if(learners[cls].length>=MAX){ err.textContent="🚫 Class FULL - Maximum 60 learners reached for "+cls; return; } let allLearnersCheck = getAllLearners(); let sameName = allLearnersCheck.find(l=>l.name.toLowerCase()===name.toLowerCase()); if(sameName){ if(!confirm("⚠️ A learner named '"+name+"' already exists!\nExisting: "+sameName.id+" - "+sameName.name+" ("+sameName.cls+")\nAre you sure this is a DIFFERENT learner?")){ return; } } let autoID = getNextLearnerID(cls); if(!autoID){ err.textContent="🚫 Class FULL - No ID left"; return; } learners[cls].push({name:name, id:autoID}); saveLearners(); err.textContent=""; document.getElementById("learnerName").value=""; showLearners(); alert("✅ Added: "+name+"\nClass: "+cls+"\nAuto Learner ID: "+autoID+"\n☁️ Synced to Google - All phones will see it."); }
-function showLearners(){ let cls=document.getElementById("classSelect").value; let list=learners[cls]||[]; document.getElementById("countText").textContent=`Learners in ${cls}: ${list.length} / 60`; document.getElementById("progressBar").style.width=(list.length/60*100)+"%"; let ul=document.getElementById("learnerList"); ul.innerHTML=""; let sorted=[...list].sort((a,b)=>a.id.localeCompare(b.id)); sorted.forEach((l)=>{ let realIndex = list.indexOf(l); let li=document.createElement("li"); li.innerHTML=`<b>${l.id}</b> - ${l.name} `; let b=document.createElement("button"); b.textContent="Remove"; b.className="btn-red"; b.onclick=()=>{ learners[cls].splice(realIndex,1); saveLearners(); showLearners(); searchGlobalLearners(); }; li.appendChild(b); ul.appendChild(li); }); if(list.length>=MAX) document.getElementById("errorText").textContent="🚫 Class FULL - 60/60"; updateNextIDDisplay(); let gc=document.getElementById("globalLearnerCount"); if(gc) gc.textContent=getAllLearners().length; if(document.getElementById("principalPanel").style.display==="block") updateDashboard(); }
-document.getElementById("classSelect").addEventListener("change", function(){ showLearners(); updateNextIDDisplay(); }); showLearners();
-function getAllLearners(){ let all = []; for(let cls in learners){ (learners[cls]||[]).forEach(l=>{ all.push({name:l.name, id:l.id, cls:cls}); }); } all.sort((a,b)=>a.id.localeCompare(b.id)); return all; }
-function searchGlobalLearners(){ let q = document.getElementById("globalLearnerSearch").value.trim().toLowerCase(); let all = getAllLearners(); document.getElementById("globalLearnerCount").textContent = all.length; let div = document.getElementById("globalLearnerResults"); if(!q){ div.innerHTML = "<p style='color:#888'>Type Name or ID to find learner. Example: <b>Thabo</b> or <b>8A01</b></p>"; return; } let filtered = all.filter(l=> l.name.toLowerCase().includes(q) || l.id.toLowerCase().includes(q) || l.cls.toLowerCase().includes(q)); if(filtered.length===0){ div.innerHTML = "<p>❌ No learner found for '<b>"+q+"</b>'.</p>"; return; } let html = ""; filtered.slice(0,20).forEach(l=>{ let borrowedCount = borrowedBooks.filter(b=>b.learnerID===l.id && !b.returned).length; html += `<div class="book" style="cursor:pointer" onclick="selectLearner('${l.id}','${l.cls}')"><b>${l.id}</b> - ${l.name}<br><small>Class: ${l.cls} | Books Out: ${borrowedCount} | ✅ Available to ALL Educators</small><br><button class="btn-blue" style="padding:6px 12px;font-size:13px">👆 Select This Learner</button></div>`; }); div.innerHTML = html; }
-function selectLearner(id, cls){ let list = learners[cls]||[]; let l = list.find(x=>x.id===id); if(!l) return; selectedLearner = {name:l.name, id:l.id, cls:cls}; document.getElementById("selectedLearnerInfo").textContent = "Selected: " + l.id + " - " + l.name + " (" + cls + ")"; document.getElementById("selectedLearnerActions").style.display = "block"; document.getElementById("selectedLearnerTitle").textContent = "✅ " + l.id + " - " + l.name; document.getElementById("selectedLearnerDetails").innerHTML = `<b>Class:</b> ${cls} | <b>ID:</b> ${l.id}<br><b>Added by:</b> School Pool (Any Educator) | <b>Status:</b> Active`; document.getElementById("selectedLearnerActions").scrollIntoView({behavior:"smooth"}); }
-function borrowForSelected(){ if(!selectedLearner){ alert("⚠️ Select a learner first"); return; } let bookNames = books.map(b=>b.barcode+" - "+b.name).join("\n"); let choice = prompt("Borrow which book for "+selectedLearner.name+" ("+selectedLearner.id+")?\nType Barcode e.g. MAT-001\nAvailable:\n"+bookNames.slice(0,500)); if(!choice) return; let book = books.find(b=>b.barcode.toUpperCase()===choice.trim().toUpperCase()); if(!book){ alert("❌ Barcode not found: "+choice); return; } borrowBookForLearner(book.name, book.barcode, selectedLearner); }
-function borrowBookForLearner(bookName, barcode, learnerObj){ let alreadyOut = borrowedBooks.find(b=> b.barcode===barcode && barcode!=="" && !b.returned); if(alreadyOut){ alert("🚫 Already Borrowed by "+alreadyOut.learner); return; } let book = books.find(b=>b.barcode===barcode) || {name:bookName, barcode:barcode}; let check = checkGradeMatch(learnerObj, book); if(!check.ok){ alert("🚫 GRADE MISMATCH - CANNOT ISSUE!\nLearner: "+learnerObj.name+" Grade "+check.learnerGrade+"\nBook: "+book.name+" Grade "+check.bookGrade); return; } borrowedBooks.push({learner:learnerObj.name, learnerID:learnerObj.id, cls:learnerObj.cls, book:bookName, barcode:barcode, date:new Date().toLocaleDateString(), returned:false, issuedBy:currentRole||"Educator"}); localStorage.setItem("wordsworth_borrowed", JSON.stringify(borrowedBooks)); pushToFirebase(); alert("✅ Borrowed:\n"+bookName+" ("+barcode+")\nFor: "+learnerObj.name+" ("+learnerObj.id+")\nGrade Check: ✅"); if(document.getElementById("principalPanel").style.display==="block") updateDashboard(); }
-function moveSelectedLearner(){ if(!selectedLearner){ alert("⚠️ Select a learner first"); return; } let newClass = prompt("Move "+selectedLearner.name+" ("+selectedLearner.id+") from "+selectedLearner.cls+" to which class?\nEnter e.g. Grade 8B"); if(!newClass) return; newClass = newClass.trim(); if(!classesList.includes(newClass)){ alert("❌ Invalid class. Use e.g. Grade 8B"); return; } if(newClass===selectedLearner.cls){ alert("Already in "+newClass); return; } let oldList = learners[selectedLearner.cls]||[]; let idx = oldList.findIndex(l=>l.id===selectedLearner.id); if(idx>-1) oldList.splice(idx,1); if(!learners[newClass]) learners[newClass]=[]; if(learners[newClass].length>=MAX){ alert("🚫 "+newClass+" is FULL 60/60"); learners[selectedLearner.cls].push({name:selectedLearner.name, id:selectedLearner.id}); return; } let newID = getNextLearnerID(newClass); learners[newClass].push({name:selectedLearner.name, id:newID}); borrowedBooks.forEach(b=>{ if(b.learnerID===selectedLearner.id) { b.learnerID=newID; b.cls=newClass; } }); localStorage.setItem("wordsworth_borrowed", JSON.stringify(borrowedBooks)); saveLearners(); showLearners(); searchGlobalLearners(); alert("✅ Moved:\n"+selectedLearner.name+"\n"+selectedLearner.id+" → "+newID+" ("+newClass+")"); selectedLearner = {name:selectedLearner.name, id:newID, cls:newClass}; }
-function checkSelectedLearner(){ if(!selectedLearner){ alert("⚠️ Select a learner first"); return; } document.getElementById("parentLearnerID").value = selectedLearner.id; parentCheck(); document.getElementById("parentResult").scrollIntoView({behavior:"smooth"}); }
-function saveIssueLog(){ localStorage.setItem("wordsworth_issueLog", JSON.stringify(issueLog)); showIssueLog(); if(document.getElementById("principalPanel").style.display==="block") updateDashboard(); pushToFirebase(); }
-function issueBook(){ let barcode = document.getElementById("issueBarcode").value.trim().toUpperCase(); let learnerID = document.getElementById("issueLearnerID").value.trim().toUpperCase(); let msg = document.getElementById("issueMsg"); if(!barcode){ msg.textContent="⚠️ Enter / Scan Barcode"; msg.style.color="red"; return; } if(!learnerID){ msg.textContent="⚠️ Enter Learner ID e.g. 8A01"; msg.style.color="red"; return; } let book = books.find(b=>(b.barcode||"").toUpperCase()===barcode); if(!book){ msg.textContent="❌ Barcode not found: "+barcode; msg.style.color="red"; return; } let alreadyOut = borrowedBooks.find(b=>b.barcode===barcode && !b.returned); if(alreadyOut){ msg.textContent="🚫 ALREADY ISSUED! "+barcode+" is with "+alreadyOut.learner; msg.style.color="red"; alert("🚫 Already Issued!\n"+barcode+" → "+alreadyOut.learner); return; } let found=null; let foundClass=""; for(let cls in learners){ let l=(learners[cls]||[]).find(x=>x.id.toUpperCase()===learnerID); if(l){ found=l; foundClass=cls; break; } } if(!found){ msg.textContent="❌ Learner ID not found: "+learnerID; msg.style.color="red"; return; } let check = checkGradeMatch({cls:foundClass}, book); if(!check.ok){ msg.textContent="🚫 GRADE MISMATCH! Grade "+check.learnerGrade+" learner CANNOT get Grade "+check.bookGrade+" book."; msg.style.color="red"; alert("🚫 GRADE MISMATCH - CANNOT ISSUE!\nLearner: "+found.name+" Grade "+check.learnerGrade+"\nBook: "+book.name+" Grade "+check.bookGrade); return; } let record = {learner:found.name, learnerID:learnerID, cls:foundClass, book:book.name, barcode:barcode, date:new Date().toLocaleDateString(), returned:false, issuedBy:currentRole||"Issuer"}; borrowedBooks.push(record); localStorage.setItem("wordsworth_borrowed", JSON.stringify(borrowedBooks)); issueLog.push({type:"ISSUED", ...record, actionBy:currentRole||"Issuer", time:new Date().toLocaleString()}); saveIssueLog(); book.status = "Borrowed"; saveBooks(); msg.textContent="✅ ISSUED: "+book.name+" ("+barcode+") → "+found.name+" ("+learnerID+") | Grade Check ✅ | ☁️ Synced"; msg.style.color="green"; document.getElementById("issueBarcode").value=""; document.getElementById("issueLearnerID").value=""; alert("✅ ISSUED!\nBook: "+book.name+" ("+barcode+")\nTo: "+found.name+" ("+learnerID+")\nIssued By: "+currentRole); }
-function retrieveBook(){ let barcode = document.getElementById("retrieveBarcode").value.trim().toUpperCase(); let condition = document.getElementById("retrieveCondition").value; let msg = document.getElementById("retrieveMsg"); if(!barcode){ msg.textContent="⚠️ Enter / Scan Barcode"; msg.style.color="red"; return; } let book = books.find(b=>(b.barcode||"").toUpperCase()===barcode); if(!book){ msg.textContent="❌ Barcode not found: "+barcode; msg.style.color="red"; return; } let loan = borrowedBooks.find(b=>b.barcode===barcode && !b.returned); if(!loan){ msg.textContent="⚠️ "+barcode+" is NOT currently issued."; msg.style.color="orange"; return; } loan.returned = true; loan.returnDate = new Date().toLocaleDateString(); loan.returnCondition = condition; loan.retrievedBy = currentRole||"Issuer"; localStorage.setItem("wordsworth_borrowed", JSON.stringify(borrowedBooks)); book.status = "Available"; if(condition==="Lost") book.status = "Lost - Needs Replacement"; if(condition==="Damaged") book.status = "Damaged - Needs Repair"; saveBooks(); issueLog.push({type:"RETRIEVED", learner:loan.learner, learnerID:loan.learnerID, cls:loan.cls, book:loan.book, barcode:barcode, date:loan.returnDate, returned:true, condition:condition, retrievedBy:currentRole||"Issuer", actionBy:currentRole||"Issuer", time:new Date().toLocaleString()}); saveIssueLog(); msg.textContent="✅ RETRIEVED: "+book.name+" ("+barcode+") from "+loan.learner+" | Condition: "+condition; msg.style.color="green"; document.getElementById("retrieveBarcode").value=""; alert("✅ RETRIEVED!\nBook: "+loan.book+" ("+barcode+")\nFrom: "+loan.learner+"\nCondition: "+condition+"\nRetrieved By: "+currentRole); }
-function showIssueLog(){ let div = document.getElementById("issuerLog"); if(!div) return; document.getElementById("issuerLogCount").textContent = issueLog.length; if(issueLog.length===0){ div.innerHTML="<p>No issues / returns yet.</p>"; return; } let html=""; issueLog.slice(-20).reverse().forEach(l=>{ let color = l.type==="ISSUED" ? "#1B5E20" : "#FF6B00"; let extra = l.condition ? " | Condition: "+l.condition : ""; html+=`<div class="book" style="border-left:4px solid ${color}"><b>${l.type}</b> - ${l.book} (${l.barcode})<br><small>${l.learner} (${l.learnerID}) - ${l.cls} | ${l.time} | By: ${l.actionBy}${extra}</small></div>`; }); div.innerHTML=html; }
-showIssueLog();
-function updateDashboard(){ let totalLearners=0; let perClassHTML=""; let alerts=""; classesList.forEach(cls=>{ let count=(learners[cls]||[]).length; totalLearners+=count; let pct=Math.round(count/60*100); let color=pct>=80?"#c62828":"#1B5E20"; perClassHTML+=`<p><b>${cls}: ${count} / 60</b> (${pct}%)<br><div class="bar-bg"><div class="bar-fill" style="background:${color};width:${pct}%"></div></div></p>`; if(pct>=80) alerts+=`<p>🚨 ${cls} is ${pct}% FULL</p>`; else if(pct>=50) alerts+=`<p>⚠️ ${cls} is ${pct}% full</p>`; }); if(!alerts) alerts="<p>✅ All classes have space</p>"; document.getElementById("dashLearners").textContent=totalLearners; document.getElementById("dashBooks").textContent=books.length; document.getElementById("dashBorrowed").textContent=borrowedBooks.filter(b=>!b.returned).length; document.getElementById("dashClasses").textContent=40; document.getElementById("dashPerClass").innerHTML=perClassHTML; document.getElementById("dashAlerts").innerHTML=alerts; let today = new Date().toLocaleDateString(); let issuedToday = issueLog.filter(l=>l.type==="ISSUED" && l.date===today).length; let retrievedToday = issueLog.filter(l=>l.type==="RETRIEVED" && l.date===today).length; let lost = books.filter(b=>b.status && b.status.includes("Lost")).length; let damaged = books.filter(b=>b.status && b.status.includes("Damaged")).length; document.getElementById("dashAlerts").innerHTML += `<p>📚 Today: Issued ${issuedToday} | Retrieved ${retrievedToday}</p><p>🚫 Lost Books: ${lost} | ⚠️ Damaged: ${damaged}</p>`; let bl=document.getElementById("dashBorrowList"); let active = borrowedBooks.filter(b=>!b.returned); if(active.length===0) bl.innerHTML="<li>No books currently out</li>"; else bl.innerHTML=active.slice(-5).reverse().map(b=>`<li>${b.learner} (${b.cls}) - ${b.book} - ${b.barcode||""} - ${b.date}</li>`).join(""); }
-function parentCheck(){ let searchID=document.getElementById("parentLearnerID").value.trim().toUpperCase(); let err=document.getElementById("parentError"); let result=document.getElementById("parentResult"); if(!searchID){ err.textContent="⚠️ Please enter Learner ID"; result.style.display="none"; return; } let found=null; let foundClass=""; for(let cls in learners){ let l=(learners[cls]||[]).find(x=>x.id.toUpperCase()===searchID); if(l){ found=l; foundClass=cls; break; } } if(!found){ err.textContent="❌ Learner ID not found."; result.style.display="none"; return; } err.textContent=""; result.style.display="block"; document.getElementById("parentChildName").textContent="✅ "+found.name; document.getElementById("parentChildInfo").innerHTML=`<b>Class:</b> ${foundClass} | <b>Learner ID:</b> ${found.id} | <b>Status:</b> Active<br><b>Class Size:</b> ${(learners[foundClass]||[]).length} / 60 Learners`; let myBooks=borrowedBooks.filter(b=>(b.learnerID&&b.learnerID===searchID)||b.learner.toLowerCase()===found.name.toLowerCase()); let booksDiv=document.getElementById("parentBooks"); if(myBooks.length===0){ booksDiv.innerHTML="<p>📚 No books borrowed yet.</p>"; document.getElementById("parentMessage").innerHTML=`Dear Parent, ${found.name.split(' ')[0]} has no books out. Encourage them to borrow. Thank you - Wordsworth Library`; } else { let html=""; let overdueCount=0; myBooks.forEach(b=>{ let isOverdue=b.book.toLowerCase().includes("science") && !b.returned; let status=b.returned?"✅ Returned - "+(b.returnCondition||"Good") : (isOverdue?"⚠️ OVERDUE - Return Today!":"📖 Still Reading - Due Soon"); let color=b.returned?"#1B5E20":(isOverdue?"#c62828":"#FF6B00"); if(isOverdue) overdueCount++; html+=`<div style="border:1px solid ${color};padding:10px;border-radius:8px;margin:6px 0"><b>${b.book}</b><br><small>Barcode: ${b.barcode||""} | Borrowed: ${b.date} | Class: ${b.cls} | Issued By: ${b.issuedBy||""}</small><br><b style="color:${color}">${status}</b></div>`; }); booksDiv.innerHTML=html; if(overdueCount>0) document.getElementById("parentMessage").innerHTML=`Dear Parent, ${found.name.split(' ')[0]} has <b>${overdueCount} overdue book(s)</b>. Please return tomorrow. Thank you - Wordsworth Library`; else document.getElementById("parentMessage").innerHTML=`Dear Parent, ${found.name.split(' ')[0]} is doing well. No overdue books. Thank you - Wordsworth Library`; } }
 </script>
 </body>
 </html>
