@@ -4,29 +4,40 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Wordsworth High School - Digital Library</title>
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 <style>
 *{box-sizing:border-box;font-family:Arial,sans-serif}
 body{margin:0;background:#eef2f7}
 .header{background:#174ea6;color:#fff;padding:14px;text-align:center}
 .logo-row{display:flex;align-items:center;justify-content:center;gap:12px}
-.logo-img{width:62px;height:62px;object-fit:contain;background:#fff;border-radius:50%;padding:4px;border:3px solid #fff;box-shadow:0 2px 8px #0003}
+.logo-img{width:62px;height:62px;object-fit:contain;background:#fff;border-radius:50%;padding:4px;border:3px solid #fff}
 .logo-fallback{width:62px;height:62px;background:#fff;color:#174ea6;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:bold;border:3px solid #fff}
 .header h1{margin:0;font-size:22px;color:#fff}
-.header p{margin:4px 0 0;font-size:13px;color:#fff;opacity:1}
+.header p{margin:4px 0 0;font-size:13px;color:#fff}
 .header .small{color:#dbeafe !important}
 .nav{display:flex;gap:6px;padding:10px;background:#fff;overflow-x:auto;position:sticky;top:0;z-index:10;box-shadow:0 2px 6px #0001}
-.nav button{flex:1;min-width:90px;padding:10px;border:0;border-radius:8px;background:#e8eefb;font-weight:bold;cursor:pointer}
+.nav button{flex:1;min-width:90px;padding:10px;border:0;border-radius:8px;background:#e8eefb;font-weight:bold;cursor:pointer;white-space:nowrap}
 .nav button.active{background:#174ea6;color:#fff}
+.nav button.gold{background:#fff3cd;border:2px solid #ffb300}
+.nav button.gold.active{background:#ffb300;color:#000}
 .wrap{max-width:1000px;margin:auto;padding:12px}
 .card{background:#fff;padding:14px;border-radius:12px;margin-bottom:12px;box-shadow:0 2px 6px #0001;border-left:5px solid #174ea6}
 .card h3{margin:0 0 8px}
+.card.gold{border-left:5px solid #ffb300;background:#fffdf5}
+.card.red{border-left:5px solid #c62828}
+.card.green{border-left:5px solid #1a7f37}
 input,select,textarea{width:100%;padding:11px;margin:6px 0;border:1px solid #cbd5e1;border-radius:8px;font-size:15px}
 textarea{min-height:120px;font-family:monospace}
 .btn{width:100%;padding:13px;border:0;border-radius:8px;background:#174ea6;color:#fff;font-weight:bold;cursor:pointer;font-size:15px}
-.btn.green{background:#1a7f37}.btn.red{background:#c62828}.btn.orange{background:#ef6c00}.btn.purple{background:#6a1b9a}
+.btn.green{background:#1a7f37}.btn.red{background:#c62828}.btn.orange{background:#ef6c00}.btn.purple{background:#6a1b9a}.btn.black{background:#111}.btn.gold{background:#ffb300;color:#000}
+.btn.small{width:auto;padding:6px 12px;font-size:13px;border-radius:20px}
 .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
-.stat{background:#fff;padding:14px;border-radius:12px;text-align:center;box-shadow:0 2px 6px #0001}
-.stat b{font-size:22px;display:block}
+.grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px}
+.stat{background:#fff;padding:14px;border-radius:12px;text-align:center;box-shadow:0 2px 6px #0001;border-top:4px solid #174ea6}
+.stat b{font-size:24px;display:block}
+.stat.red{border-top:4px solid #c62828}.stat.red b{color:#c62828}
+.stat.green{border-top:4px solid #1a7f37}.stat.green b{color:#1a7f37}
+.stat.gold{border-top:4px solid #ffb300}.stat.gold b{color:#b88600}
 table{width:100%;border-collapse:collapse;font-size:14px}
 th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
 .badge{padding:3px 8px;border-radius:20px;font-size:12px;font-weight:bold}
@@ -36,22 +47,23 @@ th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
 .msg{padding:12px;border-radius:8px;font-weight:bold;font-size:16px;margin-top:10px;background:#fff3cd;border:1px solid #ffcc00}
 .msg.ok{background:#e8f5e9;border-color:#1a7f37;color:#1a7f37}
 .msg.err{background:#ffebee;border-color:#c62828;color:#c62828}
-@media(max-width:600px){.grid{grid-template-columns:1fr 1fr}.logo-img,.logo-fallback{width:48px;height:48px;font-size:24px}}
+.qty-box{background:#fff8e1;border:2px dashed #ef6c00;border-radius:10px;padding:10px;margin:6px 0}
+.qty-box label{font-weight:bold;color:#ef6c00;font-size:14px}
+.bar{height:18px;background:#e8eefb;border-radius:20px;overflow:hidden;margin:4px 0}
+.bar > div{height:100%;background:#174ea6;color:#fff;font-size:11px;line-height:18px;text-align:right;padding-right:6px;font-weight:bold}
+.bar.red > div{background:#c62828}.bar.green > div{background:#1a7f37}.bar.gold > div{background:#ffb300;color:#000}
+@media(max-width:600px){.grid,.grid4{grid-template-columns:1fr 1fr}.logo-img,.logo-fallback{width:48px;height:48px;font-size:24px}}
 </style>
 </head>
 <body>
 
 <div class="header">
   <div class="logo-row">
-    <!-- ✅ WORDSWORTH LOGO - Upload logo.png to GitHub next to index.html -->
-    <img src="logo.png" class="logo-img" id="schoolLogo" onerror="this.style.display='none';document.getElementById('logoFallback').style.display='flex';" alt="Wordsworth Logo">
+    <img src="logo.png" class="logo-img" onerror="this.style.display='none';document.getElementById('logoFallback').style.display='flex';">
     <div class="logo-fallback" id="logoFallback" style="display:none">W</div>
-    <div style="text-align:left">
-      <h1>WORDSWORTH HIGH SCHOOL</h1>
-      <p>📚 Digital Library | Xintimani Group</p>
-    </div>
+    <div style="text-align:left"><h1>WORDSWORTH HIGH SCHOOL</h1><p>📚 Digital Library | Xintimani Group | MENTE ET MANU</p></div>
   </div>
-  <p class="small" style="margin-top:8px">40 Classes A-H | Max 60 Per Class | Library Office Only | 🔒 Safe - Parent Check Needs ID + Surname</p>
+  <p class="small" style="margin-top:8px">40 Classes A-H | Max 60 Per Class | 👔 Principal Dashboard | 🔒 Parent Check Needs ID + Surname</p>
 </div>
 
 <div class="nav">
@@ -60,332 +72,187 @@ th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
   <button onclick="showTab('return',this)">📥 Return</button>
   <button onclick="showTab('learners',this)">👩‍🎓 Learners</button>
   <button onclick="showTab('books',this)">📚 Books</button>
+  <button onclick="showTab('principal',this)" class="gold">👔 Principal</button>
   <button onclick="showTab('parent',this)">👨‍👩‍👧 Parent</button>
   <button onclick="showTab('login',this)">🔐 Login</button>
 </div>
 
 <div class="wrap">
-
 <div id="tab-home">
-  <div class="grid">
-    <div class="stat"><b id="totalBooks">0</b>📚 Total Books</div>
-    <div class="stat"><b id="totalLearners">0</b>👩‍🎓 Learners</div>
-    <div class="stat"><b id="borrowedCount">0</b>📤 Borrowed</div>
-  </div>
-  <div class="card">
-    <h3>🔍 Search Book (Everyone Can Search)</h3>
-    <input id="searchBook" placeholder="Search title or barcode e.g. MAT-001" oninput="renderBooks()">
-    <div id="bookList"></div>
-  </div>
-  <div class="card">
-    <h3>📋 How It Works</h3>
-    <p>1. <b>Learner ID Auto:</b> 8A01 - 8A60, 9B01, 10C01...<br>
-    2. <b>Barcode Auto:</b> MAT = Maths, MATL = Maths Lit, LIFO = Life Sciences, LIFS = Life Orientation<br>
-    3. <b>Grade Rule:</b> Grade 8 can only take Grade 8 books<br>
-    4. <b>Bulk Add:</b> Paste from Excel - Headers auto-skipped ✅</p>
-    <p class="small">Status: <span id="conn">Connecting to Firebase...</span> | <span id="loginStatus">Not Logged In - Parent Mode</span></p>
-  </div>
+  <div class="grid"><div class="stat"><b id="totalBooks">0</b>📚 Total Books</div><div class="stat"><b id="totalLearners">0</b>👩‍🎓 Learners</div><div class="stat"><b id="borrowedCount">0</b>📤 Borrowed</div></div>
+  <div class="card"><h3>🔍 Search Book</h3><input id="searchBook" placeholder="Search title or barcode e.g. MAT-001" oninput="renderBooks()"><div id="bookList"></div></div>
+  <div class="card"><h3>📋 How It Works</h3><p>1. <b>Quantity:</b> Add 30 copies in 1 click<br>2. <b>Print:</b> 🖨️ Print Barcodes → Stick on books<br>3. <b>Principal:</b> Tap 👔 Principal for whole school report<br>4. <b>Grade Rule:</b> Grade 8 only Grade 8 books</p><p class="small">Status: <span id="conn">Connecting...</span> | <span id="loginStatus">Not Logged In</span></p></div>
 </div>
 
 <div id="tab-issue" class="hidden">
-  <div class="card">
-    <h3>📤 Issue Book - Librarian Only</h3>
+  <div class="card"><h3>📤 Issue Book</h3>
     <select id="issueGrade"><option value="">Select Grade</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select>
     <select id="issueClass"><option value="">Select Class A-H</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select>
-    <input id="issueNumber" type="number" min="1" max="60" placeholder="Learner Number 1-60 e.g. 1">
-    <input id="issueLearnerId" placeholder="Auto Learner ID - Will Fill" readonly>
-    <input id="issueSurname" placeholder="Learner Surname e.g. Chauke (for Parent Check lock)">
-    <input id="issueBarcode" placeholder="Scan / Type Barcode e.g. MAT-001">
+    <input id="issueNumber" type="number" min="1" max="60" placeholder="Learner Number 1-60">
+    <input id="issueLearnerId" placeholder="Auto Learner ID" readonly>
+    <input id="issueSurname" placeholder="Learner Surname">
+    <input id="issueBarcode" placeholder="Scan / Type Barcode">
     <input id="issuerName" placeholder="Issuer (Librarian Name)">
     <input id="issueDue" type="date">
-    <button class="btn green" onclick="issueBook()">✅ Issue Book</button>
-    <div id="issueMsg"></div>
-    <div id="lastIssued" style="margin-top:10px"></div>
-    <h3 style="margin-top:14px">📤 Currently Borrowed</h3>
-    <div id="borrowedListIssue"></div>
+    <button class="btn green" onclick="issueBook()">✅ Issue Book</button><div id="issueMsg"></div><div id="lastIssued" style="margin-top:10px"></div>
+    <h3 style="margin-top:14px">📤 Currently Borrowed</h3><div id="borrowedListIssue"></div>
   </div>
 </div>
 
 <div id="tab-return" class="hidden">
-  <div class="card">
-    <h3>📥 Return Book - Librarian Only</h3>
-    <input id="returnBarcode" placeholder="Scan / Type Barcode e.g. MAT-001">
-    <input id="retrieverName" placeholder="Retriever (Librarian Name)">
-    <button class="btn orange" onclick="returnBook()">✅ Return Book</button>
-    <div id="returnMsg"></div>
-    <h3 style="margin-top:14px">📤 Currently Borrowed</h3>
-    <div id="borrowedList"></div>
-  </div>
+  <div class="card"><h3>📥 Return Book</h3><input id="returnBarcode" placeholder="Scan / Type Barcode"><input id="retrieverName" placeholder="Retriever"><button class="btn orange" onclick="returnBook()">✅ Return Book</button><div id="returnMsg"></div><h3 style="margin-top:14px">📤 Currently Borrowed</h3><div id="borrowedList"></div></div>
 </div>
 
 <div id="tab-learners" class="hidden">
-  <div class="card">
-    <h3>👩‍🎓 Add Learner - One By One</h3>
-    <select id="addGrade"><option value="">Grade</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select>
-    <select id="addClass"><option value="">Class</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select>
-    <input id="addNumber" type="number" min="1" max="60" placeholder="Number 1-60">
-    <input id="addName" placeholder="First Name">
-    <input id="addSurname" placeholder="Surname">
-    <button class="btn" onclick="addLearner()">➕ Add Learner (Auto ID)</button>
-    <div id="addLearnerMsg"></div>
-  </div>
-  <div class="card" style="border-left:5px solid #6a1b9a">
-    <h3>⚡ BULK ADD LEARNERS - Paste Many At Once</h3>
-    <p class="small">Format: <b>Grade,Class,Number,FirstName,Surname</b> — Headers auto-skipped ✅</p>
-    <textarea id="bulkLearners" placeholder="Grade,Class,Number,FirstName,Surname&#10;12,D,1,John,Maseko&#10;12,D,2,Sipho,Chauke"></textarea>
-    <button class="btn purple" onclick="bulkAddLearners()">⚡ BULK ADD LEARNERS</button>
-    <div id="bulkLearnerMsg"></div>
-  </div>
-  <div class="card" style="border-left:5px solid #c62828">
-    <h3>🗑️ Delete Learner - Fix Mistakes</h3>
-    <input id="deleteLearnerId" placeholder="Learner ID to delete e.g. gradeCLASSnumber">
-    <button class="btn red" onclick="deleteLearner()">🗑️ Delete This Learner</button>
-    <div id="deleteLearnerMsg"></div>
-  </div>
-  <div class="card"><h3>All Learners (Librarian Only)</h3><div id="learnerList"></div></div>
+  <div class="card"><h3>👩‍🎓 Add Learner</h3><select id="addGrade"><option value="">Grade</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select><select id="addClass"><option value="">Class</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select><input id="addNumber" type="number" min="1" max="60" placeholder="Number 1-60"><input id="addName" placeholder="First Name"><input id="addSurname" placeholder="Surname"><button class="btn" onclick="addLearner()">➕ Add Learner</button><div id="addLearnerMsg"></div></div>
+  <div class="card" style="border-left:5px solid #6a1b9a"><h3>⚡ BULK ADD LEARNERS</h3><textarea id="bulkLearners" placeholder="Grade,Class,Number,FirstName,Surname"></textarea><button class="btn purple" onclick="bulkAddLearners()">⚡ BULK ADD</button><div id="bulkLearnerMsg"></div></div>
+  <div class="card" style="border-left:5px solid #c62828"><h3>🗑️ Delete Learner</h3><input id="deleteLearnerId" placeholder="Learner ID"><button class="btn red" onclick="deleteLearner()">🗑️ Delete</button><div id="deleteLearnerMsg"></div></div>
+  <div class="card"><h3>All Learners</h3><div id="learnerList"></div></div>
 </div>
 
 <div id="tab-books" class="hidden">
-  <div class="card">
-    <h3>📚 Add Book - One By One</h3>
+  <div class="card"><h3>📚 Add Book - With Quantity ✅</h3>
     <select id="bookCategory"><option value="MAT">MAT - Maths</option><option value="MATL">MATL - Maths Lit</option><option value="LIFO">LIFO - Life Sciences</option><option value="LIFS">LIFS - Life Orientation</option></select>
     <select id="bookGrade"><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select>
-    <input id="bookTitle" placeholder="Book Title e.g. Maths Grade 8">
-    <input id="bookBarcode" placeholder="Barcode - Auto if empty e.g. MAT-001">
-    <button class="btn" onclick="addBook()">➕ Add Book</button>
-    <div id="bookMsg"></div>
+    <input id="bookTitle" placeholder="Book Title">
+    <input id="bookBarcode" placeholder="Starting Barcode - Auto if empty">
+    <div class="qty-box"><label>🔢 QUANTITY - How many copies?</label><input id="bookQty" type="number" min="1" max="200" value="1" placeholder="e.g. 30"><p class="small" style="margin:4px 0 0">Example: Qty 30 → Creates MAT-001 to MAT-030 automatically!</p></div>
+    <button class="btn" onclick="addBook()">➕ Add Book(s)</button><div id="bookMsg"></div>
   </div>
-  <div class="card" style="border-left:5px solid #6a1b9a">
-    <h3>⚡ BULK ADD BOOKS - Paste Many At Once</h3>
-    <p class="small">Format: <b>Category,Grade,Title,Barcode (optional)</b> — Headers auto-skipped ✅</p>
-    <textarea id="bulkBooks" placeholder="Category,Grade,Title,Barcode&#10;LIFO,12,Oxford Grade 12,&#10;MAT,8,Maths Grade 8,MAT-001"></textarea>
-    <button class="btn purple" onclick="bulkAddBooks()">⚡ BULK ADD BOOKS</button>
-    <div id="bulkBookMsg"></div>
+  <div class="card" style="border-left:5px solid #6a1b9a"><h3>⚡ BULK ADD BOOKS</h3><textarea id="bulkBooks" placeholder="Category,Grade,Title,Barcode"></textarea><button class="btn purple" onclick="bulkAddBooks()">⚡ BULK ADD BOOKS</button><div id="bulkBookMsg"></div></div>
+  <div class="card" style="border-left:5px solid #111"><h3>🖨️ Print Barcodes</h3><button class="btn black" onclick="printAllBarcodes()">🖨️ PRINT ALL BARCODES</button><div style="margin-top:10px"><input id="printOneBarcode" placeholder="Or type ONE barcode"><button class="btn" onclick="printSingleFromInput()" style="margin-top:6px">🖨️ Print This One</button></div><div id="printMsg"></div></div>
+</div>
+
+<!-- ✅ ===== PRINCIPAL DASHBOARD ===== -->
+<div id="tab-principal" class="hidden">
+  <div class="card gold"><h3>👔 PRINCIPAL DASHBOARD - Wordsworth High School</h3><p class="small" id="principalDate">Loading...</p><p id="principalLoginNote" class="small">🔒 Login as Librarian to see learner names & overdue details. Without login you see only totals.</p><button class="btn gold" onclick="renderPrincipal()">🔄 Refresh Dashboard</button> <button class="btn black" onclick="printPrincipalReport()" style="margin-top:8px">🖨️ Print Principal Report</button></div>
+
+  <div class="grid4">
+    <div class="stat gold"><b id="pTotalBooks">0</b>📚 Total Books</div>
+    <div class="stat"><b id="pTotalLearners">0</b>👩‍🎓 Learners</div>
+    <div class="stat red"><b id="pBorrowed">0</b>📤 Borrowed Now</div>
+    <div class="stat green"><b id="pAvailable">0</b>✅ Available</div>
   </div>
+  <div class="grid" style="margin-top:10px">
+    <div class="stat red"><b id="pOverdue">0</b>🔴 OVERDUE</div>
+    <div class="stat"><b id="pDueToday">0</b>📅 Due Today</div>
+    <div class="stat gold"><b id="pBorrowRate">0%</b>📊 % Borrowed</div>
+  </div>
+
+  <div class="card"><h3>📚 By Grade - Books vs Borrowed</h3><div id="pByGrade"></div></div>
+  <div class="card"><h3>📖 By Subject</h3><div id="pBySubject"></div></div>
+  <div class="card red"><h3>🔴 Overdue Books - Needs Attention</h3><div id="pOverdueList">Login to view</div></div>
+  <div class="card"><h3>📤 Currently Borrowed - All Grades</h3><div id="pBorrowedList">Login to view</div></div>
+  <div class="card green"><h3>✅ Recently Returned</h3><div id="pReturnedList">Login to view</div></div>
+  <div class="card"><h3>🏆 Top Borrowed Titles</h3><div id="pTopBooks"></div></div>
 </div>
 
 <div id="tab-parent" class="hidden">
-  <div class="card" style="border-left:5px solid #1a7f37">
-    <h3>👨‍👩‍👧 Parent Check - My Child</h3>
-    <input id="parentId" placeholder="Learner ID e.g. 8A01" style="text-transform:uppercase">
-    <input id="parentSurname" placeholder="Surname e.g. Chauke">
-    <button class="btn green" onclick="checkMyChild()">🔍 Check My Child</button>
-    <div id="parentResult" style="margin-top:10px"></div>
-  </div>
+  <div class="card" style="border-left:5px solid #1a7f37"><h3>👨‍👩‍👧 Parent Check</h3><input id="parentId" placeholder="Learner ID e.g. 8A01" style="text-transform:uppercase"><input id="parentSurname" placeholder="Surname"><button class="btn green" onclick="checkMyChild()">🔍 Check My Child</button><div id="parentResult" style="margin-top:10px"></div></div>
 </div>
 
 <div id="tab-login" class="hidden">
-  <div class="card">
-    <h3>🔐 Librarian Login</h3>
-    <input id="loginEmail" type="email" placeholder="Librarian Email">
-    <input id="loginPass" type="password" placeholder="Password">
-    <button class="btn" onclick="doLogin()">Login</button>
-    <button class="btn red" onclick="doLogout()" style="margin-top:8px">Logout</button>
-    <div id="loginMsg"></div>
-  </div>
+  <div class="card"><h3>🔐 Librarian / Principal Login</h3><p class="small">Principal uses SAME librarian login to see full dashboard. Parent does NOT need login.</p><input id="loginEmail" type="email" placeholder="Email"><input id="loginPass" type="password" placeholder="Password"><button class="btn" onclick="doLogin()">Login</button><button class="btn red" onclick="doLogout()" style="margin-top:8px">Logout</button><div id="loginMsg"></div></div>
 </div>
-
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyAJyTZ-tmrsY0m-EmN80HSRERSR_tiVX4E",
-  authDomain: "wordsworth-library.firebaseapp.com",
-  databaseURL: "https://wordsworth-library-default-rtdb.firebaseio.com",
-  projectId: "wordsworth-library",
-  storageBucket: "wordsworth-library.firebasestorage.app",
-  messagingSenderId: "236216515385",
-  appId: "1:236216515385:web:9f3e8937f829e9d2bf06e8"
-};
+const firebaseConfig = { apiKey: "AIzaSyAJyTZ-tmrsY0m-EmN80HSRERSR_tiVX4E", authDomain: "wordsworth-library.firebaseapp.com", databaseURL: "https://wordsworth-library-default-rtdb.firebaseio.com", projectId: "wordsworth-library", storageBucket: "wordsworth-library.firebasestorage.app", messagingSenderId: "236216515385", appId: "1:236216515385:web:9f3e8937f829e9d2bf06e8" };
 firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.database();
-let currentUser = null;
-let allBooks = {}, allLearners = {}, allLoans = {};
-function showTab(id, btn){
-  document.querySelectorAll('[id^="tab-"]').forEach(d=>d.classList.add('hidden'));
-  document.getElementById('tab-'+id).classList.remove('hidden');
-  document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
-  if(btn) btn.classList.add('active');
-}
-function setMsg(el, text, ok){ el.className = "msg " + (ok ? "ok" : "err"); el.textContent = text; el.scrollIntoView({behavior:"smooth", block:"center"}); }
-auth.onAuthStateChanged(u=>{ currentUser = u; document.getElementById('loginStatus').textContent = u ? "Logged In: "+u.email+" ✅" : "Not Logged In - Parent Mode"; document.getElementById('conn').textContent = "Firebase Connected ✅"; loadData(); });
-async function doLogin(){ try{ await auth.signInWithEmailAndPassword(loginEmail.value, loginPass.value); loginMsg.textContent="✅ Login Success"; } catch(e){ loginMsg.textContent="❌ "+e.message; } }
+const auth=firebase.auth(); const db=firebase.database();
+let currentUser=null; let allBooks={}, allLearners={}, allLoans={};
+function showTab(id,btn){ document.querySelectorAll('[id^="tab-"]').forEach(d=>d.classList.add('hidden')); document.getElementById('tab-'+id).classList.remove('hidden'); document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active')); if(btn) btn.classList.add('active'); if(id==='principal') renderPrincipal(); }
+function setMsg(el,t,ok){ el.className="msg "+(ok?"ok":"err"); el.textContent=t; el.scrollIntoView({behavior:"smooth",block:"center"}); }
+auth.onAuthStateChanged(u=>{ currentUser=u; document.getElementById('loginStatus').textContent=u?"Logged In: "+u.email+" ✅":"Not Logged In"; document.getElementById('conn').textContent="Firebase Connected ✅"; loadData(); });
+async function doLogin(){ try{ await auth.signInWithEmailAndPassword(loginEmail.value,loginPass.value); loginMsg.textContent="✅ Login Success - Go to 👔 Principal"; }catch(e){ loginMsg.textContent="❌ "+e.message; } }
 async function doLogout(){ await auth.signOut(); loginMsg.textContent="Logged out"; }
-function loadData(){
-  db.ref("books").on("value", s=>{ allBooks = s.val()||{}; renderBooks(); updateStats(); });
-  if(currentUser){
-    db.ref("learners").on("value", s=>{ allLearners = s.val()||{}; renderLearners(); updateStats(); });
-    db.ref("loans").on("value", s=>{ allLoans = s.val()||{}; renderBorrowed(); updateStats(); });
+function loadData(){ db.ref("books").on("value",s=>{ allBooks=s.val()||{}; renderBooks(); updateStats(); renderPrincipal(); }); if(currentUser){ db.ref("learners").on("value",s=>{ allLearners=s.val()||{}; renderLearners(); updateStats(); renderPrincipal(); }); db.ref("loans").on("value",s=>{ allLoans=s.val()||{}; renderBorrowed(); updateStats(); renderPrincipal(); }); } else { renderPrincipal(); } }
+function updateStats(){ totalBooks.textContent=Object.keys(allBooks).length; totalLearners.textContent=Object.keys(allLearners).length; borrowedCount.textContent=Object.values(allLoans).filter(l=>l.status==="Borrowed").length; }
+
+// ✅ ===== PRINCIPAL DASHBOARD LOGIC =====
+function daysLate(due){ const today=new Date(); today.setHours(0,0,0,0); const d=new Date(due); d.setHours(0,0,0,0); return Math.floor((today-d)/86400000); }
+function renderPrincipal(){
+  document.getElementById('principalDate').textContent="📅 Report Date: "+new Date().toLocaleDateString('en-ZA',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+" | "+new Date().toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'});
+  const books=Object.values(allBooks);
+  const learners=Object.values(allLearners);
+  const loans=Object.values(allLoans);
+  const borrowed=loans.filter(l=>l.status==="Borrowed");
+  const returned=loans.filter(l=>l.status==="Returned").sort((a,b)=>(b.returnedAt||0)-(a.returnedAt||0)).slice(0,15);
+  const todayStr=new Date().toISOString().slice(0,10);
+  const overdue=borrowed.filter(l=>l.dueDate && l.dueDate < todayStr);
+  const dueToday=borrowed.filter(l=>l.dueDate===todayStr);
+  const total=books.length;
+  const avail=books.filter(b=>b.status!=="Borrowed").length;
+  const rate=total?Math.round(borrowed.length/total*100):0;
+  document.getElementById('pTotalBooks').textContent=total;
+  document.getElementById('pTotalLearners').textContent=currentUser?learners.length:"🔒 Login";
+  document.getElementById('pBorrowed').textContent=currentUser?borrowed.length:"🔒";
+  document.getElementById('pAvailable').textContent=avail;
+  document.getElementById('pOverdue').textContent=currentUser?overdue.length:"🔒";
+  document.getElementById('pDueToday').textContent=currentUser?dueToday.length:"🔒";
+  document.getElementById('pBorrowRate').textContent=rate+"%";
+  // By Grade
+  let gHtml="<table><tr><th>Grade</th><th>📚 Books</th><th>📤 Borrowed</th><th>👩‍🎓 Learners</th><th>Usage</th></tr>";
+  ["8","9","10","11","12"].forEach(g=>{
+    const gb=books.filter(b=>String(b.grade)===g).length;
+    const gbor=borrowed.filter(l=>l.learnerId && l.learnerId.startsWith(g)).length;
+    const gl=currentUser?learners.filter(l=>String(l.grade)===g).length:"—";
+    const pct=gb?Math.round(gbor/gb*100):0;
+    gHtml+=`<tr><td><b>Grade ${g}</b></td><td>${gb}</td><td>${currentUser?gbor:"🔒"}</td><td>${gl}</td><td style="min-width:120px"><div class="bar"><div style="width:${pct}%">${pct}%</div></div></td></tr>`;
+  });
+  gHtml+="</table>"; document.getElementById('pByGrade').innerHTML=gHtml;
+  // By Subject
+  let sHtml="<table><tr><th>Subject</th><th>Books</th><th>Borrowed</th><th>Available</th></tr>";
+  [["MAT","Maths"],["MATL","Maths Lit"],["LIFO","Life Sciences"],["LIFS","Life Orientation"]].forEach(([code,name])=>{
+    const cb=books.filter(b=>b.category===code);
+    const cbor=cb.filter(b=>b.status==="Borrowed").length;
+    sHtml+=`<tr><td><b>${code}</b> - ${name}</td><td>${cb.length}</td><td>${cbor}</td><td>${cb.length-cbor}</td></tr>`;
+  });
+  sHtml+="</table>"; document.getElementById('pBySubject').innerHTML=sHtml;
+  // Overdue
+  if(!currentUser){ document.getElementById('pOverdueList').innerHTML="🔒 Login as Librarian / Principal to see names"; document.getElementById('pBorrowedList').innerHTML="🔒 Login to see"; document.getElementById('pReturnedList').innerHTML="🔒 Login to see"; }
+  else {
+    if(overdue.length===0) document.getElementById('pOverdueList').innerHTML="✅ No overdue books! Well done! 🎉";
+    else { let h="<table><tr><th>Learner</th><th>Book</th><th>Due</th><th>Days Late</th></tr>"; overdue.sort((a,b)=>daysLate(b.dueDate)-daysLate(a.dueDate)).forEach(l=>{ h+=`<tr><td><b>${l.learnerId}</b></td><td>${l.bookTitle} (${l.barcode})</td><td>${l.dueDate}</td><td style="color:#c62828;font-weight:bold">${daysLate(l.dueDate)} days</td></tr>`; }); h+="</table>"; document.getElementById('pOverdueList').innerHTML=h; }
+    if(borrowed.length===0) document.getElementById('pBorrowedList').innerHTML="No books borrowed right now";
+    else { let h="<table><tr><th>Learner</th><th>Book</th><th>Due</th><th>Status</th></tr>"; borrowed.slice(0,50).forEach(l=>{ const late=l.dueDate<todayStr?`<span class="badge borrowed">OVERDUE ${daysLate(l.dueDate)}d</span>`:l.dueDate===todayStr?`<span class="badge" style="background:#fff3cd;color:#ef6c00">DUE TODAY</span>`:`<span class="badge returned">On Time</span>`; h+=`<tr><td>${l.learnerId}</td><td>${l.bookTitle} (${l.barcode})</td><td>${l.dueDate}</td><td>${late}</td></tr>`; }); h+="</table>"; document.getElementById('pBorrowedList').innerHTML=h; }
+    if(returned.length===0) document.getElementById('pReturnedList').innerHTML="No returns yet";
+    else { let h="<table><tr><th>Learner</th><th>Book</th><th>Returned</th></tr>"; returned.forEach(l=>{ h+=`<tr><td>${l.learnerId}</td><td>${l.bookTitle} (${l.barcode})</td><td>${l.returnedAt?new Date(l.returnedAt).toLocaleDateString('en-ZA'):"-"}</td></tr>`; }); h+="</table>"; document.getElementById('pReturnedList').innerHTML=h; }
   }
+  // Top Books
+  let counts={}; loans.forEach(l=>{ counts[l.bookTitle]=(counts[l.bookTitle]||0)+1; });
+  let top=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  if(top.length===0) document.getElementById('pTopBooks').innerHTML="No borrowing history yet";
+  else { let h="<table><tr><th>#</th><th>Title</th><th>Times Borrowed</th></tr>"; top.forEach(([t,c],i)=>{ h+=`<tr><td>${i+1}</td><td>${t}</td><td><b>${c}</b></td></tr>`; }); h+="</table>"; document.getElementById('pTopBooks').innerHTML=h; }
 }
-function updateStats(){ totalBooks.textContent = Object.keys(allBooks).length; totalLearners.textContent = Object.keys(allLearners).length; borrowedCount.textContent = Object.values(allLoans).filter(l=>l.status==="Borrowed").length; }
-function renderBooks(){
-  const q = (searchBook.value||"").toLowerCase();
-  let html = "<table><tr><th>Barcode</th><th>Title</th><th>Grade</th><th>Status</th></tr>";
-  Object.values(allBooks).filter(b=>(b.title+" "+b.barcode).toLowerCase().includes(q)).slice(0,50).forEach(b=>{ html+=`<tr><td>${b.barcode}</td><td>${b.title}</td><td>${b.grade}</td><td><span class="badge ${b.status==='Borrowed'?'borrowed':'returned'}">${b.status||'Available'}</span></td></tr>`; });
-  html+="</table>"; bookList.innerHTML = html;
+function printPrincipalReport(){
+  const w=window.open('','_blank','width=900,height=700');
+  const content=document.getElementById('tab-principal').innerHTML;
+  w.document.write(`<html><head><title>Principal Report - Wordsworth</title><style>body{font-family:Arial;padding:20px} h3{margin:10px 0} table{width:100%;border-collapse:collapse} th,td{padding:8px;border:1px solid #ddd} button{display:none}</style></head><body><h1>🏫 WORDSWORTH HIGH SCHOOL</h1><h2>👔 Principal Report - ${new Date().toLocaleDateString('en-ZA')}</h2><p>MENTE ET MANU | Generated: ${new Date().toLocaleString('en-ZA')}</p><hr>${content}<script>window.onload=function(){window.print()}<\/script></body></html>`);
+  w.document.close();
 }
-function renderLearners(){
-  if(!currentUser){ learnerList.innerHTML="🔒 Login as Librarian to see learners"; return; }
-  let html="<table><tr><th>ID</th><th>Name</th><th>Class</th></tr>";
-  Object.values(allLearners).slice(0,100).forEach(l=>{ html+=`<tr><td>${l.learnerId}</td><td>${l.name} ${l.surname}</td><td>${l.grade}${l.className}</td></tr>`; });
-  html+="</table><p class='small'>Showing first 100. Total: "+Object.keys(allLearners).length+"</p>"; learnerList.innerHTML=html;
-}
-function renderBorrowed(){
-  if(!currentUser){ borrowedList.innerHTML="🔒 Login to see borrowed"; if(document.getElementById('borrowedListIssue')) document.getElementById('borrowedListIssue').innerHTML="🔒 Login to see borrowed"; return; }
-  let rows = Object.values(allLoans).filter(l=>l.status==="Borrowed");
-  let html="<table><tr><th>Learner</th><th>Book</th><th>Due</th></tr>";
-  if(rows.length===0) html+="<tr><td colspan='3'>No books borrowed yet</td></tr>";
-  rows.forEach(l=>{ html+=`<tr><td>${l.learnerId}</td><td>${l.bookTitle} (${l.barcode})</td><td>${l.dueDate}</td></tr>`; });
-  html+="</table>"; borrowedList.innerHTML=html;
-  if(document.getElementById('borrowedListIssue')) document.getElementById('borrowedListIssue').innerHTML=html;
-}
-function makeLearnerId(grade, cls, num){ return grade + cls + String(num).padStart(2,'0'); }
-issueGrade.onchange = issueClass.onchange = issueNumber.oninput = ()=>{ if(issueGrade.value && issueClass.value && issueNumber.value) issueLearnerId.value = makeLearnerId(issueGrade.value, issueClass.value, issueNumber.value); };
-async function addLearner(){
-  if(!currentUser) return alert("🔒 Login as Librarian first");
-  const grade=addGrade.value, cls=addClass.value, num=addNumber.value;
-  if(!grade||!cls||!num||!addName.value||!addSurname.value) return addLearnerMsg.textContent="⚠️ Fill all fields";
-  if(num<1||num>60) return addLearnerMsg.textContent="⚠️ Number must be 1-60";
-  const id = makeLearnerId(grade, cls, num);
-  const surnameHash = await hashSurname(addSurname.value);
-  await db.ref("learners/"+id).set({learnerId:id, grade, className:cls, number:num, name:addName.value.trim(), surname:addSurname.value.trim(), createdAt:Date.now()});
-  await db.ref("publicParent/"+id).update({learnerId:id, surnameHash, lastUpdated:Date.now()});
-  addLearnerMsg.textContent="✅ Added "+id+" - "+addName.value+" "+addSurname.value;
-}
-async function deleteLearner(){
-  if(!currentUser) return alert("🔒 Login first");
-  const id = document.getElementById('deleteLearnerId').value.trim();
-  if(!id) return deleteLearnerMsg.textContent="⚠️ Enter Learner ID to delete";
-  if(!confirm("Delete "+id+"? This cannot be undone.")) return;
-  await db.ref("learners/"+id).remove();
-  await db.ref("publicParent/"+id).remove();
-  deleteLearnerMsg.textContent="✅ Deleted "+id;
-  document.getElementById('deleteLearnerId').value="";
-}
-async function bulkAddLearners(){
-  if(!currentUser) return alert("🔒 Login as Librarian first");
-  const text = document.getElementById('bulkLearners').value.trim();
-  if(!text) return bulkLearnerMsg.textContent="⚠️ Paste learners first.";
-  const lines = text.split("\n");
-  let added=0, skipped=0, failed=[];
-  document.getElementById('bulkLearnerMsg').textContent="⏳ Adding... Please wait...";
-  for(let line of lines){
-    line=line.trim(); if(!line) continue;
-    const lower = line.toLowerCase();
-    if(lower.includes("grade") && lower.includes("class")){ skipped++; continue; }
-    if(lower.includes("firstname") || lower.includes("first name") || lower.includes("learner")){ skipped++; continue; }
-    const parts = line.split(/[\t,;]/).map(p=>p.trim()).filter(p=>p!=="");
-    if(parts.length===3 && /^[0-9]{1,2}[A-H][0-9]{2}$/i.test(parts[0])){ const m = parts[0].toUpperCase().match(/^([0-9]{1,2})([A-H])([0-9]{2})$/); parts.unshift(m[1], m[2], String(parseInt(m[3]))); parts.splice(3,1); }
-    if(parts.length<5){ failed.push(line); continue; }
-    const [grade, cls, num, firstName, surname] = parts;
-    if(isNaN(parseInt(grade))){ skipped++; continue; }
-    if(!grade||!cls||!num||!firstName||!surname){ failed.push(line); continue; }
-    try{
-      const id = makeLearnerId(grade, cls.toUpperCase(), num);
-      const surnameHash = await hashSurname(surname);
-      await db.ref("learners/"+id).set({learnerId:id, grade:String(grade), className:cls.toUpperCase(), number:String(num), name:firstName, surname:surname, createdAt:Date.now()});
-      await db.ref("publicParent/"+id).update({learnerId:id, surnameHash, lastUpdated:Date.now()});
-      added++;
-    }catch(e){ failed.push(line); }
-  }
-  document.getElementById('bulkLearnerMsg').innerHTML="✅ Added <b>"+added+"</b> learners!"+(skipped? " ⏭️ Skipped "+skipped+" header row(s) ✅":"")+(failed.length? "<br>❌ Failed "+failed.length:"");
-  document.getElementById('bulkLearners').value="";
-}
-async function bulkAddBooks(){
-  if(!currentUser) return alert("🔒 Login first");
-  const text = document.getElementById('bulkBooks').value.trim();
-  if(!text) return bulkBookMsg.textContent="⚠️ Paste books first.";
-  const lines = text.split("\n");
-  let added=0, skipped=0;
-  document.getElementById('bulkBookMsg').textContent="⏳ Adding books...";
-  let counts = {};
-  Object.values(allBooks).forEach(b=>{ counts[b.category]=(counts[b.category]||0)+1; });
-  for(let line of lines){
-    line=line.trim(); if(!line) continue;
-    const lower=line.toLowerCase();
-    if(lower.includes("category") && lower.includes("title")){ skipped++; continue; }
-    const parts = line.split(/[\t,;]/).map(p=>p.trim());
-    if(parts.length<3) continue;
-    let [cat, grade, title, barcode] = parts;
-    cat=(cat||"MAT").toUpperCase(); title=title||"";
-    if(!title || isNaN(parseInt(grade))){ skipped++; continue; }
-    try{
-      if(!barcode){ counts[cat]=(counts[cat]||0)+1; barcode = cat + "-" + String(counts[cat]).padStart(3,'0'); while(allBooks[barcode.replace(/[^A-Z0-9-]/g,'_')]){ counts[cat]++; barcode = cat + "-" + String(counts[cat]).padStart(3,'0'); } } else barcode=barcode.toUpperCase();
-      const key = barcode.replace(/[^A-Z0-9-]/g,'_');
-      await db.ref("books/"+key).set({barcode, title, category:cat, grade:String(grade), status:"Available", createdAt:Date.now()});
-      allBooks[key]={barcode,title,category:cat,grade};
-      added++;
-    }catch(e){}
-  }
-  document.getElementById('bulkBookMsg').innerHTML="✅ Added <b>"+added+"</b> books!"+(skipped? " ⏭️ Skipped "+skipped+" header(s) ✅":"");
-  document.getElementById('bulkBooks').value="";
-}
-async function addBook(){
-  if(!currentUser) return alert("🔒 Login first");
-  const cat=bookCategory.value, grade=bookGrade.value, title=bookTitle.value.trim();
-  if(!title) return bookMsg.textContent="⚠️ Enter title";
-  let barcode = bookBarcode.value.trim().toUpperCase();
-  if(!barcode){ const count = Object.values(allBooks).filter(b=>b.category===cat).length + 1; barcode = cat + "-" + String(count).padStart(3,'0'); }
-  await db.ref("books/"+barcode.replace(/[^A-Z0-9-]/g,'_')).set({barcode, title, category:cat, grade, status:"Available", createdAt:Date.now()});
-  bookMsg.textContent="✅ Added "+barcode+" - "+title+" - GRADE "+grade;
-}
-async function issueBook(){
-  if(!currentUser){ setMsg(issueMsg,"🔒 Login as Librarian first",false); return; }
-  const learnerId = issueLearnerId.value.trim().toUpperCase();
-  const barcode = issueBarcode.value.trim().toUpperCase();
-  const surname = issueSurname.value.trim();
-  if(!learnerId||!barcode||!surname||!issuerName.value){ setMsg(issueMsg,"⚠️ Fill ID, Barcode, Surname, Issuer",false); return; }
-  const key = barcode.replace(/[^A-Z0-9-]/g,'_');
-  const bookSnap = await db.ref("books/"+key).once("value");
-  const book = bookSnap.val();
-  if(!book){ setMsg(issueMsg,"❌ Book not found: "+barcode,false); return; }
-  if(book.status==="Borrowed"){ setMsg(issueMsg,"❌ Book already borrowed",false); return; }
-  const lGrade = parseInt(learnerId.match(/^\d+/)[0]);
-  if(parseInt(book.grade) !== lGrade){ setMsg(issueMsg,`❌ GRADE RULE BLOCKED: Learner Grade ${lGrade} but book ${barcode} is Grade ${book.grade}`,false); return; }
-  const due = issueDue.value || new Date(Date.now()+14*86400000).toISOString().slice(0,10);
-  await db.ref("loans/"+key).set({learnerId, barcode, bookTitle:book.title, dueDate:due, status:"Borrowed", issuer:issuerName.value, issuedAt:Date.now()});
-  await db.ref("books/"+key).update({status:"Borrowed", borrowedBy:learnerId});
-  await syncToParent(learnerId, surname, book.title, barcode, due);
-  setMsg(issueMsg,"✅ Issued "+barcode+" to "+learnerId+" Due "+due,true);
-  document.getElementById('lastIssued').innerHTML = `<div class="msg ok">✅ LAST ISSUED: ${barcode} → ${learnerId} (${surname}) Due ${due}</div>`;
-}
-async function returnBook(){
-  if(!currentUser) return alert("🔒 Login first");
-  const barcode = returnBarcode.value.trim().toUpperCase();
-  if(!barcode||!retrieverName.value) return returnMsg.textContent="⚠️ Enter Barcode + Retriever";
-  const key = barcode.replace(/[^A-Z0-9-]/g,'_');
-  const loanSnap = await db.ref("loans/"+key).once("value");
-  const loan = loanSnap.val();
-  if(!loan){ await db.ref("books/"+key).update({status:"Available", borrowedBy:""}); returnMsg.textContent="⚠️ Fixed stuck book "+barcode+" - Now Available."; return; }
-  await db.ref("loans/"+key).update({status:"Returned", retriever:retrieverName.value, returnedAt:Date.now()});
-  await db.ref("books/"+key).update({status:"Available", borrowedBy:""});
-  if(loan.learnerId) await db.ref("publicParent/"+loan.learnerId+"/books/"+key).update({status:"Returned"});
-  returnMsg.textContent="✅ Returned "+barcode+" from "+loan.learnerId;
-}
-async function hashSurname(surname){ surname = surname.trim().toLowerCase(); const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(surname)); return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('').slice(0,16); }
-async function syncToParent(learnerId, learnerSurname, bookTitle, barcode, dueDate){ const surnameHash = await hashSurname(learnerSurname); await db.ref("publicParent/"+learnerId).update({learnerId, surnameHash, lastUpdated:Date.now()}); await db.ref("publicParent/"+learnerId+"/books/"+barcode.replace(/[^A-Z0-9-]/g,'_')).set({bookTitle, barcode, dueDate, status:"Borrowed"}); }
-async function checkMyChild(){
-  const id = document.getElementById('parentId').value.trim().toUpperCase();
-  const surname = document.getElementById('parentSurname').value.trim();
-  const box = document.getElementById('parentResult');
-  if(!id||!surname){ box.innerHTML="⚠️ Please enter BOTH Learner ID and Surname."; return; }
-  box.innerHTML="🔍 Checking...";
-  try{
-    const snap = await db.ref("publicParent/"+id).once("value");
-    const data = snap.val();
-    if(!data){ box.innerHTML="❌ No books found for "+id+"."; return; }
-    const inputHash = await hashSurname(surname);
-    if(data.surnameHash !== inputHash){ box.innerHTML="❌ No books found. Check ID + Surname spelling."; return; }
-    let html=`<b>✅ Found for ${id}</b><br>`;
-    if(data.books){ Object.values(data.books).forEach(b=>{ html+=`📚 ${b.bookTitle} - ${b.barcode}<br>Due: ${b.dueDate} - ${b.status}<br><hr>`; }); } else html+="✅ No books currently borrowed.";
-    box.innerHTML=html;
-  }catch(e){ box.innerHTML="❌ Error: "+e.message; }
-}
+function renderBooks(){ const q=(searchBook.value||"").toLowerCase(); let html="<table><tr><th>Barcode</th><th>Title</th><th>Grade</th><th>Status</th><th>Print</th></tr>"; Object.values(allBooks).filter(b=>(b.title+" "+b.barcode).toLowerCase().includes(q)).slice(0,100).forEach(b=>{ html+=`<tr><td><b>${b.barcode}</b></td><td>${b.title}</td><td>${b.grade}</td><td><span class="badge ${b.status==='Borrowed'?'borrowed':'returned'}">${b.status||'Available'}</span></td><td><button class="btn small black" onclick="printBarcode('${b.barcode}','${b.title.replace(/'/g,"")}','${b.grade}')">🖨️ Print</button></td></tr>`; }); html+="</table><p class='small'>Total: "+Object.keys(allBooks).length+"</p>"; bookList.innerHTML=html; }
+function renderLearners(){ if(!currentUser){ learnerList.innerHTML="🔒 Login"; return; } let html="<table><tr><th>ID</th><th>Name</th><th>Class</th></tr>"; Object.values(allLearners).slice(0,100).forEach(l=>{ html+=`<tr><td>${l.learnerId}</td><td>${l.name} ${l.surname}</td><td>${l.grade}${l.className}</td></tr>`; }); html+="</table>"; learnerList.innerHTML=html; }
+function renderBorrowed(){ if(!currentUser){ borrowedList.innerHTML="🔒 Login"; if(document.getElementById('borrowedListIssue')) document.getElementById('borrowedListIssue').innerHTML="🔒 Login"; return; } let rows=Object.values(allLoans).filter(l=>l.status==="Borrowed"); let html="<table><tr><th>Learner</th><th>Book</th><th>Due</th></tr>"; if(rows.length===0) html+="<tr><td colspan='3'>No books borrowed</td></tr>"; rows.forEach(l=>{ html+=`<tr><td>${l.learnerId}</td><td>${l.bookTitle} (${l.barcode})</td><td>${l.dueDate}</td></tr>`; }); html+="</table>"; borrowedList.innerHTML=html; if(document.getElementById('borrowedListIssue')) document.getElementById('borrowedListIssue').innerHTML=html; }
+function makeLearnerId(g,c,n){ return g+c+String(n).padStart(2,'0'); }
+issueGrade.onchange=issueClass.onchange=issueNumber.oninput=()=>{ if(issueGrade.value&&issueClass.value&&issueNumber.value) issueLearnerId.value=makeLearnerId(issueGrade.value,issueClass.value,issueNumber.value); };
+async function addLearner(){ if(!currentUser) return alert("🔒 Login"); const g=addGrade.value,c=addClass.value,n=addNumber.value; if(!g||!c||!n||!addName.value||!addSurname.value) return addLearnerMsg.textContent="⚠️ Fill all"; const id=makeLearnerId(g,c,n); const h=await hashSurname(addSurname.value); await db.ref("learners/"+id).set({learnerId:id,grade:g,className:c,number:n,name:addName.value.trim(),surname:addSurname.value.trim(),createdAt:Date.now()}); await db.ref("publicParent/"+id).update({learnerId:id,surnameHash:h,lastUpdated:Date.now()}); addLearnerMsg.textContent="✅ Added "+id; }
+async function deleteLearner(){ if(!currentUser) return alert("🔒 Login"); const id=document.getElementById('deleteLearnerId').value.trim(); if(!id) return deleteLearnerMsg.textContent="⚠️ Enter ID"; if(!confirm("Delete "+id+"?")) return; await db.ref("learners/"+id).remove(); await db.ref("publicParent/"+id).remove(); deleteLearnerMsg.textContent="✅ Deleted "+id; }
+async function bulkAddLearners(){ if(!currentUser) return alert("🔒 Login"); const text=document.getElementById('bulkLearners').value.trim(); if(!text) return bulkLearnerMsg.textContent="⚠️ Paste"; let added=0; for(let line of text.split("\n")){ line=line.trim(); if(!line) continue; if(line.toLowerCase().includes("grade")) continue; const parts=line.split(/[\t,;]/).map(p=>p.trim()).filter(p=>p!==""); if(parts.length<5) continue; const [grade,cls,num,fn,sn]=parts; if(isNaN(parseInt(grade))) continue; try{ const id=makeLearnerId(grade,cls.toUpperCase(),num); const h=await hashSurname(sn); await db.ref("learners/"+id).set({learnerId:id,grade:String(grade),className:cls.toUpperCase(),number:String(num),name:fn,surname:sn,createdAt:Date.now()}); await db.ref("publicParent/"+id).update({learnerId:id,surnameHash:h,lastUpdated:Date.now()}); added++; }catch(e){} } document.getElementById('bulkLearnerMsg').innerHTML="✅ Added <b>"+added+"</b>"; document.getElementById('bulkLearners').value=""; }
+async function bulkAddBooks(){ if(!currentUser) return alert("🔒 Login"); const text=document.getElementById('bulkBooks').value.trim(); if(!text) return bulkBookMsg.textContent="⚠️ Paste"; let added=0; let counts={}; Object.values(allBooks).forEach(b=>{counts[b.category]=(counts[b.category]||0)+1;}); for(let line of text.split("\n")){ line=line.trim(); if(!line) continue; if(line.toLowerCase().includes("category")) continue; const parts=line.split(/[\t,;]/).map(p=>p.trim()); if(parts.length<3) continue; let [cat,grade,title,barcode]=parts; cat=(cat||"MAT").toUpperCase(); if(!title||isNaN(parseInt(grade))) continue; try{ if(!barcode){counts[cat]=(counts[cat]||0)+1; barcode=cat+"-"+String(counts[cat]).padStart(3,'0');} else barcode=barcode.toUpperCase(); const key=barcode.replace(/[^A-Z0-9-]/g,'_'); await db.ref("books/"+key).set({barcode,title,category:cat,grade:String(grade),status:"Available",createdAt:Date.now()}); allBooks[key]={barcode,title,category:cat,grade}; added++; }catch(e){} } document.getElementById('bulkBookMsg').innerHTML="✅ Added <b>"+added+"</b> books!"; document.getElementById('bulkBooks').value=""; }
+async function addBook(){ if(!currentUser) return alert("🔒 Login"); const cat=bookCategory.value,grade=bookGrade.value,title=bookTitle.value.trim(); if(!title) return bookMsg.textContent="⚠️ Enter Title"; let qty=parseInt(document.getElementById('bookQty').value)||1; if(qty<1) qty=1; if(qty>200) qty=200; let startBarcode=bookBarcode.value.trim().toUpperCase(); let startNum=1; if(startBarcode){ const m=startBarcode.match(/(\d+)$/); if(m) startNum=parseInt(m[0]); } else { let max=0; Object.values(allBooks).forEach(b=>{ if(b.category===cat){ const mm=b.barcode.match(/(\d+)$/); if(mm) max=Math.max(max,parseInt(mm[0])); } }); startNum=max+1; } bookMsg.textContent="⏳ Adding "+qty+" copies..."; let created=[]; for(let i=0;i<qty;i++){ let num=startNum+i; let barcode=cat+"-"+String(num).padStart(3,'0'); let key=barcode.replace(/[^A-Z0-9-]/g,'_'); if(allBooks[key]) continue; await db.ref("books/"+key).set({barcode,title,category:cat,grade,status:"Available",createdAt:Date.now()}); allBooks[key]={barcode,title,category:cat,grade}; created.push(barcode); } if(created.length===0){ bookMsg.textContent="❌ All exist. Try higher Starting Barcode."; return; } bookMsg.innerHTML=`✅ Added <b>${created.length} copies</b> of <b>${title}</b><br>📚 ${created[0]} ${created.length>1?"to "+created[created.length-1]:""}<br><button class="btn black" style="margin-top:8px" onclick="printAllBarcodes()">🖨️ Print Barcodes</button>`; bookTitle.value=""; bookBarcode.value=""; document.getElementById('bookQty').value=1; }
+async function issueBook(){ if(!currentUser){ setMsg(issueMsg,"🔒 Login",false); return; } const learnerId=issueLearnerId.value.trim().toUpperCase(); const barcode=issueBarcode.value.trim().toUpperCase(); const surname=issueSurname.value.trim(); if(!learnerId||!barcode||!surname||!issuerName.value){ setMsg(issueMsg,"⚠️ Fill all",false); return; } const key=barcode.replace(/[^A-Z0-9-]/g,'_'); const book=(await db.ref("books/"+key).once("value")).val(); if(!book){ setMsg(issueMsg,"❌ Not found",false); return; } if(book.status==="Borrowed"){ setMsg(issueMsg,"❌ Already borrowed",false); return; } const lGrade=parseInt(learnerId.match(/^\d+/)[0]); if(parseInt(book.grade)!==lGrade){ setMsg(issueMsg,`❌ GRADE RULE: Learner ${lGrade} but book Grade ${book.grade}`,false); return; } const due=issueDue.value||new Date(Date.now()+14*86400000).toISOString().slice(0,10); await db.ref("loans/"+key).set({learnerId,barcode,bookTitle:book.title,dueDate:due,status:"Borrowed",issuer:issuerName.value,issuedAt:Date.now()}); await db.ref("books/"+key).update({status:"Borrowed",borrowedBy:learnerId}); await syncToParent(learnerId,surname,book.title,barcode,due); setMsg(issueMsg,"✅ Issued "+barcode+" to "+learnerId+" Due "+due,true); document.getElementById('lastIssued').innerHTML=`<div class="msg ok">✅ LAST: ${barcode} → ${learnerId} Due ${due}</div>`; }
+async function returnBook(){ if(!currentUser) return alert("🔒 Login"); const barcode=returnBarcode.value.trim().toUpperCase(); if(!barcode||!retrieverName.value) return returnMsg.textContent="⚠️ Enter Barcode + Retriever"; const key=barcode.replace(/[^A-Z0-9-]/g,'_'); const loan=(await db.ref("loans/"+key).once("value")).val(); if(!loan){ await db.ref("books/"+key).update({status:"Available",borrowedBy:""}); returnMsg.textContent="⚠️ Fixed stuck "+barcode; return; } await db.ref("loans/"+key).update({status:"Returned",retriever:retrieverName.value,returnedAt:Date.now()}); await db.ref("books/"+key).update({status:"Available",borrowedBy:""}); if(loan.learnerId) await db.ref("publicParent/"+loan.learnerId+"/books/"+key).update({status:"Returned"}); returnMsg.textContent="✅ Returned "+barcode+" from "+loan.learnerId; }
+async function hashSurname(s){ s=s.trim().toLowerCase(); const buf=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s)); return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('').slice(0,16); }
+async function syncToParent(id,sn,title,barcode,due){ const h=await hashSurname(sn); await db.ref("publicParent/"+id).update({learnerId:id,surnameHash:h,lastUpdated:Date.now()}); await db.ref("publicParent/"+id+"/books/"+barcode.replace(/[^A-Z0-9-]/g,'_')).set({bookTitle:title,barcode,dueDate:due,status:"Borrowed"}); }
+async function checkMyChild(){ const id=document.getElementById('parentId').value.trim().toUpperCase(); const sn=document.getElementById('parentSurname').value.trim(); const box=document.getElementById('parentResult'); if(!id||!sn){ box.innerHTML="⚠️ Enter ID + Surname"; return; } box.innerHTML="🔍 Checking..."; try{ const data=(await db.ref("publicParent/"+id).once("value")).val(); if(!data){ box.innerHTML="❌ No books for "+id; return; } if(data.surnameHash!==await hashSurname(sn)){ box.innerHTML="❌ Check spelling."; return; } let html=`<b>✅ Found for ${id}</b><br>`; if(data.books) Object.values(data.books).forEach(b=>{ html+=`📚 ${b.bookTitle} - ${b.barcode}<br>Due: ${b.dueDate} - ${b.status}<br><hr>`; }); else html+="✅ No books borrowed."; box.innerHTML=html; }catch(e){ box.innerHTML="❌ "+e.message; } }
+function openPrintWindow(innerHTML,title){ const w=window.open('','_blank','width=800,height=600'); w.document.write(`<html><head><title>${title}</title><style>body{font-family:Arial;text-align:center;padding:10px} .label{border:2px dashed #000;padding:14px;margin:10px;display:inline-block;width:280px;page-break-inside:avoid} .label b{font-size:15px;display:block} .label small{font-size:12px} svg{width:100%;height:70px} @media print{body{padding:0} .no-print{display:none}} button{padding:12px 20px;background:#174ea6;color:#fff;border:0;border-radius:8px;font-size:16px;cursor:pointer;margin:10px}</style><script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script></head><body><div class="no-print"><button onclick="window.print()">🖨️ PRINT NOW</button><button onclick="window.close()" style="background:#666">Close</button></div>${innerHTML}<script>window.onload=function(){ document.querySelectorAll('svg[data-barcode]').forEach(el=>{ try{ JsBarcode(el, el.getAttribute('data-barcode'), {format:'CODE128', displayValue:true, fontSize:16, height:55, margin:5}); }catch(e){} }); }<\/script></body></html>`); w.document.close(); }
+function printBarcode(barcode,title,grade){ const html=`<div class="label"><small>🏫 WORDSWORTH HIGH SCHOOL</small><b>${title}</b><small>Grade ${grade} | MENTE ET MANU</small><svg data-barcode="${barcode}"></svg><b>${barcode}</b></div>`; openPrintWindow(html,'Barcode '+barcode); }
+function printSingleFromInput(){ const code=document.getElementById('printOneBarcode').value.trim().toUpperCase(); if(!code) return printMsg.textContent="⚠️ Type barcode"; const key=code.replace(/[^A-Z0-9-]/g,'_'); const b=allBooks[key]||Object.values(allBooks).find(x=>x.barcode===code); if(b) printBarcode(b.barcode,b.title,b.grade); else printBarcode(code,code,'?'); printMsg.textContent="✅ Opened print for "+code; }
+function printAllBarcodes(){ const list=Object.values(allBooks); if(list.length===0){ printMsg.textContent="❌ No books yet"; return; } let html=`<h2>🏫 WORDSWORTH - ALL BARCODES (${list.length})</h2>`; list.forEach(b=>{ html+=`<div class="label"><small>🏫 WORDSWORTH HIGH SCHOOL</small><b>${b.title}</b><small>Grade ${b.grade} | MENTE ET MANU</small><svg data-barcode="${b.barcode}"></svg><b>${b.barcode}</b></div>`; }); openPrintWindow(html,'All Barcodes'); printMsg.textContent="✅ Opened "+list.length+" barcodes"; }
 </script>
 </body>
 </html>
