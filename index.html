@@ -29,6 +29,9 @@ th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
 .badge.borrowed{background:#ffebee;color:#c62828}.badge.returned{background:#e8f5e9;color:#1a7f37}
 .small{font-size:12px;color:#666}
 .hidden{display:none}
+.msg{padding:12px;border-radius:8px;font-weight:bold;font-size:16px;margin-top:10px;background:#fff3cd;border:1px solid #ffcc00}
+.msg.ok{background:#e8f5e9;border-color:#1a7f37;color:#1a7f37}
+.msg.err{background:#ffebee;border-color:#c62828;color:#c62828}
 @media(max-width:600px){.grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
@@ -52,7 +55,6 @@ th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
 
 <div class="wrap">
 
-<!-- HOME -->
 <div id="tab-home">
   <div class="grid">
     <div class="stat"><b id="totalBooks">0</b>📚 Total Books</div>
@@ -74,7 +76,6 @@ th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
   </div>
 </div>
 
-<!-- ISSUE -->
 <div id="tab-issue" class="hidden">
   <div class="card">
     <h3>📤 Issue Book - Librarian Only</h3>
@@ -89,10 +90,12 @@ th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
     <input id="issueDue" type="date">
     <button class="btn green" onclick="issueBook()">✅ Issue Book</button>
     <div id="issueMsg"></div>
+    <div id="lastIssued" style="margin-top:10px"></div>
+    <h3 style="margin-top:14px">📤 Currently Borrowed - Check Here After Issue</h3>
+    <div id="borrowedListIssue"></div>
   </div>
 </div>
 
-<!-- RETURN -->
 <div id="tab-return" class="hidden">
   <div class="card">
     <h3>📥 Return Book - Librarian Only</h3>
@@ -106,7 +109,6 @@ th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
   </div>
 </div>
 
-<!-- LEARNERS -->
 <div id="tab-learners" class="hidden">
   <div class="card">
     <h3>👩‍🎓 Add Learner - Librarian Only</h3>
@@ -121,7 +123,6 @@ th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
   <div class="card"><h3>All Learners (Librarian Only)</h3><div id="learnerList"></div></div>
 </div>
 
-<!-- BOOKS -->
 <div id="tab-books" class="hidden">
   <div class="card">
     <h3>📚 Add Book - Librarian Only</h3>
@@ -134,7 +135,6 @@ th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
   </div>
 </div>
 
-<!-- PARENT -->
 <div id="tab-parent" class="hidden">
   <div class="card" style="border-left:5px solid #1a7f37">
     <h3>👨‍👩‍👧 Parent Check - My Child</h3>
@@ -143,11 +143,10 @@ th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
     <input id="parentSurname" placeholder="Surname e.g. Chauke">
     <button class="btn green" onclick="checkMyChild()">🔍 Check My Child</button>
     <div id="parentResult" style="margin-top:10px"></div>
-    <p class="small">🔒 Safe: Wrong surname = No data shown. We never show other children.</p>
+    <p class="small">🔒 Safe: Wrong surname = No data shown. We never show other children.<br>⚠️ If you see "Permission Denied" - Librarian must fix Firebase Rules: publicParent must be .read = true</p>
   </div>
 </div>
 
-<!-- LOGIN -->
 <div id="tab-login" class="hidden">
   <div class="card">
     <h3>🔐 Librarian Login</h3>
@@ -166,7 +165,6 @@ th,td{padding:8px;border-bottom:1px solid #eee;text-align:left}
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script>
-// ===== WORDSWORTH FIREBASE CONFIG - ALREADY FILLED ✅ =====
 const firebaseConfig = {
   apiKey: "AIzaSyAJyTZ-tmrsY0m-EmN80HSRERSR_tiVX4E",
   authDomain: "wordsworth-library.firebaseapp.com",
@@ -176,7 +174,6 @@ const firebaseConfig = {
   messagingSenderId: "236216515385",
   appId: "1:236216515385:web:9f3e8937f829e9d2bf06e8"
 };
-// =====================================================
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.database();
@@ -189,8 +186,11 @@ function showTab(id, btn){
   document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
   if(btn) btn.classList.add('active');
 }
-
-// AUTH
+function setMsg(el, text, ok){
+  el.className = "msg " + (ok ? "ok" : "err");
+  el.textContent = text;
+  el.scrollIntoView({behavior:"smooth", block:"center"});
+}
 auth.onAuthStateChanged(u=>{
   currentUser = u;
   document.getElementById('loginStatus').textContent = u ? "Logged In: "+u.email+" ✅" : "Not Logged In - Parent Mode";
@@ -202,10 +202,8 @@ async function doLogin(){
   catch(e){ loginMsg.textContent="❌ "+e.message; }
 }
 async function doLogout(){ await auth.signOut(); loginMsg.textContent="Logged out"; }
-
-// DATA LOAD
 function loadData(){
-  db.ref("books").on("value", s=>{ allBooks = s.val()||{}; renderBooks(); updateStats(); });
+  db.ref("books").on("value", s=>{ allBooks = s.val()||{}; renderBooks(); updateStats(); }, e=>{ console.log("books read denied", e); });
   if(currentUser){
     db.ref("learners").on("value", s=>{ allLearners = s.val()||{}; renderLearners(); updateStats(); });
     db.ref("loans").on("value", s=>{ allLoans = s.val()||{}; renderBorrowed(); updateStats(); });
@@ -231,19 +229,18 @@ function renderLearners(){
   html+="</table>"; learnerList.innerHTML=html;
 }
 function renderBorrowed(){
-  if(!currentUser){ borrowedList.innerHTML="🔒 Login to see borrowed"; return; }
+  if(!currentUser){ borrowedList.innerHTML="🔒 Login to see borrowed"; if(document.getElementById('borrowedListIssue')) document.getElementById('borrowedListIssue').innerHTML="🔒 Login to see borrowed"; return; }
+  let rows = Object.values(allLoans).filter(l=>l.status==="Borrowed");
   let html="<table><tr><th>Learner</th><th>Book</th><th>Due</th></tr>";
-  Object.values(allLoans).filter(l=>l.status==="Borrowed").forEach(l=>{ html+=`<tr><td>${l.learnerId}</td><td>${l.bookTitle} (${l.barcode})</td><td>${l.dueDate}</td></tr>`; });
+  if(rows.length===0) html+="<tr><td colspan='3'>No books borrowed yet</td></tr>";
+  rows.forEach(l=>{ html+=`<tr><td>${l.learnerId}</td><td>${l.bookTitle} (${l.barcode})</td><td>${l.dueDate}</td></tr>`; });
   html+="</table>"; borrowedList.innerHTML=html;
+  if(document.getElementById('borrowedListIssue')) document.getElementById('borrowedListIssue').innerHTML=html;
 }
-
-// AUTO ID
 function makeLearnerId(grade, cls, num){ return grade + cls + String(num).padStart(2,'0'); }
 issueGrade.onchange = issueClass.onchange = issueNumber.oninput = ()=>{
   if(issueGrade.value && issueClass.value && issueNumber.value) issueLearnerId.value = makeLearnerId(issueGrade.value, issueClass.value, issueNumber.value);
 };
-
-// ADD LEARNER
 async function addLearner(){
   if(!currentUser) return alert("🔒 Login as Librarian first");
   const grade=addGrade.value, cls=addClass.value, num=addNumber.value;
@@ -255,8 +252,6 @@ async function addLearner(){
   await db.ref("publicParent/"+id).update({learnerId:id, surnameHash, lastUpdated:Date.now()});
   addLearnerMsg.textContent="✅ Added "+id+" - "+addName.value+" "+addSurname.value;
 }
-
-// ADD BOOK
 async function addBook(){
   if(!currentUser) return alert("🔒 Login first");
   const cat=bookCategory.value, grade=bookGrade.value, title=bookTitle.value.trim();
@@ -267,30 +262,28 @@ async function addBook(){
     barcode = cat + "-" + String(count).padStart(3,'0');
   }
   await db.ref("books/"+barcode.replace(/[^A-Z0-9-]/g,'_')).set({barcode, title, category:cat, grade, status:"Available", createdAt:Date.now()});
-  bookMsg.textContent="✅ Added "+barcode+" - "+title;
+  bookMsg.textContent="✅ Added "+barcode+" - "+title+" - GRADE "+grade;
 }
-
-// ISSUE
 async function issueBook(){
-  if(!currentUser) return alert("🔒 Login as Librarian first");
+  if(!currentUser){ setMsg(issueMsg,"🔒 Login as Librarian first",false); return; }
   const learnerId = issueLearnerId.value.trim().toUpperCase();
   const barcode = issueBarcode.value.trim().toUpperCase();
   const surname = issueSurname.value.trim();
-  if(!learnerId||!barcode||!surname||!issuerName.value) return issueMsg.textContent="⚠️ Fill ID, Barcode, Surname, Issuer";
-  const bookSnap = await db.ref("books/"+barcode.replace(/[^A-Z0-9-]/g,'_')).once("value");
+  if(!learnerId||!barcode||!surname||!issuerName.value){ setMsg(issueMsg,"⚠️ Fill ID, Barcode, Surname, Issuer",false); return; }
+  const key = barcode.replace(/[^A-Z0-9-]/g,'_');
+  const bookSnap = await db.ref("books/"+key).once("value");
   const book = bookSnap.val();
-  if(!book) return issueMsg.textContent="❌ Book not found: "+barcode;
-  if(book.status==="Borrowed") return issueMsg.textContent="❌ Book already borrowed - Go to Return tab and return it first, or use another barcode";
-  const lGrade = parseInt(learnerId);
-  if(parseInt(book.grade) !== lGrade) return issueMsg.textContent=`❌ Grade Rule: Grade ${lGrade} learner cannot take Grade ${book.grade} book`;
+  if(!book){ setMsg(issueMsg,"❌ Book not found: "+barcode,false); return; }
+  if(book.status==="Borrowed"){ setMsg(issueMsg,"❌ Book already borrowed - Go to Return tab and return it first, or use another barcode",false); return; }
+  const lGrade = parseInt(learnerId.match(/^\d+/)[0]);
+  if(parseInt(book.grade) !== lGrade){ setMsg(issueMsg,`❌ GRADE RULE BLOCKED: Learner is Grade ${lGrade} but book ${barcode} is Grade ${book.grade}. Make a Grade ${lGrade} book in Books tab first!`,false); return; }
   const due = issueDue.value || new Date(Date.now()+14*86400000).toISOString().slice(0,10);
-  await db.ref("loans/"+barcode.replace(/[^A-Z0-9-]/g,'_')).set({learnerId, barcode, bookTitle:book.title, dueDate:due, status:"Borrowed", issuer:issuerName.value, issuedAt:Date.now()});
-  await db.ref("books/"+barcode.replace(/[^A-Z0-9-]/g,'_')).update({status:"Borrowed", borrowedBy:learnerId});
+  await db.ref("loans/"+key).set({learnerId, barcode, bookTitle:book.title, dueDate:due, status:"Borrowed", issuer:issuerName.value, issuedAt:Date.now()});
+  await db.ref("books/"+key).update({status:"Borrowed", borrowedBy:learnerId});
   await syncToParent(learnerId, surname, book.title, barcode, due);
-  issueMsg.textContent="✅ Issued "+barcode+" to "+learnerId+" Due "+due;
+  setMsg(issueMsg,"✅ Issued "+barcode+" to "+learnerId+" Due "+due,true);
+  document.getElementById('lastIssued').innerHTML = `<div class="msg ok">✅ LAST ISSUED: ${barcode} → ${learnerId} (${surname}) Due ${due}</div>`;
 }
-
-// RETURN - ✅ FIXED: AUTO-FIX STUCK BOOKS
 async function returnBook(){
   if(!currentUser) return alert("🔒 Login first");
   const barcode = returnBarcode.value.trim().toUpperCase();
@@ -298,21 +291,16 @@ async function returnBook(){
   const key = barcode.replace(/[^A-Z0-9-]/g,'_');
   const loanSnap = await db.ref("loans/"+key).once("value");
   const loan = loanSnap.val();
-
-  // ✅ FIX: If loan is missing but book says Borrowed = STUCK BOOK, just fix book
   if(!loan){
     await db.ref("books/"+key).update({status:"Available", borrowedBy:""});
     returnMsg.textContent="⚠️ Fixed stuck book "+barcode+" - Now Available. Try Issue again.";
     return;
   }
-
   await db.ref("loans/"+key).update({status:"Returned", retriever:retrieverName.value, returnedAt:Date.now()});
   await db.ref("books/"+key).update({status:"Available", borrowedBy:""});
   if(loan.learnerId) await db.ref("publicParent/"+loan.learnerId+"/books/"+key).update({status:"Returned"});
   returnMsg.textContent="✅ Returned "+barcode+" from "+loan.learnerId;
 }
-
-// --- PARENT CHECK DOUBLE LOCK ---
 async function hashSurname(surname){
   surname = surname.trim().toLowerCase();
   const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(surname));
@@ -323,6 +311,7 @@ async function syncToParent(learnerId, learnerSurname, bookTitle, barcode, dueDa
   await db.ref("publicParent/"+learnerId).update({learnerId, surnameHash, lastUpdated:Date.now()});
   await db.ref("publicParent/"+learnerId+"/books/"+barcode.replace(/[^A-Z0-9-]/g,'_')).set({bookTitle, barcode, dueDate, status:"Borrowed"});
 }
+// ✅ FIXED PARENT CHECK - SHOWS REAL ERROR
 async function checkMyChild(){
   const id = document.getElementById('parentId').value.trim().toUpperCase();
   const surname = document.getElementById('parentSurname').value.trim();
@@ -333,14 +322,27 @@ async function checkMyChild(){
   try{
     const snap = await db.ref("publicParent/"+id).once("value");
     const data = snap.val();
-    if(!data){ box.innerHTML="❌ No books found for "+id+". Check ID spelling."; return; }
+    if(!data){
+      // ⚠️ IMPORTANT: 12D01 was issued BEFORE the surname lock existed in old code?
+      // If data is empty, it means learner was never added via Add Learner, only via Issue with different surname hash
+      // Try to rebuild from loans is NOT allowed for parents - so show clear message
+      box.innerHTML="❌ No books found for "+id+".<br><br>💡 If this learner was issued a book but Parent shows nothing:<br>1. Librarian must re-Issue the book once with correct Surname (Maseko)<br>2. OR Librarian must add learner in Learners tab: 12-D-1 Maseko";
+      return;
+    }
     const inputHash = await hashSurname(surname);
-    if(data.surnameHash !== inputHash){ box.innerHTML="❌ No books found. Check ID + Surname spelling."; return; }
+    if(data.surnameHash !== inputHash){ box.innerHTML="❌ No books found. Check ID + Surname spelling. Surname must match EXACTLY what librarian typed on Issue (e.g. Maseko vs maseko)."; return; }
     let html=`<b>✅ Found for ${id}</b><br>`;
     if(data.books){ Object.values(data.books).forEach(b=>{ html+=`📚 ${b.bookTitle} - ${b.barcode}<br>Due: ${b.dueDate} - ${b.status}<br><hr>`; }); }
     else html+="✅ No books currently borrowed.";
     box.innerHTML=html;
-  }catch(e){ box.innerHTML="❌ Could not check. Check internet."; }
+  }catch(e){
+    // ✅ NOW SHOWS REAL REASON - NOT "Check internet"
+    if(e.code==="PERMISSION_DENIED" || (e.message||"").includes("permission")){
+      box.innerHTML="❌ PERMISSION DENIED - Firebase Rules Block Parent!<br><br>🔧 Librarian Fix:<br>Firebase → Realtime Database → Rules → Set <b>publicParent .read = true</b> → Publish → Try again.";
+    } else {
+      box.innerHTML="❌ Error: "+e.message+"<br>Code: "+(e.code||"unknown");
+    }
+  }
 }
 </script>
 </body>
