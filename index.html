@@ -36,9 +36,7 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 </head>
 <body>
 <header><div class="logo">M</div> <h1>MAKHANANI HIGH SCHOOL</h1><p>📚 DIGITAL LIBRARY | XINTIMANI GROUP | MENTE ET MANU</p></header>
-<div class="topbar">🏫 MAKHANANI | <span id="whoIs">👤 NOT LOGGED IN</span> | <span id="adminStatus">🔒 ADMIN LOCKED</span> | 📷 SCAN | 📅 RETURN: 30 NOV EVERY YEAR</div>
-
-<!-- LOGIN BAR ON HOME -->
+<div class="topbar">🏫 MAKHANANI | <span id="whoIs">👤 NOT LOGGED IN</span> | <span id="adminStatus">🔒 ADMIN LOCKED</span> | 📷 SCAN | 📅 RETURN: 30 NOV EVERY YEAR | 🚫 BLOCK EMIS DUPLICATE ONLY</div>
 <div style="max-width:900px;margin:auto;padding:0 12px">
 <div class="card rolebox" id="loginBar">
 <h3>🔐 WHO ARE YOU? LOGIN TO WORK</h3>
@@ -47,10 +45,8 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 <button class="big green" onclick="doLogin()">🔓 LOGIN</button>
 <button class="big red" onclick="doLogout()">🔒 LOGOUT ALL</button>
 <div id="loginMsg" style="font-weight:900"></div>
-<p style="font-size:13px">👑 First Time? Login as ADMINISTRATOR → Create your Admin Password first → Then Create Principal Password.<br>🎓 Principal then Creates Librarian Password.</p>
 </div>
 </div>
-
 <nav>
 <button onclick="show('home')" id="b-home" class="active">🏠 HOME</button>
 <button onclick="show('issue')" id="b-issue">📤 ISSUE</button>
@@ -63,14 +59,14 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 </nav>
 
 <div id="home" class="page active">
-<div class="card"><div class="adminbar">👑 APP ADMINISTRATOR - FULL CONTROL<br><small id="adminWelcome">🔒 ADMIN LOCKED</small></div><div style="background:#1e293b;color:#fff;padding:10px;border-radius:10px;margin-top:6px;text-align:center">👑 WELCOME SUPER ADMIN — YOU CONTROL ALL SCHOOLS</div></div>
+<div class="card"><div class="adminbar">👑 APP ADMINISTRATOR - FULL CONTROL<br><small id="adminWelcome">🔒 ADMIN LOCKED</small></div></div>
 <div class="stats">
 <div class="stat"><b id="sSchools">0</b><br>🏫 SCHOOLS</div>
 <div class="stat"><b id="sBooks">0</b><br>📖 ALL BOOKS</div>
 <div class="stat"><b id="sLearners">0</b><br>👧 ALL LEARNERS</div>
 <div class="stat"><b id="sOut">0</b><br>📚 ALL BORROWED</div>
 </div>
-<div class="card"><div class="greenbox">WELCOME TO MAKHANANI! 💚 EVER HAPPY!<br>📅 ALL BOOKS MUST BE RETURNED BY 30 NOVEMBER EVERY YEAR!</div><p>👑 Admin → Creates Principal Password<br>🎓 Principal → Creates Librarian Password<br>📚 Librarian → Issues / Returns Books Daily</p></div>
+<div class="card"><div class="greenbox">WELCOME TO MAKHANANI! 💚 EVER HAPPY!<br>📅 ALL BOOKS MUST BE RETURNED BY 30 NOVEMBER EVERY YEAR!<br>🚫 BLOCK EMIS DUPLICATE ONLY - Same Name Allowed!</div><p>👑 Admin → Creates Principal Password<br>🎓 Principal → Creates Librarian Password<br>📚 Librarian → Issues / Returns Books Daily</p></div>
 <div class="card"><h3>🔍 Quick Scan</h3><input id="quickScan" placeholder="Scan Learner OR Book..."><button class="big yellow" onclick="startScan('quickScan')">📷 SCAN WITH CAMERA</button><div id="reader-home"></div><button class="big" onclick="quickScan()">GO →</button><div id="quickResult"></div></div>
 </div>
 
@@ -117,20 +113,18 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 </div>
 
 <div id="principal" class="page">
-<div id="principalLock" class="card lockbox"><h2>🎓 PRINCIPAL LOGIN REQUIRED</h2><p>Principal must login on HOME first.<br>Or Admin can login to see Principal page.</p><button class="big" onclick="show('home')">🔐 GO TO LOGIN</button></div>
+<div id="principalLock" class="card lockbox"><h2>🎓 PRINCIPAL LOGIN REQUIRED</h2><p>Principal must login on HOME first.</p><button class="big" onclick="show('home')">🔐 GO TO LOGIN</button></div>
 <div id="principalContent" style="display:none">
 <div class="card"><h3>🎓 PRINCIPAL DASHBOARD - 30 NOV RULE</h3>
 <div class="stats"><div class="stat"><b id="pLearners">0</b><br>Learners</div><div class="stat"><b id="pBooks">0</b><br>Books</div><div class="stat"><b id="pOut">0</b><br>Borrowed</div><div class="stat"><b id="pOver">0</b><br>Overdue</div></div>
 <button class="big" onclick="render();alert('Report Refreshed!')">🔄 REFRESH REPORT</button>
 <div id="principalList"></div></div>
 <div class="card"><h3>📚 PRINCIPAL CREATES LIBRARIAN PASSWORD</h3>
-<p>🎓 Only Principal (or Admin) can do this:</p>
 <p>Current Librarian Password: <b id="showLibPass">Not Set Yet</b></p>
 <input type="password" id="newLibPass" placeholder="🆕 Create Librarian Password e.g. Library2026">
 <input type="password" id="newLibPass2" placeholder="🔁 Type Again to Confirm">
 <button class="big purple" onclick="createLibrarianPassword()">✅ CREATE / CHANGE LIBRARIAN PASSWORD</button>
 <div id="libPassMsg"></div>
-<p style="font-size:13px">Give this password to Librarian. Librarian uses it to Login.</p>
 </div>
 </div>
 </div>
@@ -143,16 +137,16 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 
 <div id="admin" class="page">
 <div id="adminLock" class="card lockbox"><h2>👑 ADMINISTRATOR LOGIN REQUIRED</h2><p>Admin must login on HOME first.</p><button class="big" onclick="show('home')">🔐 GO TO LOGIN</button>
-<div id="firstTimeBox" style="display:none"><hr><h3>👑 FIRST TIME SETUP - CREATE ADMIN PASSWORD</h3><input type="password" id="newAdminPass" placeholder="🆕 Create Admin Password e.g. Makhanani123"><input type="password" id="newAdminPass2" placeholder="🔁 Type Again"><button class="big yellow" onclick="createAdminPassword()">✅ CREATE ADMIN PASSWORD</button><p style="font-size:13px">⚠️ Remember! Write in your book!</p></div>
+<div id="firstTimeBox" style="display:none"><hr><h3>👑 FIRST TIME SETUP - CREATE ADMIN PASSWORD</h3><input type="password" id="newAdminPass" placeholder="🆕 Create Admin Password e.g. Makhanani123"><input type="password" id="newAdminPass2" placeholder="🔁 Type Again"><button class="big yellow" onclick="createAdminPassword()">✅ CREATE ADMIN PASSWORD</button></div>
 </div>
 <div id="adminContent" style="display:none">
 <div class="card"><h3>👑 APP ADMINISTRATOR - FULL CONTROL</h3><p>✅ LOGGED IN AS ADMIN — FULL CONTROL</p></div>
 <div class="card"><h3>🔑 ADMIN CHANGES OWN PASSWORD</h3>
 <input type="password" id="oldPass" placeholder="Old Admin Password"><input type="password" id="changePass1" placeholder="New Admin Password"><input type="password" id="changePass2" placeholder="Confirm New"><button class="big orange" onclick="changeAdminPassword()">🔑 CHANGE ADMIN PASSWORD</button><div id="changeMsg"></div></div>
-<div class="card" style="border:3px solid #7c3aed"><h3>🎓 ADMINISTRATOR CREATES PRINCIPAL PASSWORD</h3><p>👑 Only Administrator can do this:</p><p>Current Principal Password: <b id="showPrinPass">Not Set Yet</b></p><input type="password" id="newPrinPass" placeholder="🆕 Create Principal Password e.g. Principal2026"><input type="password" id="newPrinPass2" placeholder="🔁 Type Again to Confirm"><button class="big purple" onclick="createPrincipalPassword()">✅ CREATE / CHANGE PRINCIPAL PASSWORD</button><div id="prinPassMsg"></div><p style="font-size:13px">Give this password to Principal. Principal uses it to Login, then creates Librarian password.</p></div>
+<div class="card" style="border:3px solid #7c3aed"><h3>🎓 ADMINISTRATOR CREATES PRINCIPAL PASSWORD</h3><p>Current Principal Password: <b id="showPrinPass">Not Set Yet</b></p><input type="password" id="newPrinPass" placeholder="🆕 Create Principal Password e.g. Principal2026"><input type="password" id="newPrinPass2" placeholder="🔁 Type Again"><button class="big purple" onclick="createPrincipalPassword()">✅ CREATE / CHANGE PRINCIPAL PASSWORD</button><div id="prinPassMsg"></div></div>
 <div class="card"><h3>📚 ADMIN CAN ALSO CREATE LIBRARIAN PASSWORD</h3><p>Current Librarian: <b id="showLibPass2">Not Set Yet</b></p><input type="password" id="newLibPassAdmin" placeholder="Librarian Password"><input type="password" id="newLibPassAdmin2" placeholder="Confirm"><button class="big purple" onclick="createLibrarianPasswordAdmin()">✅ CREATE LIBRARIAN PASSWORD</button><div id="libPassMsg2"></div></div>
-<div class="card"><h3>📤 UPLOAD LIST OF SCHOOLS - ADMIN ONLY</h3><p>✅ Upload CSV / JSON / EXCEL (.xlsx) from DBE / DataFirst</p><input type="file" id="schoolFile" accept=".csv,.json,.xlsx,.xls"><textarea id="schoolPaste" rows="4" placeholder="Paste schools: EMIS, Name per line"></textarea><label><input type="checkbox" id="replaceAll" style="width:auto"> 🗑️ REPLACE ALL?</label><button class="big green" onclick="previewSchools()">👁️ PREVIEW SCHOOLS</button><button class="big" onclick="confirmSchools()">✅ CONFIRM - SAVE SCHOOLS</button><div id="schoolPreview"></div><div id="uploadStatus">⏳ UPLOADING 0 / 0...</div></div>
-<div class="card"><h3>🇿🇦 ➕ ADD SCHOOL FROM DBE LIST</h3><input id="dbeSearch" placeholder="🔍 SEARCH DBE SCHOOL..." oninput="searchDBE()"><div id="dbeResults"></div><input id="newEmis" placeholder="SCHOOL CODE / EMIS"><input id="newSchool" placeholder="SCHOOL NAME"><button class="big" onclick="addSchoolManual()">➕ ADD SCHOOL</button><div id="schoolList"></div></div>
+<div class="card"><h3>📤 UPLOAD LIST OF SCHOOLS - ADMIN ONLY - 🚫 BLOCK EMIS DUPLICATE ONLY</h3><p>✅ Upload CSV / JSON / EXCEL (.xlsx) from DBE / DataFirst<br>⚠️ <b>App checks EMIS ONLY! Same Name is ALLOWED if EMIS is different!</b><br>Example: ✅ <b>700400111 - MAKHANANI HIGH</b> + ✅ <b>700400222 - MAKHANANI HIGH</b> = BOTH ALLOWED<br>Example: ❌ <b>700400111 - MAKHANANI HIGH</b> + ❌ <b>700400111 - OTHER SCHOOL</b> = 2nd BLOCKED (Same EMIS!)</p><input type="file" id="schoolFile" accept=".csv,.json,.xlsx,.xls"><textarea id="schoolPaste" rows="4" placeholder="Paste schools: EMIS, Name per line"></textarea><label><input type="checkbox" id="replaceAll" style="width:auto"> 🗑️ REPLACE ALL? Tick to DELETE old list first</label><button class="big green" onclick="previewSchools()">👁️ PREVIEW SCHOOLS</button><button class="big" onclick="confirmSchools()">✅ CONFIRM - SAVE SCHOOLS</button><div id="schoolPreview"></div><div id="uploadStatus">⏳ UPLOADING 0 / 0...</div></div>
+<div class="card"><h3>🇿🇦 ➕ ADD SCHOOL FROM DBE LIST - 🚫 BLOCK EMIS ONLY</h3><input id="dbeSearch" placeholder="🔍 SEARCH DBE SCHOOL..." oninput="searchDBE()"><div id="dbeResults"></div><input id="newEmis" placeholder="SCHOOL CODE / EMIS - Must be Unique!"><input id="newSchool" placeholder="SCHOOL NAME - Same Name Allowed!"><button class="big" onclick="addSchoolManual()">➕ ADD SCHOOL</button><div id="schoolDupMsg" style="font-weight:900;color:#dc2626"></div><div id="schoolList"></div><button class="big yellow" onclick="cleanDuplicates()">🧹 CLEAN EMIS DUPLICATES NOW</button></div>
 <div class="card"><button class="big yellow" onclick="downloadSchools()">⬇️ DOWNLOAD CURRENT LIST (JSON)</button><button class="big red" onclick="if(confirm('DELETE ALL DATA?')){localStorage.clear();location.reload()}">🗑️ RESET ALL DATA</button></div>
 </div>
 </div>
@@ -164,6 +158,22 @@ let loans=JSON.parse(localStorage.getItem('mk_loans')||'[]');
 let schools=JSON.parse(localStorage.getItem('mk_schools')||'[]');
 let pendingSchools=[];let scanner=null;
 let currentRole=localStorage.getItem('mk_role')||'';
+// *** BLOCK ONLY EMIS DUPLICATE ***
+function normEmis(s){return String(s||'').trim();}
+function findDuplicateEmis(emis,list){
+  let e=normEmis(emis);
+  if(!e) return null;
+  return (list||schools).find(x=>normEmis(x.emis)===e);
+}
+function cleanDuplicates(){
+  let seen=new Set();let cleaned=[];let removed=0;
+  schools.forEach(s=>{
+    let e=normEmis(s.emis);
+    if(e && seen.has(e)){removed++;return;}
+    if(e)seen.add(e);cleaned.push(s);
+  });
+  schools=cleaned;save();alert('🧹 Cleaned! Removed '+removed+' duplicate EMIS schools! Now total: '+schools.length);
+}
 function getPw(k){return localStorage.getItem(k)||'';}
 function setRole(r){currentRole=r;localStorage.setItem('mk_role',r);updateRoleUI();}
 function updateRoleUI(){
@@ -187,21 +197,21 @@ let role=document.getElementById('loginRole').value;
 let typed=document.getElementById('loginPass').value;
 if(role==='admin'&&!getPw('mk_admin_pw')){document.getElementById('loginMsg').innerHTML='👑 No Admin Password yet! Go to 👑 ADMIN tab → Create Admin Password first!';show('admin');return;}
 let key=role==='admin'?'mk_admin_pw':role==='principal'?'mk_principal_pw':'mk_librarian_pw';
-if(!getPw(key)){document.getElementById('loginMsg').innerHTML='❌ No password set for '+role.toUpperCase()+' yet! Ask '+(role==='principal'?'Administrator':role==='librarian'?'Principal':'Admin')+' to create it!';return;}
+if(!getPw(key)){document.getElementById('loginMsg').innerHTML='❌ No password set for '+role.toUpperCase()+' yet!';return;}
 if(typed===getPw(key)){setRole(role);document.getElementById('loginMsg').innerHTML='✅ WELCOME '+role.toUpperCase()+'! You are LOGGED IN!';document.getElementById('loginPass').value='';}
 else{document.getElementById('loginMsg').innerHTML='❌ WRONG PASSWORD for '+role.toUpperCase()+'! Try again.';}
 }
 function doLogout(){currentRole='';localStorage.removeItem('mk_role');updateRoleUI();document.getElementById('loginMsg').innerHTML='🔒 Logged Out All!';}
-function createAdminPassword(){let p1=document.getElementById('newAdminPass').value;let p2=document.getElementById('newAdminPass2').value;if(!p1||p1.length<4){alert('Password must be 4+ characters');return;}if(p1!==p2){alert('Passwords do NOT match!');return;}localStorage.setItem('mk_admin_pw',p1);setRole('admin');alert('✅ ADMIN PASSWORD SAVED! '+p1+'\nNow you are Admin! Now Create Principal Password below!');}
+function createAdminPassword(){let p1=document.getElementById('newAdminPass').value;let p2=document.getElementById('newAdminPass2').value;if(!p1||p1.length<4){alert('Password must be 4+ characters');return;}if(p1!==p2){alert('Passwords do NOT match!');return;}localStorage.setItem('mk_admin_pw',p1);setRole('admin');alert('✅ ADMIN PASSWORD SAVED! '+p1);}
 function changeAdminPassword(){if(currentRole!=='admin'){alert('Only Admin!');return;}let oldP=document.getElementById('oldPass').value;if(oldP!==getPw('mk_admin_pw')){document.getElementById('changeMsg').innerHTML='<b style=color:red>❌ Old Wrong!</b>';return;}let n1=document.getElementById('changePass1').value;let n2=document.getElementById('changePass2').value;if(!n1||n1.length<4){document.getElementById('changeMsg').innerHTML='<b style=color:red>New must be 4+</b>';return;}if(n1!==n2){document.getElementById('changeMsg').innerHTML='<b style=color:red>Do NOT match!</b>';return;}localStorage.setItem('mk_admin_pw',n1);document.getElementById('changeMsg').innerHTML='✅ Admin Password Changed to: '+n1;}
-function createPrincipalPassword(){if(currentRole!=='admin'){alert('Only Administrator can create Principal password!');return;}let p1=document.getElementById('newPrinPass').value;let p2=document.getElementById('newPrinPass2').value;if(!p1||p1.length<4){alert('4+ characters');return;}if(p1!==p2){alert('Do NOT match!');return;}localStorage.setItem('mk_principal_pw',p1);document.getElementById('prinPassMsg').innerHTML='✅ <b>Principal Password Created: '+p1+' - Give to Principal!</b>';updateRoleUI();}
-function createLibrarianPassword(){if(!(currentRole==='principal'||currentRole==='admin')){alert('Only Principal or Admin!');return;}let p1=document.getElementById('newLibPass').value;let p2=document.getElementById('newLibPass2').value;if(!p1||p1.length<4){alert('4+ characters');return;}if(p1!==p2){alert('Do NOT match!');return;}localStorage.setItem('mk_librarian_pw',p1);document.getElementById('libPassMsg').innerHTML='✅ <b>Librarian Password Created: '+p1+' - Give to Librarian!</b>';updateRoleUI();}
+function createPrincipalPassword(){if(currentRole!=='admin'){alert('Only Administrator can create Principal password!');return;}let p1=document.getElementById('newPrinPass').value;let p2=document.getElementById('newPrinPass2').value;if(!p1||p1.length<4){alert('4+ characters');return;}if(p1!==p2){alert('Do NOT match!');return;}localStorage.setItem('mk_principal_pw',p1);document.getElementById('prinPassMsg').innerHTML='✅ <b>Principal Password Created: '+p1+'</b>';updateRoleUI();}
+function createLibrarianPassword(){if(!(currentRole==='principal'||currentRole==='admin')){alert('Only Principal or Admin!');return;}let p1=document.getElementById('newLibPass').value;let p2=document.getElementById('newLibPass2').value;if(!p1||p1.length<4){alert('4+ characters');return;}if(p1!==p2){alert('Do NOT match!');return;}localStorage.setItem('mk_librarian_pw',p1);document.getElementById('libPassMsg').innerHTML='✅ <b>Librarian Password Created: '+p1+'</b>';updateRoleUI();}
 function createLibrarianPasswordAdmin(){if(currentRole!=='admin'){alert('Only Admin!');return;}let p1=document.getElementById('newLibPassAdmin').value;let p2=document.getElementById('newLibPassAdmin2').value;if(!p1||p1.length<4){alert('4+');return;}if(p1!==p2){alert('Do NOT match!');return;}localStorage.setItem('mk_librarian_pw',p1);document.getElementById('libPassMsg2').innerHTML='✅ Librarian Password: '+p1;updateRoleUI();}
 function save(){localStorage.setItem('mk_learners',JSON.stringify(learners));localStorage.setItem('mk_books',JSON.stringify(books));localStorage.setItem('mk_loans',JSON.stringify(loans));localStorage.setItem('mk_schools',JSON.stringify(schools));render();}
 function show(p){document.querySelectorAll('.page').forEach(e=>e.classList.remove('active'));document.querySelectorAll('nav button').forEach(e=>e.classList.remove('active'));document.getElementById(p).classList.add('active');document.getElementById('b-'+p).classList.add('active');render();}
 function getDueDate(){let now=new Date();let year=now.getFullYear();let due=new Date(year,10,30);if(now>due){due=new Date(year+1,10,30);}return due;}
 function startScan(target){let map={'retBook':'reader2','quickScan':'reader-home','scanLearner':'reader','scanBook':'reader-issue2'};let boxId=map[target]||'reader';let box=document.getElementById(boxId);box.style.display='block';if(scanner){try{scanner.clear()}catch(e){}}scanner=new Html5Qrcode(boxId);scanner.start({facingMode:"environment"},{fps:10,qrbox:{width:250,height:150}},(txt)=>{document.getElementById(target).value=txt;scanner.stop().then(()=>{scanner.clear();box.style.display='none';});alert('✅ Scanned! '+txt);if(target==='quickScan')quickScan();},(err)=>{});}
-function addLearner(){if(!(currentRole==='admin'||currentRole==='librarian'||currentRole==='principal')){alert('🔐 Please LOGIN as Librarian / Principal / Admin first on HOME!');show('home');return;}let n=document.getElementById('lName').value.trim();let g=document.getElementById('lGrade').value.trim();let s=document.getElementById('lSchool').value.trim()||'MAKHANANI HIGH SCHOOL';if(!n||!g){alert('Type Name + Grade');return;}let no='MKH-'+String(learners.length+1).padStart(4,'0');learners.push({no,name:n,grade:g,school:s});save();document.getElementById('lName').value='';document.getElementById('lGrade').value='';alert('Done! '+n+' = '+no);printOneCard(learners[learners.length-1]);}
+function addLearner(){if(!(currentRole==='admin'||currentRole==='librarian'||currentRole==='principal')){alert('🔐 Please LOGIN first on HOME!');show('home');return;}let n=document.getElementById('lName').value.trim();let g=document.getElementById('lGrade').value.trim();let s=document.getElementById('lSchool').value.trim()||'MAKHANANI HIGH SCHOOL';if(!n||!g){alert('Type Name + Grade');return;}let no='MKH-'+String(learners.length+1).padStart(4,'0');learners.push({no,name:n,grade:g,school:s});save();document.getElementById('lName').value='';document.getElementById('lGrade').value='';alert('Done! '+n+' = '+no);printOneCard(learners[learners.length-1]);}
 function addBook(){if(!(currentRole==='admin'||currentRole==='librarian'||currentRole==='principal')){alert('🔐 Login first!');show('home');return;}let t=document.getElementById('bTitle').value.trim();let a=document.getElementById('bAuthor').value.trim();let c=document.getElementById('bCat').value.trim();if(!t){alert('Type Book Title');return;}let code='BK-'+String(books.length+1).padStart(3,'0');books.push({code,title:t,author:a,cat:c});save();document.getElementById('bTitle').value='';document.getElementById('bAuthor').value='';document.getElementById('bCat').value='';alert('Book Added! '+code);}
 function issueBook(){if(!(currentRole==='admin'||currentRole==='librarian'||currentRole==='principal')){alert('🔐 Librarian must LOGIN first on HOME!');show('home');return;}let ln=document.getElementById('scanLearner').value.trim();let bk=document.getElementById('scanBook').value.trim();let L=learners.find(x=>x.no===ln);let B=books.find(x=>x.code===bk);if(!L){document.getElementById('issueMsg').innerHTML='<b style=color:red>Learner not found!</b>';return;}if(!B){document.getElementById('issueMsg').innerHTML='<b style=color:red>Book not found!</b>';return;}if(loans.find(x=>x.book===B.code&&!x.returned)){document.getElementById('issueMsg').innerHTML='<b style=color:red>Book already OUT!</b>';return;}let d=getDueDate();loans.push({learner:L.no,lname:L.name,book:B.code,btitle:B.title,date:new Date().toLocaleDateString(),due:d.toLocaleDateString(),returned:false});save();document.getElementById('issueMsg').innerHTML='✅ <b>'+B.title+' given to '+L.name+' - 📅 RETURN BY 30 NOVEMBER '+d.getFullYear()+'</b>';}
 function returnBook(){if(!(currentRole==='admin'||currentRole==='librarian'||currentRole==='principal')){alert('🔐 Librarian must LOGIN first!');show('home');return;}let bk=document.getElementById('retBook').value.trim();let loan=loans.find(x=>x.book===bk&&!x.returned);if(!loan){document.getElementById('retMsg').innerHTML='<b style=color:red>Not OUT!</b>';return;}loan.returned=true;save();document.getElementById('retMsg').innerHTML='✅ <b>'+loan.btitle+' returned by '+loan.lname+'</b>';}
@@ -210,9 +220,43 @@ function parentCheck(){let v=document.getElementById('parentNo').value.trim();le
 function printOneCard(l){let w=window.open('','','width=800,height=600');w.document.write('<html><head><title>Card</title><style>body{font-family:Arial}.c{width:300px;border:3px solid #1a56db;border-radius:12px;padding:12px;text-align:center;margin:20px auto}svg{width:100%}</style><script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script></head><body><div class="c"><b>MAKHANANI HIGH SCHOOL 💙</b><br>LEARNER CARD<br>Name: '+l.name+'<br>No: <b>'+l.no+'</b><br>Grade: '+l.grade+'<br><svg id="bc"></svg><br>'+l.no+'<br><small>XINTIMANI GROUP | MENTE ET MANU<br>📅 BOOKS RETURN 30 NOV EVERY YEAR</small></div><script>window.onload=function(){JsBarcode("#bc","'+l.no+'",{format:"CODE128",width:2,height:50,displayValue:false});setTimeout(()=>window.print(),500)}<\/script></body></html>');w.document.close();}
 function printAllCards(){if(!learners.length){alert('No learners');return;}let w=window.open('','','width=900,height=800');let html='<html><head><title>All Cards</title><style>body{font-family:Arial}.c{width:280px;border:3px solid #1a56db;border-radius:12px;padding:10px;text-align:center;display:inline-block;margin:8px}svg{width:100%}</style><script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script></head><body>';learners.forEach((l,i)=>{html+='<div class="c"><b>MAKHANANI HIGH 💙</b><br>'+l.name+'<br><b>'+l.no+'</b><br>'+l.grade+'<br><svg id="bc'+i+'"></svg><br>'+l.no+'</div>'});html+='<script>window.onload=function(){'+learners.map((l,i)=>'JsBarcode("#bc'+i+'","'+l.no+'",{format:"CODE128",width:2,height:40,displayValue:false});').join('')+'setTimeout(()=>window.print(),800)}<\/script></body></html>';w.document.write(html);w.document.close();}
 function previewSchools(){let file=document.getElementById('schoolFile').files[0];let paste=document.getElementById('schoolPaste').value.trim();if(file){let r=new FileReader();r.onload=function(e){try{if(file.name.endsWith('.json')){pendingSchools=JSON.parse(e.target.result);}else if(file.name.endsWith('.csv')){pendingSchools=e.target.result.split('\n').slice(1).map(l=>{let p=l.split(',');return{emis:p[0],name:p[1]}}).filter(x=>x.name);}else{let wb=XLSX.read(e.target.result,{type:'array'});let ws=wb.Sheets[wb.SheetNames[0]];let rows=XLSX.utils.sheet_to_json(ws,{header:1});pendingSchools=rows.slice(1).map(row=>{let emis=row.find(c=>String(c).length>=6&&!isNaN(c));let name=row.find(c=>typeof c==='string'&&c.length>3);return{emis:emis||'',name:name||''}}).filter(x=>x.name);}showPreview();}catch(err){alert('File error: '+err)}};if(file.name.endsWith('.xlsx')||file.name.endsWith('.xls'))r.readAsArrayBuffer(file);else r.readAsText(file);}else if(paste){pendingSchools=paste.split('\n').map(l=>{let p=l.split(',');return{emis:p[0]?.trim(),name:p[1]?.trim()||p[0]}}).filter(x=>x.name);showPreview();}else alert('Choose file or paste first');}
-function showPreview(){document.getElementById('schoolPreview').innerHTML='<b>Preview '+pendingSchools.length+' schools:</b><br>'+pendingSchools.slice(0,5).map(s=>s.emis+' - '+s.name).join('<br>')+'...';document.getElementById('uploadStatus').innerText='⏳ UPLOADING '+pendingSchools.length+' / '+pendingSchools.length+'...';}
-function confirmSchools(){if(currentRole!=='admin'){alert('Only Admin!');return;}if(!pendingSchools.length){alert('Preview first!');return;}if(document.getElementById('replaceAll').checked){schools=[];}pendingSchools.forEach(s=>{if(!schools.find(x=>x.emis==s.emis))schools.push(s);});save();alert('✅ Saved '+pendingSchools.length+' schools! Total now '+schools.length);pendingSchools=[];}
-function addSchoolManual(){if(currentRole!=='admin'){alert('Only Admin!');return;}let e=document.getElementById('newEmis').value.trim();let n=document.getElementById('newSchool').value.trim();if(!n){alert('Type school name');return;}schools.push({emis:e||Date.now(),name:n});save();alert('School Added!');}
+function showPreview(){
+  let unique=[];let dupCount=0;
+  pendingSchools.forEach(s=>{
+    if(findDuplicateEmis(s.emis,unique) || findDuplicateEmis(s.emis,schools)){dupCount++;}
+    else{unique.push(s);}
+  });
+  document.getElementById('schoolPreview').innerHTML='<b>Preview: '+pendingSchools.length+' in file → ✅ '+unique.length+' NEW will be added, 🚫 '+dupCount+' DUPLICATE EMIS will be SKIPPED (Name duplicates allowed!)</b><br>'+unique.slice(0,5).map(s=>s.emis+' - '+s.name).join('<br>')+'...';
+  document.getElementById('uploadStatus').innerText='⏳ UPLOADING '+unique.length+' NEW / '+pendingSchools.length+' total ('+dupCount+' duplicate EMIS skipped)...';
+  pendingSchools = unique;
+}
+function confirmSchools(){
+  if(currentRole!=='admin'){alert('Only Admin!');return;}
+  if(!pendingSchools.length){alert('Preview first! No NEW schools - all were duplicate EMIS!');return;}
+  if(document.getElementById('replaceAll').checked){schools=[];}
+  let added=0;let skipped=0;
+  pendingSchools.forEach(s=>{
+    if(findDuplicateEmis(s.emis,schools)){skipped++;}
+    else{schools.push({emis:normEmis(s.emis),name:String(s.name).trim()});added++;}
+  });
+  save();alert('✅ Added '+added+' NEW schools! 🚫 Skipped '+skipped+' duplicate EMIS! Total now '+schools.length);pendingSchools=[];
+}
+function addSchoolManual(){
+  if(currentRole!=='admin'){alert('Only Admin!');return;}
+  let e=document.getElementById('newEmis').value.trim();let n=document.getElementById('newSchool').value.trim();
+  if(!n){alert('Type school name');return;}
+  if(!e){alert('⚠️ EMIS is REQUIRED! Every school must have unique EMIS. Type EMIS first!');return;}
+  let dup=findDuplicateEmis(e,schools);
+  if(dup){
+    let msg='🚫 DUPLICATE EMIS! EMIS '+e+' already exists: '+dup.emis+' - '+dup.name+' - NOT ADDED!';
+    document.getElementById('schoolDupMsg').innerText=msg;
+    alert(msg);
+    return;
+  }
+  document.getElementById('schoolDupMsg').innerText='';
+  schools.push({emis:e,name:n});save();alert('✅ School Added! '+e+' - '+n+' (Same Name allowed, EMIS is unique!)');
+  document.getElementById('newEmis').value='';document.getElementById('newSchool').value='';
+}
 function searchDBE(){let q=(document.getElementById('dbeSearch').value||'').toLowerCase();if(!q){document.getElementById('dbeResults').innerHTML='';return;}let f=schools.filter(s=>s.name.toLowerCase().includes(q)).slice(0,10);document.getElementById('dbeResults').innerHTML=f.map(s=>'<div class="badge" onclick="document.getElementById(\'newEmis\').value=\''+s.emis+'\';document.getElementById(\'newSchool\').value=\''+s.name+'\'">'+s.name+' - '+s.emis+' (Tap to fill)</div>').join('')||'No school found';}
 function downloadSchools(){let b=new Blob([JSON.stringify(schools,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='makhanani-schools.json';a.click();}
 function isOverdue(l){return !l.returned && new Date()>new Date(l.due);}
