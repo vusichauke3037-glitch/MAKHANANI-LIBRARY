@@ -4,393 +4,220 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MAKHANANI - Digital Library</title>
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https:; script-src 'self' https://www.gstatic.com https://cdn.jsdelivr.net https://cdn.sheetjs.com https://unpkg.com 'unsafe-inline'; style-src 'self' https: 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https://*.firebaseio.com https://*.googleapis.com wss://*.firebaseio.com;">
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
-*{box-sizing:border-box;font-family:Arial,sans-serif}
-body{margin:0;background:#eef2f7}
-.header{background:#174ea6;color:#fff;padding:14px;text-align:center}
-.logo-row{display:flex;align-items:center;justify-content:center;gap:12px}
-.logo-img{width:62px;height:62px;object-fit:contain;background:#fff;border-radius:50%;padding:4px;border:3px solid #fff}
-.logo-fallback{width:62px;height:62px;background:#fff;color:#174ea6;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:bold;border:3px solid #fff}
-.header h1{margin:0;font-size:22px}
-.header p{margin:4px 0 0;font-size:13px}
-.header .small{color:#dbeafe !important}
-.nav{display:flex;gap:6px;padding:10px;background:#fff;overflow-x:auto;position:sticky;top:0;z-index:10;box-shadow:0 2px 6px #0001}
-.nav button{flex:1;min-width:90px;padding:10px;border:0;border-radius:8px;background:#e8eefb;font-weight:bold;cursor:pointer;white-space:nowrap}
-.nav button.active{background:#174ea6;color:#fff}
-.nav button.gold{background:#fff3cd;border:2px solid #ffb300}
-.nav button.gold.active{background:#ffb300;color:#000}
-.nav button.admin{background:#111;color:#ffb300;border:2px solid #ffb300}
-.nav button.admin.active{background:#ffb300;color:#000}
-.wrap{max-width:1000px;margin:auto;padding:12px}
-.card{background:#fff;padding:14px;border-radius:12px;margin-bottom:12px;box-shadow:0 2px 6px #0001;border-left:5px solid #174ea6}
-.card h3{margin:0 0 8px;text-transform:uppercase}
-.card.gold{border-left:5px solid #ffb300;background:#fffdf5}
-.card.red{border-left:5px solid #c62828}
-.card.green{border-left:5px solid #1a7f37}
-.card.scan{border-left:5px solid #111;background:#f8f9ff}
-.card.learner{border-left:5px solid #1a7f37;background:#f0fff4}
-.card.secure{border-left:5px solid #111;background:#f0f0f0}
-.card.admin{border-left:5px solid #111;background:#fff8e1}
-.card.dbe{border-left:5px solid #007A4D;background:#f0fff4}
-input,select,textarea{width:100%;padding:11px;margin:6px 0;border:1px solid #cbd5e1;border-radius:8px;font-size:15px}
-select{font-weight:bold;text-transform:uppercase}
-textarea{min-height:120px;font-family:monospace;text-transform:uppercase}
-.btn{width:100%;padding:13px;border:0;border-radius:8px;background:#174ea6;color:#fff;font-weight:bold;cursor:pointer;font-size:15px;text-transform:uppercase}
-.btn.green{background:#1a7f37}.btn.red{background:#c62828}.btn.orange{background:#ef6c00}.btn.purple{background:#6a1b9a}.btn.black{background:#111}.btn.gold{background:#ffb300;color:#000}
-.btn.small{width:auto;padding:6px 12px;font-size:13px;border-radius:20px}
-.btn.half{width:49%;display:inline-block}
-.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
-.grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px}
-.stat{background:#fff;padding:14px;border-radius:12px;text-align:center;box-shadow:0 2px 6px #0001;border-top:4px solid #174ea6}
-.stat b{font-size:24px;display:block}
-.stat.red{border-top:4px solid #c62828}.stat.red b{color:#c62828}
-.stat.green{border-top:4px solid #1a7f37}.stat.green b{color:#1a7f37}
-.stat.gold{border-top:4px solid #ffb300}.stat.gold b{color:#b88600}
-.stat.black{border-top:4px solid #111}.stat.black b{color:#111}
-table{width:100%;border-collapse:collapse;font-size:14px}
-th,td{padding:8px;border-bottom:1px solid #eee;text-align:left;text-transform:uppercase}
-.badge{padding:3px 8px;border-radius:20px;font-size:12px;font-weight:bold}
-.badge.borrowed{background:#ffebee;color:#c62828}.badge.returned{background:#e8f5e9;color:#1a7f37}
-.small{font-size:12px;color:#666}
-.hidden{display:none}
-.msg{padding:12px;border-radius:8px;font-weight:bold;font-size:16px;margin-top:10px;background:#fff3cd;border:1px solid #ffcc00;text-transform:uppercase}
-.msg.ok{background:#e8f5e9;border-color:#1a7f37;color:#1a7f37}
-.msg.err{background:#ffebee;border-color:#c62828;color:#c62828}
-.qty-box{background:#fff8e1;border:2px dashed #ef6c00;border-radius:10px;padding:10px;margin:6px 0}
-.qty-box label{font-weight:bold;color:#ef6c00;font-size:14px}
-.bar{height:18px;background:#e8eefb;border-radius:20px;overflow:hidden;margin:4px 0}
-.bar > div{height:100%;background:#174ea6;color:#fff;font-size:11px;line-height:18px;text-align:right;padding-right:6px;font-weight:bold}
-#reader-issue,#reader-return{width:100%;max-width:400px;margin:10px auto;border-radius:12px;overflow:hidden}
-.learner-item{padding:10px;border-bottom:1px solid #eee;cursor:pointer;display:flex;justify-content:space-between;align-items:center;text-transform:uppercase}
-.learner-item:hover{background:#e8f5e9}
-.learner-pick{max-height:280px;overflow-y:auto;border:1px solid #cbd5e1;border-radius:8px;background:#fff;margin-top:2px}
-.selected-learner{background:#1a7f37;color:#fff;padding:10px;border-radius:8px;font-weight:bold;margin:6px 0;display:flex;justify-content:space-between;align-items:center;text-transform:uppercase}
-.selected-learner button{background:#fff;color:#c62828;border:0;border-radius:20px;padding:4px 10px;font-weight:bold;cursor:pointer}
-.school-badge{background:#ffb300;color:#000;padding:6px 12px;border-radius:20px;font-weight:bold;font-size:13px;display:inline-block}
-.admin-badge{background:#111;color:#ffb300;padding:6px 12px;border-radius:20px;font-weight:bold;font-size:13px;display:inline-block}
-@media(max-width:600px){.grid,.grid4{grid-template-columns:1fr 1fr}.logo-img,.logo-fallback{width:48px;height:48px;font-size:24px}}
+*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#eef4ff}
+header{background:#1a56db;color:#fff;padding:14px;text-align:center}
+header .logo{width:48px;height:48px;background:#fff;color:#1a56db;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;vertical-align:middle}
+header h1{margin:0;font-size:22px;display:inline;vertical-align:middle}
+header p{margin:4px 0;font-size:12px}
+.topbar{background:#facc15;color:#000;font-weight:900;padding:6px;text-align:center;font-size:12px}
+.topbar span{background:#1a56db;color:#fff;padding:2px 8px;border-radius:20px}
+nav{display:flex;flex-wrap:wrap;gap:6px;padding:10px;background:#fff;position:sticky;top:0;z-index:10}
+nav button{flex:1;min-width:80px;padding:10px;border:0;border-radius:10px;background:#e0e7ff;font-weight:900;cursor:pointer}
+nav button.active{background:#1a56db;color:#fff}
+.page{display:none;padding:12px;max-width:900px;margin:auto}.page.active{display:block}
+.card{background:#fff;border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:0 2px 8px #0002}
+input,select,textarea{width:100%;padding:12px;margin:6px 0;border:2px solid #bfdbfe;border-radius:10px;font-size:16px}
+button.big{width:100%;padding:14px;margin:6px 0;border:0;border-radius:12px;background:#1a56db;color:#fff;font-size:17px;font-weight:900;cursor:pointer}
+button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}button.red{background:#dc2626}button.orange{background:#ea580c}
+.badge{background:#f0f9ff;border:2px solid #bfdbfe;border-radius:10px;padding:10px;margin:6px 0}
+.badge button{padding:8px 10px;margin:3px;border:0;border-radius:8px;background:#1a56db;color:#fff;font-weight:900;cursor:pointer}
+.stats{display:flex;gap:8px;flex-wrap:wrap}.stat{flex:1;min-width:100px;background:#fff;border-radius:12px;padding:12px;text-align:center}
+.stat b{font-size:26px;color:#1a56db}
+.adminbar{background:#1e293b;color:#fff;padding:10px;border-radius:10px;text-align:center;font-weight:900}
+.adminbar span{background:#dc2626;padding:4px 10px;border-radius:20px;font-size:12px}
+#reader,#reader2,#reader-home,#reader-issue2{width:100%;border-radius:12px;overflow:hidden;margin:8px 0}
+.greenbox{background:#16a34a;color:#fff;padding:10px;border-radius:10px;text-align:center;font-weight:900}
 </style>
 </head>
 <body>
-<div class="header">
-  <div class="logo-row">
-    <img src="logo.png" class="logo-img" onerror="this.style.display='none';document.getElementById('logoFallback').style.display='flex';">
-    <div class="logo-fallback" id="logoFallback" style="display:none">M</div>
-    <div style="text-align:left"><h1>MAKHANANI HIGH SCHOOL</h1><p>📚 DIGITAL LIBRARY | XINTIMANI GROUP | MENTE ET MANU</p></div>
-  </div>
-  <p class="small" style="margin-top:8px">🏫 SCHOOL: <span id="headerSchoolCode" class="school-badge">MAKHANANI</span> <span id="headerSchoolName" class="small" style="color:#fff"></span> <span id="headerAdminBadge" class="hidden"><span class="admin-badge">👑 ADMIN MODE</span></span> | 🇿🇦 DBE NATIONWIDE | 🔒 SECURED | 📷 SCAN</p>
+<header><div class="logo">M</div> <h1>MAKHANANI HIGH SCHOOL</h1><p>📚 DIGITAL LIBRARY | XINTIMANI GROUP | MENTE ET MANU</p></header>
+<div class="topbar">🏫 SCHOOL: <span>MAKHANANI</span> - MAKHANANI HIGH SCHOOL 👑 ADMIN MODE | 🇿🇦 DBE NATIONWIDE | 🔒 SECURED | 📷 SCAN</div>
+<nav>
+<button onclick="show('home')" id="b-home" class="active">🏠 HOME</button>
+<button onclick="show('issue')" id="b-issue">📤 ISSUE</button>
+<button onclick="show('return')" id="b-return">📥 RETURN</button>
+<button onclick="show('learners')" id="b-learners">👧 LEARNERS</button>
+<button onclick="show('books')" id="b-books">📖 BOOKS</button>
+<button onclick="show('principal')" id="b-principal">📊 PRINCIPAL</button>
+<button onclick="show('parent')" id="b-parent">👨‍👩‍👧 PARENT</button>
+<button onclick="show('admin')" id="b-admin">👑 ADMIN</button>
+</nav>
+
+<!-- HOME -->
+<div id="home" class="page active">
+<div class="card"><div class="adminbar">👑 APP ADMINISTRATOR - FULL CONTROL<br><small>✅ LOGGED IN AS ADMIN — FULL CONTROL</small></div><div style="background:#1e293b;color:#fff;padding:10px;border-radius:10px;margin-top:6px;text-align:center">👑 WELCOME SUPER ADMIN — YOU CONTROL ALL SCHOOLS <button style="background:#dc2626;color:#fff;border:0;padding:6px 12px;border-radius:20px;font-weight:900" onclick="alert('Logged Out')">LOGOUT ADMIN</button></div></div>
+<div class="stats">
+<div class="stat"><b id="sSchools">0</b><br>🏫 SCHOOLS</div>
+<div class="stat"><b id="sBooks">0</b><br>📖 ALL BOOKS</div>
+<div class="stat"><b id="sLearners">0</b><br>👧 ALL LEARNERS</div>
+<div class="stat"><b id="sOut">0</b><br>📚 ALL BORROWED</div>
 </div>
-<div class="nav">
-  <button class="active" onclick="showTab('home',this)">🏠 HOME</button>
-  <button onclick="showTab('issue',this)">📤 ISSUE</button>
-  <button onclick="showTab('return',this)">📥 RETURN</button>
-  <button onclick="showTab('learners',this)">👩‍🎓 LEARNERS</button>
-  <button onclick="showTab('books',this)">📚 BOOKS</button>
-  <button onclick="showTab('principal',this)" class="gold">👔 PRINCIPAL</button>
-  <button onclick="showTab('parent',this)">👨‍👩‍👧 PARENT</button>
-  <button onclick="showTab('admin',this)" class="admin">👑 ADMIN</button>
-  <button onclick="showTab('login',this)">🔐 LOGIN</button>
+<div class="card"><div class="greenbox">WELCOME TO MAKHANANI! 💚 EVER HAPPY!</div><p>1. Add Learner + Print Barcode Card<br>2. Add Book<br>3. 📷 Scan Learner Card + Scan Book → Issue<br>4. 📷 Scan Book → Return<br>5. Principal Sees Report | Parent Checks Child</p></div>
+<div class="card"><h3>🔍 Quick Scan</h3><input id="quickScan" placeholder="Scan Learner OR Book..."><button class="big yellow" onclick="startScan('quickScan')">📷 SCAN WITH CAMERA</button><div id="reader-home"></div><button class="big" onclick="quickScan()">GO →</button><div id="quickResult"></div></div>
 </div>
-<div class="wrap">
-<div id="tab-home">
-  <div class="grid"><div class="stat"><b id="totalBooks">0</b>📚 TOTAL BOOKS</div><div class="stat"><b id="totalLearners">0</b>👩‍🎓 LEARNERS</div><div class="stat"><b id="borrowedCount">0</b>📤 BORROWED</div></div>
-  <div class="card dbe"><h3>🇿🇦 DBE SCHOOLS NATIONWIDE</h3><p>✅ <b><span id="dbeCountHome">21</span> DBE SCHOOLS LOADED</b> — STARTER LIST<br>🔍 Search by Name / EMIS / Town in <b>🔐 LOGIN</b> tab to switch school.<br><span class="small">Admin can upload full 25,000+ list in 👑 ADMIN → UPLOAD LIST!</span></p><button class="btn" style="background:#007A4D" onclick="showTab('login',document.querySelectorAll('.nav button')[8])">🔍 FIND MY DBE SCHOOL →</button></div>
-  <div class="card secure"><h3>🛡️ SECURITY STATUS</h3><p id="securityStatus">CHECKING...</p><p class="small">✅ ONLY LIBRARIAN CAN EDIT • ✅ PARENT NEEDS ID + SURNAME (HASHED) • ✅ ADMIN CONTROLS ALL SCHOOLS • ✅ EMIS SEPARATES SCHOOLS</p></div>
-  <div class="card admin"><h3>👑 APP ADMINISTRATOR</h3><p>YOU ARE THE SUPER ADMIN. UPLOAD DBE LIST, ADD NEW SCHOOLS, DELETE SCHOOLS, VIEW ALL SCHOOLS.</p><button class="btn black" onclick="showTab('admin',document.querySelectorAll('.nav button')[7])">👑 OPEN ADMIN PANEL →</button><p class="small" style="margin-top:8px">ADMIN PASSCODE: <b>ADMIN@2026</b></p></div>
-  <div class="card"><h3>📚 ALL CAPS SUBJECTS</h3><p class="small" id="subjectListDisplay"></p></div>
-  <div class="card scan"><h3>📷 QUICK SCAN</h3><button class="btn black" onclick="showTab('issue',document.querySelectorAll('.nav button')[1])">👩‍🎓 PICK LEARNER + 📷 SCAN TO ISSUE →</button><button class="btn orange" onclick="showTab('return',document.querySelectorAll('.nav button')[2])" style="margin-top:8px">📷 SCAN TO RETURN →</button></div>
-  <div class="card"><h3>🔍 SEARCH BOOK</h3><input id="searchBook" placeholder="SEARCH TITLE OR BARCODE" oninput="renderBooks()" maxlength="100" style="text-transform:uppercase"><div id="bookList"></div></div>
-  <div class="card"><h3>📋 HOW IT WORKS</h3><p>1. <b>LOGIN:</b> 🔍 SEARCH DBE SCHOOL → TAP IT<br>2. <b>PICK LEARNER:</b> TYPE SURNAME → TAP NAME<br>3. <b>SCAN:</b> 📷 CAMERA SCANS BARCODE</p><p class="small">STATUS: <span id="conn">CONNECTING...</span> | <span id="loginStatus">NOT LOGGED IN</span></p></div>
+
+<!-- ISSUE -->
+<div id="issue" class="page">
+<div class="card"><h3>📤 ISSUE BOOK - WITH SCANNER</h3>
+<input id="scanLearner" placeholder="Learner No e.g. MKH-0001">
+<button class="big yellow" onclick="startScan('scanLearner')">📷 SCAN LEARNER CARD WITH CAMERA</button>
+<div id="reader"></div>
+<input id="scanBook" placeholder="Book Code e.g. BK-001">
+<button class="big yellow" onclick="startScan('scanBook')">📷 SCAN BOOK WITH CAMERA</button>
+<div id="reader-issue2"></div>
+<button class="big green" onclick="issueBook()">📤 GIVE BOOK</button><div id="issueMsg"></div></div>
+<div class="card"><h3>📚 Books OUT Now</h3><div id="outList"></div></div>
 </div>
-<div id="tab-issue" class="hidden">
-  <div class="card"><h3>📤 ISSUE BOOK - LIBRARIAN ONLY 🔒</h3>
-    <div class="card learner" style="margin:8px 0">
-      <label style="font-weight:bold">👩‍🎓 STEP 1 - SELECT LEARNER FROM SAVED LIST</label>
-      <input id="learnerSearch" placeholder="🔍 TYPE NAME / SURNAME / ID E.G. CHAUKE / JOHN / 8A01" oninput="filterLearnersForIssue()" autocomplete="off" style="border:2px solid #1a7f37;font-size:16px;text-transform:uppercase" maxlength="50">
-      <div id="selectedLearnerBox" class="hidden"></div>
-      <div id="learnerPickList" class="learner-pick"></div>
-      <div style="display:flex;gap:6px">
-        <select id="issueGrade"><option value="">GRADE</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select>
-        <select id="issueClass"><option value="">CLASS</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select>
-        <input id="issueNumber" type="number" min="1" max="60" placeholder="NO. 1-60">
-      </div>
-      <input id="issueLearnerId" placeholder="AUTO LEARNER ID" readonly style="background:#e8f5e9;font-weight:bold">
-      <input id="issueSurname" placeholder="SURNAME - AUTO" readonly style="background:#e8f5e9;font-weight:bold">
-      <input id="issueFirstName" placeholder="FIRST NAME - AUTO" readonly style="background:#e8f5e9">
-      <button class="btn" style="background:#666;margin-top:4px" onclick="clearSelectedLearner()">🔄 CLEAR / PICK DIFFERENT LEARNER</button>
-      <div id="learnerBooksInfo" class="small" style="margin-top:6px"></div>
-    </div>
-    <div class="card scan" style="margin:8px 0">
-      <label style="font-weight:bold">📷 STEP 2 - SCAN / TYPE BARCODE</label>
-      <input id="issueBarcode" placeholder="📷 SCAN OR TYPE E.G. MAT-001" style="font-size:18px;font-weight:bold;text-transform:uppercase;border:2px solid #111" maxlength="20">
-      <button class="btn black half" onclick="startScan('issue')">📷 START CAMERA SCAN</button>
-      <button class="btn red half" onclick="stopScan('issue')">⏹️ STOP CAMERA</button>
-      <div id="reader-issue" class="hidden"></div>
-      <p id="scanStatusIssue" class="small" style="text-align:center">💡 SCANNER GUN? JUST SCAN — ENTER = ISSUE.</p>
-      <label style="font-size:13px"><input type="checkbox" id="autoIssue" checked style="width:auto"> ✅ AUTO-ISSUE AFTER SCAN</label>
-    </div>
-    <input id="issuerName" placeholder="ISSUER (LIBRARIAN NAME)" maxlength="50" style="text-transform:uppercase">
-    <input id="issueDue" type="date">
-    <button class="btn green" onclick="issueBook()">✅ ISSUE BOOK TO SELECTED LEARNER</button><div id="issueMsg"></div><div id="lastIssued" style="margin-top:10px"></div>
-    <div id="scanHistoryIssue" style="margin-top:10px"></div>
-    <h3 style="margin-top:14px">📤 CURRENTLY BORROWED</h3><div id="borrowedListIssue"></div>
-  </div>
+
+<!-- RETURN -->
+<div id="return" class="page">
+<div class="card"><h3>📥 RETURN BOOK</h3>
+<input id="retBook" placeholder="Scan Book Code e.g. BK-001">
+<button class="big yellow" onclick="startScan('retBook')">📷 SCAN BOOK TO RETURN</button>
+<div id="reader2"></div>
+<button class="big green" onclick="returnBook()">📥 RETURN BOOK</button><div id="retMsg"></div></div>
+<div class="card"><h3>⏰ OVERDUE (14 Days)</h3><button class="big red" onclick="render()">🔄 CHECK NOW</button><div id="overdueList"></div></div>
 </div>
-<div id="tab-return" class="hidden">
-  <div class="card"><h3>📥 RETURN BOOK - LIBRARIAN ONLY 🔒</h3>
-    <div class="card scan" style="margin:8px 0">
-      <label style="font-weight:bold">📷 SCAN / TYPE BARCODE</label>
-      <input id="returnBarcode" placeholder="📷 SCAN OR TYPE" style="font-size:18px;font-weight:bold;text-transform:uppercase;border:2px solid #111" maxlength="20">
-      <button class="btn black half" onclick="startScan('return')">📷 START CAMERA SCAN</button>
-      <button class="btn red half" onclick="stopScan('return')">⏹️ STOP CAMERA</button>
-      <div id="reader-return" class="hidden"></div>
-      <label style="font-size:13px"><input type="checkbox" id="autoReturn" checked style="width:auto"> ✅ AUTO-RETURN AFTER SCAN</label>
-    </div>
-    <div id="returnLearnerInfo"></div>
-    <input id="retrieverName" placeholder="RETRIEVER (LIBRARIAN NAME)" maxlength="50" style="text-transform:uppercase">
-    <button class="btn orange" onclick="returnBook()">✅ RETURN BOOK</button><div id="returnMsg"></div>
-    <div id="scanHistoryReturn" style="margin-top:10px"></div>
-    <h3 style="margin-top:14px">📤 CURRENTLY BORROWED</h3><div id="borrowedList"></div>
-  </div>
+
+<!-- LEARNERS -->
+<div id="learners" class="page">
+<div class="card"><h3>➕ ADD LEARNER</h3>
+<input id="lName" placeholder="Learner Full Name">
+<input id="lGrade" placeholder="Grade e.g. Grade 8A">
+<input id="lSchool" placeholder="School - MAKHANANI HIGH SCHOOL" value="MAKHANANI HIGH SCHOOL">
+<button class="big" onclick="addLearner()">➕ MAKE LEARNER + CARD</button>
+<button class="big yellow" onclick="printAllCards()">🖨️ PRINT ALL LEARNER CARDS</button>
 </div>
-<div id="tab-learners" class="hidden">
-  <div class="card"><h3>👩‍🎓 ADD LEARNER 🔒</h3><select id="addGrade"><option value="">GRADE</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select><select id="addClass"><option value="">CLASS</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>H</option></select><input id="addNumber" type="number" min="1" max="60" placeholder="NUMBER 1-60"><input id="addName" placeholder="FIRST NAME" maxlength="50" style="text-transform:uppercase"><input id="addSurname" placeholder="SURNAME" maxlength="50" style="text-transform:uppercase"><button class="btn" onclick="addLearner()">➕ ADD LEARNER</button><div id="addLearnerMsg"></div></div>
-  <div class="card" style="border-left:5px solid #6a1b9a"><h3>⚡ BULK ADD LEARNERS</h3><p class="small">FORMAT: GRADE,CLASS,NUMBER,FIRSTNAME,SURNAME</p><textarea id="bulkLearners" placeholder="GRADE,CLASS,NUMBER,FIRSTNAME,SURNAME&#10;12,D,1,JOHN,MASEKO"></textarea><button class="btn purple" onclick="bulkAddLearners()">⚡ BULK ADD</button><div id="bulkLearnerMsg"></div></div>
-  <div class="card" style="border-left:5px solid #c62828"><h3>🗑️ DELETE LEARNER</h3><input id="deleteLearnerId" placeholder="LEARNER ID" maxlength="10" style="text-transform:uppercase"><button class="btn red" onclick="deleteLearner()">🗑️ DELETE</button><div id="deleteLearnerMsg"></div></div>
-  <div class="card"><h3>ALL LEARNERS</h3><input id="learnerTabSearch" placeholder="🔍 SEARCH LEARNERS..." oninput="renderLearners()" maxlength="50" style="text-transform:uppercase"><div id="learnerList"></div></div>
+<div class="card"><h3>👧 ALL LEARNERS</h3><input id="searchLearner" placeholder="Search name / no..." oninput="render()"><div id="learnerList"></div></div>
 </div>
-<div id="tab-books" class="hidden">
-  <div class="card"><h3>📚 ADD BOOK - WITH QUANTITY ✅</h3>
-    <label style="font-weight:bold">📖 SUBJECT - ALL CAPS ✅</label>
-    <select id="bookCategory"><option value="MAT">MAT - MATHEMATICS</option><option value="MATL">MATL - MATHEMATICAL LITERACY</option><option value="ENG">ENG - ENGLISH HOME LANGUAGE</option><option value="AFR">AFR - AFRIKAANS FIRST ADDITIONAL LANGUAGE</option><option value="ZUL">ZUL - ISIZULU HOME LANGUAGE</option><option value="SEP">SEP - SEPEDI HOME LANGUAGE</option><option value="XHO">XHO - ISIXHOSA HOME LANGUAGE</option><option value="LIFS">LIFS - LIFE SCIENCES</option><option value="PHYS">PHYS - PHYSICAL SCIENCES</option><option value="ACC">ACC - ACCOUNTING</option><option value="BUS">BUS - BUSINESS STUDIES</option><option value="ECO">ECO - ECONOMICS</option><option value="GEO">GEO - GEOGRAPHY</option><option value="HIST">HIST - HISTORY</option><option value="LIFO">LIFO - LIFE ORIENTATION</option><option value="CAT">CAT - COMPUTER APPLICATIONS TECHNOLOGY</option><option value="IT">IT - INFORMATION TECHNOLOGY</option><option value="TOUR">TOUR - TOURISM</option><option value="CONS">CONS - CONSUMER STUDIES</option><option value="AGRI">AGRI - AGRICULTURAL SCIENCES</option><option value="EGD">EGD - ENGINEERING GRAPHICS & DESIGN</option><option value="TECH">TECH - TECHNOLOGY</option></select>
-    <select id="bookGrade"><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select>
-    <input id="bookTitle" placeholder="BOOK TITLE E.G. OXFORD MATHEMATICS GRADE 12" maxlength="100" style="text-transform:uppercase">
-    <input id="bookBarcode" placeholder="STARTING BARCODE - AUTO IF EMPTY E.G. MAT-001" maxlength="20" style="text-transform:uppercase">
-    <div class="qty-box"><label>🔢 QUANTITY</label><input id="bookQty" type="number" min="1" max="200" value="1"></div>
-    <button class="btn" onclick="addBook()">➕ ADD BOOK(S)</button><div id="bookMsg"></div>
-  </div>
-  <div class="card" style="border-left:5px solid #6a1b9a"><h3>⚡ BULK ADD BOOKS</h3><p class="small">FORMAT: CATEGORY,GRADE,TITLE,BARCODE — ALL CAPS AUTO ✅</p><textarea id="bulkBooks" placeholder="CATEGORY,GRADE,TITLE,BARCODE&#10;ENG,10,OXFORD ENGLISH GRADE 10,&#10;PHYS,12,PHYSICAL SCIENCES GRADE 12,"></textarea><button class="btn purple" onclick="bulkAddBooks()">⚡ BULK ADD BOOKS</button><div id="bulkBookMsg"></div></div>
-  <div class="card" style="border-left:5px solid #111"><h3>🖨️ PRINT BARCODES</h3><button class="btn black" onclick="printAllBarcodes()">🖨️ PRINT ALL BARCODES</button><div style="margin-top:10px"><input id="printOneBarcode" placeholder="OR TYPE ONE BARCODE" maxlength="20" style="text-transform:uppercase"><button class="btn" onclick="printSingleFromInput()" style="margin-top:6px">🖨️ PRINT THIS ONE</button></div><div id="printMsg"></div></div>
+
+<!-- BOOKS -->
+<div id="books" class="page">
+<div class="card"><h3>➕ ADD BOOK</h3>
+<input id="bTitle" placeholder="Book Title">
+<input id="bAuthor" placeholder="Author">
+<input id="bCat" placeholder="Category e.g. Maths / English">
+<button class="big" onclick="addBook()">➕ ADD BOOK</button>
 </div>
-<div id="tab-principal" class="hidden">
-  <div class="card gold"><h3>👔 PRINCIPAL DASHBOARD 🔒</h3><p class="small" id="principalDate">LOADING...</p><button class="btn gold" onclick="renderPrincipal()">🔄 REFRESH</button> <button class="btn black" onclick="printPrincipalReport()" style="margin-top:8px">🖨️ PRINT PRINCIPAL REPORT</button></div>
-  <div class="grid4"><div class="stat gold"><b id="pTotalBooks">0</b>📚 TOTAL BOOKS</div><div class="stat"><b id="pTotalLearners">0</b>👩‍🎓 LEARNERS</div><div class="stat red"><b id="pBorrowed">0</b>📤 BORROWED</div><div class="stat green"><b id="pAvailable">0</b>✅ AVAILABLE</div></div>
-  <div class="grid" style="margin-top:10px"><div class="stat red"><b id="pOverdue">0</b>🔴 OVERDUE</div><div class="stat"><b id="pDueToday">0</b>📅 DUE TODAY</div><div class="stat gold"><b id="pBorrowRate">0%</b>📊 % BORROWED</div></div>
-  <div class="card"><h3>📚 BY GRADE</h3><div id="pByGrade"></div></div>
-  <div class="card"><h3>📖 BY SUBJECT - ALL CAPS</h3><div id="pBySubject"></div></div>
-  <div class="card red"><h3>🔴 OVERDUE</h3><div id="pOverdueList">LOGIN TO VIEW</div></div>
-  <div class="card"><h3>📤 CURRENTLY BORROWED</h3><div id="pBorrowedList">LOGIN TO VIEW</div></div>
-  <div class="card green"><h3>✅ RECENTLY RETURNED</h3><div id="pReturnedList">LOGIN TO VIEW</div></div>
-  <div class="card"><h3>🏆 TOP BORROWED</h3><div id="pTopBooks"></div></div>
+<div class="card"><h3>📖 ALL BOOKS</h3><input id="searchBook" placeholder="Search book..." oninput="render()"><div id="bookList"></div></div>
 </div>
-<div id="tab-parent" class="hidden">
-  <div class="card" style="border-left:5px solid #1a7f37"><h3>👨‍👩‍👧 PARENT CHECK - PROTECTED</h3><p class="small">🔒 SURNAME IS HASHED — 5 WRONG TRIES = LOCKED 5 MINS.</p><input id="parentId" placeholder="LEARNER ID E.G. 8A01" style="text-transform:uppercase" maxlength="10"><input id="parentSurname" placeholder="SURNAME" maxlength="50" style="text-transform:uppercase"><button class="btn green" onclick="checkMyChild()">🔍 CHECK MY CHILD</button><div id="parentResult" style="margin-top:10px"></div><div id="parentAttempts" class="small"></div></div>
+
+<!-- PRINCIPAL -->
+<div id="principal" class="page">
+<div class="card"><h3>📊 PRINCIPAL DASHBOARD</h3>
+<div class="stats"><div class="stat"><b id="pLearners">0</b><br>Learners</div><div class="stat"><b id="pBooks">0</b><br>Books</div><div class="stat"><b id="pOut">0</b><br>Borrowed</div><div class="stat"><b id="pOver">0</b><br>Overdue</div></div>
+<button class="big" onclick="render();alert('Report Refreshed!')">🔄 REFRESH REPORT</button>
+<div id="principalList"></div></div>
 </div>
-<div id="tab-admin" class="hidden">
-  <div class="card admin"><h3>👑 APP ADMINISTRATOR - FULL CONTROL</h3><p class="small" id="adminStatus">🔒 NOT LOGGED IN AS ADMIN</p>
-    <div id="adminLoginBox">
-      <label style="font-weight:bold">🔐 ADMIN PASSCODE</label>
-      <input id="adminPasscode" type="password" placeholder="ENTER ADMIN PASSCODE" maxlength="50">
-      <p class="small">DEFAULT: <b>ADMIN@2026</b></p>
-      <button class="btn black" onclick="adminLogin()">👑 UNLOCK ADMIN PANEL</button><div id="adminLoginMsg"></div>
-    </div>
-    <div id="adminPanel" class="hidden">
-      <p style="background:#111;color:#ffb300;padding:10px;border-radius:8px;font-weight:bold;text-align:center">👑 WELCOME SUPER ADMIN — YOU CONTROL ALL SCHOOLS <button class="btn small" style="background:#c62828;color:#fff;margin-left:10px" onclick="adminLogout()">LOGOUT ADMIN</button></p>
-      <div class="grid4" style="margin:10px 0"><div class="stat black"><b id="aTotalSchools">0</b>🏫 SCHOOLS</div><div class="stat"><b id="aTotalBooksAll">0</b>📚 ALL BOOKS</div><div class="stat"><b id="aTotalLearnersAll">0</b>👩‍🎓 ALL LEARNERS</div><div class="stat red"><b id="aTotalBorrowedAll">0</b>📤 ALL BORROWED</div></div>
-      <div class="card" style="border-left:5px solid #007A4D;background:#f0fff4">
-        <h3>📎 👑 UPLOAD LIST OF SCHOOLS - ADMIN ONLY</h3>
-        <p class="small">✅ Upload <b>CSV / JSON / EXCEL (.xlsx)</b> from DBE / DataFirst<br>✅ Or paste below. <b>Preview first, then Confirm!</b></p>
-        <button class="btn small" style="background:#007A4D" onclick="downloadSchoolTemplate()">📥 DOWNLOAD TEMPLATE (CSV)</button>
-        <button class="btn small" style="background:#111;margin-left:6px" onclick="downloadCurrentSchoolsAsJSON()">📥 DOWNLOAD CURRENT LIST (JSON)</button>
-        <label style="font-weight:bold;margin-top:10px;display:block">📎 CHOOSE FILE:</label>
-        <input type="file" id="schoolFileInput" accept=".csv,.json,.xlsx,.xls,.txt" onchange="handleSchoolFileUpload(event)" style="background:#fff;border:2px dashed #007A4D;padding:14px">
-        <label style="font-weight:bold;margin-top:10px;display:block">📋 OR PASTE HERE (CSV):</label>
-        <p class="small">FORMAT: <b>EMIS,NAME,TOWN,PROVINCE,DISTRICT</b> — One school per line</p>
-        <textarea id="pasteSchoolsText" placeholder="EMIS,NAME,TOWN,PROVINCE,DISTRICT&#10;700400123,MAKHANANI HIGH SCHOOL,BENONI,GAUTENG,EKURHULENI NORTH&#10;400100001,DURBAN HIGH SCHOOL,DURBAN,KWAZULU-NATAL,UMGUNGUNDLOVU"></textarea>
-        <button class="btn" style="background:#007A4D" onclick="previewPastedSchools()">👀 PREVIEW PASTED LIST</button>
-        <div id="uploadPreviewBox" style="margin-top:10px"></div>
-        <div id="uploadProgress" class="small" style="margin-top:6px"></div>
-        <div id="uploadResult" style="margin-top:8px"></div>
-        <p class="small" style="margin-top:10px">💡 DBE Excel from DataFirst has many columns — App auto-finds EMIS + NAME + TOWN + PROVINCE.</p>
-      </div>
-      <div class="card dbe"><h3>🇿🇦 ➕ ADD SCHOOL FROM DBE LIST</h3>
-        <input id="adminDBESearch" placeholder="🔍 SEARCH DBE SCHOOL E.G. BENONI HIGH / DURBAN HIGH" oninput="searchDBEForAdmin(this.value)" style="border:2px solid #007A4D;text-transform:uppercase" maxlength="60">
-        <div id="adminDBEResults" style="max-height:250px;overflow-y:auto;border:1px solid #cbd5e1;border-radius:8px;background:#fff;margin-top:4px"></div>
-        <p class="small">👆 Tap a DBE school above to auto-fill below. If NOT in starter list, fill manually.</p>
-        <input id="newSchoolCode" placeholder="SCHOOL CODE = EMIS NUMBER E.G. 700400123" maxlength="20" style="text-transform:uppercase">
-        <input id="newSchoolName" placeholder="SCHOOL NAME E.G. BENONI HIGH SCHOOL" maxlength="80" style="text-transform:uppercase">
-        <input id="newSchoolTown" placeholder="TOWN / AREA E.G. BENONI, GAUTENG" maxlength="80" style="text-transform:uppercase">
-        <input id="newSchoolPrincipal" placeholder="PRINCIPAL NAME (OPTIONAL)" maxlength="60" style="text-transform:uppercase">
-        <input id="newSchoolLibrarianEmail" placeholder="LIBRARIAN EMAIL FOR THIS SCHOOL (OPTIONAL)" maxlength="100">
-        <button class="btn green" onclick="addNewSchool()">🏫 CREATE NEW SCHOOL ✅</button><div id="addSchoolMsg"></div>
-      </div>
-      <div class="card"><h3>🏫 ALL SCHOOLS - MANAGE</h3><button class="btn gold" onclick="loadAllSchoolsAdmin()">🔄 REFRESH ALL SCHOOLS</button><div id="allSchoolsList" style="margin-top:10px"></div></div>
-      <div class="card red"><h3>⚠️ DANGER ZONE - ADMIN ONLY</h3>
-        <input id="dangerSchoolCode" placeholder="TYPE SCHOOL CODE TO DELETE E.G. SCH005" maxlength="20" style="text-transform:uppercase">
-        <button class="btn red" onclick="deleteSchoolAdmin()">🗑️ DELETE THIS SCHOOL + ALL ITS DATA (CANNOT UNDO!)</button><div id="dangerMsg"></div>
-      </div>
-      <div class="card"><h3>🔧 ADMIN QUICK ACTIONS</h3>
-        <button class="btn black half" onclick="exportAllSchools()">📥 EXPORT ALL SCHOOLS (BACKUP)</button>
-        <button class="btn purple half" onclick="printAdminReport()">🖨️ PRINT ADMIN REPORT</button>
-      </div>
-    </div>
-  </div>
+
+<!-- PARENT -->
+<div id="parent" class="page">
+<div class="card"><h3>👨‍👩‍👧 PARENT CHECK</h3><p>Type your child's Learner No to see books borrowed.</p>
+<input id="parentNo" placeholder="Learner No e.g. MKH-0001">
+<button class="big green" onclick="parentCheck()">🔍 CHECK MY CHILD</button><div id="parentResult"></div></div>
 </div>
-<div id="tab-login" class="hidden">
-  <div class="card dbe"><h3>🇿🇦 CHOOSE YOUR SCHOOL - DBE REGISTERED</h3>
-    <p class="small">✅ <b><span id="dbeCountLogin">21</span> DBE SCHOOLS</b> in starter list. Type name / EMIS / town to find yours.</p>
-    <input id="dbeSchoolSearch" placeholder="🔍 TYPE SCHOOL NAME / EMIS / TOWN E.G. MAKHANANI / 700400123 / BENONI" oninput="searchDBESchools(this.value)" autocomplete="off" style="border:2px solid #007A4D;font-size:16px;text-transform:uppercase" maxlength="60">
-    <select id="dbeProvinceFilter" onchange="searchDBESchools(document.getElementById('dbeSchoolSearch').value)">
-      <option value="">🌍 ALL PROVINCES - SOUTH AFRICA</option><option value="GAUTENG">GAUTENG</option><option value="KWAZULU-NATAL">KWAZULU-NATAL</option><option value="WESTERN CAPE">WESTERN CAPE</option><option value="EASTERN CAPE">EASTERN CAPE</option><option value="LIMPOPO">LIMPOPO</option><option value="MPUMALANGA">MPUMALANGA</option><option value="NORTH WEST">NORTH WEST</option><option value="FREE STATE">FREE STATE</option><option value="NORTHERN CAPE">NORTHERN CAPE</option>
-    </select>
-    <div id="dbeSchoolResults" style="max-height:300px;overflow-y:auto;border:1px solid #cbd5e1;border-radius:8px;background:#fff;margin-top:4px"></div>
-    <div id="dbeSelectedSchool" style="margin-top:8px"></div>
-    <select id="loginSchoolCode" onchange="changeSchoolCode(this.value)" style="display:none"></select>
-    <input id="loginSchoolCodeCustom" placeholder="OR TYPE SCHOOL CODE" maxlength="20" style="display:none">
-    <p class="small">💡 SCHOOL CODE = <b>EMIS NUMBER</b> from DBE. Your books stay separate per EMIS.</p>
-  </div>
-  <div class="card"><h3>🔐 LIBRARIAN / PRINCIPAL LOGIN</h3>
-    <input id="loginEmail" type="email" placeholder="EMAIL" maxlength="100" autocomplete="username"><input id="loginPass" type="password" placeholder="PASSWORD" maxlength="100" autocomplete="current-password"><button class="btn" onclick="doLogin()">LOGIN</button><button class="btn red" onclick="doLogout()" style="margin-top:8px">LOGOUT</button><div id="loginMsg"></div><div id="loginAttempts" class="small"></div>
-    <p class="small" style="margin-top:10px">CURRENT SCHOOL: <b id="currentSchoolDisplay">MAKHANANI</b> - <span id="currentSchoolNameDisplay">MAKHANANI HIGH SCHOOL</span></p>
-  </div>
+
+<!-- ADMIN -->
+<div id="admin" class="page">
+<div class="card"><h3>👑 APP ADMINISTRATOR - FULL CONTROL</h3><p>✅ LOGGED IN AS ADMIN — FULL CONTROL</p></div>
+<div class="card"><h3>📤 UPLOAD LIST OF SCHOOLS - ADMIN ONLY</h3>
+<p>✅ Upload CSV / JSON / EXCEL (.xlsx) from DBE / DataFirst<br>✅ Or paste below. Preview first, then Confirm!</p>
+<input type="file" id="schoolFile" accept=".csv,.json,.xlsx,.xls">
+<textarea id="schoolPaste" rows="4" placeholder="Paste schools: EMIS, Name per line e.g. 123456, MAKHANANI HIGH"></textarea>
+<label><input type="checkbox" id="replaceAll" style="width:auto"> 🗑️ REPLACE ALL? Tick to DELETE old list first (use with care!)</label>
+<button class="big green" onclick="previewSchools()">👁️ PREVIEW SCHOOLS</button>
+<button class="big" onclick="confirmSchools()">✅ CONFIRM - SAVE SCHOOLS</button>
+<div id="schoolPreview"></div>
+<div id="uploadStatus">⏳ UPLOADING 0 / 0...</div>
+<p>💡 DBE Excel from DataFirst has many columns — App auto-finds EMIS + Name</p>
 </div>
+<div class="card"><h3>🇿🇦 ➕ ADD SCHOOL FROM DBE LIST</h3>
+<input id="dbeSearch" placeholder="🔍 SEARCH DBE SCHOOL E.G. BENONI HIGH / DURBAN..." oninput="searchDBE()">
+<div id="dbeResults"></div>
+<input id="newEmis" placeholder="SCHOOL CODE / EMIS NUMBER E.G. 700400123">
+<input id="newSchool" placeholder="SCHOOL NAME E.G. MAKHANANI HIGH SCHOOL">
+<button class="big" onclick="addSchoolManual()">➕ ADD SCHOOL</button>
+<div id="schoolList"></div>
 </div>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<div class="card"><button class="big yellow" onclick="downloadSchools()">⬇️ DOWNLOAD CURRENT LIST (JSON)</button><button class="big red" onclick="if(confirm('DELETE ALL DATA?')){localStorage.clear();location.reload()}">🗑️ RESET ALL DATA</button></div>
+</div>
+
 <script>
-const firebaseConfig = { apiKey: "AIzaSyAJyTZ-tmrsY0m-EmN80HSRERSR_tiVX4E", authDomain: "wordsworth-library.firebaseapp.com", databaseURL: "https://wordsworth-library-default-rtdb.firebaseio.com", projectId: "wordsworth-library", storageBucket: "wordsworth-library.firebasestorage.app", messagingSenderId: "236216515385", appId: "1:236216515385:web:9f3e8937f829e9d2bf06e8" };
-firebase.initializeApp(firebaseConfig);
-const auth=firebase.auth(); const db=firebase.database();
-const ADMIN_PASSCODE = "ADMIN@2026";
-let isAdmin = sessionStorage.getItem('isAdmin')==='1';
-let dbeSchools = [
-  {emis:"MAKHANANI", name:"MAKHANANI HIGH SCHOOL", town:"BENONI", province:"GAUTENG", district:"EKURHULENI NORTH"},
-  {emis:"700400123", name:"MAKHANANI HIGH SCHOOL", town:"BENONI", province:"GAUTENG", district:"EKURHULENI NORTH"},
-  {emis:"700400124", name:"BENONI HIGH SCHOOL", town:"BENONI", province:"GAUTENG", district:"EKURHULENI NORTH"},
-  {emis:"700400125", name:"DAVEYTON HIGH SCHOOL", town:"DAVEYTON", province:"GAUTENG", district:"EKURHULENI NORTH"},
-  {emis:"700110001", name:"SOWETO HIGH SCHOOL", town:"SOWETO", province:"GAUTENG", district:"JOHANNESBURG WEST"},
-  {emis:"700210002", name:"PRETORIA HIGH SCHOOL FOR GIRLS", town:"PRETORIA", province:"GAUTENG", district:"TSHWANE NORTH"},
-  {emis:"700210003", name:"PRETORIA BOYS HIGH SCHOOL", town:"PRETORIA", province:"GAUTENG", district:"TSHWANE NORTH"},
-  {emis:"400100001", name:"DURBAN HIGH SCHOOL", town:"DURBAN", province:"KWAZULU-NATAL", district:"UMGUNGUNDLOVU"},
-  {emis:"400100002", name:"WESTVILLE GIRLS HIGH SCHOOL", town:"WESTVILLE", province:"KWAZULU-NATAL", district:"PINETOWN"},
-  {emis:"400100003", name:"GROOTVLEI SECONDARY SCHOOL", town:"PIETERMARITZBURG", province:"KWAZULU-NATAL", district:"UMGUNGUNDLOVU"},
-  {emis:"100100001", name:"SACS HIGH SCHOOL", town:"CAPE TOWN", province:"WESTERN CAPE", district:"CAPE TOWN CENTRAL"},
-  {emis:"100100002", name:"REDDAM HOUSE CONSTANTIA", town:"CONSTANTIA", province:"WESTERN CAPE", district:"CAPE TOWN SOUTH"},
-  {emis:"100100003", name:"KHAYELITSHA HIGH SCHOOL", town:"KHAYELITSHA", province:"WESTERN CAPE", district:"CAPE TOWN EAST"},
-  {emis:"200100001", name:"GREY HIGH SCHOOL", town:"GQEBERHA", province:"EASTERN CAPE", district:"NELSON MANDELA BAY"},
-  {emis:"200100002", name:"QUEEN'S COLLEGE", town:"QUEENSTOWN", province:"EASTERN CAPE", district:"CHRIS HANI"},
-  {emis:"900100001", name:"POLOKWANE HIGH SCHOOL", town:"POLOKWANE", province:"LIMPOPO", district:"CAPRICORN"},
-  {emis:"900100002", name:"THUTO-LESEDI SECONDARY SCHOOL", town:"SESHEGO", province:"LIMPOPO", district:"CAPRICORN"},
-  {emis:"800100001", name:"NELSPRUIT HIGH SCHOOL", town:"MBOMBELA", province:"MPUMALANGA", district:"EHLANZENI"},
-  {emis:"600100001", name:"RUSTENBURG HIGH SCHOOL", town:"RUSTENBURG", province:"NORTH WEST", district:"BOJANALA"},
-  {emis:"500100001", name:"GREY COLLEGE", town:"BLOEMFONTEIN", province:"FREE STATE", district:"MOTHEO"},
-  {emis:"300100001", name:"KIMBERLEY BOYS HIGH SCHOOL", town:"KIMBERLEY", province:"NORTHERN CAPE", district:"FRANCES BAARD"}
-];
-async function loadDBESchools(){
-  try{
-    const snap = await db.ref("schoolsMeta").once("value");
-    const meta = snap.val()||{};
-    const fromFirebase = Object.values(meta).filter(s=>s.emis || s.code).map(s=>({emis: s.emis||s.code, name: s.name, town: s.town||"", province: s.province||"", district: s.district||"", phase: s.phase||"", quintile: s.quintile||""}));
-    if(fromFirebase.length > 0){ const map={}; dbeSchools.forEach(s=>map[s.emis]=s); fromFirebase.forEach(s=>map[s.emis]=s); dbeSchools = Object.values(map); }
-  }catch(e){}
-  try{
-    const res = await fetch('schools.json');
-    if(res.ok){ const data = await res.json(); if(Array.isArray(data) && data.length>0){ const map={}; dbeSchools.forEach(s=>map[s.emis]=s); data.forEach(s=>{ if(s.emis && s.name) map[s.emis]=s; }); dbeSchools = Object.values(map); } }
-  }catch(e){}
-  updateDBECount();
-  const el=document.getElementById('dbeSchoolResults');
-  if(el) el.innerHTML=`<p class='small' style='padding:10px'>✅ <b>${dbeSchools.length.toLocaleString()}</b> DBE SCHOOLS LOADED 🇿🇦<br>Type school name above to search...</p>`;
+let learners=JSON.parse(localStorage.getItem('mk_learners')||'[]');
+let books=JSON.parse(localStorage.getItem('mk_books')||'[]');
+let loans=JSON.parse(localStorage.getItem('mk_loans')||'[]');
+let schools=JSON.parse(localStorage.getItem('mk_schools')||'[]');
+let pendingSchools=[];
+let scanner=null;
+function save(){localStorage.setItem('mk_learners',JSON.stringify(learners));localStorage.setItem('mk_books',JSON.stringify(books));localStorage.setItem('mk_loans',JSON.stringify(loans));localStorage.setItem('mk_schools',JSON.stringify(schools));render();}
+function show(p){document.querySelectorAll('.page').forEach(e=>e.classList.remove('active'));document.querySelectorAll('nav button').forEach(e=>e.classList.remove('active'));document.getElementById(p).classList.add('active');document.getElementById('b-'+p).classList.add('active');render();}
+// SCANNER - CAMERA
+function startScan(target){
+let map={'retBook':'reader2','quickScan':'reader-home','scanLearner':'reader','scanBook':'reader-issue2'};
+let boxId=map[target]||'reader';
+let box=document.getElementById(boxId);box.style.display='block';
+if(scanner){try{scanner.clear()}catch(e){}}
+scanner=new Html5Qrcode(boxId);
+scanner.start({facingMode:"environment"},{fps:10,qrbox:{width:250,height:150}},
+(txt)=>{document.getElementById(target).value=txt;scanner.stop().then(()=>{scanner.clear();box.style.display='none';});alert('✅ Scanned! '+txt);if(target==='quickScan')quickScan();},
+(err)=>{});
 }
-function updateDBECount(){ const c=dbeSchools.length; ['dbeCountHome','dbeCountLogin'].forEach(id=>{ const e=document.getElementById(id); if(e) e.textContent=c.toLocaleString(); }); }
-function searchDBESchools(q){ q=(q||"").trim().toUpperCase(); const prov=(document.getElementById('dbeProvinceFilter')?.value||"").toUpperCase(); const box=document.getElementById('dbeSchoolResults'); if(!box) return; if(q.length<2){ box.innerHTML=`<p class='small' style='padding:10px'>💡 TYPE AT LEAST 2 LETTERS<br>✅ ${dbeSchools.length.toLocaleString()} DBE SCHOOLS READY<br>CURRENT: <b>${escapeHTML(schoolCode)}</b></p>`; return; } let filtered=dbeSchools.filter(s=>{ const hay=(s.name+" "+s.emis+" "+s.town+" "+s.province+" "+(s.district||"")).toUpperCase(); return hay.includes(q) && (!prov || (s.province||"").toUpperCase()===prov); }).slice(0,50); if(filtered.length===0){ box.innerHTML=`<p class='small' style='padding:10px'>❌ NO DBE SCHOOL FOUND FOR "<b>${escapeHTML(q)}</b>"<br>👑 Ask ADMIN to upload it in ADMIN tab.</p>`; return; } let html=`<p class='small' style='padding:8px 10px 0'>✅ FOUND ${filtered.length} SCHOOL(S) — TAP TO SELECT 👇</p>`; filtered.forEach(s=>{ html+=`<div class="learner-item" onclick="selectDBESchool('${escapeHTML(s.emis)}')" style="border-left:4px solid #007A4D"><span><b>${escapeHTML(s.name)}</b><br><span class="small">🏫 EMIS: ${escapeHTML(s.emis)} | 📍 ${escapeHTML(s.town||"")} - ${escapeHTML(s.province||"")}<br>${escapeHTML(s.district||"")}</span></span><span>👉 SELECT</span></div>`; }); box.innerHTML=html; }
-function selectDBESchool(emis){ const s=dbeSchools.find(x=>String(x.emis)===String(emis)); if(!s) return; changeSchoolCode(emis); db.ref("schoolsMeta/"+emis).update({code:emis, name:s.name, town:s.town||"", province:s.province||"", district:s.district||"", emis:emis, lastSelected:Date.now()}); document.getElementById('dbeSelectedSchool').innerHTML=`<div class="selected-learner" style="background:#007A4D">✅ SELECTED: ${escapeHTML(s.name)}<br>EMIS: ${escapeHTML(s.emis)} | ${escapeHTML(s.town||"")} - ${escapeHTML(s.province||"")}</div>`; document.getElementById('dbeSchoolResults').innerHTML=`<p class='small' style='padding:10px;color:#007A4D'>✅ SCHOOL SELECTED! Now login below with your librarian email 👇</p>`; document.getElementById('dbeSchoolSearch').value=s.name; document.getElementById('currentSchoolNameDisplay').textContent=s.name; document.getElementById('headerSchoolName').textContent=" - "+s.name; try{ document.getElementById('loginSchoolCode').value=emis; }catch(e){} beep(); }
-function searchDBEForAdmin(q){ q=(q||"").trim().toUpperCase(); const box=document.getElementById('adminDBEResults'); if(!box) return; if(q.length<2){ box.innerHTML="<p class='small' style='padding:10px'>Type 2+ letters to search DBE...</p>"; return; } let filtered=dbeSchools.filter(s=>(s.name+" "+s.emis+" "+s.town).toUpperCase().includes(q)).slice(0,20); if(filtered.length===0){ box.innerHTML="<p class='small' style='padding:10px'>❌ Not in list - Use UPLOAD above or fill manually below</p>"; return; } let html=""; filtered.forEach(s=>{ html+=`<div class="learner-item" onclick="adminPickDBE('${escapeHTML(s.emis)}')"><span><b>${escapeHTML(s.name)}</b><br><span class="small">EMIS: ${escapeHTML(s.emis)} | ${escapeHTML(s.town||"")} - ${escapeHTML(s.province||"")}</span></span><span>👉 USE</span></div>`; }); box.innerHTML=html; }
-function adminPickDBE(emis){ const s=dbeSchools.find(x=>String(x.emis)===String(emis)); if(!s) return; document.getElementById('newSchoolCode').value=s.emis; document.getElementById('newSchoolName').value=s.name; document.getElementById('newSchoolTown').value=(s.town||"")+", "+(s.province||""); document.getElementById('adminDBEResults').innerHTML=`<p class='small' style='padding:10px;color:#1a7f37'>✅ PICKED: ${escapeHTML(s.name)} — Now tap CREATE NEW SCHOOL ✅</p>`; beep(); }
-let pendingSchoolsToUpload = [];
-function downloadSchoolTemplate(){ const csv="EMIS,NAME,TOWN,PROVINCE,DISTRICT,PHASE,QUINTILE\n700400123,MAKHANANI HIGH SCHOOL,BENONI,GAUTENG,EKURHULENI NORTH,SECONDARY,3\n400100001,DURBAN HIGH SCHOOL,DURBAN,KWAZULU-NATAL,UMGUNGUNDLOVU,SECONDARY,4\n100100001,SACS HIGH SCHOOL,CAPE TOWN,WESTERN CAPE,CAPE TOWN CENTRAL,SECONDARY,5\n"; const blob=new Blob([csv],{type:"text/csv"}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download="SCHOOLS_TEMPLATE.csv"; a.click(); }
-function downloadCurrentSchoolsAsJSON(){ const blob=new Blob([JSON.stringify(dbeSchools,null,2)],{type:"application/json"}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download="schools.json"; a.click(); }
-async function handleSchoolFileUpload(event){ if(!isAdmin) return alert("🔒 ADMIN ONLY"); const file=event.target.files[0]; if(!file) return; const name=file.name.toLowerCase(); document.getElementById('uploadResult').innerHTML="⏳ READING "+escapeHTML(file.name)+"..."; try{ if(name.endsWith('.json')){ const text=await file.text(); const data=JSON.parse(text); const arr=Array.isArray(data)?data:(data.schools||data.data||[]); showSchoolsPreview(normalizeSchools(arr)); } else if(name.endsWith('.xlsx')||name.endsWith('.xls')){ const buf=await file.arrayBuffer(); const wb=XLSX.read(buf,{type:'array'}); const firstSheet=wb.Sheets[wb.SheetNames[0]]; const rows=XLSX.utils.sheet_to_json(firstSheet,{defval:""}); showSchoolsPreview(normalizeSchools(rows)); } else { const text=await file.text(); showSchoolsPreview(parseSchoolsCSV(text)); } }catch(e){ document.getElementById('uploadResult').innerHTML="❌ FAILED: "+escapeHTML(e.message); } event.target.value=""; }
-function previewPastedSchools(){ if(!isAdmin) return alert("🔒 ADMIN ONLY"); const text=document.getElementById('pasteSchoolsText').value.trim(); if(!text) return document.getElementById('uploadResult').innerHTML="⚠️ PASTE SCHOOLS FIRST"; showSchoolsPreview(parseSchoolsCSV(text)); }
-function normalizeSchools(arr){ return arr.map(row=>{ if(typeof row==='string') return null; const keys={}; Object.keys(row).forEach(k=>{ keys[k.toLowerCase().trim()]=row[k]; }); let emis=keys['emis']||keys['natemis']||keys['emis number']||keys['emis_number']||keys['school code']||keys['code']||keys['emis no']||""; let name=keys['name']||keys['school name']||keys['schoolname']||keys['institution name']||keys['school']||""; let town=keys['town']||keys['city']||keys['area']||keys['town/city']||""; let province=keys['province']||keys['prov']||""; let district=keys['district']||keys['district municipality']||keys['education district']||""; let phase=keys['phase']||keys['school phase']||""; let quintile=keys['quintile']||""; emis=String(emis||"").trim().toUpperCase(); name=String(name||"").trim().toUpperCase(); if(!emis||!name) return null; emis=emis.replace(/[^A-Z0-9-]/g,""); return {emis, name, town:String(town||"").trim().toUpperCase(), province:String(province||"").trim().toUpperCase(), district:String(district||"").trim().toUpperCase(), phase:String(phase||"").trim().toUpperCase(), quintile:String(quintile||"")}; }).filter(Boolean); }
-function parseSchoolsCSV(text){ const lines=text.split(/\r?\n/).map(l=>l.trim()).filter(l=>l); if(lines.length===0) return []; let start=0; if(lines[0].toUpperCase().includes('EMIS')||lines[0].toUpperCase().includes('NAME')) start=1; const out=[]; for(let i=start;i<lines.length;i++){ const parts=lines[i].match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g)||lines[i].split(','); const clean=parts.map(p=>p.trim().replace(/^"|"$/g,"")); if(clean.length<2) continue; const [emis,name,town="",province="",district="",phase="",quintile=""]=clean; if(!emis||!name) continue; if(emis.toUpperCase()==="EMIS") continue; out.push({emis:String(emis).trim().toUpperCase().replace(/[^A-Z0-9-]/g,""), name:String(name).trim().toUpperCase(), town:String(town).trim().toUpperCase(), province:String(province).trim().toUpperCase(), district:String(district).trim().toUpperCase(), phase:String(phase).trim().toUpperCase(), quintile:String(quintile).trim()}); } return out; }
-function showSchoolsPreview(list){ pendingSchoolsToUpload=list; const box=document.getElementById('uploadPreviewBox'); const res=document.getElementById('uploadResult'); if(!list||list.length===0){ box.innerHTML=""; res.innerHTML="❌ NO VALID SCHOOLS FOUND.<br><span class='small'>Check format: EMIS,NAME,TOWN,PROVINCE,DISTRICT</span>"; return; } const seen=new Set(); const deduped=[]; list.forEach(s=>{ if(!seen.has(s.emis)){ seen.add(s.emis); deduped.push(s); } }); pendingSchoolsToUpload=deduped; let html=`<div class="card" style="border:2px solid #007A4D;margin:0"><h3>👀 PREVIEW - ${deduped.length} SCHOOLS FOUND</h3>`; html+=`<table><tr><th>EMIS</th><th>NAME</th><th>TOWN</th><th>PROVINCE</th></tr>`; deduped.slice(0,10).forEach(s=>{ html+=`<tr><td><b>${escapeHTML(s.emis)}</b></td><td>${escapeHTML(s.name)}</td><td>${escapeHTML(s.town)}</td><td>${escapeHTML(s.province)}</td></tr>`; }); html+=`</table>`; if(deduped.length>10) html+=`<p class='small'>... + ${deduped.length-10} more schools</p>`; html+=`<p class='small'>⚠️ This will <b>ADD / UPDATE</b> these schools. Existing with same EMIS will be updated.</p>`; html+=`<button class="btn green" onclick="confirmUploadSchools()">✅ CONFIRM - SAVE ${deduped.length} SCHOOLS TO FIREBASE</button> `; html+=`<button class="btn red" onclick="cancelUploadSchools()">❌ CANCEL</button>`; html+=`<label style="font-size:13px;display:block;margin-top:8px"><input type="checkbox" id="replaceAllSchoolsCheck" style="width:auto"> 🗑️ REPLACE ALL? Tick to DELETE old list first (use with care!)</label>`; html+=`</div>`; box.innerHTML=html; res.innerHTML=""; box.scrollIntoView({behavior:"smooth"}); }
-function cancelUploadSchools(){ pendingSchoolsToUpload=[]; document.getElementById('uploadPreviewBox').innerHTML=""; document.getElementById('uploadResult').innerHTML="❌ CANCELLED"; }
-async function confirmUploadSchools(){ if(!isAdmin) return alert("🔒 ADMIN ONLY"); if(pendingSchoolsToUpload.length===0) return; const replaceAll=document.getElementById('replaceAllSchoolsCheck')?.checked; if(replaceAll){ if(!confirm(`⚠️ REPLACE ALL? This will delete ${dbeSchools.length} old schools and replace with ${pendingSchoolsToUpload.length} new ones. Continue?`)) return; } const prog=document.getElementById('uploadProgress'); const res=document.getElementById('uploadResult'); prog.textContent="⏳ UPLOADING 0 / "+pendingSchoolsToUpload.length+"..."; try{ if(replaceAll){ const snap=await db.ref("schoolsMeta").once("value"); const old=snap.val()||{}; for(let code of Object.keys(old)){ if(code!=="MAKHANANI") await db.ref("schoolsMeta/"+code).remove(); } } let uploaded=0; for(let s of pendingSchoolsToUpload){ await db.ref("schoolsMeta/"+s.emis).set({code:s.emis, emis:s.emis, name:s.name, town:s.town||"", province:s.province||"", district:s.district||"", phase:s.phase||"", quintile:s.quintile||"", updatedAt:Date.now(), updatedBy:"ADMIN_UPLOAD"}); uploaded++; if(uploaded%20===0||uploaded===pendingSchoolsToUpload.length){ prog.textContent=`⏳ UPLOADING ${uploaded} / ${pendingSchoolsToUpload.length}... (${Math.round(uploaded/pendingSchoolsToUpload.length*100)}%)`; await new Promise(r=>setTimeout(r,10)); } } const map={}; dbeSchools.forEach(s=>map[s.emis]=s); pendingSchoolsToUpload.forEach(s=>map[s.emis]=s); dbeSchools=Object.values(map); updateDBECount(); try{ localStorage.setItem('dbeSchoolsBackup', JSON.stringify(dbeSchools.slice(0,500))); }catch(e){} document.getElementById('uploadPreviewBox').innerHTML=""; document.getElementById('pasteSchoolsText').value=""; prog.textContent=""; res.innerHTML=`<div class="msg ok">✅ SUCCESS! ${uploaded} SCHOOLS SAVED TO FIREBASE! 🎉<br>🇿🇦 Total DBE schools now: <b>${dbeSchools.length.toLocaleString()}</b><br>👉 Go to LOGIN → Search any school name to test!</div>`; pendingSchoolsToUpload=[]; loadAllSchoolsAdmin(); beep(); }catch(e){ res.innerHTML="❌ UPLOAD FAILED: "+escapeHTML(e.message); } }
-const SUBJECTS = { "MAT":"MATHEMATICS","MATL":"MATHEMATICAL LITERACY","ENG":"ENGLISH HOME LANGUAGE","AFR":"AFRIKAANS FIRST ADDITIONAL LANGUAGE","ZUL":"ISIZULU HOME LANGUAGE","SEP":"SEPEDI HOME LANGUAGE","XHO":"ISIXHOSA HOME LANGUAGE","LIFS":"LIFE SCIENCES","PHYS":"PHYSICAL SCIENCES","ACC":"ACCOUNTING","BUS":"BUSINESS STUDIES","ECO":"ECONOMICS","GEO":"GEOGRAPHY","HIST":"HISTORY","LIFO":"LIFE ORIENTATION","CAT":"COMPUTER APPLICATIONS TECHNOLOGY","IT":"INFORMATION TECHNOLOGY","TOUR":"TOURISM","CONS":"CONSUMER STUDIES","AGRI":"AGRICULTURAL SCIENCES","EGD":"ENGINEERING GRAPHICS & DESIGN","TECH":"TECHNOLOGY" };
-function subjectName(code){ return SUBJECTS[code] || code; }
-document.getElementById('subjectListDisplay').innerHTML = Object.entries(SUBJECTS).map(([c,n])=>`<b>${c}</b> - ${n}`).join(' • ');
-let schoolsMeta = {};
-let defaultSchools = { "MAKHANANI": {code:"MAKHANANI", name:"MAKHANANI HIGH SCHOOL", town:"BENONI, GAUTENG"}, "SCH001": {code:"SCH001", name:"MAKHANANI HIGH SCHOOL", town:"BENONI"} };
-function refreshSchoolDropdown(){ const sel=document.getElementById('loginSchoolCode'); let all={...defaultSchools, ...schoolsMeta}; sel.innerHTML = Object.values(all).map(s=>`<option value="${escapeHTML(s.code)}">${escapeHTML(s.code)} - ${escapeHTML(s.name)}</option>`).join(''); if(!all[schoolCode]) sel.innerHTML += `<option value="${escapeHTML(schoolCode)}">${escapeHTML(schoolCode)} - CUSTOM</option>`; try{ sel.value = all[schoolCode] ? schoolCode : sel.options[0]?.value; }catch(e){} }
-function loadSchoolsMeta(){ db.ref("schoolsMeta").on("value", s=>{ schoolsMeta = s.val()||{}; refreshSchoolDropdown(); if(isAdmin) loadAllSchoolsAdmin(); }); }
-let schoolCode = localStorage.getItem('schoolCode') || 'MAKHANANI';
-if(localStorage.getItem('schoolCode')==='WORDSWORTH'){ schoolCode='MAKHANANI'; localStorage.setItem('schoolCode','MAKHANANI'); }
-function changeSchoolCode(code){ code=(code||"").trim().toUpperCase().replace(/[^A-Z0-9-]/g,""); if(!code) return; schoolCode=code; localStorage.setItem('schoolCode',code); document.getElementById('headerSchoolCode').textContent=code; document.getElementById('currentSchoolDisplay').textContent=code; const found=dbeSchools.find(x=>String(x.emis)===code); if(found){ document.getElementById('currentSchoolNameDisplay').textContent=found.name; document.getElementById('headerSchoolName').textContent=" - "+found.name; } loadData(); }
-function basePath(p){ return "schools/"+schoolCode+"/"+p; }
-document.getElementById('headerSchoolCode').textContent=schoolCode; document.getElementById('currentSchoolDisplay').textContent=schoolCode;
-function updateAdminUI(){ document.getElementById('adminStatus').textContent = isAdmin ? "✅ LOGGED IN AS ADMIN 👑 — FULL CONTROL" : "🔒 NOT LOGGED IN AS ADMIN"; document.getElementById('adminLoginBox').classList.toggle('hidden', isAdmin); document.getElementById('adminPanel').classList.toggle('hidden', !isAdmin); document.getElementById('headerAdminBadge').classList.toggle('hidden', !isAdmin); }
-function adminLogin(){ const v=document.getElementById('adminPasscode').value; if(v===ADMIN_PASSCODE){ isAdmin=true; sessionStorage.setItem('isAdmin','1'); document.getElementById('adminPasscode').value=""; document.getElementById('adminLoginMsg').textContent="✅ WELCOME SUPER ADMIN 👑"; updateAdminUI(); loadAllSchoolsAdmin(); } else { document.getElementById('adminLoginMsg').textContent="❌ WRONG PASSCODE"; } }
-function adminLogout(){ isAdmin=false; sessionStorage.removeItem('isAdmin'); updateAdminUI(); }
-async function addNewSchool(){ if(!isAdmin) return alert("🔒 ADMIN ONLY"); const code=cleanID(document.getElementById('newSchoolCode').value); const name=cleanText(document.getElementById('newSchoolName').value); const town=cleanText(document.getElementById('newSchoolTown').value); const principal=cleanName(document.getElementById('newSchoolPrincipal').value); const libEmail=document.getElementById('newSchoolLibrarianEmail').value.trim(); if(!code||!name) { document.getElementById('addSchoolMsg').textContent="⚠️ ENTER SCHOOL CODE + NAME"; return; } if(code.length<3){ document.getElementById('addSchoolMsg').textContent="⚠️ CODE TOO SHORT"; return; } const exists = (await db.ref("schoolsMeta/"+code).once("value")).val(); if(exists){ document.getElementById('addSchoolMsg').textContent="❌ CODE ALREADY EXISTS: "+code; return; } await db.ref("schoolsMeta/"+code).set({code, name, town, principal, librarianEmail:libEmail, createdAt:Date.now(), createdBy:"ADMIN"}); await db.ref("schools/"+code+"/info").set({code, name, town, principal, createdAt:Date.now()}); document.getElementById('addSchoolMsg').innerHTML="✅ SCHOOL CREATED! <b>"+code+" - "+escapeHTML(name)+"</b><br>👉 Tell librarian: Search <b>"+escapeHTML(name)+"</b> in LOGIN!"; document.getElementById('newSchoolCode').value=""; document.getElementById('newSchoolName').value=""; document.getElementById('newSchoolTown').value=""; document.getElementById('newSchoolPrincipal').value=""; document.getElementById('newSchoolLibrarianEmail').value=""; refreshSchoolDropdown(); loadAllSchoolsAdmin(); }
-async function loadAllSchoolsAdmin(){ if(!isAdmin) return; let all={...defaultSchools, ...schoolsMeta}; let html="<table><tr><th>CODE / EMIS</th><th>SCHOOL NAME</th><th>📚 BOOKS</th><th>👩‍🎓 LEARNERS</th><th>📤 BORROWED</th><th>ACTION</th></tr>"; let totalB=0, totalL=0, totalBor=0; for(let code of Object.keys(all)){ let s=all[code]; let books=0, learners=0, borrowed=0; try{ const bSnap=await db.ref("schools/"+code+"/books").once("value"); books=Object.keys(bSnap.val()||{}).length; const lSnap=await db.ref("schools/"+code+"/learners").once("value"); learners=Object.keys(lSnap.val()||{}).length; const loSnap=await db.ref("schools/"+code+"/loans").once("value"); borrowed=Object.values(loSnap.val()||{}).filter(x=>x.status==="Borrowed").length; }catch(e){} totalB+=books; totalL+=learners; totalBor+=borrowed; html+=`<tr><td><b>${escapeHTML(code)}</b></td><td>${escapeHTML(s.name)}<br><span class="small">${escapeHTML(s.town||"")}</span></td><td>${books}</td><td>${learners}</td><td>${borrowed}</td><td><button class="btn small green" onclick="adminEnterSchool('${escapeHTML(code)}')">👉 ENTER</button> <button class="btn small red" onclick="adminDeleteOne('${escapeHTML(code)}')">🗑️</button></td></tr>`; } html+="</table><p class='small'>TOTAL SCHOOLS: "+Object.keys(all).length+"</p>"; document.getElementById('allSchoolsList').innerHTML=html; document.getElementById('aTotalSchools').textContent=Object.keys(all).length; document.getElementById('aTotalBooksAll').textContent=totalB; document.getElementById('aTotalLearnersAll').textContent=totalL; document.getElementById('aTotalBorrowedAll').textContent=totalBor; }
-function adminEnterSchool(code){ changeSchoolCode(code); try{ document.getElementById('loginSchoolCode').value=code; }catch(e){} showTab('home', document.querySelectorAll('.nav button')[0]); alert("👑 ADMIN: NOW VIEWING SCHOOL "+code+" ✅"); }
-async function adminDeleteOne(code){ if(!isAdmin) return; document.getElementById('dangerSchoolCode').value=code; showTab('admin', document.querySelectorAll('.nav button')[7]); document.getElementById('dangerMsg').textContent="⚠️ Confirm delete for "+code; }
-async function deleteSchoolAdmin(){ if(!isAdmin) return alert("🔒 ADMIN ONLY"); const code=cleanID(document.getElementById('dangerSchoolCode').value); if(!code) return document.getElementById('dangerMsg').textContent="⚠️ TYPE SCHOOL CODE"; if(code==="MAKHANANI") return document.getElementById('dangerMsg').textContent="❌ CANNOT DELETE MAIN SCHOOL MAKHANANI — PROTECTED!"; if(!confirm("⚠️ DELETE SCHOOL "+code+" + ALL DATA? THIS CANNOT BE UNDONE!")) return; const confirm2=prompt("TYPE THE SCHOOL CODE AGAIN TO CONFIRM DELETE: "+code); if(confirm2!==code) return document.getElementById('dangerMsg').textContent="❌ CODES DID NOT MATCH - NOT DELETED"; await db.ref("schools/"+code).remove(); await db.ref("schoolsMeta/"+code).remove(); document.getElementById('dangerMsg').textContent="✅ DELETED "+code; document.getElementById('dangerSchoolCode').value=""; loadAllSchoolsAdmin(); refreshSchoolDropdown(); }
-async function exportAllSchools(){ if(!isAdmin) return; const snap=await db.ref("schools").once("value"); const data=snap.val()||{}; const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download="ALL_SCHOOLS_BACKUP_"+new Date().toISOString().slice(0,10)+".json"; a.click(); }
-function printAdminReport(){ if(!isAdmin) return; const w=window.open('','_blank','width=900,height=700'); w.document.write(`<html><head><title>ADMIN REPORT</title><style>body{font-family:Arial;padding:20px} table{width:100%;border-collapse:collapse} th,td{padding:8px;border:1px solid #ddd} button{display:none}</style></head><body><h1>👑 ADMIN REPORT - ALL SCHOOLS - MAKHANANI</h1><h2>${new Date().toLocaleDateString('en-ZA')}</h2><hr>${document.getElementById('tab-admin').innerHTML}<script>window.onload=function(){window.print()}<\/script></body></html>`); w.document.close(); }
-function escapeHTML(s){ if(s==null) return ""; return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;"); }
-function cleanID(s){ return String(s||"").trim().toUpperCase().replace(/[^A-Z0-9-]/g,"").slice(0,20); }
-function cleanText(s){ return String(s||"").trim().toUpperCase().replace(/[<>"';`\\]/g,"").slice(0,100); }
-function cleanName(s){ return String(s||"").trim().toUpperCase().replace(/[^A-Z \-']/g,"").slice(0,50); }
-let parentFailCount=0, parentLockedUntil=0, loginFailCount=0, lastActivity=Date.now();
-function resetActivity(){ lastActivity=Date.now(); }
-document.addEventListener('click',resetActivity); document.addEventListener('keydown',resetActivity);
-setInterval(()=>{ if(currentUser && Date.now()-lastActivity > 2*60*60*1000){ auth.signOut(); alert("🔒 AUTO-LOGGED OUT AFTER 2 HOURS"); } }, 60000);
-let currentUser=null; let allBooks={}, allLearners={}, allLoans={};
-let scanners={}; let lastScanned={issue:"", return:""}; let scanCooldown=false; let selectedLearner=null;
-function showTab(id,btn){ document.querySelectorAll('[id^="tab-"]').forEach(d=>d.classList.add('hidden')); document.getElementById('tab-'+id).classList.remove('hidden'); document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active')); if(btn) btn.classList.add('active'); if(id==='principal') renderPrincipal(); if(id==='admin') updateAdminUI(); if(id==='issue'){ filterLearnersForIssue(); } if(id==='return'){ setTimeout(()=>document.getElementById('returnBarcode').focus(),300); } }
-function setMsg(el,t,ok){ el.className="msg "+(ok?"ok":"err"); el.textContent=t; el.scrollIntoView({behavior:"smooth",block:"center"}); }
-function beep(){ try{ const ctx=new (window.AudioContext||window.webkitAudioContext)(); const o=ctx.createOscillator(); const g=ctx.createGain(); o.connect(g); g.connect(ctx.destination); o.frequency.value=880; o.type='sine'; g.gain.value=0.2; o.start(); o.stop(ctx.currentTime+0.15); }catch(e){} if(navigator.vibrate) navigator.vibrate(100); }
-auth.onAuthStateChanged(u=>{ currentUser=u; document.getElementById('loginStatus').textContent=u?"LOGGED IN: "+u.email+" ✅":"NOT LOGGED IN"; document.getElementById('conn').textContent="FIREBASE CONNECTED ✅"; document.getElementById('securityStatus').innerHTML=u? "✅ <b>LOGGED IN AS LIBRARIAN</b> - SCHOOL: "+escapeHTML(schoolCode)+(isAdmin?" | 👑 ADMIN":"") : "✅ <b>PUBLIC MODE</b> - SCHOOL: "+escapeHTML(schoolCode); loadData(); loadSchoolsMeta(); updateAdminUI(); });
-async function doLogin(){ if(loginFailCount>=5){ loginMsg.textContent="🔒 TOO MANY TRIES. WAIT 1 MIN + REFRESH."; return; } try{ changeSchoolCode(document.getElementById('loginSchoolCode').value || schoolCode); await auth.signInWithEmailAndPassword(loginEmail.value.trim(),loginPass.value); loginFailCount=0; loginMsg.textContent="✅ LOGIN SUCCESS - SCHOOL: "+schoolCode; }catch(e){ loginFailCount++; loginMsg.textContent="❌ WRONG EMAIL / PASSWORD. "+(5-loginFailCount)+" LEFT."; } }
-async function doLogout(){ await auth.signOut(); loginMsg.textContent="LOGGED OUT ✅"; }
-function loadData(){ db.ref(basePath("books")).on("value",s=>{ allBooks=s.val()||{}; renderBooks(); updateStats(); renderPrincipal(); }); if(currentUser){ db.ref(basePath("learners")).on("value",s=>{ allLearners=s.val()||{}; renderLearners(); filterLearnersForIssue(); updateStats(); renderPrincipal(); }); db.ref(basePath("loans")).on("value",s=>{ allLoans=s.val()||{}; renderBorrowed(); updateStats(); renderPrincipal(); }); } else { allLearners={}; allLoans={}; renderPrincipal(); renderLearners(); renderBorrowed(); } }
-function updateStats(){ totalBooks.textContent=Object.keys(allBooks).length; totalLearners.textContent=currentUser?Object.keys(allLearners).length:"🔒"; borrowedCount.textContent=currentUser?Object.values(allLoans).filter(l=>l.status==="Borrowed").length:"🔒"; }
-function filterLearnersForIssue(){ const q=(document.getElementById('learnerSearch').value||"").toUpperCase().trim(); const listEl=document.getElementById('learnerPickList'); if(!currentUser){ listEl.innerHTML="<p class='small' style='padding:10px'>🔒 LOGIN AS LIBRARIAN TO SEE LEARNERS</p>"; return; } let arr=Object.values(allLearners); if(q) arr=arr.filter(l=>(l.learnerId+" "+l.name+" "+l.surname+" "+l.grade+l.className).toUpperCase().includes(q)); arr.sort((a,b)=>a.learnerId.localeCompare(b.learnerId)); if(arr.length===0){ listEl.innerHTML="<p class='small' style='padding:10px'>❌ NO LEARNER FOUND</p>"; return; } let html=`<p class='small' style='padding:8px 10px 0'>SHOWING ${Math.min(arr.length,30)} OF ${arr.length} — TAP TO SELECT 👇</p>`; arr.slice(0,30).forEach(l=>{ const bc=Object.values(allLoans).filter(x=>x.learnerId===l.learnerId && x.status==="Borrowed").length; html+=`<div class="learner-item" onclick="selectLearnerForIssue('${escapeHTML(l.learnerId)}')"><span><b>${escapeHTML(l.learnerId)}</b> - ${escapeHTML(l.name)} ${escapeHTML(l.surname)} <span class="small">(${escapeHTML(l.grade)}${escapeHTML(l.className)})</span><br><span class="small">${bc? "📤 HAS "+bc+" BOOK(S) OUT" : "✅ NO BOOKS OUT"}</span></span><span>👉 SELECT</span></div>`; }); listEl.innerHTML=html; }
-function selectLearnerForIssue(id){ const l=allLearners[cleanID(id)]; if(!l) return; selectedLearner=l; document.getElementById('issueGrade').value=l.grade; document.getElementById('issueClass').value=l.className; document.getElementById('issueNumber').value=l.number; document.getElementById('issueLearnerId').value=l.learnerId; document.getElementById('issueSurname').value=l.surname; document.getElementById('issueFirstName').value=l.name; document.getElementById('learnerSearch').value=l.learnerId+" - "+l.name+" "+l.surname; document.getElementById('selectedLearnerBox').classList.remove('hidden'); document.getElementById('selectedLearnerBox').innerHTML=`<div class="selected-learner"><span>✅ SELECTED: ${escapeHTML(l.learnerId)} - ${escapeHTML(l.name)} ${escapeHTML(l.surname)}</span><button onclick="clearSelectedLearner()">✕ CHANGE</button></div>`; document.getElementById('learnerPickList').innerHTML="<p class='small' style='padding:10px;color:#1a7f37'>✅ LEARNER SELECTED! NOW SCAN BOOK BELOW 👇</p>"; const borrowed=Object.values(allLoans).filter(x=>x.learnerId===l.learnerId && x.status==="Borrowed"); document.getElementById('learnerBooksInfo').innerHTML= borrowed.length? `<b style="color:#c62828">📤 HAS ${borrowed.length} BOOK(S):</b><br>`+borrowed.map(b=>`• ${escapeHTML(b.bookTitle)} (${escapeHTML(b.barcode)}) - DUE ${escapeHTML(b.dueDate)}`).join('<br>') : `<span style="color:#1a7f37">✅ NO BOOKS CURRENTLY BORROWED</span>`; beep(); }
-function clearSelectedLearner(){ selectedLearner=null; document.getElementById('issueGrade').value=""; document.getElementById('issueClass').value=""; document.getElementById('issueNumber').value=""; document.getElementById('issueLearnerId').value=""; document.getElementById('issueSurname').value=""; document.getElementById('issueFirstName').value=""; document.getElementById('learnerSearch').value=""; document.getElementById('selectedLearnerBox').classList.add('hidden'); document.getElementById('learnerBooksInfo').innerHTML=""; filterLearnersForIssue(); }
-function quickIssueToLearner(id){ showTab('issue', document.querySelectorAll('.nav button')[1]); setTimeout(()=>selectLearnerForIssue(id),300); }
-async function startScan(mode){ if(!currentUser){ alert("🔒 LOGIN FIRST"); return; } const readerId = mode==='issue' ? 'reader-issue' : 'reader-return'; const el = document.getElementById(readerId); el.classList.remove('hidden'); if(scanners[mode]){ try{ await scanners[mode].stop(); }catch(e){} } const scanner = new Html5Qrcode(readerId); scanners[mode]=scanner; try{ await scanner.start({facingMode:"environment"}, {fps:10, qrbox:{width:280,height:140}}, (t)=>onBarcodeScanned(mode,t), ()=>{}); }catch(e){ try{ await scanner.start({facingMode:"user"}, {fps:10, qrbox:{width:280,height:140}}, (t)=>onBarcodeScanned(mode,t), ()=>{}); }catch(e2){ alert("❌ CAMERA FAILED"); } } }
-async function stopScan(mode){ const readerId = mode==='issue' ? 'reader-issue' : 'reader-return'; if(scanners[mode]){ try{ await scanners[mode].stop(); await scanners[mode].clear(); }catch(e){} scanners[mode]=null; } document.getElementById(readerId).classList.add('hidden'); document.getElementById(readerId).innerHTML=""; }
-async function onBarcodeScanned(mode, code){ code=cleanID(code); if(!code) return; if(scanCooldown && lastScanned[mode]===code) return; lastScanned[mode]=code; scanCooldown=true; setTimeout(()=>scanCooldown=false,2500); beep(); if(mode==='issue'){ document.getElementById('issueBarcode').value=code; const book=Object.values(allBooks).find(b=>b.barcode===code); document.getElementById('scanHistoryIssue').innerHTML=`<div class="msg ok">📷 SCANNED: <b>${escapeHTML(code)}</b> ${book? " - "+escapeHTML(book.title):""}</div>`; if(document.getElementById('autoIssue').checked){ if(!selectedLearner || !issuerName.value){ document.getElementById('scanStatusIssue').textContent="⚠️ SCANNED "+code+" - SELECT LEARNER + ISSUER FIRST"; } else { await stopScan('issue'); await issueBook(); } } } else { document.getElementById('returnBarcode').value=code; document.getElementById('scanHistoryReturn').innerHTML=`<div class="msg ok">📷 SCANNED: <b>${escapeHTML(code)}</b></div>`; if(document.getElementById('autoReturn').checked){ if(!retrieverName.value){ alert("⚠️ ENTER RETRIEVER FIRST"); return; } await stopScan('return'); await returnBook(); } } }
-document.addEventListener('DOMContentLoaded', ()=>{ document.getElementById('issueBarcode').addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); issueBook(); } }); document.getElementById('returnBarcode').addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); returnBook(); } }); updateAdminUI(); refreshSchoolDropdown(); loadSchoolsMeta(); loadDBESchools(); });
-function daysLate(due){ const today=new Date(); today.setHours(0,0,0,0); const d=new Date(due); d.setHours(0,0,0,0); return Math.floor((today-d)/86400000); }
-function renderPrincipal(){ document.getElementById('principalDate').textContent="📅 REPORT: "+new Date().toLocaleDateString('en-ZA',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+" | SCHOOL: "+schoolCode; const books=Object.values(allBooks); const learners=Object.values(allLearners); const loans=Object.values(allLoans); const borrowed=loans.filter(l=>l.status==="Borrowed"); const returned=loans.filter(l=>l.status==="Returned").sort((a,b)=>(b.returnedAt||0)-(a.returnedAt||0)).slice(0,15); const todayStr=new Date().toISOString().slice(0,10); const overdue=borrowed.filter(l=>l.dueDate && l.dueDate < todayStr); const dueToday=borrowed.filter(l=>l.dueDate===todayStr); const total=books.length; const avail=books.filter(b=>b.status!=="Borrowed").length; const rate=total?Math.round(borrowed.length/total*100):0; document.getElementById('pTotalBooks').textContent=total; document.getElementById('pTotalLearners').textContent=currentUser?learners.length:"🔒"; document.getElementById('pBorrowed').textContent=currentUser?borrowed.length:"🔒"; document.getElementById('pAvailable').textContent=avail; document.getElementById('pOverdue').textContent=currentUser?overdue.length:"🔒"; document.getElementById('pDueToday').textContent=currentUser?dueToday.length:"🔒"; document.getElementById('pBorrowRate').textContent=rate+"%"; let gHtml="<table><tr><th>GRADE</th><th>📚 BOOKS</th><th>📤 BORROWED</th><th>👩‍🎓 LEARNERS</th><th>USAGE</th></tr>"; ["8","9","10","11","12"].forEach(g=>{ const gb=books.filter(b=>String(b.grade)===g).length; const gbor=borrowed.filter(l=>l.learnerId && l.learnerId.startsWith(g)).length; const gl=currentUser?learners.filter(l=>String(l.grade)===g).length:"—"; const pct=gb?Math.round(gbor/gb*100):0; gHtml+=`<tr><td><b>GRADE ${g}</b></td><td>${gb}</td><td>${currentUser?gbor:"🔒"}</td><td>${gl}</td><td style="min-width:120px"><div class="bar"><div style="width:${pct}%">${pct}%</div></div></td></tr>`; }); gHtml+="</table>"; document.getElementById('pByGrade').innerHTML=gHtml; let sHtml="<table><tr><th>SUBJECT</th><th>BOOKS</th><th>BORROWED</th><th>AVAILABLE</th></tr>"; Object.keys(SUBJECTS).forEach(code=>{ const cb=books.filter(b=>b.category===code); if(cb.length===0) return; const cbor=cb.filter(b=>b.status==="Borrowed").length; sHtml+=`<tr><td><b>${code}</b> - ${subjectName(code)}</td><td>${cb.length}</td><td>${cbor}</td><td>${cb.length-cbor}</td></tr>`; }); sHtml+="</table>"; document.getElementById('pBySubject').innerHTML=sHtml; if(!currentUser){ document.getElementById('pOverdueList').innerHTML="🔒 LOGIN"; document.getElementById('pBorrowedList').innerHTML="🔒 LOGIN"; document.getElementById('pReturnedList').innerHTML="🔒 LOGIN"; } else { if(overdue.length===0) document.getElementById('pOverdueList').innerHTML="✅ NO OVERDUE!"; else { let h="<table><tr><th>LEARNER</th><th>BOOK</th><th>DUE</th><th>DAYS LATE</th></tr>"; overdue.sort((a,b)=>daysLate(b.dueDate)-daysLate(a.dueDate)).forEach(l=>{ h+=`<tr><td><b>${escapeHTML(l.learnerId)}</b></td><td>${escapeHTML(l.bookTitle)} (${escapeHTML(l.barcode)})</td><td>${escapeHTML(l.dueDate)}</td><td style="color:#c62828;font-weight:bold">${daysLate(l.dueDate)} DAYS</td></tr>`; }); h+="</table>"; document.getElementById('pOverdueList').innerHTML=h; } if(borrowed.length===0) document.getElementById('pBorrowedList').innerHTML="NO BOOKS BORROWED"; else { let h="<table><tr><th>LEARNER</th><th>BOOK</th><th>DUE</th></tr>"; borrowed.slice(0,50).forEach(l=>{ h+=`<tr><td>${escapeHTML(l.learnerId)}</td><td>${escapeHTML(l.bookTitle)} (${escapeHTML(l.barcode)})</td><td>${escapeHTML(l.dueDate)}</td></tr>`; }); h+="</table>"; document.getElementById('pBorrowedList').innerHTML=h; } if(returned.length===0) document.getElementById('pReturnedList').innerHTML="NO RETURNS YET"; else { let h="<table><tr><th>LEARNER</th><th>BOOK</th><th>RETURNED</th></tr>"; returned.forEach(l=>{ h+=`<tr><td>${escapeHTML(l.learnerId)}</td><td>${escapeHTML(l.bookTitle)} (${escapeHTML(l.barcode)})</td><td>${l.returnedAt?new Date(l.returnedAt).toLocaleDateString('en-ZA'):"-"}</td></tr>`; }); h+="</table>"; document.getElementById('pReturnedList').innerHTML=h; } } let counts={}; loans.forEach(l=>{ counts[l.bookTitle]=(counts[l.bookTitle]||0)+1; }); let top=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,5); if(top.length===0) document.getElementById('pTopBooks').innerHTML="NO HISTORY YET"; else { let h="<table><tr><th>#</th><th>TITLE</th><th>TIMES</th></tr>"; top.forEach(([t,c],i)=>{ h+=`<tr><td>${i+1}</td><td>${escapeHTML(t)}</td><td><b>${c}</b></td></tr>`; }); h+="</table>"; document.getElementById('pTopBooks').innerHTML=h; } }
-function printPrincipalReport(){ const w=window.open('','_blank','width=900,height=700'); const content=document.getElementById('tab-principal').innerHTML; w.document.write(`<html><head><title>PRINCIPAL REPORT - ${schoolCode}</title><style>body{font-family:Arial;padding:20px} table{width:100%;border-collapse:collapse} th,td{padding:8px;border:1px solid #ddd} button{display:none}</style></head><body><h1>🏫 MAKHANANI HIGH SCHOOL - ${schoolCode}</h1><h2>👔 PRINCIPAL REPORT - ${new Date().toLocaleDateString('en-ZA')}</h2><hr>${content}<script>window.onload=function(){window.print()}<\/script></body></html>`); w.document.close(); }
-function renderBooks(){ const q=(searchBook.value||"").toUpperCase(); let html="<table><tr><th>BARCODE</th><th>TITLE</th><th>SUBJECT</th><th>GRADE</th><th>STATUS</th><th>PRINT</th></tr>"; Object.values(allBooks).filter(b=>(b.title+" "+b.barcode+" "+subjectName(b.category)).toUpperCase().includes(q)).slice(0,100).forEach(b=>{ html+=`<tr><td><b>${escapeHTML(b.barcode)}</b></td><td>${escapeHTML(b.title)}</td><td><b>${escapeHTML(b.category)}</b><br><span class="small">${escapeHTML(subjectName(b.category))}</span></td><td>${escapeHTML(b.grade)}</td><td><span class="badge ${b.status==='Borrowed'?'borrowed':'returned'}">${escapeHTML(b.status||'AVAILABLE')}</span></td><td><button class="btn small black" onclick="printBarcode('${escapeHTML(b.barcode)}','${escapeHTML(b.title).replace(/'/g,"")}','${escapeHTML(b.grade)}')">🖨️ PRINT</button></td></tr>`; }); html+="</table><p class='small'>TOTAL: "+Object.keys(allBooks).length+" | SCHOOL: "+escapeHTML(schoolCode)+"</p>"; bookList.innerHTML=html; }
-function renderLearners(){ if(!currentUser){ learnerList.innerHTML="🔒 LOGIN AS LIBRARIAN TO SEE LEARNERS"; return; } const q=((document.getElementById('learnerTabSearch')||{}).value||"").toUpperCase(); let arr=Object.values(allLearners).filter(l=>(l.learnerId+" "+l.name+" "+l.surname).toUpperCase().includes(q)).sort((a,b)=>a.learnerId.localeCompare(b.learnerId)); let html="<table><tr><th>ID</th><th>NAME</th><th>CLASS</th><th>ACTION</th></tr>"; arr.slice(0,100).forEach(l=>{ html+=`<tr><td><b>${escapeHTML(l.learnerId)}</b></td><td>${escapeHTML(l.name)} ${escapeHTML(l.surname)}</td><td>${escapeHTML(l.grade)}${escapeHTML(l.className)}</td><td><button class="btn small green" onclick="quickIssueToLearner('${escapeHTML(l.learnerId)}')">📤 ISSUE →</button></td></tr>`; }); html+="</table>"; learnerList.innerHTML=html; }
-function renderBorrowed(){ if(!currentUser){ borrowedList.innerHTML="🔒 LOGIN"; if(document.getElementById('borrowedListIssue')) document.getElementById('borrowedListIssue').innerHTML="🔒 LOGIN"; return; } let rows=Object.values(allLoans).filter(l=>l.status==="Borrowed"); let html="<table><tr><th>LEARNER</th><th>BOOK</th><th>DUE</th><th>RETURN</th></tr>"; if(rows.length===0) html+="<tr><td colspan='4'>NO BOOKS BORROWED</td></tr>"; rows.forEach(l=>{ const learner=allLearners[l.learnerId]; html+=`<tr><td>${escapeHTML(l.learnerId)} ${learner? "<br><span class='small'>"+escapeHTML(learner.name)+" "+escapeHTML(learner.surname)+"</span>":""}</td><td>${escapeHTML(l.bookTitle)} (${escapeHTML(l.barcode)})</td><td>${escapeHTML(l.dueDate)}</td><td><button class="btn small orange" onclick="quickReturn('${escapeHTML(l.barcode)}')">📥 RETURN</button></td></tr>`; }); html+="</table>"; borrowedList.innerHTML=html; if(document.getElementById('borrowedListIssue')) document.getElementById('borrowedListIssue').innerHTML=html; }
-function quickReturn(barcode){ showTab('return', document.querySelectorAll('.nav button')[2]); setTimeout(()=>{ document.getElementById('returnBarcode').value=cleanID(barcode); },300); }
-function makeLearnerId(g,c,n){ return g+c+String(n).padStart(2,'0'); }
-async function addLearner(){ if(!currentUser) return alert("🔒 LOGIN"); const g=addGrade.value,c=addClass.value,n=addNumber.value; if(!g||!c||!n||!addName.value||!addSurname.value) return addLearnerMsg.textContent="⚠️ FILL ALL"; const id=makeLearnerId(g,c,n); const h=await hashSurname(addSurname.value); await db.ref(basePath("learners/"+id)).set({learnerId:id,grade:g,className:c,number:n,name:cleanName(addName.value),surname:cleanName(addSurname.value),schoolCode:schoolCode,createdAt:Date.now()}); await db.ref(basePath("publicParent/"+id)).update({learnerId:id,surnameHash:h,schoolCode:schoolCode,lastUpdated:Date.now()}); addLearnerMsg.textContent="✅ ADDED "+id+" - SCHOOL: "+schoolCode; }
-async function deleteLearner(){ if(!currentUser) return alert("🔒 LOGIN"); const id=cleanID(document.getElementById('deleteLearnerId').value); if(!id) return deleteLearnerMsg.textContent="⚠️ ENTER ID"; if(!confirm("DELETE "+id+"?")) return; await db.ref(basePath("learners/"+id)).remove(); await db.ref(basePath("publicParent/"+id)).remove(); deleteLearnerMsg.textContent="✅ DELETED "+id; }
-async function bulkAddLearners(){ if(!currentUser) return alert("🔒 LOGIN"); const text=document.getElementById('bulkLearners').value.trim(); if(!text) return bulkLearnerMsg.textContent="⚠️ PASTE FIRST"; let added=0; for(let line of text.split("\n")){ line=line.trim(); if(!line) continue; if(line.toUpperCase().includes("GRADE")) continue; const parts=line.split(/[\t,;]/).map(p=>p.trim()).filter(p=>p!==""); if(parts.length<5) continue; const [grade,cls,num,fn,sn]=parts; if(isNaN(parseInt(grade))) continue; try{ const id=makeLearnerId(grade,cls.toUpperCase(),num); const h=await hashSurname(sn); await db.ref(basePath("learners/"+id)).set({learnerId:id,grade:String(grade),className:cls.toUpperCase(),number:String(num),name:cleanName(fn),surname:cleanName(sn),schoolCode:schoolCode,createdAt:Date.now()}); await db.ref(basePath("publicParent/"+id)).update({learnerId:id,surnameHash:h,schoolCode:schoolCode,lastUpdated:Date.now()}); added++; }catch(e){} } document.getElementById('bulkLearnerMsg').innerHTML="✅ ADDED <b>"+added+"</b> - ALL CAPS ✅"; document.getElementById('bulkLearners').value=""; }
-async function bulkAddBooks(){ if(!currentUser) return alert("🔒 LOGIN"); const text=document.getElementById('bulkBooks').value.trim(); if(!text) return bulkBookMsg.textContent="⚠️ PASTE"; let added=0; let counts={}; Object.values(allBooks).forEach(b=>{counts[b.category]=(counts[b.category]||0)+1;}); for(let line of text.split("\n")){ line=line.trim(); if(!line) continue; if(line.toUpperCase().includes("CATEGORY")) continue; const parts=line.split(/[\t,;]/).map(p=>p.trim()); if(parts.length<3) continue; let [cat,grade,title,barcode]=parts; cat=(cat||"MAT").toUpperCase().replace(/[^A-Z]/g,""); if(!SUBJECTS[cat]) cat="MAT"; if(!title||isNaN(parseInt(grade))) continue; try{ if(!barcode){counts[cat]=(counts[cat]||0)+1; barcode=cat+"-"+String(counts[cat]).padStart(3,'0');} else barcode=cleanID(barcode); const key=barcode.replace(/[^A-Z0-9-]/g,'_'); await db.ref(basePath("books/"+key)).set({barcode,title:cleanText(title),category:cat,subjectName:subjectName(cat),grade:String(grade),status:"AVAILABLE",schoolCode:schoolCode,createdAt:Date.now()}); allBooks[key]={barcode,title:cleanText(title),category:cat,grade}; added++; }catch(e){} } document.getElementById('bulkBookMsg').innerHTML="✅ ADDED <b>"+added+"</b> BOOKS! ALL CAPS ✅"; document.getElementById('bulkBooks').value=""; }
-async function addBook(){ if(!currentUser) return alert("🔒 LOGIN"); const cat=bookCategory.value,grade=bookGrade.value,title=cleanText(bookTitle.value); if(!title) return bookMsg.textContent="⚠️ ENTER TITLE"; let qty=parseInt(document.getElementById('bookQty').value)||1; if(qty<1) qty=1; if(qty>200) qty=200; let startBarcode=cleanID(bookBarcode.value); let startNum=1; if(startBarcode){ const m=startBarcode.match(/(\d+)$/); if(m) startNum=parseInt(m[0]); } else { let max=0; Object.values(allBooks).forEach(b=>{ if(b.category===cat){ const mm=b.barcode.match(/(\d+)$/); if(mm) max=Math.max(max,parseInt(mm[0])); } }); startNum=max+1; } bookMsg.textContent="⏳ ADDING "+qty+" COPIES..."; let created=[]; for(let i=0;i<qty;i++){ let num=startNum+i; let barcode=cat+"-"+String(num).padStart(3,'0'); let key=barcode.replace(/[^A-Z0-9-]/g,'_'); if(allBooks[key]) continue; await db.ref(basePath("books/"+key)).set({barcode,title,category:cat,subjectName:subjectName(cat),grade,status:"AVAILABLE",schoolCode:schoolCode,createdAt:Date.now()}); allBooks[key]={barcode,title,category:cat,grade}; created.push(barcode); } if(created.length===0){ bookMsg.textContent="❌ ALL EXIST."; return; } bookMsg.innerHTML=`✅ ADDED <b>${created.length} COPIES</b> OF <b>${escapeHTML(title)}</b> - ${cat} - ${subjectName(cat)}<br>📚 ${escapeHTML(created[0])} ${created.length>1?"TO "+escapeHTML(created[created.length-1]):""}`; bookTitle.value=""; bookBarcode.value=""; document.getElementById('bookQty').value=1; }
-async function issueBook(){ if(!currentUser){ setMsg(issueMsg,"🔒 LOGIN",false); return; } const learnerId=cleanID(issueLearnerId.value); const barcode=cleanID(issueBarcode.value); const surname=cleanName(issueSurname.value); if(!learnerId||!barcode||!surname||!issuerName.value){ setMsg(issueMsg,"⚠️ SELECT LEARNER + SCAN BARCODE + ISSUER",false); return; } const key=barcode.replace(/[^A-Z0-9-]/g,'_'); const book=(await db.ref(basePath("books/"+key)).once("value")).val(); if(!book){ setMsg(issueMsg,"❌ BOOK NOT FOUND: "+barcode,false); return; } if(book.status==="Borrowed"){ setMsg(issueMsg,"❌ ALREADY BORROWED",false); return; } const lGrade=parseInt(learnerId.match(/^\d+/)[0]); if(parseInt(book.grade)!==lGrade){ setMsg(issueMsg,`❌ GRADE RULE: LEARNER ${lGrade} BUT BOOK GRADE ${book.grade}`,false); return; } const due=issueDue.value||new Date(Date.now()+14*86400000).toISOString().slice(0,10); const firstName=cleanName(document.getElementById('issueFirstName').value); await db.ref(basePath("loans/"+key)).set({learnerId,learnerName:firstName+" "+surname,barcode,bookTitle:book.title,category:book.category,subjectName:subjectName(book.category),dueDate:due,status:"Borrowed",issuer:cleanText(issuerName.value),schoolCode:schoolCode,issuedAt:Date.now()}); await db.ref(basePath("books/"+key)).update({status:"Borrowed",borrowedBy:learnerId}); await syncToParent(learnerId,surname,book.title,barcode,due); setMsg(issueMsg,"✅ ISSUED "+barcode+" TO "+learnerId+" DUE "+due,true); document.getElementById('lastIssued').innerHTML=`<div class="msg ok">✅ LAST: ${escapeHTML(barcode)} → ${escapeHTML(learnerId)} DUE ${escapeHTML(due)}</div>`; document.getElementById('issueBarcode').value=""; document.getElementById('issueBarcode').focus(); filterLearnersForIssue(); }
-async function returnBook(){ if(!currentUser) return alert("🔒 LOGIN"); const barcode=cleanID(returnBarcode.value); if(!barcode||!retrieverName.value){ returnMsg.textContent="⚠️ ENTER BARCODE + RETRIEVER"; return; } const key=barcode.replace(/[^A-Z0-9-]/g,'_'); const loan=(await db.ref(basePath("loans/"+key)).once("value")).val(); if(!loan){ await db.ref(basePath("books/"+key)).update({status:"AVAILABLE",borrowedBy:""}); returnMsg.textContent="⚠️ FIXED STUCK "+barcode; document.getElementById('returnBarcode').value=""; return; } await db.ref(basePath("loans/"+key)).update({status:"RETURNED",retriever:cleanText(retrieverName.value),returnedAt:Date.now()}); await db.ref(basePath("books/"+key)).update({status:"AVAILABLE",borrowedBy:""}); if(loan.learnerId) await db.ref(basePath("publicParent/"+loan.learnerId+"/books/"+key)).update({status:"RETURNED"}); returnMsg.textContent="✅ RETURNED "+barcode+" FROM "+loan.learnerId; document.getElementById('returnBarcode').value=""; document.getElementById('returnLearnerInfo').innerHTML=""; document.getElementById('returnBarcode').focus(); }
-async function hashSurname(s){ s=String(s||"").trim().toLowerCase(); const buf=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s)); return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('').slice(0,16); }
-async function syncToParent(id,sn,title,barcode,due){ const h=await hashSurname(sn); await db.ref(basePath("publicParent/"+id)).update({learnerId:id,surnameHash:h,schoolCode:schoolCode,lastUpdated:Date.now()}); await db.ref(basePath("publicParent/"+id+"/books/"+barcode.replace(/[^A-Z0-9-]/g,'_'))).set({bookTitle:title,barcode,dueDate:due,status:"Borrowed"}); }
-async function checkMyChild(){ if(Date.now()<parentLockedUntil){ const mins=Math.ceil((parentLockedUntil-Date.now())/60000); document.getElementById('parentResult').innerHTML="🔒 LOCKED FOR "+mins+" MIN"; return; } const id=cleanID(document.getElementById('parentId').value); const sn=cleanName(document.getElementById('parentSurname').value); const box=document.getElementById('parentResult'); if(!id||!sn){ box.innerHTML="⚠️ ENTER ID + SURNAME"; return; } box.innerHTML="🔍 CHECKING..."; try{ const data=(await db.ref(basePath("publicParent/"+id)).once("value")).val(); if(!data){ parentFailCount++; if(parentFailCount>=5){ parentLockedUntil=Date.now()+5*60*1000; box.innerHTML="🔒 TOO MANY TRIES - LOCKED 5 MINS"; return; } box.innerHTML="❌ NO BOOKS FOR "+id+" IN SCHOOL "+schoolCode; return; } if(data.surnameHash!==await hashSurname(sn)){ parentFailCount++; if(parentFailCount>=5){ parentLockedUntil=Date.now()+5*60*1000; box.innerHTML="🔒 TOO MANY TRIES - LOCKED 5 MINS"; return; } box.innerHTML="❌ WRONG SURNAME. ("+(5-parentFailCount)+" TRIES LEFT)"; return; } parentFailCount=0; let html=`<b>✅ FOUND FOR ${escapeHTML(id)} - SCHOOL ${escapeHTML(schoolCode)}</b><br>`; if(data.books) Object.values(data.books).forEach(b=>{ html+=`📚 ${escapeHTML(b.bookTitle)} - ${escapeHTML(b.barcode)}<br>DUE: ${escapeHTML(b.dueDate)} - ${escapeHTML(b.status)}<br><hr>`; }); else html+="✅ NO BOOKS BORROWED."; box.innerHTML=html; }catch(e){ box.innerHTML="❌ "+escapeHTML(e.message); } }
-function openPrintWindow(innerHTML,title){ const w=window.open('','_blank','width=800,height=600'); w.document.write(`<html><head><title>${escapeHTML(title)}</title><style>body{font-family:Arial;text-align:center;padding:10px} .label{border:2px dashed #000;padding:14px;margin:10px;display:inline-block;width:280px} .label b{font-size:15px;display:block} svg{width:100%;height:70px} @media print{.no-print{display:none}} button{padding:12px 20px;background:#174ea6;color:#fff;border:0;border-radius:8px;cursor:pointer;margin:10px}</style><script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script></head><body><div class="no-print"><button onclick="window.print()">🖨️ PRINT NOW</button></div>${innerHTML}<script>window.onload=function(){ document.querySelectorAll('svg[data-barcode]').forEach(el=>{ try{ JsBarcode(el, el.getAttribute('data-barcode'), {format:'CODE128', displayValue:true, fontSize:16, height:55, margin:5}); }catch(e){} }); }<\/script></body></html>`); w.document.close(); }
-function printBarcode(barcode,title,grade){ const html=`<div class="label"><small>🏫 MAKHANANI HIGH SCHOOL - ${escapeHTML(schoolCode)}</small><b>${escapeHTML(title)}</b><small>GRADE ${escapeHTML(grade)} | MENTE ET MANU</small><svg data-barcode="${escapeHTML(barcode)}"></svg><b>${escapeHTML(barcode)}</b></div>`; openPrintWindow(html,'BARCODE '+barcode); }
-function printSingleFromInput(){ const code=cleanID(document.getElementById('printOneBarcode').value); if(!code) return printMsg.textContent="⚠️ TYPE BARCODE"; const key=code.replace(/[^A-Z0-9-]/g,'_'); const b=allBooks[key]||Object.values(allBooks).find(x=>x.barcode===code); if(b) printBarcode(b.barcode,b.title,b.grade); else printBarcode(code,code,'?'); printMsg.textContent="✅ OPENED PRINT FOR "+code; }
-function printAllBarcodes(){ const list=Object.values(allBooks); if(list.length===0){ printMsg.textContent="❌ NO BOOKS YET"; return; } let html=`<h2>🏫 MAKHANANI - ALL BARCODES (${list.length}) - SCHOOL ${escapeHTML(schoolCode)}</h2>`; list.forEach(b=>{ html+=`<div class="label"><small>🏫 MAKHANANI HIGH SCHOOL - ${escapeHTML(schoolCode)}</small><b>${escapeHTML(b.title)}</b><small>${escapeHTML(b.category)} - ${escapeHTML(subjectName(b.category))} | GRADE ${escapeHTML(b.grade)}</small><svg data-barcode="${escapeHTML(b.barcode)}"></svg><b>${escapeHTML(b.barcode)}</b></div>`; }); openPrintWindow(html,'ALL BARCODES'); printMsg.textContent="✅ OPENED "+list.length+" BARCODES"; }
+function addLearner(){let n=document.getElementById('lName').value.trim();let g=document.getElementById('lGrade').value.trim();let s=document.getElementById('lSchool').value.trim()||'MAKHANANI HIGH SCHOOL';if(!n||!g){alert('Type Name + Grade');return;}let no='MKH-'+String(learners.length+1).padStart(4,'0');learners.push({no,name:n,grade:g,school:s});save();document.getElementById('lName').value='';document.getElementById('lGrade').value='';alert('Done! '+n+' = '+no);printOneCard(learners[learners.length-1]);}
+function addBook(){let t=document.getElementById('bTitle').value.trim();let a=document.getElementById('bAuthor').value.trim();let c=document.getElementById('bCat').value.trim();if(!t){alert('Type Book Title');return;}let code='BK-'+String(books.length+1).padStart(3,'0');books.push({code,title:t,author:a,cat:c});save();document.getElementById('bTitle').value='';document.getElementById('bAuthor').value='';document.getElementById('bCat').value='';alert('Book Added! '+code);}
+function issueBook(){let ln=document.getElementById('scanLearner').value.trim();let bk=document.getElementById('scanBook').value.trim();let L=learners.find(x=>x.no===ln);let B=books.find(x=>x.code===bk);if(!L){document.getElementById('issueMsg').innerHTML='<b style=color:red>Learner not found!</b>';return;}if(!B){document.getElementById('issueMsg').innerHTML='<b style=color:red>Book not found!</b>';return;}if(loans.find(x=>x.book===B.code&&!x.returned)){document.getElementById('issueMsg').innerHTML='<b style=color:red>Book already OUT!</b>';return;}let d=new Date();d.setDate(d.getDate()+14);loans.push({learner:L.no,lname:L.name,book:B.code,btitle:B.title,date:new Date().toLocaleDateString(),due:d.toLocaleDateString(),returned:false});save();document.getElementById('issueMsg').innerHTML='✅ <b>'+B.title+' given to '+L.name+' - Return by '+d.toLocaleDateString()+'</b>';}
+function returnBook(){let bk=document.getElementById('retBook').value.trim();let loan=loans.find(x=>x.book===bk&&!x.returned);if(!loan){document.getElementById('retMsg').innerHTML='<b style=color:red>Not OUT!</b>';return;}loan.returned=true;save();document.getElementById('retMsg').innerHTML='✅ <b>'+loan.btitle+' returned by '+loan.lname+'</b>';}
+function quickScan(){let v=document.getElementById('quickScan').value.trim();let L=learners.find(x=>x.no===v);let B=books.find(x=>x.code===v);if(L){document.getElementById('scanLearner').value=L.no;show('issue');}else if(B){document.getElementById('scanBook').value=B.code;show('issue');}else{document.getElementById('quickResult').innerHTML='Not found';}}
+function parentCheck(){let v=document.getElementById('parentNo').value.trim();let L=learners.find(x=>x.no===v);if(!L){document.getElementById('parentResult').innerHTML='Learner not found';return;}let my=loans.filter(x=>x.learner===v&&!x.returned);document.getElementById('parentResult').innerHTML='<b>'+L.name+' - '+L.grade+'</b><br>'+(my.length?my.map(x=>x.btitle+' - Due '+x.due).join('<br>'):'✅ No books out - All returned!');}
+function printOneCard(l){let w=window.open('','','width=800,height=600');w.document.write('<html><head><title>Card</title><style>body{font-family:Arial}.c{width:300px;border:3px solid #1a56db;border-radius:12px;padding:12px;text-align:center;margin:20px auto}svg{width:100%}</style><script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script></head><body><div class="c"><b>MAKHANANI HIGH SCHOOL 💙</b><br>LEARNER CARD<br>Name: '+l.name+'<br>No: <b>'+l.no+'</b><br>Grade: '+l.grade+'<br><svg id="bc"></svg><br>'+l.no+'<br><small>XINTIMANI GROUP | MENTE ET MANU</small></div><script>window.onload=function(){JsBarcode("#bc","'+l.no+'",{format:"CODE128",width:2,height:50,displayValue:false});setTimeout(()=>window.print(),500)}<\/script></body></html>');w.document.close();}
+function printAllCards(){if(!learners.length){alert('No learners');return;}let w=window.open('','','width=900,height=800');let html='<html><head><title>All Cards</title><style>body{font-family:Arial}.c{width:280px;border:3px solid #1a56db;border-radius:12px;padding:10px;text-align:center;display:inline-block;margin:8px}svg{width:100%}</style><script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script></head><body>';learners.forEach((l,i)=>{html+='<div class="c"><b>MAKHANANI HIGH 💙</b><br>'+l.name+'<br><b>'+l.no+'</b><br>'+l.grade+'<br><svg id="bc'+i+'"></svg><br>'+l.no+'</div>'});html+='<script>window.onload=function(){'+learners.map((l,i)=>'JsBarcode("#bc'+i+'","'+l.no+'",{format:"CODE128",width:2,height:40,displayValue:false});').join('')+'setTimeout(()=>window.print(),800)}<\/script></body></html>';w.document.write(html);w.document.close();}
+function previewSchools(){
+let file=document.getElementById('schoolFile').files[0];
+let paste=document.getElementById('schoolPaste').value.trim();
+if(file){
+let r=new FileReader();
+r.onload=function(e){
+try{
+if(file.name.endsWith('.json')){pendingSchools=JSON.parse(e.target.result);}
+else if(file.name.endsWith('.csv')){pendingSchools=e.target.result.split('\n').slice(1).map(l=>{let p=l.split(',');return{emis:p[0],name:p[1]}}).filter(x=>x.name);}
+else{let wb=XLSX.read(e.target.result,{type:'array'});let ws=wb.Sheets[wb.SheetNames[0]];let rows=XLSX.utils.sheet_to_json(ws,{header:1});pendingSchools=rows.slice(1).map(row=>{let emis=row.find(c=>String(c).length>=6&&!isNaN(c));let name=row.find(c=>typeof c==='string'&&c.length>3);return{emis:emis||'',name:name||''}}).filter(x=>x.name);}
+showPreview();
+}catch(err){alert('File error: '+err)}
+};
+if(file.name.endsWith('.xlsx')||file.name.endsWith('.xls'))r.readAsArrayBuffer(file);else r.readAsText(file);
+}else if(paste){
+pendingSchools=paste.split('\n').map(l=>{let p=l.split(',');return{emis:p[0]?.trim(),name:p[1]?.trim()||p[0]}}).filter(x=>x.name);showPreview();
+}else alert('Choose file or paste first');
+}
+function showPreview(){document.getElementById('schoolPreview').innerHTML='<b>Preview '+pendingSchools.length+' schools:</b><br>'+pendingSchools.slice(0,5).map(s=>s.emis+' - '+s.name).join('<br>')+'...';document.getElementById('uploadStatus').innerText='⏳ UPLOADING '+pendingSchools.length+' / '+pendingSchools.length+'...';}
+function confirmSchools(){if(!pendingSchools.length){alert('Preview first!');return;}if(document.getElementById('replaceAll').checked){schools=[];}pendingSchools.forEach(s=>{if(!schools.find(x=>x.emis==s.emis))schools.push(s);});save();alert('✅ Saved '+pendingSchools.length+' schools! Total now '+schools.length);pendingSchools=[];}
+function addSchoolManual(){let e=document.getElementById('newEmis').value.trim();let n=document.getElementById('newSchool').value.trim();if(!n){alert('Type school name');return;}schools.push({emis:e||Date.now(),name:n});save();alert('School Added!');}
+function searchDBE(){let q=(document.getElementById('dbeSearch').value||'').toLowerCase();if(!q){document.getElementById('dbeResults').innerHTML='';return;}let f=schools.filter(s=>s.name.toLowerCase().includes(q)).slice(0,10);document.getElementById('dbeResults').innerHTML=f.map(s=>'<div class="badge" onclick="document.getElementById(\'newEmis\').value=\''+s.emis+'\';document.getElementById(\'newSchool\').value=\''+s.name+'\'">'+s.name+' - '+s.emis+' (Tap to fill)</div>').join('')||'No school found - Fill manually below';}
+function downloadSchools(){let b=new Blob([JSON.stringify(schools,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='makhanani-schools.json';a.click();}
+function isOverdue(l){return !l.returned && new Date()>new Date(l.due);}
+function render(){
+document.getElementById('sSchools').innerText=schools.length;
+document.getElementById('sBooks').innerText=books.length;
+document.getElementById('sLearners').innerText=learners.length;
+document.getElementById('sOut').innerText=loans.filter(x=>!x.returned).length;
+document.getElementById('pLearners').innerText=learners.length;
+document.getElementById('pBooks').innerText=books.length;
+document.getElementById('pOut').innerText=loans.filter(x=>!x.returned).length;
+document.getElementById('pOver').innerText=loans.filter(isOverdue).length;
+let sl=(document.getElementById('searchLearner').value||'').toLowerCase();
+document.getElementById('learnerList').innerHTML=learners.filter(x=>x.name.toLowerCase().includes(sl)||x.no.toLowerCase().includes(sl)).map(x=>`<div class="badge"><b>${x.no}</b> - ${x.name} - ${x.grade} - ${x.school||''}<br><button onclick="document.getElementById('scanLearner').value='${x.no}';show('issue')">ISSUE →</button> <button onclick="printOneCard({no:'${x.no}',name:'${x.name}',grade:'${x.grade}'})">🖨️ PRINT CARD</button></div>`).join('')||'No learners yet';
+let sb=(document.getElementById('searchBook').value||'').toLowerCase();
+document.getElementById('bookList').innerHTML=books.filter(x=>x.title.toLowerCase().includes(sb)).map(x=>`<div class="badge"><b>${x.code}</b> - ${x.title} - ${x.author||''} - ${x.cat||''} ${loans.find(l=>l.book===x.code&&!l.returned)?'🔴 OUT':'🟢 IN'}<br><button onclick="document.getElementById('scanBook').value='${x.code}';show('issue')">ISSUE →</button></div>`).join('')||'No books yet';
+document.getElementById('outList').innerHTML=loans.filter(x=>!x.returned).map(x=>`<div class="badge">${x.btitle} → ${x.lname}<br>Due: ${x.due}</div>`).join('')||'All IN! 🎉';
+document.getElementById('overdueList').innerHTML=loans.filter(isOverdue).map(x=>`<div class="badge">⏰ ${x.btitle} → ${x.lname} - Due ${x.due}</div>`).join('')||'No overdue! 💚';
+document.getElementById('principalList').innerHTML=loans.filter(x=>!x.returned).map(x=>`<div class="badge">${x.btitle} → ${x.lname} - Due ${x.due} ${isOverdue(x)?'⏰ OVERDUE':''}</div>`).join('')||'All IN! 🎉';
+document.getElementById('schoolList').innerHTML=schools.slice(0,20).map(s=>`<div class="badge">${s.emis} - ${s.name}</div>`).join('')||'No schools yet - Upload DBE list';
+document.getElementById('uploadStatus').innerText='⏳ UPLOADING '+schools.length+' / '+schools.length+'...';
+}
+render();
 </script>
 </body>
 </html>
