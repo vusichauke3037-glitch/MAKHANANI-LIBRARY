@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MAKHANANI - Digital Library</title>
+<title>MAKHANANI DIGITAL LIBRARY</title>
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial;background:#eef4ff}
-header{background:#1a56db;color:#fff;padding:14px;text-align:center}
-header .logo{width:48px;height:48px;background:#fff;color:#1a56db;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;vertical-align:middle}
-header h1{margin:0;font-size:22px;display:inline;vertical-align:middle}
-header p{margin:4px 0;font-size:12px}
+header{background:#ffffff;color:#0a1a4d;padding:10px;text-align:center;border-bottom:4px solid #c9a227}
+header .headerLogo{width:100%;max-width:320px;height:auto;display:block;margin:0 auto 4px auto}
+header h1{margin:2px 0;font-size:24px;color:#0a1a4d}
+header p{margin:4px 0;font-size:12px;color:#0a1a4d;font-weight:700}
 .topbar{background:#facc15;color:#000;font-weight:900;padding:6px;text-align:center;font-size:12px}
 .topbar span{background:#1a56db;color:#fff;padding:2px 8px;border-radius:20px}
 nav{display:flex;flex-wrap:wrap;gap:6px;padding:10px;background:#fff;position:sticky;top:0;z-index:10}
@@ -34,17 +34,23 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 .rolebox{background:#eef2ff;border:3px solid #1a56db;border-radius:14px;padding:14px;text-align:center}
 .schoolbar{background:#16a34a;color:#fff;padding:10px;border-radius:10px;text-align:center;font-weight:900;margin-bottom:10px}
 .searchResult{max-height:200px;overflow-y:auto}
+.footerLogo{width:140px;height:auto;display:block;margin:10px auto}
 </style>
 </head>
 <body>
-<header><div class="logo">M</div> <h1>MAKHANANI HIGH SCHOOL</h1><p>📚 DIGITAL LIBRARY | XINTIMANI GROUP | MENTE ET MANU</p></header>
+<header>
+<img src="logo.png" alt="XINTIMANI GROUP - Building Solutions. Empowering Communities." class="headerLogo" onerror="this.style.display='none'">
+<h1>MAKHANANI DIGITAL LIBRARY</h1>
+<p>📚 POWERED BY XINTIMANI GROUP | FOR ALL SCHOOLS</p>
+<p style="font-size:11px;color:#0f766e">Building Solutions. Empowering Communities.</p>
+</header>
 <div class="topbar">🏫 <span id="currentSchoolLabel">NO SCHOOL SELECTED</span> | <span id="whoIs">👤 NOT LOGGED IN</span> | <span id="adminStatus">🔒 ADMIN LOCKED</span> | 📷 SCAN | 📅 30 NOV | 🚫 EMIS ONLY | 🔒 SCHOOL ACCESS CONTROL | 🔍 SEARCH SCHOOL</div>
 
 <div style="max-width:900px;margin:auto;padding:0 12px">
 <div class="card rolebox">
 <h3>🔐 LOGIN - SELECT YOUR SCHOOL + ROLE</h3>
 <label>🔍 SEARCH YOUR SCHOOL (Type Name or EMIS):</label>
-<input id="loginSchoolSearch" placeholder="🔍 Type e.g. MAKHANANI / BENONI / 700400111..." oninput="filterLoginSchools()">
+<input id="loginSchoolSearch" placeholder="🔍 Type e.g. BENONI / DURBAN / 700400111..." oninput="filterLoginSchools()">
 <select id="loginSchool"><option value="">-- Select School --</option></select>
 <label>👤 YOUR ROLE:</label>
 <select id="loginRole"><option value="admin">👑 ADMINISTRATOR - Sees ALL Schools</option><option value="principal">🎓 PRINCIPAL - Sees ONLY My School</option><option value="librarian">📚 LIBRARIAN - Sees ONLY My School</option></select>
@@ -69,21 +75,21 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 
 <div id="home" class="page active">
 <div class="schoolbar" id="homeSchoolBar">🏫 NO SCHOOL SELECTED - Login First</div>
-<div class="card"><div class="adminbar">👑 APP ADMINISTRATOR - FULL CONTROL<br><small id="adminWelcome">🔒 ADMIN LOCKED</small></div></div>
+<div class="card" style="text-align:center"><img src="logo.png" alt="XINTIMANI GROUP" class="footerLogo" onerror="this.style.display='none'"><div class="adminbar">👑 APP ADMINISTRATOR - FULL CONTROL<br><small id="adminWelcome">🔒 ADMIN LOCKED</small></div></div>
 <div class="stats">
 <div class="stat"><b id="sSchools">0</b><br>🏫 SCHOOLS</div>
 <div class="stat"><b id="sBooks">0</b><br>📖 BOOKS (My School)</div>
 <div class="stat"><b id="sLearners">0</b><br>👧 LEARNERS (My School)</div>
 <div class="stat"><b id="sOut">0</b><br>📚 BORROWED (My School)</div>
 </div>
-<div class="card"><div class="greenbox">WELCOME TO MAKHANANI! 💚 EVER HAPPY!<br>📅 RETURN BY 30 NOV EVERY YEAR!<br>🔒 EACH SCHOOL SEES ONLY ITS OWN DATA! 🔍 SEARCH SCHOOL TO CREATE PASSWORD!</div><p>👑 Admin → Search School → Creates Principal Password<br>🎓 Principal → Creates Librarian Password for HIS School<br>📚 Librarian → Works ONLY in HIS School</p></div>
+<div class="card"><div class="greenbox">WELCOME TO MAKHANANI DIGITAL LIBRARY! 💚 EVER HAPPY!<br>📅 RETURN BY 30 NOV EVERY YEAR!<br>🔒 EACH SCHOOL SEES ONLY ITS OWN DATA! 🔍 SEARCH SCHOOL TO CREATE PASSWORD!</div><p>👑 Admin → Search School → Creates Principal Password<br>🎓 Principal → Creates Librarian Password for HIS School<br>📚 Librarian → Works ONLY in HIS School</p></div>
 <div class="card"><h3>🔍 Quick Scan</h3><input id="quickScan" placeholder="Scan Learner OR Book..."><button class="big yellow" onclick="startScan('quickScan')">📷 SCAN WITH CAMERA</button><div id="reader-home"></div><button class="big" onclick="quickScan()">GO →</button><div id="quickResult"></div></div>
 </div>
 
 <div id="issue" class="page">
 <div class="schoolbar" id="issueSchoolBar"></div>
 <div class="card"><h3>📤 ISSUE BOOK - RETURN 30 NOV</h3>
-<input id="scanLearner" placeholder="Learner No e.g. MKH-0001">
+<input id="scanLearner" placeholder="Learner No e.g. L-0001">
 <button class="big yellow" onclick="startScan('scanLearner')">📷 SCAN LEARNER CARD</button>
 <div id="reader"></div>
 <input id="scanBook" placeholder="Book Code e.g. BK-001">
@@ -145,7 +151,7 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 
 <div id="parent" class="page">
 <div class="card"><h3>👨‍👩‍👧 PARENT CHECK</h3><p>Type your child's Learner No. All books due 30 November.</p>
-<input id="parentNo" placeholder="Learner No e.g. MKH-0001">
+<input id="parentNo" placeholder="Learner No e.g. L-0001">
 <button class="big green" onclick="parentCheck()">🔍 CHECK MY CHILD</button><div id="parentResult"></div></div>
 </div>
 
@@ -158,11 +164,10 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 <div class="card"><h3>🔑 ADMIN CHANGES OWN PASSWORD</h3>
 <input type="password" id="oldPass" placeholder="Old Admin Password"><input type="password" id="changePass1" placeholder="New Admin Password"><input type="password" id="changePass2" placeholder="Confirm New"><button class="big orange" onclick="changeAdminPassword()">🔑 CHANGE ADMIN PASSWORD</button><div id="changeMsg"></div></div>
 
-<!-- *** NEW: SEARCH SCHOOL TO CREATE PRINCIPAL PASSWORD *** -->
 <div class="card" style="border:3px solid #7c3aed"><h3>🔍🎓 SEARCH SCHOOL → CREATE PRINCIPAL PASSWORD</h3>
 <p>👑 Admin: Search school first, then tap it to select!</p>
 <label>🔍 SEARCH SCHOOL BY NAME OR EMIS:</label>
-<input id="adminPrinSearch" placeholder="🔍 Type e.g. MAKHANANI / BENONI / DURBAN / 700400111..." oninput="searchSchoolForPrincipal()">
+<input id="adminPrinSearch" placeholder="🔍 Type e.g. BENONI / DURBAN / 700400111..." oninput="searchSchoolForPrincipal()">
 <div id="adminPrinSearchResults" class="searchResult"></div>
 <label>🏫 SELECTED SCHOOL:</label>
 <input id="adminPrinSelected" readonly placeholder="No school selected yet - Search above & Tap a school" style="background:#fef3c7;font-weight:900">
@@ -171,7 +176,7 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 <input type="password" id="newPrinPass" placeholder="🆕 Create Principal Password for SELECTED School">
 <input type="password" id="newPrinPass2" placeholder="🔁 Type Again">
 <button class="big purple" onclick="createPrincipalPassword()">✅ CREATE / CHANGE PRINCIPAL PASSWORD (Selected School)</button><div id="prinPassMsg"></div>
-<p style="font-size:13px">💡 Example: Search <b>MAKHANANI</b> → Tap <b>700400111 - MAKHANANI HIGH</b> → Type <b>MakhananiPrin</b> → CREATE → Give to Principal!</p></div>
+<p style="font-size:13px">💡 Example: Search <b>BENONI</b> → Tap <b>700400222 - BENONI HIGH</b> → Type <b>BenoniPrin</b> → CREATE → Give to Principal!</p></div>
 
 <div class="card"><h3>🔍📚 SEARCH SCHOOL → CREATE LIBRARIAN PASSWORD</h3>
 <label>🔍 SEARCH SCHOOL:</label>
@@ -188,12 +193,16 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 </div>
 </div>
 
+<div style="text-align:center;padding:12px;background:#fff;margin-top:10px">
+<img src="logo.png" alt="XINTIMANI GROUP" class="footerLogo" onerror="this.style.display='none'">
+<p style="font-size:12px;color:#0a1a4d;font-weight:900">MAKHANANI DIGITAL LIBRARY<br><span style="color:#0f766e">Powered by Xintimani Group - Building Solutions. Empowering Communities.</span><br>© 2026 Xintimani Group - Makhanani Digital Library</p>
+</div>
+
 <script>
 let learners=JSON.parse(localStorage.getItem('mk_learners')||'[]');
 let books=JSON.parse(localStorage.getItem('mk_books')||'[]');
 let loans=JSON.parse(localStorage.getItem('mk_loans')||'[]');
 let schools=JSON.parse(localStorage.getItem('mk_schools')||'[]');
-if(!schools.length){schools=[{emis:'700400111',name:'MAKHANANI HIGH SCHOOL',principalPw:'',librarianPw:''}];}
 let pendingSchools=[];let scanner=null;
 let currentRole=localStorage.getItem('mk_role')||'';
 let currentSchoolEmis=localStorage.getItem('mk_school')||'';
@@ -205,11 +214,10 @@ function getSchoolName(emis){let s=schools.find(x=>normEmis(x.emis)===normEmis(e
 function myLearners(){if(currentRole==='admin'&&!currentSchoolEmis) return learners;if(!currentSchoolEmis) return [];return learners.filter(x=>normEmis(x.schoolEmis)===normEmis(currentSchoolEmis) || (!x.schoolEmis && normEmis(x.school)===normEmis(getSchoolName(currentSchoolEmis))) );}
 function myBooks(){if(currentRole==='admin'&&!currentSchoolEmis) return books;if(!currentSchoolEmis) return [];return books.filter(x=>normEmis(x.schoolEmis)===normEmis(currentSchoolEmis));}
 function myLoans(){if(currentRole==='admin'&&!currentSchoolEmis) return loans;if(!currentSchoolEmis) return [];return loans.filter(x=>normEmis(x.schoolEmis)===normEmis(currentSchoolEmis));}
-// *** SEARCH SCHOOL FOR PRINCIPAL PASSWORD ***
 function searchSchoolForPrincipal(){
   let q=(document.getElementById('adminPrinSearch').value||'').toLowerCase().trim();
   let box=document.getElementById('adminPrinSearchResults');
-  if(!q){box.innerHTML='<small>Type to search - e.g. MAKHANANI, BENONI, 700400...</small>';return;}
+  if(!q){box.innerHTML='<small>Type to search - e.g. BENONI, DURBAN, 700400...</small>';return;}
   let f=schools.filter(s=>s.name.toLowerCase().includes(q)||String(s.emis).includes(q)).slice(0,20);
   if(!f.length){box.innerHTML='❌ No school found for <b>'+q+'</b> - Check spelling or Add School below';return;}
   box.innerHTML='<b>Found '+f.length+' schools - Tap one to select:</b>'+f.map(s=>`<div class="badge" style="cursor:pointer;background:#ede9fe" onclick="selectSchoolForPrincipal('${s.emis}')">🏫 <b>${s.emis} - ${s.name}</b><br>🎓 Principal: ${s.principalPw?'✅ Set ('+s.principalPw+')':'❌ Not Set - Click to Create!'}<br><small>👆 TAP TO SELECT THIS SCHOOL</small></div>`).join('');
@@ -331,14 +339,14 @@ function show(p){document.querySelectorAll('.page').forEach(e=>e.classList.remov
 function getDueDate(){let now=new Date();let year=now.getFullYear();let due=new Date(year,10,30);if(now>due){due=new Date(year+1,10,30);}return due;}
 function startScan(target){let map={'retBook':'reader2','quickScan':'reader-home','scanLearner':'reader','scanBook':'reader-issue2'};let boxId=map[target]||'reader';let box=document.getElementById(boxId);box.style.display='block';if(scanner){try{scanner.clear()}catch(e){}}scanner=new Html5Qrcode(boxId);scanner.start({facingMode:"environment"},{fps:10,qrbox:{width:250,height:150}},(txt)=>{document.getElementById(target).value=txt;scanner.stop().then(()=>{scanner.clear();box.style.display='none';});alert('✅ Scanned! '+txt);if(target==='quickScan')quickScan();},(err)=>{});}
 function needLogin(){if(!currentRole){alert('🔐 Please LOGIN first on HOME! Select School + Role + Password');show('home');return true;}if((currentRole==='principal'||currentRole==='librarian')&&!currentSchoolEmis){alert('🔐 Select YOUR School first!');show('home');return true;}return false;}
-function addLearner(){if(needLogin())return;let n=document.getElementById('lName').value.trim();let g=document.getElementById('lGrade').value.trim();if(!n||!g){alert('Type Name + Grade');return;}let school=getCurrentSchool();let schoolName=school?school.name:'MAKHANANI HIGH SCHOOL';let no='MKH-'+String(learners.length+1).padStart(4,'0');learners.push({no,name:n,grade:g,school:schoolName,schoolEmis:currentSchoolEmis||(school?school.emis:'')});save();document.getElementById('lName').value='';document.getElementById('lGrade').value='';alert('Done! '+n+' = '+no+' in '+schoolName);printOneCard(learners[learners.length-1]);}
+function addLearner(){if(needLogin())return;let n=document.getElementById('lName').value.trim();let g=document.getElementById('lGrade').value.trim();if(!n||!g){alert('Type Name + Grade');return;}let school=getCurrentSchool();let schoolName=school?school.name:'Your School';let no='L-'+String(learners.length+1).padStart(4,'0');learners.push({no,name:n,grade:g,school:schoolName,schoolEmis:currentSchoolEmis||(school?school.emis:'')});save();document.getElementById('lName').value='';document.getElementById('lGrade').value='';alert('Done! '+n+' = '+no+' in '+schoolName);printOneCard(learners[learners.length-1]);}
 function addBook(){if(needLogin())return;let t=document.getElementById('bTitle').value.trim();let a=document.getElementById('bAuthor').value.trim();let c=document.getElementById('bCat').value.trim();if(!t){alert('Type Book Title');return;}if(currentRole==='admin'&&!currentSchoolEmis){alert('👑 Admin: Select a School to add book to! Use SWITCH SCHOOL on top!');return;}let code='BK-'+String(books.length+1).padStart(3,'0');books.push({code,title:t,author:a,cat:c,schoolEmis:currentSchoolEmis});save();document.getElementById('bTitle').value='';document.getElementById('bAuthor').value='';document.getElementById('bCat').value='';alert('Book Added! '+code+' to '+getSchoolName(currentSchoolEmis));}
 function issueBook(){if(needLogin())return;let ln=document.getElementById('scanLearner').value.trim();let bk=document.getElementById('scanBook').value.trim();let L=myLearners().find(x=>x.no===ln);let B=myBooks().find(x=>x.code===bk);if(!L){document.getElementById('issueMsg').innerHTML='<b style=color:red>Learner not found in YOUR school! BLOCKED!</b>';return;}if(!B){document.getElementById('issueMsg').innerHTML='<b style=color:red>Book not found in YOUR school! BLOCKED!</b>';return;}if(myLoans().find(x=>x.book===B.code&&!x.returned)){document.getElementById('issueMsg').innerHTML='<b style=color:red>Book already OUT!</b>';return;}let d=getDueDate();loans.push({learner:L.no,lname:L.name,book:B.code,btitle:B.title,date:new Date().toLocaleDateString(),due:d.toLocaleDateString(),returned:false,schoolEmis:currentSchoolEmis});save();document.getElementById('issueMsg').innerHTML='✅ <b>'+B.title+' given to '+L.name+' - 📅 RETURN BY 30 NOVEMBER '+d.getFullYear()+' - '+getSchoolName(currentSchoolEmis)+'</b>';}
 function returnBook(){if(needLogin())return;let bk=document.getElementById('retBook').value.trim();let loan=myLoans().find(x=>x.book===bk&&!x.returned);if(!loan){document.getElementById('retMsg').innerHTML='<b style=color:red>Not OUT in YOUR school! BLOCKED!</b>';return;}loan.returned=true;save();document.getElementById('retMsg').innerHTML='✅ <b>'+loan.btitle+' returned by '+loan.lname+'</b>';}
 function quickScan(){let v=document.getElementById('quickScan').value.trim();let L=myLearners().find(x=>x.no===v);let B=myBooks().find(x=>x.code===v);if(L){document.getElementById('scanLearner').value=L.no;show('issue');}else if(B){document.getElementById('scanBook').value=B.code;show('issue');}else{document.getElementById('quickResult').innerHTML='Not found in YOUR school';}}
 function parentCheck(){let v=document.getElementById('parentNo').value.trim();let L=learners.find(x=>x.no===v);if(!L){document.getElementById('parentResult').innerHTML='Learner not found';return;}let my=loans.filter(x=>x.learner===v&&!x.returned);document.getElementById('parentResult').innerHTML='<b>'+L.name+' - '+L.grade+' - '+(L.school||'')+'</b><br>📅 All books due 30 November<br>'+(my.length?my.map(x=>x.btitle+' - Due '+x.due).join('<br>'):'✅ No books out - All returned!');}
-function printOneCard(l){let w=window.open('','','width=800,height=600');w.document.write('<html><head><title>Card</title><style>body{font-family:Arial}.c{width:300px;border:3px solid #1a56db;border-radius:12px;padding:12px;text-align:center;margin:20px auto}svg{width:100%}</style><script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script></head><body><div class="c"><b>'+(l.school||'MAKHANANI HIGH SCHOOL')+' 💙</b><br>LEARNER CARD<br>Name: '+l.name+'<br>No: <b>'+l.no+'</b><br>Grade: '+l.grade+'<br><svg id="bc"></svg><br>'+l.no+'<br><small>XINTIMANI GROUP | MENTE ET MANU<br>📅 BOOKS RETURN 30 NOV EVERY YEAR</small></div><script>window.onload=function(){JsBarcode("#bc","'+l.no+'",{format:"CODE128",width:2,height:50,displayValue:false});setTimeout(()=>window.print(),500)}<\/script></body></html>');w.document.close();}
-function printAllCards(){let list=myLearners();if(!list.length){alert('No learners in YOUR school');return;}let w=window.open('','','width=900,height=800');let html='<html><head><title>All Cards</title><style>body{font-family:Arial}.c{width:280px;border:3px solid #1a56db;border-radius:12px;padding:10px;text-align:center;display:inline-block;margin:8px}svg{width:100%}</style><script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script></head><body>';list.forEach((l,i)=>{html+='<div class="c"><b>'+(l.school||'')+' 💙</b><br>'+l.name+'<br><b>'+l.no+'</b><br>'+l.grade+'<br><svg id="bc'+i+'"></svg><br>'+l.no+'</div>'});html+='<script>window.onload=function(){'+list.map((l,i)=>'JsBarcode("#bc'+i+'","'+l.no+'",{format:"CODE128",width:2,height:40,displayValue:false});').join('')+'setTimeout(()=>window.print(),800)}<\/script></body></html>';w.document.write(html);w.document.close();}
+function printOneCard(l){let w=window.open('','','width=800,height=600');w.document.write('<html><head><title>Card</title><style>body{font-family:Arial}.c{width:300px;border:3px solid #1a56db;border-radius:12px;padding:12px;text-align:center;margin:20px auto}svg{width:100%}</style><script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script></head><body><div class="c"><b>'+(l.school||'Your School')+' 💙</b><br>MAKHANANI DIGITAL LIBRARY<br>LEARNER CARD<br>Name: '+l.name+'<br>No: <b>'+l.no+'</b><br>Grade: '+l.grade+'<br><svg id="bc"></svg><br>'+l.no+'<br><small>XINTIMANI GROUP<br>📅 BOOKS RETURN 30 NOV EVERY YEAR</small></div><script>window.onload=function(){JsBarcode("#bc","'+l.no+'",{format:"CODE128",width:2,height:50,displayValue:false});setTimeout(()=>window.print(),500)}<\/script></body></html>');w.document.close();}
+function printAllCards(){let list=myLearners();if(!list.length){alert('No learners in YOUR school');return;}let w=window.open('','','width=900,height=800');let html='<html><head><title>All Cards</title><style>body{font-family:Arial}.c{width:280px;border:3px solid #1a56db;border-radius:12px;padding:10px;text-align:center;display:inline-block;margin:8px}svg{width:100%}</style><script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script></head><body>';list.forEach((l,i)=>{html+='<div class="c"><b>'+(l.school||'')+' 💙</b><br>MAKHANANI DIGITAL LIBRARY<br>'+l.name+'<br><b>'+l.no+'</b><br>'+l.grade+'<br><svg id="bc'+i+'"></svg><br>'+l.no+'</div>'});html+='<script>window.onload=function(){'+list.map((l,i)=>'JsBarcode("#bc'+i+'","'+l.no+'",{format:"CODE128",width:2,height:40,displayValue:false});').join('')+'setTimeout(()=>window.print(),800)}<\/script></body></html>';w.document.write(html);w.document.close();}
 function previewSchools(){let file=document.getElementById('schoolFile').files[0];let paste=document.getElementById('schoolPaste').value.trim();if(file){let r=new FileReader();r.onload=function(e){try{if(file.name.endsWith('.json')){pendingSchools=JSON.parse(e.target.result);}else if(file.name.endsWith('.csv')){pendingSchools=e.target.result.split('\n').slice(1).map(l=>{let p=l.split(',');return{emis:p[0],name:p[1]}}).filter(x=>x.name);}else{let wb=XLSX.read(e.target.result,{type:'array'});let ws=wb.Sheets[wb.SheetNames[0]];let rows=XLSX.utils.sheet_to_json(ws,{header:1});pendingSchools=rows.slice(1).map(row=>{let emis=row.find(c=>String(c).length>=6&&!isNaN(c));let name=row.find(c=>typeof c==='string'&&c.length>3);return{emis:emis||'',name:name||'',principalPw:'',librarianPw:''}}).filter(x=>x.name);}showPreview();}catch(err){alert('File error: '+err)}};if(file.name.endsWith('.xlsx')||file.name.endsWith('.xls'))r.readAsArrayBuffer(file);else r.readAsText(file);}else if(paste){pendingSchools=paste.split('\n').map(l=>{let p=l.split(',');return{emis:p[0]?.trim(),name:p[1]?.trim()||p[0],principalPw:'',librarianPw:''}}).filter(x=>x.name);showPreview();}else alert('Choose file or paste first');}
 function showPreview(){let unique=[];let dupCount=0;pendingSchools.forEach(s=>{if(findDuplicateEmis(s.emis,unique)||findDuplicateEmis(s.emis,schools)){dupCount++;}else{unique.push(s);}});document.getElementById('schoolPreview').innerHTML='<b>Preview: '+pendingSchools.length+' in file → ✅ '+unique.length+' NEW, 🚫 '+dupCount+' DUPLICATE EMIS skipped</b><br>'+unique.slice(0,5).map(s=>s.emis+' - '+s.name).join('<br>')+'...';document.getElementById('uploadStatus').innerText='⏳ UPLOADING '+unique.length+' NEW...';pendingSchools=unique;}
 function confirmSchools(){if(currentRole!=='admin'){alert('Only Admin!');return;}if(!pendingSchools.length){alert('Preview first!');return;}if(document.getElementById('replaceAll').checked){schools=[];}let added=0;let skipped=0;pendingSchools.forEach(s=>{if(findDuplicateEmis(s.emis,schools)){skipped++;}else{schools.push({emis:normEmis(s.emis),name:String(s.name).trim(),principalPw:s.principalPw||'',librarianPw:s.librarianPw||''});added++;}});save();alert('✅ Added '+added+' NEW schools! 🚫 Skipped '+skipped+' duplicate EMIS! Total '+schools.length);pendingSchools=[];}
