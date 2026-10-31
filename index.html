@@ -7,7 +7,6 @@
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<!-- FIREBASE - CLOUD + LOGIN -->
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -50,12 +49,12 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 <p>📚 POWERED BY XINTIMANI GROUP | FOR ALL SCHOOLS</p>
 <p style="font-size:11px;color:#0f766e">Building Solutions. Empowering Communities.</p>
 </header>
-<div class="protectBar">🔒 FIREBASE LOGIN • PASSWORDS IN CLOUD • EACH SCHOOL SEES ONLY ITS OWN DATA • AUTO-LOCK 30 MIN</div>
-<div class="topbar">🏫 <span id="currentSchoolLabel">NO SCHOOL SELECTED</span> | <span id="whoIs">👤 NOT LOGGED IN</span> | <span id="adminStatus">🔒 ADMIN LOCKED</span> | ☁️ FIREBASE LOGIN | 📅 30 NOV</div>
+<div class="protectBar">🔒 FIREBASE LOGIN • GRADE LOCK • BARCODE PRINT • QUANTITY • AUTO-LOCK 30 MIN</div>
+<div class="topbar">🏫 <span id="currentSchoolLabel">NO SCHOOL SELECTED</span> | <span id="whoIs">👤 NOT LOGGED IN</span> | <span id="adminStatus">🔒 ADMIN LOCKED</span> | ☁️ FIREBASE | 📅 30 NOV</div>
 <div style="max-width:900px;margin:auto;padding:0 12px">
 <div class="card rolebox">
 <h3>🔐 FIREBASE LOGIN - SELECT YOUR SCHOOL + ROLE</h3>
-<p style="font-size:13px;font-weight:900;color:#0ea5e9">☁️ Login now works on ANY phone - Passwords are in Firebase Cloud!</p>
+<p style="font-size:13px;font-weight:900;color:#0ea5e9">☁️ Login works on ANY phone - Passwords in Firebase Cloud!</p>
 <label>🔍 SEARCH YOUR SCHOOL (Type Name or EMIS):</label>
 <input id="loginSchoolSearch" placeholder="🔍 Type e.g. BENONI / DURBAN / 700400111..." oninput="filterLoginSchools()">
 <select id="loginSchool"><option value="">-- Select School --</option></select>
@@ -88,12 +87,12 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 <div class="stat"><b id="sLearners">0</b><br>👧 LEARNERS (My School)</div>
 <div class="stat"><b id="sOut">0</b><br>📚 BORROWED (My School)</div>
 </div>
-<div class="card"><div class="greenbox">WELCOME TO MAKHANANI DIGITAL LIBRARY! 💚 EVER HAPPY!<br>🔒 FIREBASE LOGIN - WORKS ON ALL PHONES!<br>📅 RETURN BY 30 NOV EVERY YEAR!<br>🔒 EACH SCHOOL SEES ONLY ITS OWN DATA!<br>☁️ CLOUD SYNC - LIVE!</div><p>👑 Admin → Search School → Creates Principal Password (Saved in Firebase Cloud)<br>🎓 Principal → Creates Librarian Password for HIS School (Saved in Firebase Cloud)<br>📚 Librarian → Works ONLY in HIS School - On ANY Phone</p></div>
+<div class="card"><div class="greenbox">WELCOME TO MAKHANANI DIGITAL LIBRARY! 💚 EVER HAPPY!<br>🔒 FIREBASE LOGIN - WORKS ON ALL PHONES!<br>🎓 GRADE LOCK - Wrong Grade Blocked!<br>🖨️ BARCODE PRINT - Learners + Books!<br>📦 QUANTITY - IN STORE / AVAILABLE / ISSUED<br>📅 RETURN BY 30 NOV EVERY YEAR!</div><p>👑 Admin → Creates Principal Password (Firebase)<br>🎓 Principal → Creates Librarian Password (Firebase)<br>📚 Librarian → Scan Learner + Scan Book → Issue in 5 sec!</p></div>
 <div class="card"><h3>🔍 Quick Scan</h3><input id="quickScan" placeholder="Scan Learner OR Book..."><button class="big yellow" onclick="startScan('quickScan')">📷 SCAN WITH CAMERA</button><div id="reader-home"></div><button class="big" onclick="quickScan()">GO →</button><div id="quickResult"></div></div>
 </div>
 <div id="issue" class="page">
 <div class="schoolbar" id="issueSchoolBar"></div>
-<div class="card"><h3>📤 ISSUE BOOK - RETURN 30 NOV</h3>
+<div class="card"><h3>📤 ISSUE BOOK - RETURN 30 NOV - 🎓 GRADE LOCK ON</h3>
 <input id="scanLearner" placeholder="Learner No e.g. L-0001">
 <button class="big yellow" onclick="startScan('scanLearner')">📷 SCAN LEARNER CARD</button>
 <div id="reader"></div>
@@ -118,21 +117,24 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 <input id="lName" placeholder="Learner Full Name">
 <input id="lGrade" placeholder="Grade e.g. Grade 8A">
 <button class="big" onclick="addLearner()">➕ MAKE LEARNER + CARD</button>
-<button class="big yellow" onclick="printAllCards()">🖨️ PRINT ALL LEARNER CARDS (My School)</button>
+<button class="big yellow" onclick="printAllCards()">🖨️ PRINT ALL LEARNER CARDS (My School) - With Barcode</button>
 </div>
 <div class="card"><h3>👧 ALL LEARNERS - My School Only</h3><input id="searchLearner" placeholder="Search name / no..." oninput="render()"><div id="learnerList"></div></div>
 </div>
 <div id="books" class="page">
 <div class="schoolbar" id="bookSchoolBar"></div>
-<div class="card"><h3>➕ ADD BOOK - To MY School</h3>
+<div class="card"><h3>➕ ADD BOOK - To MY School - 🎓 GRADE + 📦 QTY</h3>
 <input id="bTitle" placeholder="Book Title">
 <input id="bAuthor" placeholder="Author">
 <input id="bCat" placeholder="Category e.g. Maths / English">
+<input id="bGrade" placeholder="🎓 Grade for this Book e.g. Grade 8 / Grade 12 / ALL">
 <input type="number" id="bQty" placeholder="Quantity in Store e.g. 10" min="1" value="1">
 <button class="big" onclick="addBook()">➕ ADD BOOK</button>
-<p style="font-size:13px;font-weight:900;color:#0f766e">💡 If same book exists, quantity will ADD - no duplicate!</p>
+<p style="font-size:13px;font-weight:900;color:#0f766e">💡 Same title again → Quantity ADDS - no duplicate! | Grade ALL = Any Grade can take it</p>
 </div>
-<div class="card"><h3>📖 ALL BOOKS - My School Only</h3><input id="searchBook" placeholder="Search book..." oninput="render()"><div id="bookList"></div></div>
+<div class="card"><h3>📖 ALL BOOKS - My School Only</h3>
+<button class="big yellow" onclick="printAllBookBarcodes()">🖨️ PRINT ALL BOOK BARCODES (My School) - Stick On Books!</button>
+<input id="searchBook" placeholder="Search book..." oninput="render()"><div id="bookList"></div></div>
 </div>
 <div id="principal" class="page">
 <div id="principalLock" class="card lockbox"><h2>🎓 PRINCIPAL LOGIN REQUIRED</h2><p>🔒 Firebase Login - Principal must login with YOUR School + Password.</p><button class="big" onclick="show('home')">🔐 GO TO LOGIN</button></div>
@@ -176,7 +178,7 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 <input type="password" id="newPrinPass" placeholder="🆕 Create Principal Password for SELECTED School" autocomplete="off">
 <input type="password" id="newPrinPass2" placeholder="🔁 Type Again" autocomplete="off">
 <button class="big purple" onclick="createPrincipalPassword()">✅ CREATE / CHANGE PRINCIPAL PASSWORD (Selected School - Firebase)</button><div id="prinPassMsg"></div>
-<p style="font-size:13px">💡 Password is hidden & saved in Firebase Cloud. Write it down and give to THAT Principal ONLY! They can login on ANY phone!</p></div>
+<p style="font-size:13px">💡 Password is hidden & saved in Firebase Cloud. Write it down and give to THAT Principal ONLY!</p></div>
 <div class="card"><h3>🔍📚 SEARCH SCHOOL → CREATE LIBRARIAN PASSWORD - ☁️ FIREBASE</h3>
 <label>🔍 SEARCH SCHOOL:</label>
 <input id="adminLibSearch" placeholder="🔍 Type School Name or EMIS..." oninput="searchSchoolForLibrarian()">
@@ -192,7 +194,7 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 </div>
 <div style="text-align:center;padding:12px;background:#fff;margin-top:10px">
 <img src="logo.png" alt="XINTIMANI GROUP" class="footerLogo" onerror="this.style.display='none'">
-<p style="font-size:12px;color:#0a1a4d;font-weight:900">MAKHANANI DIGITAL LIBRARY<br><span style="color:#0f766e">Powered by Xintimani Group - Building Solutions. Empowering Communities.</span><br>🔒 FIREBASE LOGIN • © 2026 Xintimani Group</p>
+<p style="font-size:12px;color:#0a1a4d;font-weight:900">MAKHANANI DIGITAL LIBRARY<br><span style="color:#0f766e">Powered by Xintimani Group - Building Solutions. Empowering Communities.</span><br>🔒 FIREBASE LOGIN • GRADE LOCK • BARCODE • © 2026 Xintimani Group</p>
 </div>
 <script>
 // === FIREBASE - MAKHANANI CLOUD + FIREBASE LOGIN ===
@@ -213,10 +215,8 @@ let cloudReady = false;
 let isSyncingFromCloud = false;
 let cloudAdminPw = localStorage.getItem('mk_admin_pw')||'';
 function getAdminPw(){ return cloudAdminPw || localStorage.getItem('mk_admin_pw')||''; }
-function setAdminPw(hashed){
-  cloudAdminPw = hashed;
-  localStorage.setItem('mk_admin_pw',hashed);
-}
+function setAdminPw(hashed){ cloudAdminPw = hashed; localStorage.setItem('mk_admin_pw',hashed); }
+function getGradeNum(g){ let m=String(g||'').match(/\d+/); return m?m[0]:''; }
 function pushToCloud(){
   if(!cloudReady || isSyncingFromCloud) return;
   db.ref('makhanani').set({learners:learners,books:books,loans:loans,schools:schools,adminPw:cloudAdminPw,updated:new Date().toISOString()}).catch(e=>{console.log('Cloud save error',e);});
@@ -230,7 +230,7 @@ function pullFromCloud(){
       if(d.loans) loans=d.loans;
       if(d.schools) schools=d.schools;
       if(d.adminPw){ cloudAdminPw=d.adminPw; localStorage.setItem('mk_admin_pw',d.adminPw); }
-      books.forEach(b=>{if(b.totalQty===undefined){b.totalQty=1;b.availableQty=1;b.issuedQty=0;}});
+      books.forEach(b=>{if(b.totalQty===undefined){b.totalQty=1;b.availableQty=1;b.issuedQty=0;} if(!b.grade) b.grade='ALL';});
       localStorage.setItem('mk_learners',JSON.stringify(learners));
       localStorage.setItem('mk_books',JSON.stringify(books));
       localStorage.setItem('mk_loans',JSON.stringify(loans));
@@ -256,7 +256,6 @@ function pullFromCloud(){
     setTimeout(()=>{isSyncingFromCloud=false;},500);
   });
 }
-// === PROTECTION ===
 document.addEventListener('keydown',function(e){if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&(e.key==='I'||e.key==='J'||e.key==='C'))||(e.ctrlKey&&e.key==='u')){e.preventDefault();alert('🔒 PROTECTED - MAKHANANI DIGITAL LIBRARY');}});
 let lastActivity=Date.now();['click','keypress','touchstart','mousemove'].forEach(ev=>document.addEventListener(ev,()=>{lastActivity=Date.now();}));
 setInterval(()=>{if(currentRole && Date.now()-lastActivity>30*60*1000){alert('🔒 AUTO-LOCKED after 30 min - Please login again for protection!');doLogout();}},60000);
@@ -266,7 +265,7 @@ let learners=JSON.parse(localStorage.getItem('mk_learners')||'[]');
 let books=JSON.parse(localStorage.getItem('mk_books')||'[]');
 let loans=JSON.parse(localStorage.getItem('mk_loans')||'[]');
 let schools=JSON.parse(localStorage.getItem('mk_schools')||'[]');
-books.forEach(b=>{if(b.totalQty===undefined){b.totalQty=1;b.availableQty=1;b.issuedQty=0;}});
+books.forEach(b=>{if(b.totalQty===undefined){b.totalQty=1;b.availableQty=1;b.issuedQty=0;} if(!b.grade) b.grade='ALL';});
 let pendingSchools=[];let scanner=null;
 let currentRole=localStorage.getItem('mk_role')||'';
 let currentSchoolEmis=localStorage.getItem('mk_school')||'';
@@ -368,26 +367,26 @@ if(!cloudReady){document.getElementById('loginMsg').innerHTML='☁️ Still conn
 if(role==='admin'){
   if(!getAdminPw()){document.getElementById('loginMsg').innerHTML='👑 No Admin Password yet in Firebase! Go to 👑 ADMIN tab → Create Admin Password!';show('admin');return;}
   if(!checkPw(getAdminPw(),typed)){loginFails++;if(loginFails>=3){lockUntil=Date.now()+60000;loginFails=0;document.getElementById('loginMsg').innerHTML='🔒 LOCKED 1 MIN - Too many wrong tries!';return;}document.getElementById('loginMsg').innerHTML='❌ WRONG Admin Password! (Firebase) Try '+(3-loginFails)+' left!';return;}
-  loginFails=0;setRole('admin','');document.getElementById('loginMsg').innerHTML='✅ WELCOME ADMINISTRATOR! ☁️ Firebase Login Success - Works on ALL Phones!';return;
+  loginFails=0;setRole('admin','');document.getElementById('loginMsg').innerHTML='✅ WELCOME ADMINISTRATOR! ☁️ Firebase Login Success!';return;
 }
 if(!schoolEmis){document.getElementById('loginMsg').innerHTML='❌ Select YOUR School first!';return;}
 let sc=schools.find(s=>normEmis(s.emis)===normEmis(schoolEmis));
-if(!sc){document.getElementById('loginMsg').innerHTML='❌ School not found! Check Firebase sync - Wait 3 sec & try again!';return;}
+if(!sc){document.getElementById('loginMsg').innerHTML='❌ School not found! Wait 3 sec & try again!';return;}
 let correct=role==='principal'?sc.principalPw:sc.librarianPw;
 if(!correct){document.getElementById('loginMsg').innerHTML='❌ No password set for '+role.toUpperCase()+' at '+sc.name+' yet in Firebase! Ask Admin / Principal!';return;}
 if(!checkPw(correct,typed)){loginFails++;if(loginFails>=3){lockUntil=Date.now()+60000;loginFails=0;document.getElementById('loginMsg').innerHTML='🔒 LOCKED 1 MIN - Too many wrong tries!';return;}document.getElementById('loginMsg').innerHTML='❌ WRONG PASSWORD for '+role.toUpperCase()+' at '+sc.name+'! (Firebase) Try '+(3-loginFails)+' left!';return;}
 loginFails=0;setRole(role,schoolEmis);document.getElementById('loginMsg').innerHTML='✅ WELCOME '+role.toUpperCase()+' of '+sc.name+'! ☁️ Firebase Login - You see ONLY '+sc.name+'!';document.getElementById('loginPass').value='';
 }
 function doLogout(){currentRole='';currentSchoolEmis='';localStorage.removeItem('mk_role');localStorage.removeItem('mk_school');auth.signOut().catch(()=>{});updateRoleUI();render();document.getElementById('loginMsg').innerHTML='🔒 Logged Out All - Firebase Login Protected!';}
-function createAdminPassword(){let p1=document.getElementById('newAdminPass').value;let p2=document.getElementById('newAdminPass2').value;if(!p1||p1.length<4){alert('Password must be 4+ characters');return;}if(p1!==p2){alert('Passwords do NOT match!');return;}setAdminPw(hashPw(p1));save();setRole('admin','');alert('✅ ADMIN PASSWORD SAVED IN FIREBASE CLOUD! ✅ Now you can login on ANY phone with this password! Write it down!');}
-function changeAdminPassword(){if(currentRole!=='admin'){alert('Only Admin!');return;}let oldP=document.getElementById('oldPass').value;if(!checkPw(getAdminPw(),oldP)){document.getElementById('changeMsg').innerHTML='<b style=color:red>❌ Old Wrong!</b>';return;}let n1=document.getElementById('changePass1').value;let n2=document.getElementById('changePass2').value;if(!n1||n1.length<4){document.getElementById('changeMsg').innerHTML='<b style=color:red>New must be 4+</b>';return;}if(n1!==n2){document.getElementById('changeMsg').innerHTML='<b style=color:red>Do NOT match!</b>';return;}setAdminPw(hashPw(n1));save();document.getElementById('changeMsg').innerHTML='✅ Admin Password Changed in FIREBASE! Works on ALL phones now! Write it down!';}
+function createAdminPassword(){let p1=document.getElementById('newAdminPass').value;let p2=document.getElementById('newAdminPass2').value;if(!p1||p1.length<4){alert('Password must be 4+ characters');return;}if(p1!==p2){alert('Passwords do NOT match!');return;}setAdminPw(hashPw(p1));save();setRole('admin','');alert('✅ ADMIN PASSWORD SAVED IN FIREBASE CLOUD! Now you can login on ANY phone! Write it down!');}
+function changeAdminPassword(){if(currentRole!=='admin'){alert('Only Admin!');return;}let oldP=document.getElementById('oldPass').value;if(!checkPw(getAdminPw(),oldP)){document.getElementById('changeMsg').innerHTML='<b style=color:red>❌ Old Wrong!</b>';return;}let n1=document.getElementById('changePass1').value;let n2=document.getElementById('changePass2').value;if(!n1||n1.length<4){document.getElementById('changeMsg').innerHTML='<b style=color:red>New must be 4+</b>';return;}if(n1!==n2){document.getElementById('changeMsg').innerHTML='<b style=color:red>Do NOT match!</b>';return;}setAdminPw(hashPw(n1));save();document.getElementById('changeMsg').innerHTML='✅ Admin Password Changed in FIREBASE! Works on ALL phones!';}
 function createPrincipalPassword(){
   if(currentRole!=='admin'){alert('Only Administrator!');return;}
   let emis=selectedPrinEmis||document.getElementById('adminPrinSchool').value;
   let sc=schools.find(s=>normEmis(s.emis)===normEmis(emis));
   if(!sc){alert('🔍 Search School first!');return;}
   let p1=document.getElementById('newPrinPass').value;let p2=document.getElementById('newPrinPass2').value;if(!p1||p1.length<4){alert('4+ characters');return;}if(p1!==p2){alert('Do NOT match!');return;}
-  sc.principalPw=hashPw(p1);save();document.getElementById('prinPassMsg').innerHTML='✅ <b>Principal Password for '+sc.name+' SAVED IN FIREBASE ☁️ - Principal can login on ANY phone! Password is: '+p1+' (Shown ONCE - Copy now!)</b>';updateRoleUI();
+  sc.principalPw=hashPw(p1);save();document.getElementById('prinPassMsg').innerHTML='✅ <b>Principal Password for '+sc.name+' SAVED IN FIREBASE ☁️ - Password is: '+p1+' (Shown ONCE - Copy now!)</b>';updateRoleUI();
 }
 function createLibrarianPassword(){
   if(!(currentRole==='principal'||currentRole==='admin')){alert('Only Principal or Admin!');return;}
@@ -421,6 +420,7 @@ function addBook(){
   let t=document.getElementById('bTitle').value.trim();
   let a=document.getElementById('bAuthor').value.trim();
   let c=document.getElementById('bCat').value.trim();
+  let bg=document.getElementById('bGrade').value.trim()||'ALL';
   let qty=parseInt(document.getElementById('bQty').value)||1;
   if(qty<1) qty=1;
   if(!t){alert('Type Book Title');return;}
@@ -429,16 +429,17 @@ function addBook(){
   if(existing){
     existing.totalQty=(existing.totalQty||1)+qty;
     existing.availableQty=(existing.availableQty??existing.totalQty)+qty;
+    if(bg && bg.toUpperCase()!=='ALL') existing.grade=bg;
     save();
-    document.getElementById('bQty').value=1;
+    document.getElementById('bQty').value=1;document.getElementById('bGrade').value='';
     alert('✅ Added '+qty+' more copies! Total now: '+existing.totalQty+' - '+existing.title);
     return;
   }
   let code='BK-'+String(books.length+1).padStart(3,'0');
-  books.push({code,title:t,author:a,cat:c,schoolEmis:currentSchoolEmis,totalQty:qty,availableQty:qty,issuedQty:0});
+  books.push({code,title:t,author:a,cat:c,grade:bg,schoolEmis:currentSchoolEmis,totalQty:qty,availableQty:qty,issuedQty:0});
   save();
-  document.getElementById('bTitle').value='';document.getElementById('bAuthor').value='';document.getElementById('bCat').value='';document.getElementById('bQty').value=1;
-  alert('Book Added! '+code+' - Qty: '+qty+' to '+getSchoolName(currentSchoolEmis));
+  document.getElementById('bTitle').value='';document.getElementById('bAuthor').value='';document.getElementById('bCat').value='';document.getElementById('bQty').value=1;document.getElementById('bGrade').value='';
+  alert('Book Added! '+code+' - Grade: '+bg+' - Qty: '+qty+' to '+getSchoolName(currentSchoolEmis));
 }
 function issueBook(){
   if(needLogin())return;
@@ -448,6 +449,14 @@ function issueBook(){
   let B=myBooks().find(x=>x.code===bk);
   if(!L){document.getElementById('issueMsg').innerHTML='<b style=color:red>Learner not found in YOUR school! BLOCKED!</b>';return;}
   if(!B){document.getElementById('issueMsg').innerHTML='<b style=color:red>Book not found in YOUR school! BLOCKED!</b>';return;}
+  // === GRADE MISMATCH LOCK ===
+  let learnerGradeNum=getGradeNum(L.grade);
+  let bookGrade=(B.grade||'ALL').toUpperCase().trim();
+  let bookGradeNum=getGradeNum(bookGrade);
+  if(bookGrade!=='ALL' && bookGrade!=='' && learnerGradeNum!=='' && bookGradeNum!=='' && learnerGradeNum!==bookGradeNum){
+    document.getElementById('issueMsg').innerHTML='<b style=color:red>🚫 GRADE MISMATCH BLOCKED!<br>Learner: '+L.name+' is '+L.grade+'<br>Book: '+B.title+' is for '+B.grade+'<br>❌ Grade '+learnerGradeNum+' Learner CANNOT take Grade '+bookGradeNum+' Book!</b>';
+    return;
+  }
   let avail=B.availableQty ?? B.totalQty ?? 1;
   if(avail<=0){document.getElementById('issueMsg').innerHTML='<b style=color:red>❌ NO COPIES LEFT IN STORE for '+B.title+' - OUT OF STOCK! Total was '+(B.totalQty||1)+'</b>';return;}
   let d=getDueDate();
@@ -455,7 +464,7 @@ function issueBook(){
   B.availableQty=avail-1;
   B.issuedQty=(B.issuedQty||0)+1;
   save();
-  document.getElementById('issueMsg').innerHTML='✅ <b>'+B.title+' given to '+L.name+' - 📅 RETURN BY 30 NOVEMBER '+d.getFullYear()+' - '+getSchoolName(currentSchoolEmis)+' - 📦 Left in Store: '+B.availableQty+' / '+B.totalQty+'</b>';
+  document.getElementById('issueMsg').innerHTML='✅ <b>'+B.title+' given to '+L.name+' - 📅 RETURN BY 30 NOVEMBER '+d.getFullYear()+' - '+getSchoolName(currentSchoolEmis)+' - 📦 Left: '+B.availableQty+' / '+B.totalQty+'</b>';
 }
 function returnBook(){
   if(needLogin())return;
@@ -474,6 +483,25 @@ function returnBook(){
 }
 function quickScan(){let v=document.getElementById('quickScan').value.trim();let L=myLearners().find(x=>x.no===v);let B=myBooks().find(x=>x.code===v);if(L){document.getElementById('scanLearner').value=L.no;show('issue');}else if(B){document.getElementById('scanBook').value=B.code;show('issue');}else{document.getElementById('quickResult').innerHTML='Not found in YOUR school';}}
 function parentCheck(){let v=document.getElementById('parentNo').value.trim();let L=learners.find(x=>x.no===v);if(!L){document.getElementById('parentResult').innerHTML='Learner not found';return;}let my=loans.filter(x=>x.learner===v&&!x.returned);document.getElementById('parentResult').innerHTML='<b>'+L.name+' - '+L.grade+' - '+(L.school||'')+'</b><br>📅 All books due 30 November<br>'+(my.length?my.map(x=>x.btitle+' - Due '+x.due).join('<br>'):'✅ No books out - All returned!');}
+// === 📖 PRINT ONE BOOK BARCODE ===
+function printOneBookBarcode(b){
+  let w=window.open('','','width=800,height=600');
+  w.document.write('<html><head><title>Book Barcode - '+b.code+'</title><style>body{font-family:Arial}.c{width:320px;border:3px solid #1a56db;border-radius:12px;padding:12px;text-align:center;margin:20px auto}svg{width:100%}</style><script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script></head><body><div class="c"><b>MAKHANANI DIGITAL LIBRARY 💙</b><br><b>'+b.title+'</b><br>Author: '+b.author+'<br>Grade: '+b.grade+' - '+b.cat+'<br>Code: <b>'+b.code+'</b><br><svg id="bc"></svg><br><b>'+b.code+'</b><br><small>XINTIMANI GROUP<br>📅 RETURN BY 30 NOV EVERY YEAR</small></div><script>window.onload=function(){JsBarcode("#bc","'+b.code+'",{format:"CODE128",width:2,height:60,displayValue:false});setTimeout(()=>window.print(),500)}<\/script></body></html>');
+  w.document.close();
+}
+// === 📖 PRINT ALL BOOK BARCODES - MY SCHOOL ===
+function printAllBookBarcodes(){
+  let list=myBooks();
+  if(!list.length){alert('No books in YOUR school');return;}
+  let w=window.open('','','width=900,height=800');
+  let html='<html><head><title>All Book Barcodes</title><style>body{font-family:Arial}.c{width:280px;border:3px solid #1a56db;border-radius:12px;padding:10px;text-align:center;display:inline-block;margin:8px}svg{width:100%}</style><script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script></head><body>';
+  list.forEach((b,i)=>{
+    let safeTitle=String(b.title||'').replace(/"/g,'');
+    html+='<div class="c"><b>MAKHANANI LIBRARY 💙</b><br><b>'+safeTitle+'</b><br>'+(b.author||'')+' - 🎓 '+(b.grade||'ALL')+'<br><b>'+b.code+'</b><br><svg id="bb'+i+'"></svg><br>'+b.code+'<br><small>📦 Qty: '+(b.totalQty||1)+' | 📅 Return 30 Nov</small></div>';
+  });
+  html+='<script>window.onload=function(){'+list.map((b,i)=>'JsBarcode("#bb'+i+'","'+b.code+'",{format:"CODE128",width:2,height:45,displayValue:false});').join('')+'setTimeout(()=>window.print(),800)}<\/script></body></html>';
+  w.document.write(html); w.document.close();
+}
 function printOneCard(l){let w=window.open('','','width=800,height=600');w.document.write('<html><head><title>Card</title><style>body{font-family:Arial}.c{width:300px;border:3px solid #1a56db;border-radius:12px;padding:12px;text-align:center;margin:20px auto}svg{width:100%}</style><script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script></head><body><div class="c"><b>'+(l.school||'Your School')+' 💙</b><br>MAKHANANI DIGITAL LIBRARY<br>LEARNER CARD<br>Name: '+l.name+'<br>No: <b>'+l.no+'</b><br>Grade: '+l.grade+'<br><svg id="bc"></svg><br>'+l.no+'<br><small>XINTIMANI GROUP<br>📅 BOOKS RETURN 30 NOV EVERY YEAR</small></div><script>window.onload=function(){JsBarcode("#bc","'+l.no+'",{format:"CODE128",width:2,height:50,displayValue:false});setTimeout(()=>window.print(),500)}<\/script></body></html>');w.document.close();}
 function printAllCards(){let list=myLearners();if(!list.length){alert('No learners in YOUR school');return;}let w=window.open('','','width=900,height=800');let html='<html><head><title>All Cards</title><style>body{font-family:Arial}.c{width:280px;border:3px solid #1a56db;border-radius:12px;padding:10px;text-align:center;display:inline-block;margin:8px}svg{width:100%}</style><script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script></head><body>';list.forEach((l,i)=>{html+='<div class="c"><b>'+(l.school||'')+' 💙</b><br>MAKHANANI DIGITAL LIBRARY<br>'+l.name+'<br><b>'+l.no+'</b><br>'+l.grade+'<br><svg id="bc'+i+'"></svg><br>'+l.no+'</div>'});html+='<script>window.onload=function(){'+list.map((l,i)=>'JsBarcode("#bc'+i+'","'+l.no+'",{format:"CODE128",width:2,height:40,displayValue:false});').join('')+'setTimeout(()=>window.print(),800)}<\/script></body></html>';w.document.write(html);w.document.close();}
 function previewSchools(){let file=document.getElementById('schoolFile').files[0];let paste=document.getElementById('schoolPaste').value.trim();if(file){let r=new FileReader();r.onload=function(e){try{if(file.name.endsWith('.json')){pendingSchools=JSON.parse(e.target.result);}else if(file.name.endsWith('.csv')){pendingSchools=e.target.result.split('\n').slice(1).map(l=>{let p=l.split(',');return{emis:p[0],name:p[1]}}).filter(x=>x.name);}else{let wb=XLSX.read(e.target.result,{type:'array'});let ws=wb.Sheets[wb.SheetNames[0]];let rows=XLSX.utils.sheet_to_json(ws,{header:1});pendingSchools=rows.slice(1).map(row=>{let emis=row.find(c=>String(c).length>=6&&!isNaN(c));let name=row.find(c=>typeof c==='string'&&c.length>3);return{emis:emis||'',name:name||'',principalPw:'',librarianPw:''}}).filter(x=>x.name);}showPreview();}catch(err){alert('File error: '+err)}};if(file.name.endsWith('.xlsx')||file.name.endsWith('.xls'))r.readAsArrayBuffer(file);else r.readAsText(file);}else if(paste){pendingSchools=paste.split('\n').map(l=>{let p=l.split(',');return{emis:p[0]?.trim(),name:p[1]?.trim()||p[0],principalPw:'',librarianPw:''}}).filter(x=>x.name);showPreview();}else alert('Choose file or paste first');}
@@ -500,7 +528,9 @@ let sb=(document.getElementById('searchBook').value||'').toLowerCase();
 document.getElementById('bookList').innerHTML=myBooks().filter(x=>x.title.toLowerCase().includes(sb)).map(x=>{
 let total=x.totalQty||1;let avail=x.availableQty??total;let issued=x.issuedQty||(total-avail);
 let status=avail>0?'🟢 IN - '+avail+' Available':'🔴 OUT OF STOCK';
-return `<div class="badge"><b>${x.code}</b> - ${x.title} - ${x.author||''} - ${x.cat||''}<br>📦 <b>IN STORE: ${total}</b> | ✅ Available: ${avail} | 🔴 Issued: ${issued} | ${status}<br><button onclick="document.getElementById('scanBook').value='${x.code}';show('issue')">ISSUE →</button></div>`;
+let safeTitle=String(x.title||'').replace(/'/g,"");
+let safeAuthor=String(x.author||'').replace(/'/g,"");
+return `<div class="badge"><b>${x.code}</b> - ${x.title} - ${x.author||''} - ${x.cat||''} - 🎓 <b>${x.grade||'ALL'}</b><br>📦 <b>IN STORE: ${total}</b> | ✅ Available: ${avail} | 🔴 Issued: ${issued} | ${status}<br><button onclick="document.getElementById('scanBook').value='${x.code}';show('issue')">ISSUE →</button> <button style="background:#facc15;color:#000" onclick="printOneBookBarcode({code:'${x.code}',title:'${safeTitle}',author:'${safeAuthor}',grade:'${x.grade||'ALL'}',cat:'${x.cat||''}'})">🖨️ PRINT BARCODE</button></div>`;
 }).join('')||'No books in YOUR school yet';
 document.getElementById('outList').innerHTML=myLoans().filter(x=>!x.returned).map(x=>`<div class="badge">${x.btitle} → ${x.lname}<br>📅 Due: 30 Nov ${new Date(x.due).getFullYear()} - ${x.due}</div>`).join('')||'All IN! 🎉';
 document.getElementById('overdueList').innerHTML=myLoans().filter(isOverdue).map(x=>`<div class="badge">⏰ ${x.btitle} → ${x.lname} - Was Due ${x.due} - OVERDUE AFTER 30 NOV!</div>`).join('')||'No overdue! 💚';
