@@ -7,6 +7,9 @@
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<!-- FIREBASE - MAKHANANI CLOUD -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial;background:#eef4ff;-webkit-user-select:none;user-select:none}
 header{background:#ffffff;color:#0a1a4d;padding:10px;text-align:center;border-bottom:4px solid #c9a227}
@@ -36,6 +39,7 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 .schoolbar{background:#16a34a;color:#fff;padding:10px;border-radius:10px;text-align:center;font-weight:900;margin-bottom:10px}
 .searchResult{max-height:200px;overflow-y:auto}
 .footerLogo{width:140px;height:auto;display:block;margin:10px auto}
+.cloudbar{background:#0ea5e9;color:#fff;padding:8px;border-radius:10px;text-align:center;font-weight:900;font-size:13px;margin-bottom:10px}
 </style>
 </head>
 <body oncontextmenu="return false">
@@ -74,6 +78,7 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 </nav>
 <div id="home" class="page active">
 <div class="schoolbar" id="homeSchoolBar">🏫 NO SCHOOL SELECTED - Login First</div>
+<div class="cloudbar" id="cloudStatus">☁️ CLOUD: Connecting to Firebase...</div>
 <div class="card" style="text-align:center"><img src="logo.png" alt="XINTIMANI GROUP" class="footerLogo" onerror="this.style.display='none'"><div class="adminbar">🔒 PROTECTED - MAKHANANI DIGITAL LIBRARY<br><small id="adminWelcome">🔒 ADMIN LOCKED</small></div></div>
 <div class="stats">
 <div class="stat"><b id="sSchools">0</b><br>🏫 SCHOOLS</div>
@@ -81,7 +86,7 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 <div class="stat"><b id="sLearners">0</b><br>👧 LEARNERS (My School)</div>
 <div class="stat"><b id="sOut">0</b><br>📚 BORROWED (My School)</div>
 </div>
-<div class="card"><div class="greenbox">WELCOME TO MAKHANANI DIGITAL LIBRARY! 💚 EVER HAPPY!<br>🔒 PROTECTED SYSTEM - PASSWORDS HIDDEN!<br>📅 RETURN BY 30 NOV EVERY YEAR!<br>🔒 EACH SCHOOL SEES ONLY ITS OWN DATA!</div><p>👑 Admin → Search School → Creates Principal Password (Hidden)<br>🎓 Principal → Creates Librarian Password for HIS School (Hidden)<br>📚 Librarian → Works ONLY in HIS School</p></div>
+<div class="card"><div class="greenbox">WELCOME TO MAKHANANI DIGITAL LIBRARY! 💚 EVER HAPPY!<br>🔒 PROTECTED SYSTEM - PASSWORDS HIDDEN!<br>📅 RETURN BY 30 NOV EVERY YEAR!<br>🔒 EACH SCHOOL SEES ONLY ITS OWN DATA!<br>☁️ CLOUD SYNC - WORKS ON ALL PHONES!</div><p>👑 Admin → Search School → Creates Principal Password (Hidden)<br>🎓 Principal → Creates Librarian Password for HIS School (Hidden)<br>📚 Librarian → Works ONLY in HIS School</p></div>
 <div class="card"><h3>🔍 Quick Scan</h3><input id="quickScan" placeholder="Scan Learner OR Book..."><button class="big yellow" onclick="startScan('quickScan')">📷 SCAN WITH CAMERA</button><div id="reader-home"></div><button class="big" onclick="quickScan()">GO →</button><div id="quickResult"></div></div>
 </div>
 <div id="issue" class="page">
@@ -188,6 +193,61 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 <p style="font-size:12px;color:#0a1a4d;font-weight:900">MAKHANANI DIGITAL LIBRARY<br><span style="color:#0f766e">Powered by Xintimani Group - Building Solutions. Empowering Communities.</span><br>🔒 PROTECTED SYSTEM • © 2026 Xintimani Group</p>
 </div>
 <script>
+// === FIREBASE - MAKHANANI CLOUD SYNC ===
+const firebaseConfig = {
+  apiKey: "AIzaSyDAVEvpVbVsIplT4KeMevEzOg-5WE_Q0VM",
+  authDomain: "makhanani-digital-library.firebaseapp.com",
+  databaseURL: "https://makhanani-digital-library-default-rtdb.firebaseio.com",
+  projectId: "makhanani-digital-library",
+  storageBucket: "makhanani-digital-library.firebasestorage.app",
+  messagingSenderId: "133966099448",
+  appId: "1:133966099448:web:260c2fb27b4f31e4765c0d",
+  measurementId: "G-6QB6WG4CG4"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+let cloudReady = false;
+let isSyncingFromCloud = false;
+function pushToCloud(){
+  if(!cloudReady || isSyncingFromCloud) return;
+  db.ref('makhanani').set({learners:learners,books:books,loans:loans,schools:schools,updated:new Date().toISOString()}).catch(e=>{console.log('Cloud save error',e);});
+}
+function pullFromCloud(){
+  db.ref('makhanani').once('value').then(snap=>{
+    let d=snap.val();
+    if(d){
+      if(d.learners) learners=d.learners;
+      if(d.books) books=d.books;
+      if(d.loans) loans=d.loans;
+      if(d.schools) schools=d.schools;
+      books.forEach(b=>{if(b.totalQty===undefined){b.totalQty=1;b.availableQty=1;b.issuedQty=0;}});
+      // Save cloud data to local too, so offline still works
+      localStorage.setItem('mk_learners',JSON.stringify(learners));
+      localStorage.setItem('mk_books',JSON.stringify(books));
+      localStorage.setItem('mk_loans',JSON.stringify(loans));
+      localStorage.setItem('mk_schools',JSON.stringify(schools));
+      render();
+    }
+    cloudReady=true;
+    let el=document.getElementById('cloudStatus'); if(el) el.innerHTML='☁️ CLOUD: ✅ CONNECTED - Live Sync ON - All Phones See Same Data!';
+    // If cloud is EMPTY but local has data, push local up first time
+    if(!d || (!d.schools || !d.schools.length)){
+      if(schools.length>0 || books.length>0) pushToCloud();
+    }
+  }).catch(e=>{
+    cloudReady=true;
+    let el=document.getElementById('cloudStatus'); if(el) el.innerHTML='⚠️ CLOUD: Offline Mode - Using Phone Storage - Will Sync When Online';
+  });
+  db.ref('makhanani').on('value', snap=>{
+    if(!cloudReady) return;
+    let d=snap.val(); if(!d) return;
+    isSyncingFromCloud=true;
+    learners=d.learners||learners; books=d.books||books; loans=d.loans||loans; schools=d.schools||schools;
+    render();
+    setTimeout(()=>{isSyncingFromCloud=false;},500);
+  });
+}
+// === PROTECTION ===
 document.addEventListener('keydown',function(e){if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&(e.key==='I'||e.key==='J'||e.key==='C'))||(e.ctrlKey&&e.key==='u')){e.preventDefault();alert('🔒 PROTECTED - MAKHANANI DIGITAL LIBRARY');}});
 let lastActivity=Date.now();['click','keypress','touchstart','mousemove'].forEach(ev=>document.addEventListener(ev,()=>{lastActivity=Date.now();}));
 setInterval(()=>{if(currentRole && Date.now()-lastActivity>30*60*1000){alert('🔒 AUTO-LOCKED after 30 min - Please login again for protection!');doLogout();}},60000);
@@ -197,7 +257,6 @@ let learners=JSON.parse(localStorage.getItem('mk_learners')||'[]');
 let books=JSON.parse(localStorage.getItem('mk_books')||'[]');
 let loans=JSON.parse(localStorage.getItem('mk_loans')||'[]');
 let schools=JSON.parse(localStorage.getItem('mk_schools')||'[]');
-// AUTO-FIX OLD BOOKS WITHOUT QUANTITY - Default 1
 books.forEach(b=>{if(b.totalQty===undefined){b.totalQty=1;b.availableQty=1;b.issuedQty=0;}});
 let pendingSchools=[];let scanner=null;
 let currentRole=localStorage.getItem('mk_role')||'';
@@ -332,7 +391,14 @@ function createLibrarianPasswordAdmin(){
   let p1=document.getElementById('newLibPassAdmin').value;let p2=document.getElementById('newLibPassAdmin2').value;if(!p1||p1.length<4){alert('4+');return;}if(p1!==p2){alert('Do NOT match!');return;}
   sc.librarianPw=hashPw(p1);save();document.getElementById('libPassMsg2').innerHTML='✅ Librarian Password for '+sc.name+' SAVED - HIDDEN 🔒 - Password is: '+p1+' (Shown ONCE!)';updateRoleUI();
 }
-function save(){localStorage.setItem('mk_learners',JSON.stringify(learners));localStorage.setItem('mk_books',JSON.stringify(books));localStorage.setItem('mk_loans',JSON.stringify(loans));localStorage.setItem('mk_schools',JSON.stringify(schools));render();}
+function save(){
+  localStorage.setItem('mk_learners',JSON.stringify(learners));
+  localStorage.setItem('mk_books',JSON.stringify(books));
+  localStorage.setItem('mk_loans',JSON.stringify(loans));
+  localStorage.setItem('mk_schools',JSON.stringify(schools));
+  pushToCloud();
+  render();
+}
 function show(p){document.querySelectorAll('.page').forEach(e=>e.classList.remove('active'));document.querySelectorAll('nav button').forEach(e=>e.classList.remove('active'));document.getElementById(p).classList.add('active');document.getElementById('b-'+p).classList.add('active');render();}
 function getDueDate(){let now=new Date();let year=now.getFullYear();let due=new Date(year,10,30);if(now>due){due=new Date(year+1,10,30);}return due;}
 function startScan(target){let map={'retBook':'reader2','quickScan':'reader-home','scanLearner':'reader','scanBook':'reader-issue2'};let boxId=map[target]||'reader';let box=document.getElementById(boxId);box.style.display='block';if(scanner){try{scanner.clear()}catch(e){}}scanner=new Html5Qrcode(boxId);scanner.start({facingMode:"environment"},{fps:10,qrbox:{width:250,height:150}},(txt)=>{document.getElementById(target).value=txt;scanner.stop().then(()=>{scanner.clear();box.style.display='none';});alert('✅ Scanned! '+txt);if(target==='quickScan')quickScan();},(err)=>{});}
@@ -372,12 +438,6 @@ function issueBook(){
   if(!B){document.getElementById('issueMsg').innerHTML='<b style=color:red>Book not found in YOUR school! BLOCKED!</b>';return;}
   let avail=B.availableQty ?? B.totalQty ?? 1;
   if(avail<=0){document.getElementById('issueMsg').innerHTML='<b style=color:red>❌ NO COPIES LEFT IN STORE for '+B.title+' - OUT OF STOCK! Total was '+(B.totalQty||1)+'</b>';return;}
-  // If this exact BK code is already out, but we have other copies, we allow it by using same code - quantity controls stock
-  // To keep 1 loan per copy, we count loans for this code
-  let outCount=myLoans().filter(x=>x.book===B.code&&!x.returned).length;
-  if(outCount>=avail && (B.totalQty||1)>1){
-    // Still allow because avail is based on total - outCount, but we already checked avail
-  }
   let d=getDueDate();
   loans.push({learner:L.no,lname:L.name,book:B.code,btitle:B.title,date:new Date().toLocaleDateString(),due:d.toLocaleDateString(),returned:false,schoolEmis:currentSchoolEmis});
   B.availableQty=avail-1;
@@ -437,6 +497,7 @@ document.getElementById('schoolList').innerHTML=schools.slice(0,20).map(s=>`<div
 document.getElementById('uploadStatus').innerText='⏳ UPLOADING '+schools.length+' / '+schools.length+'...';
 updateRoleUI();
 }
+pullFromCloud();
 render();
 </script>
 </body>
