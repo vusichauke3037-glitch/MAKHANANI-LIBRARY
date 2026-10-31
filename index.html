@@ -49,7 +49,7 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 <p>📚 POWERED BY XINTIMANI GROUP | FOR ALL SCHOOLS</p>
 <p style="font-size:11px;color:#0f766e">Building Solutions. Empowering Communities.</p>
 </header>
-<div class="protectBar">🔒 FIREBASE LOGIN • GRADE LOCK • BARCODE PRINT • QUANTITY • AUTO-LOCK 30 MIN</div>
+<div class="protectBar">🔒 FIREBASE LOGIN • CAPS • GRADE LOCK • BARCODE • NO DUPLICATE • AUTO-LOCK 30 MIN</div>
 <div class="topbar">🏫 <span id="currentSchoolLabel">NO SCHOOL SELECTED</span> | <span id="whoIs">👤 NOT LOGGED IN</span> | <span id="adminStatus">🔒 ADMIN LOCKED</span> | ☁️ FIREBASE | 📅 30 NOV</div>
 <div style="max-width:900px;margin:auto;padding:0 12px">
 <div class="card rolebox">
@@ -87,7 +87,7 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 <div class="stat"><b id="sLearners">0</b><br>👧 LEARNERS (My School)</div>
 <div class="stat"><b id="sOut">0</b><br>📚 BORROWED (My School)</div>
 </div>
-<div class="card"><div class="greenbox">WELCOME TO MAKHANANI DIGITAL LIBRARY! 💚 EVER HAPPY!<br>🔒 FIREBASE LOGIN - WORKS ON ALL PHONES!<br>🎓 GRADE LOCK - Wrong Grade Blocked!<br>🖨️ BARCODE PRINT - Learners + Books!<br>📦 QUANTITY - IN STORE / AVAILABLE / ISSUED<br>📅 RETURN BY 30 NOV EVERY YEAR!</div><p>👑 Admin → Creates Principal Password (Firebase)<br>🎓 Principal → Creates Librarian Password (Firebase)<br>📚 Librarian → Scan Learner + Scan Book → Issue in 5 sec!</p></div>
+<div class="card"><div class="greenbox">WELCOME TO MAKHANANI DIGITAL LIBRARY! 💚 EVER HAPPY!<br>🔒 FIREBASE LOGIN - WORKS ON ALL PHONES!<br>📚 CAPS SUBJECTS - Dropdown + CAPS Code on Sticker!<br>🎓 GRADE LOCK - Wrong Grade Blocked!<br>🖨️ BARCODE PRINT - Learners + Books!<br>📦 QUANTITY - IN STORE / AVAILABLE / ISSUED<br>🚫 NO DUPLICATE BOOK NUMBER - MAX + 1!<br>📅 RETURN BY 30 NOV EVERY YEAR!</div><p>👑 Admin → Creates Principal Password (Firebase)<br>🎓 Principal → Creates Librarian Password (Firebase)<br>📚 Librarian → Scan Learner + Scan Book → Issue in 5 sec!</p></div>
 <div class="card"><h3>🔍 Quick Scan</h3><input id="quickScan" placeholder="Scan Learner OR Book..."><button class="big yellow" onclick="startScan('quickScan')">📷 SCAN WITH CAMERA</button><div id="reader-home"></div><button class="big" onclick="quickScan()">GO →</button><div id="quickResult"></div></div>
 </div>
 <div id="issue" class="page">
@@ -123,18 +123,59 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 </div>
 <div id="books" class="page">
 <div class="schoolbar" id="bookSchoolBar"></div>
-<div class="card"><h3>➕ ADD BOOK - To MY School - 🎓 GRADE + 📦 QTY</h3>
-<input id="bTitle" placeholder="Book Title">
-<input id="bAuthor" placeholder="Author">
-<input id="bCat" placeholder="Category e.g. Maths / English">
-<input id="bGrade" placeholder="🎓 Grade for this Book e.g. Grade 8 / Grade 12 / ALL">
+<div class="card"><h3>➕ ADD BOOK - To MY School - 📚 CAPS + 🎓 GRADE + 📦 QTY - 🚫 NO DUPLICATE</h3>
+<input id="bCodeManual" placeholder="🏷️ Book Number (Optional) e.g. BK-050 - Leave BLANK for Auto">
+<input id="bTitle" placeholder="Book Title e.g. Via Africa Grade 12 Mathematical Literacy">
+<input id="bAuthor" placeholder="Author e.g. Via Africa / Platinum / Focus">
+<label>📚 CAPS SUBJECT - Pick From Dropdown:</label>
+<select id="bCat">
+<option value="ENG HL">ENG HL - English Home Language</option>
+<option value="ENG FAL">ENG FAL - English First Additional Language</option>
+<option value="AFR HL">AFR HL - Afrikaans Home Language</option>
+<option value="AFR FAL">AFR FAL - Afrikaans First Additional Language</option>
+<option value="MATH">MATH - Mathematics</option>
+<option value="MLIT">MLIT - Mathematical Literacy</option>
+<option value="LO">LO - Life Orientation</option>
+<option value="NS">NS - Natural Sciences</option>
+<option value="SS">SS - Social Sciences</option>
+<option value="TECH">TECH - Technology</option>
+<option value="EMS">EMS - Economic & Management Sciences</option>
+<option value="ACC">ACC - Accounting</option>
+<option value="BS">BS - Business Studies</option>
+<option value="ECON">ECON - Economics</option>
+<option value="PHYS">PHYS - Physical Sciences</option>
+<option value="LS">LS - Life Sciences</option>
+<option value="GEO">GEO - Geography</option>
+<option value="HIST">HIST - History</option>
+<option value="CAT">CAT - Computer Applications Technology</option>
+<option value="IT">IT - Information Technology</option>
+<option value="ART">ART - Visual Arts</option>
+<option value="OTHER">OTHER - Other / Story Book</option>
+</select>
+<label>🎓 GRADE - Pick Grade:</label>
+<select id="bGrade">
+<option value="ALL">ALL - All Grades</option>
+<option value="Grade R">Grade R</option>
+<option value="Grade 1">Grade 1</option>
+<option value="Grade 2">Grade 2</option>
+<option value="Grade 3">Grade 3</option>
+<option value="Grade 4">Grade 4</option>
+<option value="Grade 5">Grade 5</option>
+<option value="Grade 6">Grade 6</option>
+<option value="Grade 7">Grade 7</option>
+<option value="Grade 8">Grade 8</option>
+<option value="Grade 9">Grade 9</option>
+<option value="Grade 10">Grade 10</option>
+<option value="Grade 11">Grade 11</option>
+<option value="Grade 12">Grade 12</option>
+</select>
 <input type="number" id="bQty" placeholder="Quantity in Store e.g. 10" min="1" value="1">
-<button class="big" onclick="addBook()">➕ ADD BOOK</button>
-<p style="font-size:13px;font-weight:900;color:#0f766e">💡 Same title again → Quantity ADDS - no duplicate! | Grade ALL = Any Grade can take it</p>
+<button class="big" onclick="addBook()">➕ ADD BOOK - NO DUPLICATE CHECK</button>
+<p style="font-size:13px;font-weight:900;color:#0f766e">💡 Same title again → Quantity ADDS - no duplicate! | Leave Book Number blank = Auto MAX+1 | CAPS code prints BIG on sticker!</p>
 </div>
 <div class="card"><h3>📖 ALL BOOKS - My School Only</h3>
-<button class="big yellow" onclick="printAllBookBarcodes()">🖨️ PRINT ALL BOOK BARCODES (My School) - Stick On Books!</button>
-<input id="searchBook" placeholder="Search book..." oninput="render()"><div id="bookList"></div></div>
+<button class="big yellow" onclick="printAllBookBarcodes()">🖨️ PRINT ALL BOOK BARCODES (My School) - CAPS Stickers!</button>
+<input id="searchBook" placeholder="Search book / CAPS e.g. MLIT / MATH / LO..." oninput="render()"><div id="bookList"></div></div>
 </div>
 <div id="principal" class="page">
 <div id="principalLock" class="card lockbox"><h2>🎓 PRINCIPAL LOGIN REQUIRED</h2><p>🔒 Firebase Login - Principal must login with YOUR School + Password.</p><button class="big" onclick="show('home')">🔐 GO TO LOGIN</button></div>
@@ -188,13 +229,13 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 <select id="adminLibSchool" style="display:none"></select>
 <p>Current Librarian: <b id="showLibPass2">Select School First</b></p><input type="password" id="newLibPassAdmin" placeholder="Librarian Password for SELECTED School" autocomplete="off"><input type="password" id="newLibPassAdmin2" placeholder="Confirm" autocomplete="off"><button class="big purple" onclick="createLibrarianPasswordAdmin()">✅ CREATE LIBRARIAN PASSWORD (Selected School - Firebase)</button><div id="libPassMsg2"></div></div>
 <div class="card"><h3>📤 UPLOAD LIST OF SCHOOLS - ADMIN ONLY - 🚫 BLOCK EMIS DUPLICATE ONLY</h3><p>✅ Upload CSV / JSON / EXCEL (.xlsx) from DBE</p><input type="file" id="schoolFile" accept=".csv,.json,.xlsx,.xls"><textarea id="schoolPaste" rows="4" placeholder="Paste schools: EMIS, Name per line"></textarea><label><input type="checkbox" id="replaceAll" style="width:auto"> 🗑️ REPLACE ALL?</label><button class="big green" onclick="previewSchools()">👁️ PREVIEW SCHOOLS</button><button class="big" onclick="confirmSchools()">✅ CONFIRM - SAVE SCHOOLS (Firebase)</button><div id="schoolPreview"></div><div id="uploadStatus">⏳ UPLOADING 0 / 0...</div></div>
-<div class="card"><h3>🇿🇦 ➕ ADD SCHOOL - 🚫 BLOCK EMIS ONLY</h3><input id="dbeSearch" placeholder="🔍 SEARCH DBE SCHOOL..." oninput="searchDBE()"><div id="dbeResults"></div><input id="newEmis" placeholder="SCHOOL CODE / EMIS - Must be Unique!"><input id="newSchool" placeholder="SCHOOL NAME - Same Name Allowed!"><button class="big" onclick="addSchoolManual()">➕ ADD SCHOOL</button><div id="schoolDupMsg" style="font-weight:900;color:#dc2626"></div><div id="schoolList"></div><button class="big yellow" onclick="cleanDuplicates()">🧹 CLEAN EMIS DUPLICATES NOW</button></div>
+<div class="card"><h3>🇿🇦 ➕ ADD SCHOOL - 🚫 BLOCK EMIS ONLY</h3><input id="dbeSearch" placeholder="🔍 SEARCH DBE SCHOOL..." oninput="searchDBE()"><div id="dbeResults"></div><input id="newEmis" placeholder="SCHOOL CODE / EMIS - Must be Unique!"><input id="newSchool" placeholder="SCHOOL NAME - Same Name Allowed!"><button class="big" onclick="addSchoolManual()">➕ ADD SCHOOL</button><div id="schoolDupMsg" style="font-weight:900;color:#dc2626"></div><div id="schoolList"></div><button class="big yellow" onclick="cleanDuplicates()">🧹 CLEAN EMIS DUPLICATES NOW</button><button class="big yellow" onclick="cleanDuplicateBooks()">🧹 CLEAN DUPLICATE BOOK NUMBERS NOW</button></div>
 <div class="card"><button class="big yellow" onclick="downloadSchools()">⬇️ DOWNLOAD CURRENT LIST (JSON)</button><button class="big red" onclick="if(confirm('DELETE ALL DATA?')){localStorage.clear();location.reload()}">🗑️ RESET ALL DATA</button></div>
 </div>
 </div>
 <div style="text-align:center;padding:12px;background:#fff;margin-top:10px">
 <img src="logo.png" alt="XINTIMANI GROUP" class="footerLogo" onerror="this.style.display='none'">
-<p style="font-size:12px;color:#0a1a4d;font-weight:900">MAKHANANI DIGITAL LIBRARY<br><span style="color:#0f766e">Powered by Xintimani Group - Building Solutions. Empowering Communities.</span><br>🔒 FIREBASE LOGIN • GRADE LOCK • BARCODE • © 2026 Xintimani Group</p>
+<p style="font-size:12px;color:#0a1a4d;font-weight:900">MAKHANANI DIGITAL LIBRARY<br><span style="color:#0f766e">Powered by Xintimani Group - Building Solutions. Empowering Communities.</span><br>🔒 FIREBASE LOGIN • CAPS • GRADE LOCK • BARCODE • NO DUPLICATE • © 2026 Xintimani Group</p>
 </div>
 <script>
 // === FIREBASE - MAKHANANI CLOUD + FIREBASE LOGIN ===
@@ -217,6 +258,7 @@ let cloudAdminPw = localStorage.getItem('mk_admin_pw')||'';
 function getAdminPw(){ return cloudAdminPw || localStorage.getItem('mk_admin_pw')||''; }
 function setAdminPw(hashed){ cloudAdminPw = hashed; localStorage.setItem('mk_admin_pw',hashed); }
 function getGradeNum(g){ let m=String(g||'').match(/\d+/); return m?m[0]:''; }
+function getNextBookCode(){ let max=0; books.forEach(x=>{ let m=String(x.code||'').match(/(\d+)/); if(m){ let n=parseInt(m[1]); if(n>max) max=n; } }); return 'BK-'+String(max+1).padStart(3,'0'); }
 function pushToCloud(){
   if(!cloudReady || isSyncingFromCloud) return;
   db.ref('makhanani').set({learners:learners,books:books,loans:loans,schools:schools,adminPw:cloudAdminPw,updated:new Date().toISOString()}).catch(e=>{console.log('Cloud save error',e);});
@@ -230,7 +272,7 @@ function pullFromCloud(){
       if(d.loans) loans=d.loans;
       if(d.schools) schools=d.schools;
       if(d.adminPw){ cloudAdminPw=d.adminPw; localStorage.setItem('mk_admin_pw',d.adminPw); }
-      books.forEach(b=>{if(b.totalQty===undefined){b.totalQty=1;b.availableQty=1;b.issuedQty=0;} if(!b.grade) b.grade='ALL';});
+      books.forEach(b=>{if(b.totalQty===undefined){b.totalQty=1;b.availableQty=1;b.issuedQty=0;} if(!b.grade) b.grade='ALL'; if(!b.cat) b.cat='OTHER';});
       localStorage.setItem('mk_learners',JSON.stringify(learners));
       localStorage.setItem('mk_books',JSON.stringify(books));
       localStorage.setItem('mk_loans',JSON.stringify(loans));
@@ -265,7 +307,7 @@ let learners=JSON.parse(localStorage.getItem('mk_learners')||'[]');
 let books=JSON.parse(localStorage.getItem('mk_books')||'[]');
 let loans=JSON.parse(localStorage.getItem('mk_loans')||'[]');
 let schools=JSON.parse(localStorage.getItem('mk_schools')||'[]');
-books.forEach(b=>{if(b.totalQty===undefined){b.totalQty=1;b.availableQty=1;b.issuedQty=0;} if(!b.grade) b.grade='ALL';});
+books.forEach(b=>{if(b.totalQty===undefined){b.totalQty=1;b.availableQty=1;b.issuedQty=0;} if(!b.grade) b.grade='ALL'; if(!b.cat) b.cat='OTHER';});
 let pendingSchools=[];let scanner=null;
 let currentRole=localStorage.getItem('mk_role')||'';
 let currentSchoolEmis=localStorage.getItem('mk_school')||'';
@@ -323,6 +365,21 @@ function filterSwitchSchools(){
   document.getElementById('switchSchoolSelect').innerHTML='<option value="">🌍 ALL SCHOOLS (Admin View)</option>'+list.slice(0,100).map(s=>`<option value="${s.emis}">${s.emis} - ${s.name}</option>`).join('');
 }
 function cleanDuplicates(){let seen=new Set();let cleaned=[];let removed=0;schools.forEach(s=>{let e=normEmis(s.emis);if(e&&seen.has(e)){removed++;return;}if(e)seen.add(e);cleaned.push(s);});schools=cleaned;save();alert('🧹 Cleaned! Removed '+removed+' duplicate EMIS! Total: '+schools.length);}
+function cleanDuplicateBooks(){
+  let seen=new Set(); let cleaned=[]; let removed=0;
+  books.forEach(b=>{
+    let c=String(b.code||'').toUpperCase();
+    if(c && seen.has(c)){
+      let first=cleaned.find(x=>String(x.code).toUpperCase()===c);
+      if(first){ first.totalQty=(first.totalQty||1)+(b.totalQty||1); first.availableQty=(first.availableQty??first.totalQty)+(b.availableQty??b.totalQty??1); }
+      removed++; return;
+    }
+    if(c) seen.add(c);
+    cleaned.push(b);
+  });
+  books=cleaned; save();
+  alert('🧹 Cleaned! Merged '+removed+' duplicate Book Numbers! Total Books: '+books.length);
+}
 function getPw(k){ if(k==='mk_admin_pw') return getAdminPw(); return localStorage.getItem(k)||''; }
 function setRole(r,emis){currentRole=r;currentSchoolEmis=emis||'';localStorage.setItem('mk_role',r);localStorage.setItem('mk_school',emis||'');updateRoleUI();render();}
 function fillSchoolDropdowns(){
@@ -414,12 +471,12 @@ function show(p){document.querySelectorAll('.page').forEach(e=>e.classList.remov
 function getDueDate(){let now=new Date();let year=now.getFullYear();let due=new Date(year,10,30);if(now>due){due=new Date(year+1,10,30);}return due;}
 function startScan(target){let map={'retBook':'reader2','quickScan':'reader-home','scanLearner':'reader','scanBook':'reader-issue2'};let boxId=map[target]||'reader';let box=document.getElementById(boxId);box.style.display='block';if(scanner){try{scanner.clear()}catch(e){}}scanner=new Html5Qrcode(boxId);scanner.start({facingMode:"environment"},{fps:10,qrbox:{width:250,height:150}},(txt)=>{document.getElementById(target).value=txt;scanner.stop().then(()=>{scanner.clear();box.style.display='none';});alert('✅ Scanned! '+txt);if(target==='quickScan')quickScan();},(err)=>{});}
 function needLogin(){if(!currentRole){alert('🔐 Please FIREBASE LOGIN first on HOME! Select School + Role + Password');show('home');return true;}if((currentRole==='principal'||currentRole==='librarian')&&!currentSchoolEmis){alert('🔐 Select YOUR School first!');show('home');return true;}return false;}
-function addLearner(){if(needLogin())return;let n=document.getElementById('lName').value.trim();let g=document.getElementById('lGrade').value.trim();if(!n||!g){alert('Type Name + Grade');return;}let school=getCurrentSchool();let schoolName=school?school.name:'Your School';let no='L-'+String(learners.length+1).padStart(4,'0');learners.push({no,name:n,grade:g,school:schoolName,schoolEmis:currentSchoolEmis||(school?school.emis:'')});save();document.getElementById('lName').value='';document.getElementById('lGrade').value='';alert('Done! '+n+' = '+no+' in '+schoolName);printOneCard(learners[learners.length-1]);}
+function addLearner(){if(needLogin())return;let n=document.getElementById('lName').value.trim();let g=document.getElementById('lGrade').value.trim();if(!n||!g){alert('Type Name + Grade');return;}let school=getCurrentSchool();let schoolName=school?school.name:'Your School';let maxL=0; learners.forEach(x=>{ let m=String(x.no||'').match(/(\d+)/); if(m){ let nn=parseInt(m[1]); if(nn>maxL) maxL=nn; } }); let no='L-'+String(maxL+1).padStart(4,'0');learners.push({no,name:n,grade:g,school:schoolName,schoolEmis:currentSchoolEmis||(school?school.emis:'')});save();document.getElementById('lName').value='';document.getElementById('lGrade').value='';alert('Done! '+n+' = '+no+' in '+schoolName);printOneCard(learners[learners.length-1]);}
 function addBook(){
   if(needLogin())return;
   let t=document.getElementById('bTitle').value.trim();
   let a=document.getElementById('bAuthor').value.trim();
-  let c=document.getElementById('bCat').value.trim();
+  let c=document.getElementById('bCat').value;
   let bg=document.getElementById('bGrade').value.trim()||'ALL';
   let qty=parseInt(document.getElementById('bQty').value)||1;
   if(qty<1) qty=1;
@@ -430,16 +487,23 @@ function addBook(){
     existing.totalQty=(existing.totalQty||1)+qty;
     existing.availableQty=(existing.availableQty??existing.totalQty)+qty;
     if(bg && bg.toUpperCase()!=='ALL') existing.grade=bg;
+    if(c) existing.cat=c;
     save();
-    document.getElementById('bQty').value=1;document.getElementById('bGrade').value='';
-    alert('✅ Added '+qty+' more copies! Total now: '+existing.totalQty+' - '+existing.title);
+    document.getElementById('bQty').value=1;document.getElementById('bCodeManual').value='';
+    alert('✅ Added '+qty+' more copies! Total now: '+existing.totalQty+' - '+existing.title+' - No new number, same '+existing.code);
     return;
   }
-  let code='BK-'+String(books.length+1).padStart(3,'0');
+  let manualCode=(document.getElementById('bCodeManual').value||'').trim().toUpperCase();
+  let code=manualCode||getNextBookCode();
+  let dupCode=books.find(x=>String(x.code||'').toUpperCase()===code);
+  if(dupCode){
+    alert('🚫 DUPLICATE BOOK NUMBER BLOCKED!\n'+code+' already exists!\nExisting: '+dupCode.title+' - '+getSchoolName(dupCode.schoolEmis)+'\n\nType a different number OR leave blank for Auto: '+getNextBookCode());
+    return;
+  }
   books.push({code,title:t,author:a,cat:c,grade:bg,schoolEmis:currentSchoolEmis,totalQty:qty,availableQty:qty,issuedQty:0});
   save();
-  document.getElementById('bTitle').value='';document.getElementById('bAuthor').value='';document.getElementById('bCat').value='';document.getElementById('bQty').value=1;document.getElementById('bGrade').value='';
-  alert('Book Added! '+code+' - Grade: '+bg+' - Qty: '+qty+' to '+getSchoolName(currentSchoolEmis));
+  document.getElementById('bTitle').value='';document.getElementById('bAuthor').value='';document.getElementById('bQty').value=1;document.getElementById('bCodeManual').value='';
+  alert('Book Added! '+code+' - '+c+' - Grade: '+bg+' - Qty: '+qty+' to '+getSchoolName(currentSchoolEmis));
 }
 function issueBook(){
   if(needLogin())return;
@@ -449,7 +513,6 @@ function issueBook(){
   let B=myBooks().find(x=>x.code===bk);
   if(!L){document.getElementById('issueMsg').innerHTML='<b style=color:red>Learner not found in YOUR school! BLOCKED!</b>';return;}
   if(!B){document.getElementById('issueMsg').innerHTML='<b style=color:red>Book not found in YOUR school! BLOCKED!</b>';return;}
-  // === GRADE MISMATCH LOCK ===
   let learnerGradeNum=getGradeNum(L.grade);
   let bookGrade=(B.grade||'ALL').toUpperCase().trim();
   let bookGradeNum=getGradeNum(bookGrade);
@@ -483,21 +546,21 @@ function returnBook(){
 }
 function quickScan(){let v=document.getElementById('quickScan').value.trim();let L=myLearners().find(x=>x.no===v);let B=myBooks().find(x=>x.code===v);if(L){document.getElementById('scanLearner').value=L.no;show('issue');}else if(B){document.getElementById('scanBook').value=B.code;show('issue');}else{document.getElementById('quickResult').innerHTML='Not found in YOUR school';}}
 function parentCheck(){let v=document.getElementById('parentNo').value.trim();let L=learners.find(x=>x.no===v);if(!L){document.getElementById('parentResult').innerHTML='Learner not found';return;}let my=loans.filter(x=>x.learner===v&&!x.returned);document.getElementById('parentResult').innerHTML='<b>'+L.name+' - '+L.grade+' - '+(L.school||'')+'</b><br>📅 All books due 30 November<br>'+(my.length?my.map(x=>x.btitle+' - Due '+x.due).join('<br>'):'✅ No books out - All returned!');}
-// === 📖 PRINT ONE BOOK BARCODE ===
 function printOneBookBarcode(b){
   let w=window.open('','','width=800,height=600');
-  w.document.write('<html><head><title>Book Barcode - '+b.code+'</title><style>body{font-family:Arial}.c{width:320px;border:3px solid #1a56db;border-radius:12px;padding:12px;text-align:center;margin:20px auto}svg{width:100%}</style><script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script></head><body><div class="c"><b>MAKHANANI DIGITAL LIBRARY 💙</b><br><b>'+b.title+'</b><br>Author: '+b.author+'<br>Grade: '+b.grade+' - '+b.cat+'<br>Code: <b>'+b.code+'</b><br><svg id="bc"></svg><br><b>'+b.code+'</b><br><small>XINTIMANI GROUP<br>📅 RETURN BY 30 NOV EVERY YEAR</small></div><script>window.onload=function(){JsBarcode("#bc","'+b.code+'",{format:"CODE128",width:2,height:60,displayValue:false});setTimeout(()=>window.print(),500)}<\/script></body></html>');
+  let caps=(b.cat||'OTHER').toUpperCase();
+  w.document.write('<html><head><title>Book Barcode - '+b.code+'</title><style>body{font-family:Arial}.c{width:340px;border:3px solid #1a56db;border-radius:12px;padding:12px;text-align:center;margin:20px auto}.caps{font-size:38px;font-weight:900;color:#1a56db;background:#facc15;padding:4px 10px;border-radius:10px;display:inline-block}svg{width:100%}</style><script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script></head><body><div class="c"><b>MAKHANANI DIGITAL LIBRARY 💙</b><br><div class="caps">'+caps+'</div><br><b style="font-size:18px">'+b.title+'</b><br>'+b.author+'<br>🎓 '+b.grade+' - 📚 '+caps+'<br>Code: <b>'+b.code+'</b><br><svg id="bc"></svg><br><b style="font-size:18px">'+b.code+' | '+caps+' | '+b.grade+'</b><br><small>XINTIMANI GROUP<br>📅 RETURN BY 30 NOV</small></div><script>window.onload=function(){JsBarcode("#bc","'+b.code+'",{format:"CODE128",width:2,height:60,displayValue:false});setTimeout(()=>window.print(),500)}<\/script></body></html>');
   w.document.close();
 }
-// === 📖 PRINT ALL BOOK BARCODES - MY SCHOOL ===
 function printAllBookBarcodes(){
   let list=myBooks();
   if(!list.length){alert('No books in YOUR school');return;}
   let w=window.open('','','width=900,height=800');
-  let html='<html><head><title>All Book Barcodes</title><style>body{font-family:Arial}.c{width:280px;border:3px solid #1a56db;border-radius:12px;padding:10px;text-align:center;display:inline-block;margin:8px}svg{width:100%}</style><script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script></head><body>';
+  let html='<html><head><title>All Book Barcodes</title><style>body{font-family:Arial}.c{width:280px;border:3px solid #1a56db;border-radius:12px;padding:10px;text-align:center;display:inline-block;margin:8px}.caps{font-size:22px;font-weight:900;background:#facc15;padding:2px 8px;border-radius:8px;display:inline-block}svg{width:100%}</style><script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script></head><body>';
   list.forEach((b,i)=>{
     let safeTitle=String(b.title||'').replace(/"/g,'');
-    html+='<div class="c"><b>MAKHANANI LIBRARY 💙</b><br><b>'+safeTitle+'</b><br>'+(b.author||'')+' - 🎓 '+(b.grade||'ALL')+'<br><b>'+b.code+'</b><br><svg id="bb'+i+'"></svg><br>'+b.code+'<br><small>📦 Qty: '+(b.totalQty||1)+' | 📅 Return 30 Nov</small></div>';
+    let capsAll=(b.cat||'OTHER').toUpperCase();
+    html+='<div class="c"><b>MAKHANANI LIBRARY 💙</b><br><span class="caps">'+capsAll+'</span><br><b>'+safeTitle+'</b><br>'+(b.author||'')+'<br>🎓 '+(b.grade||'ALL')+' | 📚 '+capsAll+'<br><b>'+b.code+'</b><br><svg id="bb'+i+'"></svg><br>'+b.code+' | '+capsAll+'<br><small>📦 Qty: '+(b.totalQty||1)+' | 📅 Return 30 Nov</small></div>';
   });
   html+='<script>window.onload=function(){'+list.map((b,i)=>'JsBarcode("#bb'+i+'","'+b.code+'",{format:"CODE128",width:2,height:45,displayValue:false});').join('')+'setTimeout(()=>window.print(),800)}<\/script></body></html>';
   w.document.write(html); w.document.close();
@@ -525,12 +588,12 @@ document.getElementById('pOver').innerText=myLoans().filter(isOverdue).length;
 let sl=(document.getElementById('searchLearner').value||'').toLowerCase();
 document.getElementById('learnerList').innerHTML=myLearners().filter(x=>x.name.toLowerCase().includes(sl)||x.no.toLowerCase().includes(sl)).map(x=>`<div class="badge"><b>${x.no}</b> - ${x.name} - ${x.grade} - ${x.school||''}<br><button onclick="document.getElementById('scanLearner').value='${x.no}';show('issue')">ISSUE →</button> <button onclick="printOneCard({no:'${x.no}',name:'${x.name}',grade:'${x.grade}',school:'${x.school}'})">🖨️ PRINT CARD</button></div>`).join('')||'No learners in YOUR school yet - Login first!';
 let sb=(document.getElementById('searchBook').value||'').toLowerCase();
-document.getElementById('bookList').innerHTML=myBooks().filter(x=>x.title.toLowerCase().includes(sb)).map(x=>{
+document.getElementById('bookList').innerHTML=myBooks().filter(x=>(x.title||'').toLowerCase().includes(sb)||(x.cat||'').toLowerCase().includes(sb)||(x.code||'').toLowerCase().includes(sb)).map(x=>{
 let total=x.totalQty||1;let avail=x.availableQty??total;let issued=x.issuedQty||(total-avail);
 let status=avail>0?'🟢 IN - '+avail+' Available':'🔴 OUT OF STOCK';
 let safeTitle=String(x.title||'').replace(/'/g,"");
 let safeAuthor=String(x.author||'').replace(/'/g,"");
-return `<div class="badge"><b>${x.code}</b> - ${x.title} - ${x.author||''} - ${x.cat||''} - 🎓 <b>${x.grade||'ALL'}</b><br>📦 <b>IN STORE: ${total}</b> | ✅ Available: ${avail} | 🔴 Issued: ${issued} | ${status}<br><button onclick="document.getElementById('scanBook').value='${x.code}';show('issue')">ISSUE →</button> <button style="background:#facc15;color:#000" onclick="printOneBookBarcode({code:'${x.code}',title:'${safeTitle}',author:'${safeAuthor}',grade:'${x.grade||'ALL'}',cat:'${x.cat||''}'})">🖨️ PRINT BARCODE</button></div>`;
+return `<div class="badge"><b>${x.code}</b> - ${x.title} - ${x.author||''} - 📚 <b>${x.cat||'OTHER'}</b> - 🎓 <b>${x.grade||'ALL'}</b><br>📦 <b>IN STORE: ${total}</b> | ✅ Available: ${avail} | 🔴 Issued: ${issued} | ${status}<br><button onclick="document.getElementById('scanBook').value='${x.code}';show('issue')">ISSUE →</button> <button style="background:#facc15;color:#000" onclick="printOneBookBarcode({code:'${x.code}',title:'${safeTitle}',author:'${safeAuthor}',grade:'${x.grade||'ALL'}',cat:'${x.cat||'OTHER'}'})">🖨️ PRINT BARCODE</button></div>`;
 }).join('')||'No books in YOUR school yet';
 document.getElementById('outList').innerHTML=myLoans().filter(x=>!x.returned).map(x=>`<div class="badge">${x.btitle} → ${x.lname}<br>📅 Due: 30 Nov ${new Date(x.due).getFullYear()} - ${x.due}</div>`).join('')||'All IN! 🎉';
 document.getElementById('overdueList').innerHTML=myLoans().filter(isOverdue).map(x=>`<div class="badge">⏰ ${x.btitle} → ${x.lname} - Was Due ${x.due} - OVERDUE AFTER 30 NOV!</div>`).join('')||'No overdue! 💚';
