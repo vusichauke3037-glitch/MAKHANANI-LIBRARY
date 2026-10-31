@@ -3,13 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MAKHANANI DIGITAL LIBRARY - PROTECTED</title>
+<title>MAKHANANI DIGITAL LIBRARY - FIREBASE LOGIN</title>
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<!-- FIREBASE - MAKHANANI CLOUD -->
+<!-- FIREBASE - CLOUD + LOGIN -->
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial;background:#eef4ff;-webkit-user-select:none;user-select:none}
 header{background:#ffffff;color:#0a1a4d;padding:10px;text-align:center;border-bottom:4px solid #c9a227}
@@ -49,18 +50,19 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 <p>📚 POWERED BY XINTIMANI GROUP | FOR ALL SCHOOLS</p>
 <p style="font-size:11px;color:#0f766e">Building Solutions. Empowering Communities.</p>
 </header>
-<div class="protectBar">🔒 PROTECTED SYSTEM • PASSWORDS ARE HIDDEN • EACH SCHOOL SEES ONLY ITS OWN DATA • AUTO-LOCK 30 MIN</div>
-<div class="topbar">🏫 <span id="currentSchoolLabel">NO SCHOOL SELECTED</span> | <span id="whoIs">👤 NOT LOGGED IN</span> | <span id="adminStatus">🔒 ADMIN LOCKED</span> | 📷 SCAN | 📅 30 NOV | 🚫 EMIS ONLY | 🔒 SCHOOL ACCESS CONTROL</div>
+<div class="protectBar">🔒 FIREBASE LOGIN • PASSWORDS IN CLOUD • EACH SCHOOL SEES ONLY ITS OWN DATA • AUTO-LOCK 30 MIN</div>
+<div class="topbar">🏫 <span id="currentSchoolLabel">NO SCHOOL SELECTED</span> | <span id="whoIs">👤 NOT LOGGED IN</span> | <span id="adminStatus">🔒 ADMIN LOCKED</span> | ☁️ FIREBASE LOGIN | 📅 30 NOV</div>
 <div style="max-width:900px;margin:auto;padding:0 12px">
 <div class="card rolebox">
-<h3>🔐 LOGIN - SELECT YOUR SCHOOL + ROLE</h3>
+<h3>🔐 FIREBASE LOGIN - SELECT YOUR SCHOOL + ROLE</h3>
+<p style="font-size:13px;font-weight:900;color:#0ea5e9">☁️ Login now works on ANY phone - Passwords are in Firebase Cloud!</p>
 <label>🔍 SEARCH YOUR SCHOOL (Type Name or EMIS):</label>
 <input id="loginSchoolSearch" placeholder="🔍 Type e.g. BENONI / DURBAN / 700400111..." oninput="filterLoginSchools()">
 <select id="loginSchool"><option value="">-- Select School --</option></select>
 <label>👤 YOUR ROLE:</label>
 <select id="loginRole"><option value="admin">👑 ADMINISTRATOR - Sees ALL Schools</option><option value="principal">🎓 PRINCIPAL - Sees ONLY My School</option><option value="librarian">📚 LIBRARIAN - Sees ONLY My School</option></select>
 <input type="password" id="loginPass" placeholder="🔑 Type Your Password..." autocomplete="off">
-<button class="big green" onclick="doLogin()">🔓 LOGIN</button>
+<button class="big green" onclick="doLogin()">🔓 FIREBASE LOGIN</button>
 <button class="big red" onclick="doLogout()">🔒 LOGOUT ALL</button>
 <div id="loginMsg" style="font-weight:900"></div>
 <div id="schoolSwitch" style="display:none"><hr><label>🔄 SWITCH SCHOOL (Admin Only):</label><input id="switchSchoolSearch" placeholder="🔍 Search to switch school..." oninput="filterSwitchSchools()"><select id="switchSchoolSelect" onchange="switchSchool()"></select></div>
@@ -78,15 +80,15 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 </nav>
 <div id="home" class="page active">
 <div class="schoolbar" id="homeSchoolBar">🏫 NO SCHOOL SELECTED - Login First</div>
-<div class="cloudbar" id="cloudStatus">☁️ CLOUD: Connecting to Firebase...</div>
-<div class="card" style="text-align:center"><img src="logo.png" alt="XINTIMANI GROUP" class="footerLogo" onerror="this.style.display='none'"><div class="adminbar">🔒 PROTECTED - MAKHANANI DIGITAL LIBRARY<br><small id="adminWelcome">🔒 ADMIN LOCKED</small></div></div>
+<div class="cloudbar" id="cloudStatus">☁️ FIREBASE LOGIN: Connecting...</div>
+<div class="card" style="text-align:center"><img src="logo.png" alt="XINTIMANI GROUP" class="footerLogo" onerror="this.style.display='none'"><div class="adminbar">🔒 FIREBASE LOGIN - MAKHANANI DIGITAL LIBRARY<br><small id="adminWelcome">🔒 ADMIN LOCKED</small></div></div>
 <div class="stats">
 <div class="stat"><b id="sSchools">0</b><br>🏫 SCHOOLS</div>
 <div class="stat"><b id="sBooks">0</b><br>📖 BOOKS (My School)</div>
 <div class="stat"><b id="sLearners">0</b><br>👧 LEARNERS (My School)</div>
 <div class="stat"><b id="sOut">0</b><br>📚 BORROWED (My School)</div>
 </div>
-<div class="card"><div class="greenbox">WELCOME TO MAKHANANI DIGITAL LIBRARY! 💚 EVER HAPPY!<br>🔒 PROTECTED SYSTEM - PASSWORDS HIDDEN!<br>📅 RETURN BY 30 NOV EVERY YEAR!<br>🔒 EACH SCHOOL SEES ONLY ITS OWN DATA!<br>☁️ CLOUD SYNC - WORKS ON ALL PHONES!</div><p>👑 Admin → Search School → Creates Principal Password (Hidden)<br>🎓 Principal → Creates Librarian Password for HIS School (Hidden)<br>📚 Librarian → Works ONLY in HIS School</p></div>
+<div class="card"><div class="greenbox">WELCOME TO MAKHANANI DIGITAL LIBRARY! 💚 EVER HAPPY!<br>🔒 FIREBASE LOGIN - WORKS ON ALL PHONES!<br>📅 RETURN BY 30 NOV EVERY YEAR!<br>🔒 EACH SCHOOL SEES ONLY ITS OWN DATA!<br>☁️ CLOUD SYNC - LIVE!</div><p>👑 Admin → Search School → Creates Principal Password (Saved in Firebase Cloud)<br>🎓 Principal → Creates Librarian Password for HIS School (Saved in Firebase Cloud)<br>📚 Librarian → Works ONLY in HIS School - On ANY Phone</p></div>
 <div class="card"><h3>🔍 Quick Scan</h3><input id="quickScan" placeholder="Scan Learner OR Book..."><button class="big yellow" onclick="startScan('quickScan')">📷 SCAN WITH CAMERA</button><div id="reader-home"></div><button class="big" onclick="quickScan()">GO →</button><div id="quickResult"></div></div>
 </div>
 <div id="issue" class="page">
@@ -133,18 +135,18 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 <div class="card"><h3>📖 ALL BOOKS - My School Only</h3><input id="searchBook" placeholder="Search book..." oninput="render()"><div id="bookList"></div></div>
 </div>
 <div id="principal" class="page">
-<div id="principalLock" class="card lockbox"><h2>🎓 PRINCIPAL LOGIN REQUIRED</h2><p>🔒 PROTECTED - Principal must login with YOUR School + Password.</p><button class="big" onclick="show('home')">🔐 GO TO LOGIN</button></div>
+<div id="principalLock" class="card lockbox"><h2>🎓 PRINCIPAL LOGIN REQUIRED</h2><p>🔒 Firebase Login - Principal must login with YOUR School + Password.</p><button class="big" onclick="show('home')">🔐 GO TO LOGIN</button></div>
 <div id="principalContent" style="display:none">
 <div class="schoolbar" id="principalSchoolBar"></div>
-<div class="card"><h3>🎓 PRINCIPAL DASHBOARD - MY SCHOOL ONLY - 🔒 PROTECTED</h3>
+<div class="card"><h3>🎓 PRINCIPAL DASHBOARD - MY SCHOOL ONLY - 🔒 FIREBASE LOGIN</h3>
 <div class="stats"><div class="stat"><b id="pLearners">0</b><br>Learners</div><div class="stat"><b id="pBooks">0</b><br>Books In Store</div><div class="stat"><b id="pOut">0</b><br>Borrowed</div><div class="stat"><b id="pOver">0</b><br>Overdue</div></div>
 <button class="big" onclick="render();alert('Report Refreshed!')">🔄 REFRESH REPORT</button>
 <div id="principalList"></div></div>
-<div class="card"><h3>📚 PRINCIPAL CREATES LIBRARIAN PASSWORD - FOR MY SCHOOL - 🔒 HIDDEN</h3>
-<p>School: <b id="prinSchoolName"></b><br>Current Librarian Password: <b id="showLibPass">Not Set Yet</b> <small>(Password is hidden for protection)</small></p>
+<div class="card"><h3>📚 PRINCIPAL CREATES LIBRARIAN PASSWORD - FOR MY SCHOOL - ☁️ SAVED IN FIREBASE</h3>
+<p>School: <b id="prinSchoolName"></b><br>Current Librarian Password: <b id="showLibPass">Not Set Yet</b> <small>(Hidden - Saved in Firebase Cloud)</small></p>
 <input type="password" id="newLibPass" placeholder="🆕 Create Librarian Password" autocomplete="off">
 <input type="password" id="newLibPass2" placeholder="🔁 Type Again" autocomplete="off">
-<button class="big purple" onclick="createLibrarianPassword()">✅ CREATE / CHANGE LIBRARIAN PASSWORD (My School)</button>
+<button class="big purple" onclick="createLibrarianPassword()">✅ CREATE / CHANGE LIBRARIAN PASSWORD (My School - Firebase)</button>
 <div id="libPassMsg"></div>
 </div>
 </div>
@@ -155,15 +157,15 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 <button class="big green" onclick="parentCheck()">🔍 CHECK MY CHILD</button><div id="parentResult"></div></div>
 </div>
 <div id="admin" class="page">
-<div id="adminLock" class="card lockbox"><h2>👑 ADMINISTRATOR LOGIN REQUIRED - 🔒 PROTECTED</h2><p>🔒 Admin must login on HOME first. Passwords are hidden.</p><button class="big" onclick="show('home')">🔐 GO TO LOGIN</button>
-<div id="firstTimeBox" style="display:none"><hr><h3>👑 FIRST TIME SETUP - CREATE ADMIN PASSWORD</h3><input type="password" id="newAdminPass" placeholder="🆕 Create Admin Password" autocomplete="off"><input type="password" id="newAdminPass2" placeholder="🔁 Type Again" autocomplete="off"><button class="big yellow" onclick="createAdminPassword()">✅ CREATE ADMIN PASSWORD</button></div>
+<div id="adminLock" class="card lockbox"><h2>👑 ADMINISTRATOR LOGIN REQUIRED - ☁️ FIREBASE LOGIN</h2><p>🔒 Admin must login on HOME first. Password is now in Firebase Cloud - Works on ANY phone.</p><button class="big" onclick="show('home')">🔐 GO TO LOGIN</button>
+<div id="firstTimeBox" style="display:none"><hr><h3>👑 FIRST TIME SETUP - CREATE ADMIN PASSWORD - ☁️ SAVED IN FIREBASE</h3><input type="password" id="newAdminPass" placeholder="🆕 Create Admin Password" autocomplete="off"><input type="password" id="newAdminPass2" placeholder="🔁 Type Again" autocomplete="off"><button class="big yellow" onclick="createAdminPassword()">✅ CREATE ADMIN PASSWORD (Firebase)</button></div>
 </div>
 <div id="adminContent" style="display:none">
-<div class="card"><h3>👑 APP ADMINISTRATOR - FULL CONTROL - 🔒 PROTECTED</h3><p>✅ LOGGED IN AS ADMIN — FULL CONTROL — PASSWORDS HIDDEN</p></div>
-<div class="card"><h3>🔑 ADMIN CHANGES OWN PASSWORD - 🔒 HIDDEN</h3>
-<input type="password" id="oldPass" placeholder="Old Admin Password" autocomplete="off"><input type="password" id="changePass1" placeholder="New Admin Password" autocomplete="off"><input type="password" id="changePass2" placeholder="Confirm New" autocomplete="off"><button class="big orange" onclick="changeAdminPassword()">🔑 CHANGE ADMIN PASSWORD</button><div id="changeMsg"></div></div>
-<div class="card" style="border:3px solid #7c3aed"><h3>🔍🎓 SEARCH SCHOOL → CREATE PRINCIPAL PASSWORD - 🔒 HIDDEN</h3>
-<p>👑 Admin: Search school first, then tap it to select! Password will NOT be shown after saving.</p>
+<div class="card"><h3>👑 APP ADMINISTRATOR - FULL CONTROL - ☁️ FIREBASE LOGIN</h3><p>✅ LOGGED IN AS ADMIN — FULL CONTROL — PASSWORD IN FIREBASE CLOUD</p></div>
+<div class="card"><h3>🔑 ADMIN CHANGES OWN PASSWORD - ☁️ SAVED IN FIREBASE - WORKS ON ALL PHONES</h3>
+<input type="password" id="oldPass" placeholder="Old Admin Password" autocomplete="off"><input type="password" id="changePass1" placeholder="New Admin Password" autocomplete="off"><input type="password" id="changePass2" placeholder="Confirm New" autocomplete="off"><button class="big orange" onclick="changeAdminPassword()">🔑 CHANGE ADMIN PASSWORD (Firebase)</button><div id="changeMsg"></div></div>
+<div class="card" style="border:3px solid #7c3aed"><h3>🔍🎓 SEARCH SCHOOL → CREATE PRINCIPAL PASSWORD - ☁️ FIREBASE</h3>
+<p>👑 Admin: Search school first, then tap it to select! Saved in Firebase Cloud - Principal can login on ANY phone!</p>
 <label>🔍 SEARCH SCHOOL BY NAME OR EMIS:</label>
 <input id="adminPrinSearch" placeholder="🔍 Type e.g. BENONI / DURBAN / 700400111..." oninput="searchSchoolForPrincipal()">
 <div id="adminPrinSearchResults" class="searchResult"></div>
@@ -173,27 +175,27 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 <p>Selected School Principal Password: <b id="showPrinPass">Select School First</b></p>
 <input type="password" id="newPrinPass" placeholder="🆕 Create Principal Password for SELECTED School" autocomplete="off">
 <input type="password" id="newPrinPass2" placeholder="🔁 Type Again" autocomplete="off">
-<button class="big purple" onclick="createPrincipalPassword()">✅ CREATE / CHANGE PRINCIPAL PASSWORD (Selected School)</button><div id="prinPassMsg"></div>
-<p style="font-size:13px">💡 Password is hidden after saving for protection. Write it down and give to THAT Principal ONLY!</p></div>
-<div class="card"><h3>🔍📚 SEARCH SCHOOL → CREATE LIBRARIAN PASSWORD - 🔒 HIDDEN</h3>
+<button class="big purple" onclick="createPrincipalPassword()">✅ CREATE / CHANGE PRINCIPAL PASSWORD (Selected School - Firebase)</button><div id="prinPassMsg"></div>
+<p style="font-size:13px">💡 Password is hidden & saved in Firebase Cloud. Write it down and give to THAT Principal ONLY! They can login on ANY phone!</p></div>
+<div class="card"><h3>🔍📚 SEARCH SCHOOL → CREATE LIBRARIAN PASSWORD - ☁️ FIREBASE</h3>
 <label>🔍 SEARCH SCHOOL:</label>
 <input id="adminLibSearch" placeholder="🔍 Type School Name or EMIS..." oninput="searchSchoolForLibrarian()">
 <div id="adminLibSearchResults" class="searchResult"></div>
 <label>🏫 SELECTED SCHOOL:</label>
 <input id="adminLibSelected" readonly placeholder="No school selected yet" style="background:#fef3c7;font-weight:900">
 <select id="adminLibSchool" style="display:none"></select>
-<p>Current Librarian: <b id="showLibPass2">Select School First</b></p><input type="password" id="newLibPassAdmin" placeholder="Librarian Password for SELECTED School" autocomplete="off"><input type="password" id="newLibPassAdmin2" placeholder="Confirm" autocomplete="off"><button class="big purple" onclick="createLibrarianPasswordAdmin()">✅ CREATE LIBRARIAN PASSWORD (Selected School)</button><div id="libPassMsg2"></div></div>
-<div class="card"><h3>📤 UPLOAD LIST OF SCHOOLS - ADMIN ONLY - 🚫 BLOCK EMIS DUPLICATE ONLY</h3><p>✅ Upload CSV / JSON / EXCEL (.xlsx) from DBE</p><input type="file" id="schoolFile" accept=".csv,.json,.xlsx,.xls"><textarea id="schoolPaste" rows="4" placeholder="Paste schools: EMIS, Name per line"></textarea><label><input type="checkbox" id="replaceAll" style="width:auto"> 🗑️ REPLACE ALL?</label><button class="big green" onclick="previewSchools()">👁️ PREVIEW SCHOOLS</button><button class="big" onclick="confirmSchools()">✅ CONFIRM - SAVE SCHOOLS</button><div id="schoolPreview"></div><div id="uploadStatus">⏳ UPLOADING 0 / 0...</div></div>
+<p>Current Librarian: <b id="showLibPass2">Select School First</b></p><input type="password" id="newLibPassAdmin" placeholder="Librarian Password for SELECTED School" autocomplete="off"><input type="password" id="newLibPassAdmin2" placeholder="Confirm" autocomplete="off"><button class="big purple" onclick="createLibrarianPasswordAdmin()">✅ CREATE LIBRARIAN PASSWORD (Selected School - Firebase)</button><div id="libPassMsg2"></div></div>
+<div class="card"><h3>📤 UPLOAD LIST OF SCHOOLS - ADMIN ONLY - 🚫 BLOCK EMIS DUPLICATE ONLY</h3><p>✅ Upload CSV / JSON / EXCEL (.xlsx) from DBE</p><input type="file" id="schoolFile" accept=".csv,.json,.xlsx,.xls"><textarea id="schoolPaste" rows="4" placeholder="Paste schools: EMIS, Name per line"></textarea><label><input type="checkbox" id="replaceAll" style="width:auto"> 🗑️ REPLACE ALL?</label><button class="big green" onclick="previewSchools()">👁️ PREVIEW SCHOOLS</button><button class="big" onclick="confirmSchools()">✅ CONFIRM - SAVE SCHOOLS (Firebase)</button><div id="schoolPreview"></div><div id="uploadStatus">⏳ UPLOADING 0 / 0...</div></div>
 <div class="card"><h3>🇿🇦 ➕ ADD SCHOOL - 🚫 BLOCK EMIS ONLY</h3><input id="dbeSearch" placeholder="🔍 SEARCH DBE SCHOOL..." oninput="searchDBE()"><div id="dbeResults"></div><input id="newEmis" placeholder="SCHOOL CODE / EMIS - Must be Unique!"><input id="newSchool" placeholder="SCHOOL NAME - Same Name Allowed!"><button class="big" onclick="addSchoolManual()">➕ ADD SCHOOL</button><div id="schoolDupMsg" style="font-weight:900;color:#dc2626"></div><div id="schoolList"></div><button class="big yellow" onclick="cleanDuplicates()">🧹 CLEAN EMIS DUPLICATES NOW</button></div>
 <div class="card"><button class="big yellow" onclick="downloadSchools()">⬇️ DOWNLOAD CURRENT LIST (JSON)</button><button class="big red" onclick="if(confirm('DELETE ALL DATA?')){localStorage.clear();location.reload()}">🗑️ RESET ALL DATA</button></div>
 </div>
 </div>
 <div style="text-align:center;padding:12px;background:#fff;margin-top:10px">
 <img src="logo.png" alt="XINTIMANI GROUP" class="footerLogo" onerror="this.style.display='none'">
-<p style="font-size:12px;color:#0a1a4d;font-weight:900">MAKHANANI DIGITAL LIBRARY<br><span style="color:#0f766e">Powered by Xintimani Group - Building Solutions. Empowering Communities.</span><br>🔒 PROTECTED SYSTEM • © 2026 Xintimani Group</p>
+<p style="font-size:12px;color:#0a1a4d;font-weight:900">MAKHANANI DIGITAL LIBRARY<br><span style="color:#0f766e">Powered by Xintimani Group - Building Solutions. Empowering Communities.</span><br>🔒 FIREBASE LOGIN • © 2026 Xintimani Group</p>
 </div>
 <script>
-// === FIREBASE - MAKHANANI CLOUD SYNC ===
+// === FIREBASE - MAKHANANI CLOUD + FIREBASE LOGIN ===
 const firebaseConfig = {
   apiKey: "AIzaSyDAVEvpVbVsIplT4KeMevEzOg-5WE_Q0VM",
   authDomain: "makhanani-digital-library.firebaseapp.com",
@@ -206,11 +208,18 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
+const auth = firebase.auth();
 let cloudReady = false;
 let isSyncingFromCloud = false;
+let cloudAdminPw = localStorage.getItem('mk_admin_pw')||'';
+function getAdminPw(){ return cloudAdminPw || localStorage.getItem('mk_admin_pw')||''; }
+function setAdminPw(hashed){
+  cloudAdminPw = hashed;
+  localStorage.setItem('mk_admin_pw',hashed);
+}
 function pushToCloud(){
   if(!cloudReady || isSyncingFromCloud) return;
-  db.ref('makhanani').set({learners:learners,books:books,loans:loans,schools:schools,updated:new Date().toISOString()}).catch(e=>{console.log('Cloud save error',e);});
+  db.ref('makhanani').set({learners:learners,books:books,loans:loans,schools:schools,adminPw:cloudAdminPw,updated:new Date().toISOString()}).catch(e=>{console.log('Cloud save error',e);});
 }
 function pullFromCloud(){
   db.ref('makhanani').once('value').then(snap=>{
@@ -220,8 +229,8 @@ function pullFromCloud(){
       if(d.books) books=d.books;
       if(d.loans) loans=d.loans;
       if(d.schools) schools=d.schools;
+      if(d.adminPw){ cloudAdminPw=d.adminPw; localStorage.setItem('mk_admin_pw',d.adminPw); }
       books.forEach(b=>{if(b.totalQty===undefined){b.totalQty=1;b.availableQty=1;b.issuedQty=0;}});
-      // Save cloud data to local too, so offline still works
       localStorage.setItem('mk_learners',JSON.stringify(learners));
       localStorage.setItem('mk_books',JSON.stringify(books));
       localStorage.setItem('mk_loans',JSON.stringify(loans));
@@ -229,20 +238,20 @@ function pullFromCloud(){
       render();
     }
     cloudReady=true;
-    let el=document.getElementById('cloudStatus'); if(el) el.innerHTML='☁️ CLOUD: ✅ CONNECTED - Live Sync ON - All Phones See Same Data!';
-    // If cloud is EMPTY but local has data, push local up first time
+    let el=document.getElementById('cloudStatus'); if(el) el.innerHTML='☁️ FIREBASE LOGIN: ✅ CONNECTED - Login Works On ALL Phones!';
     if(!d || (!d.schools || !d.schools.length)){
-      if(schools.length>0 || books.length>0) pushToCloud();
+      if(schools.length>0 || books.length>0 || cloudAdminPw) pushToCloud();
     }
   }).catch(e=>{
     cloudReady=true;
-    let el=document.getElementById('cloudStatus'); if(el) el.innerHTML='⚠️ CLOUD: Offline Mode - Using Phone Storage - Will Sync When Online';
+    let el=document.getElementById('cloudStatus'); if(el) el.innerHTML='⚠️ FIREBASE: Offline Mode - Using Phone Storage - Will Sync When Online';
   });
   db.ref('makhanani').on('value', snap=>{
     if(!cloudReady) return;
     let d=snap.val(); if(!d) return;
     isSyncingFromCloud=true;
     learners=d.learners||learners; books=d.books||books; loans=d.loans||loans; schools=d.schools||schools;
+    if(d.adminPw){ cloudAdminPw=d.adminPw; localStorage.setItem('mk_admin_pw',d.adminPw); }
     render();
     setTimeout(()=>{isSyncingFromCloud=false;},500);
   });
@@ -315,7 +324,7 @@ function filterSwitchSchools(){
   document.getElementById('switchSchoolSelect').innerHTML='<option value="">🌍 ALL SCHOOLS (Admin View)</option>'+list.slice(0,100).map(s=>`<option value="${s.emis}">${s.emis} - ${s.name}</option>`).join('');
 }
 function cleanDuplicates(){let seen=new Set();let cleaned=[];let removed=0;schools.forEach(s=>{let e=normEmis(s.emis);if(e&&seen.has(e)){removed++;return;}if(e)seen.add(e);cleaned.push(s);});schools=cleaned;save();alert('🧹 Cleaned! Removed '+removed+' duplicate EMIS! Total: '+schools.length);}
-function getPw(k){return localStorage.getItem(k)||'';}
+function getPw(k){ if(k==='mk_admin_pw') return getAdminPw(); return localStorage.getItem(k)||''; }
 function setRole(r,emis){currentRole=r;currentSchoolEmis=emis||'';localStorage.setItem('mk_role',r);localStorage.setItem('mk_school',emis||'');updateRoleUI();render();}
 function fillSchoolDropdowns(){
   let opts='<option value="">-- Select School --</option>'+schools.map(s=>`<option value="${s.emis}">${s.emis} - ${s.name}</option>`).join('');
@@ -335,11 +344,11 @@ document.getElementById('currentSchoolLabel').innerText=schoolLabel;
 let label=currentRole==='admin'?'👑 ADMINISTRATOR':currentRole==='principal'?'🎓 PRINCIPAL':currentRole==='librarian'?'📚 LIBRARIAN':'👤 NOT LOGGED IN';
 document.getElementById('whoIs').innerText=label+(school?' - '+school.name:'');
 document.getElementById('adminStatus').innerText=currentRole==='admin'?'👑 ADMIN UNLOCKED':'🔒 ADMIN LOCKED';
-document.getElementById('adminWelcome').innerText=currentRole==='admin'?'✅ LOGGED IN AS ADMIN — FULL CONTROL - PROTECTED':currentRole?('✅ LOGGED IN AS '+currentRole.toUpperCase()+' - '+schoolLabel+' - PROTECTED'):'🔒 ADMIN LOCKED - PROTECTED';
+document.getElementById('adminWelcome').innerText=currentRole==='admin'?'✅ LOGGED IN AS ADMIN — FIREBASE LOGIN - PROTECTED':currentRole?('✅ LOGGED IN AS '+currentRole.toUpperCase()+' - '+schoolLabel+' - FIREBASE LOGIN'):'🔒 ADMIN LOCKED - FIREBASE LOGIN';
 let showAdmin=currentRole==='admin';
 document.getElementById('adminLock').style.display=showAdmin?'none':'block';
 document.getElementById('adminContent').style.display=showAdmin?'block':'none';
-document.getElementById('firstTimeBox').style.display=!getPw('mk_admin_pw')?'block':'none';
+document.getElementById('firstTimeBox').style.display=!getAdminPw()?'block':'none';
 document.getElementById('schoolSwitch').style.display=showAdmin?'block':'none';
 let showPrin=(currentRole==='principal'||currentRole==='admin');
 document.getElementById('principalLock').style.display=showPrin?'none':'block';
@@ -354,55 +363,58 @@ if(Date.now()<lockUntil){document.getElementById('loginMsg').innerHTML='🔒 LOC
 let role=document.getElementById('loginRole').value;
 let typed=document.getElementById('loginPass').value;
 let schoolEmis=document.getElementById('loginSchool').value;
+if(!typed){document.getElementById('loginMsg').innerHTML='❌ Type Your Password!';return;}
+if(!cloudReady){document.getElementById('loginMsg').innerHTML='☁️ Still connecting to Firebase... Wait 3 seconds & try again!';return;}
 if(role==='admin'){
-  if(!getPw('mk_admin_pw')){document.getElementById('loginMsg').innerHTML='👑 No Admin Password yet! Go to 👑 ADMIN tab → Create Admin Password!';show('admin');return;}
-  if(!checkPw(getPw('mk_admin_pw'),typed)){loginFails++;if(loginFails>=3){lockUntil=Date.now()+60000;loginFails=0;document.getElementById('loginMsg').innerHTML='🔒 LOCKED 1 MIN - Too many wrong tries!';return;}document.getElementById('loginMsg').innerHTML='❌ WRONG Admin Password! Try '+(3-loginFails)+' left!';return;}
-  loginFails=0;setRole('admin','');document.getElementById('loginMsg').innerHTML='✅ WELCOME ADMINISTRATOR! Protected Login!';return;
+  if(!getAdminPw()){document.getElementById('loginMsg').innerHTML='👑 No Admin Password yet in Firebase! Go to 👑 ADMIN tab → Create Admin Password!';show('admin');return;}
+  if(!checkPw(getAdminPw(),typed)){loginFails++;if(loginFails>=3){lockUntil=Date.now()+60000;loginFails=0;document.getElementById('loginMsg').innerHTML='🔒 LOCKED 1 MIN - Too many wrong tries!';return;}document.getElementById('loginMsg').innerHTML='❌ WRONG Admin Password! (Firebase) Try '+(3-loginFails)+' left!';return;}
+  loginFails=0;setRole('admin','');document.getElementById('loginMsg').innerHTML='✅ WELCOME ADMINISTRATOR! ☁️ Firebase Login Success - Works on ALL Phones!';return;
 }
 if(!schoolEmis){document.getElementById('loginMsg').innerHTML='❌ Select YOUR School first!';return;}
 let sc=schools.find(s=>normEmis(s.emis)===normEmis(schoolEmis));
-if(!sc){document.getElementById('loginMsg').innerHTML='❌ School not found!';return;}
+if(!sc){document.getElementById('loginMsg').innerHTML='❌ School not found! Check Firebase sync - Wait 3 sec & try again!';return;}
 let correct=role==='principal'?sc.principalPw:sc.librarianPw;
-if(!correct){document.getElementById('loginMsg').innerHTML='❌ No password set for '+role.toUpperCase()+' at '+sc.name+' yet! Ask Admin / Principal!';return;}
-if(!checkPw(correct,typed)){loginFails++;if(loginFails>=3){lockUntil=Date.now()+60000;loginFails=0;document.getElementById('loginMsg').innerHTML='🔒 LOCKED 1 MIN - Too many wrong tries!';return;}document.getElementById('loginMsg').innerHTML='❌ WRONG PASSWORD for '+role.toUpperCase()+' at '+sc.name+'! Try '+(3-loginFails)+' left!';return;}
-loginFails=0;setRole(role,schoolEmis);document.getElementById('loginMsg').innerHTML='✅ WELCOME '+role.toUpperCase()+' of '+sc.name+'! Protected - You see ONLY '+sc.name+'!';document.getElementById('loginPass').value='';
+if(!correct){document.getElementById('loginMsg').innerHTML='❌ No password set for '+role.toUpperCase()+' at '+sc.name+' yet in Firebase! Ask Admin / Principal!';return;}
+if(!checkPw(correct,typed)){loginFails++;if(loginFails>=3){lockUntil=Date.now()+60000;loginFails=0;document.getElementById('loginMsg').innerHTML='🔒 LOCKED 1 MIN - Too many wrong tries!';return;}document.getElementById('loginMsg').innerHTML='❌ WRONG PASSWORD for '+role.toUpperCase()+' at '+sc.name+'! (Firebase) Try '+(3-loginFails)+' left!';return;}
+loginFails=0;setRole(role,schoolEmis);document.getElementById('loginMsg').innerHTML='✅ WELCOME '+role.toUpperCase()+' of '+sc.name+'! ☁️ Firebase Login - You see ONLY '+sc.name+'!';document.getElementById('loginPass').value='';
 }
-function doLogout(){currentRole='';currentSchoolEmis='';localStorage.removeItem('mk_role');localStorage.removeItem('mk_school');updateRoleUI();render();document.getElementById('loginMsg').innerHTML='🔒 Logged Out All - Protected!';}
-function createAdminPassword(){let p1=document.getElementById('newAdminPass').value;let p2=document.getElementById('newAdminPass2').value;if(!p1||p1.length<4){alert('Password must be 4+ characters');return;}if(p1!==p2){alert('Passwords do NOT match!');return;}localStorage.setItem('mk_admin_pw',hashPw(p1));setRole('admin','');alert('✅ ADMIN PASSWORD SAVED - HIDDEN & PROTECTED! Write it down!');}
-function changeAdminPassword(){if(currentRole!=='admin'){alert('Only Admin!');return;}let oldP=document.getElementById('oldPass').value;if(!checkPw(getPw('mk_admin_pw'),oldP)){document.getElementById('changeMsg').innerHTML='<b style=color:red>❌ Old Wrong!</b>';return;}let n1=document.getElementById('changePass1').value;let n2=document.getElementById('changePass2').value;if(!n1||n1.length<4){document.getElementById('changeMsg').innerHTML='<b style=color:red>New must be 4+</b>';return;}if(n1!==n2){document.getElementById('changeMsg').innerHTML='<b style=color:red>Do NOT match!</b>';return;}localStorage.setItem('mk_admin_pw',hashPw(n1));document.getElementById('changeMsg').innerHTML='✅ Admin Password Changed - HIDDEN & PROTECTED! Write it down!';}
+function doLogout(){currentRole='';currentSchoolEmis='';localStorage.removeItem('mk_role');localStorage.removeItem('mk_school');auth.signOut().catch(()=>{});updateRoleUI();render();document.getElementById('loginMsg').innerHTML='🔒 Logged Out All - Firebase Login Protected!';}
+function createAdminPassword(){let p1=document.getElementById('newAdminPass').value;let p2=document.getElementById('newAdminPass2').value;if(!p1||p1.length<4){alert('Password must be 4+ characters');return;}if(p1!==p2){alert('Passwords do NOT match!');return;}setAdminPw(hashPw(p1));save();setRole('admin','');alert('✅ ADMIN PASSWORD SAVED IN FIREBASE CLOUD! ✅ Now you can login on ANY phone with this password! Write it down!');}
+function changeAdminPassword(){if(currentRole!=='admin'){alert('Only Admin!');return;}let oldP=document.getElementById('oldPass').value;if(!checkPw(getAdminPw(),oldP)){document.getElementById('changeMsg').innerHTML='<b style=color:red>❌ Old Wrong!</b>';return;}let n1=document.getElementById('changePass1').value;let n2=document.getElementById('changePass2').value;if(!n1||n1.length<4){document.getElementById('changeMsg').innerHTML='<b style=color:red>New must be 4+</b>';return;}if(n1!==n2){document.getElementById('changeMsg').innerHTML='<b style=color:red>Do NOT match!</b>';return;}setAdminPw(hashPw(n1));save();document.getElementById('changeMsg').innerHTML='✅ Admin Password Changed in FIREBASE! Works on ALL phones now! Write it down!';}
 function createPrincipalPassword(){
   if(currentRole!=='admin'){alert('Only Administrator!');return;}
   let emis=selectedPrinEmis||document.getElementById('adminPrinSchool').value;
   let sc=schools.find(s=>normEmis(s.emis)===normEmis(emis));
   if(!sc){alert('🔍 Search School first!');return;}
   let p1=document.getElementById('newPrinPass').value;let p2=document.getElementById('newPrinPass2').value;if(!p1||p1.length<4){alert('4+ characters');return;}if(p1!==p2){alert('Do NOT match!');return;}
-  sc.principalPw=hashPw(p1);save();document.getElementById('prinPassMsg').innerHTML='✅ <b>Principal Password for '+sc.name+' SAVED - HIDDEN 🔒 - Write it down & Give to THAT Principal ONLY! Password is: '+p1+' (Shown ONCE - Copy now!)</b>';updateRoleUI();
+  sc.principalPw=hashPw(p1);save();document.getElementById('prinPassMsg').innerHTML='✅ <b>Principal Password for '+sc.name+' SAVED IN FIREBASE ☁️ - Principal can login on ANY phone! Password is: '+p1+' (Shown ONCE - Copy now!)</b>';updateRoleUI();
 }
 function createLibrarianPassword(){
   if(!(currentRole==='principal'||currentRole==='admin')){alert('Only Principal or Admin!');return;}
   let emis=currentRole==='principal'?currentSchoolEmis:(selectedLibEmis||document.getElementById('adminLibSchool').value);
   let sc=schools.find(s=>normEmis(s.emis)===normEmis(emis));if(!sc){alert('School not found!');return;}
   let p1=document.getElementById('newLibPass').value;let p2=document.getElementById('newLibPass2').value;if(!p1||p1.length<4){alert('4+ characters');return;}if(p1!==p2){alert('Do NOT match!');return;}
-  sc.librarianPw=hashPw(p1);save();document.getElementById('libPassMsg').innerHTML='✅ <b>Librarian Password for '+sc.name+' SAVED - HIDDEN 🔒 - Password is: '+p1+' (Shown ONCE - Copy now!)</b>';updateRoleUI();
+  sc.librarianPw=hashPw(p1);save();document.getElementById('libPassMsg').innerHTML='✅ <b>Librarian Password for '+sc.name+' SAVED IN FIREBASE ☁️ - Password is: '+p1+' (Shown ONCE - Copy now!)</b>';updateRoleUI();
 }
 function createLibrarianPasswordAdmin(){
   if(currentRole!=='admin'){alert('Only Admin!');return;}
   let emis=selectedLibEmis||document.getElementById('adminLibSchool').value;let sc=schools.find(s=>normEmis(s.emis)===normEmis(emis));if(!sc){alert('🔍 Search School first → Tap to select!');return;}
   let p1=document.getElementById('newLibPassAdmin').value;let p2=document.getElementById('newLibPassAdmin2').value;if(!p1||p1.length<4){alert('4+');return;}if(p1!==p2){alert('Do NOT match!');return;}
-  sc.librarianPw=hashPw(p1);save();document.getElementById('libPassMsg2').innerHTML='✅ Librarian Password for '+sc.name+' SAVED - HIDDEN 🔒 - Password is: '+p1+' (Shown ONCE!)';updateRoleUI();
+  sc.librarianPw=hashPw(p1);save();document.getElementById('libPassMsg2').innerHTML='✅ Librarian Password for '+sc.name+' SAVED IN FIREBASE ☁️ - Password is: '+p1+' (Shown ONCE!)';updateRoleUI();
 }
 function save(){
   localStorage.setItem('mk_learners',JSON.stringify(learners));
   localStorage.setItem('mk_books',JSON.stringify(books));
   localStorage.setItem('mk_loans',JSON.stringify(loans));
   localStorage.setItem('mk_schools',JSON.stringify(schools));
+  localStorage.setItem('mk_admin_pw',getAdminPw());
   pushToCloud();
   render();
 }
 function show(p){document.querySelectorAll('.page').forEach(e=>e.classList.remove('active'));document.querySelectorAll('nav button').forEach(e=>e.classList.remove('active'));document.getElementById(p).classList.add('active');document.getElementById('b-'+p).classList.add('active');render();}
 function getDueDate(){let now=new Date();let year=now.getFullYear();let due=new Date(year,10,30);if(now>due){due=new Date(year+1,10,30);}return due;}
 function startScan(target){let map={'retBook':'reader2','quickScan':'reader-home','scanLearner':'reader','scanBook':'reader-issue2'};let boxId=map[target]||'reader';let box=document.getElementById(boxId);box.style.display='block';if(scanner){try{scanner.clear()}catch(e){}}scanner=new Html5Qrcode(boxId);scanner.start({facingMode:"environment"},{fps:10,qrbox:{width:250,height:150}},(txt)=>{document.getElementById(target).value=txt;scanner.stop().then(()=>{scanner.clear();box.style.display='none';});alert('✅ Scanned! '+txt);if(target==='quickScan')quickScan();},(err)=>{});}
-function needLogin(){if(!currentRole){alert('🔐 Please LOGIN first on HOME! Select School + Role + Password');show('home');return true;}if((currentRole==='principal'||currentRole==='librarian')&&!currentSchoolEmis){alert('🔐 Select YOUR School first!');show('home');return true;}return false;}
+function needLogin(){if(!currentRole){alert('🔐 Please FIREBASE LOGIN first on HOME! Select School + Role + Password');show('home');return true;}if((currentRole==='principal'||currentRole==='librarian')&&!currentSchoolEmis){alert('🔐 Select YOUR School first!');show('home');return true;}return false;}
 function addLearner(){if(needLogin())return;let n=document.getElementById('lName').value.trim();let g=document.getElementById('lGrade').value.trim();if(!n||!g){alert('Type Name + Grade');return;}let school=getCurrentSchool();let schoolName=school?school.name:'Your School';let no='L-'+String(learners.length+1).padStart(4,'0');learners.push({no,name:n,grade:g,school:schoolName,schoolEmis:currentSchoolEmis||(school?school.emis:'')});save();document.getElementById('lName').value='';document.getElementById('lGrade').value='';alert('Done! '+n+' = '+no+' in '+schoolName);printOneCard(learners[learners.length-1]);}
 function addBook(){
   if(needLogin())return;
