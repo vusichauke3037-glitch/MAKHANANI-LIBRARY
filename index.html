@@ -49,7 +49,7 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 <p>📚 POWERED BY XINTIMANI GROUP | FOR ALL SCHOOLS</p>
 <p style="font-size:11px;color:#0f766e">Building Solutions. Empowering Communities.</p>
 </header>
-<div class="protectBar">🔒 FIREBASE LOGIN • CAPS • GRADE LOCK • BARCODE • NO DUPLICATE • AUTO-LOCK 30 MIN</div>
+<div class="protectBar">🔒 FIREBASE LOGIN • CAPS • GRADE LOCK • EDUCATOR SUBJECT LOCK • TRACKING • PRINT HISTORY • AUTO-LOCK 30 MIN</div>
 <div class="topbar">🏫 <span id="currentSchoolLabel">NO SCHOOL SELECTED</span> | <span id="whoIs">👤 NOT LOGGED IN</span> | <span id="adminStatus">🔒 ADMIN LOCKED</span> | ☁️ FIREBASE | 📅 30 NOV</div>
 <div style="max-width:900px;margin:auto;padding:0 12px">
 <div class="card rolebox">
@@ -57,9 +57,10 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 <p style="font-size:13px;font-weight:900;color:#0ea5e9">☁️ Login works on ANY phone - Passwords in Firebase Cloud!</p>
 <label>🔍 SEARCH YOUR SCHOOL (Type Name or EMIS):</label>
 <input id="loginSchoolSearch" placeholder="🔍 Type e.g. BENONI / DURBAN / 700400111..." oninput="filterLoginSchools()">
-<select id="loginSchool"><option value="">-- Select School --</option></select>
+<select id="loginSchool" onchange="toggleEducatorLogin()"><option value="">-- Select School --</option></select>
 <label>👤 YOUR ROLE:</label>
-<select id="loginRole"><option value="admin">👑 ADMINISTRATOR - Sees ALL Schools</option><option value="principal">🎓 PRINCIPAL - Sees ONLY My School</option><option value="librarian">📚 LIBRARIAN - Sees ONLY My School</option></select>
+<select id="loginRole" onchange="toggleEducatorLogin()"><option value="admin">👑 ADMINISTRATOR - Sees ALL Schools</option><option value="principal">🎓 PRINCIPAL - Sees ONLY My School</option><option value="librarian">📚 LIBRARIAN - Sees ONLY My School</option><option value="educator">👩‍🏫 EDUCATOR - Issue ONLY My Subject / Return ANY Book</option></select>
+<div id="educatorLoginBox" style="display:none"><label>👩‍🏫 SELECT YOUR NAME:</label><select id="loginEducator"></select></div>
 <input type="password" id="loginPass" placeholder="🔑 Type Your Password..." autocomplete="off">
 <button class="big green" onclick="doLogin()">🔓 FIREBASE LOGIN</button>
 <button class="big red" onclick="doLogout()">🔒 LOGOUT ALL</button>
@@ -87,12 +88,12 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 <div class="stat"><b id="sLearners">0</b><br>👧 LEARNERS (My School)</div>
 <div class="stat"><b id="sOut">0</b><br>📚 BORROWED (My School)</div>
 </div>
-<div class="card"><div class="greenbox">WELCOME TO MAKHANANI DIGITAL LIBRARY! 💚 EVER HAPPY!<br>🔒 FIREBASE LOGIN - WORKS ON ALL PHONES!<br>📚 CAPS SUBJECTS - Dropdown + CAPS Code on Sticker!<br>🎓 GRADE LOCK - Wrong Grade Blocked!<br>🖨️ BARCODE PRINT - Learners + Books!<br>📦 QUANTITY - IN STORE / AVAILABLE / ISSUED<br>🚫 NO DUPLICATE BOOK NUMBER - MAX + 1!<br>📅 RETURN BY 30 NOV EVERY YEAR!</div><p>👑 Admin → Creates Principal Password (Firebase)<br>🎓 Principal → Creates Librarian Password (Firebase)<br>📚 Librarian → Scan Learner + Scan Book → Issue in 5 sec!</p></div>
+<div class="card"><div class="greenbox">WELCOME TO MAKHANANI DIGITAL LIBRARY! 💚 EVER HAPPY!<br>🔒 FIREBASE LOGIN - WORKS ON ALL PHONES!<br>📚 CAPS SUBJECTS - Dropdown + CAPS Code on Sticker!<br>🎓 GRADE LOCK - Wrong Grade Blocked!<br>👩‍🏫 EDUCATOR LOCK - Issue ONLY My Subject / Return ANY!<br>🔍 PRINCIPAL TRACKING - Who Issued / Who Retrieved / Date / Condition<br>🖨️ PRINT HISTORY BY EVERYONE!<br>📦 QUANTITY - IN STORE / AVAILABLE / ISSUED<br>🚫 NO DUPLICATE BOOK NUMBER - MAX + 1!<br>📅 RETURN BY 30 NOV EVERY YEAR!</div><p>👑 Admin → Creates Principal Password (Firebase)<br>🎓 Principal → Creates Librarian + Adds Educators<br>👩‍🏫 Educator → Issue ONLY My Subject, Return ANY<br>📚 Librarian → Scan Learner + Scan Book → Issue in 5 sec!</p></div>
 <div class="card"><h3>🔍 Quick Scan</h3><input id="quickScan" placeholder="Scan Learner OR Book..."><button class="big yellow" onclick="startScan('quickScan')">📷 SCAN WITH CAMERA</button><div id="reader-home"></div><button class="big" onclick="quickScan()">GO →</button><div id="quickResult"></div></div>
 </div>
 <div id="issue" class="page">
 <div class="schoolbar" id="issueSchoolBar"></div>
-<div class="card"><h3>📤 ISSUE BOOK - RETURN 30 NOV - 🎓 GRADE LOCK ON</h3>
+<div class="card"><h3>📤 ISSUE BOOK - RETURN 30 NOV - 🎓 GRADE LOCK + 👩‍🏫 SUBJECT LOCK ON</h3>
 <input id="scanLearner" placeholder="Learner No e.g. L-0001">
 <button class="big yellow" onclick="startScan('scanLearner')">📷 SCAN LEARNER CARD</button>
 <div id="reader"></div>
@@ -104,8 +105,15 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 </div>
 <div id="return" class="page">
 <div class="schoolbar" id="returnSchoolBar"></div>
-<div class="card"><h3>📥 RETURN BOOK</h3>
+<div class="card"><h3>📥 RETURN BOOK - ANY Book Can Be Retrieved By Anyone</h3>
 <input id="retBook" placeholder="Scan Book Code">
+<label>📖 BOOK CONDITION WHEN RETURNED:</label>
+<select id="retCondition">
+<option value="Good ✅">Good ✅ - Clean, Like New</option>
+<option value="Damaged ⚠️">Damaged ⚠️ - Cover / Pages Damaged</option>
+<option value="Torn 📄">Torn 📄 - Pages Torn</option>
+<option value="Lost ❌">Lost ❌ - Learner Lost Book / Must Pay</option>
+</select>
 <button class="big yellow" onclick="startScan('retBook')">📷 SCAN BOOK TO RETURN</button>
 <div id="reader2"></div>
 <button class="big green" onclick="returnBook()">📥 RETURN BOOK</button><div id="retMsg"></div></div>
@@ -184,7 +192,44 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 <div class="card"><h3>🎓 PRINCIPAL DASHBOARD - MY SCHOOL ONLY - 🔒 FIREBASE LOGIN</h3>
 <div class="stats"><div class="stat"><b id="pLearners">0</b><br>Learners</div><div class="stat"><b id="pBooks">0</b><br>Books In Store</div><div class="stat"><b id="pOut">0</b><br>Borrowed</div><div class="stat"><b id="pOver">0</b><br>Overdue</div></div>
 <button class="big" onclick="render();alert('Report Refreshed!')">🔄 REFRESH REPORT</button>
+<hr>
+<label>🖨️ PRINT HISTORY BY EVERYONE - Pick Person:</label>
+<select id="printHistoryPerson"><option value="ALL">🌍 ALL - Everyone in My School</option></select>
+<button class="big yellow" onclick="printHistoryByPerson()">🖨️ PRINT HISTORY FOR SELECTED PERSON</button>
+<button class="big" onclick="printAllHistory()">🖨️ PRINT FULL HISTORY (ALL - My School)</button>
+<button class="big green" onclick="printDamagedHistory()">🖨️ PRINT DAMAGED / LOST ONLY (For Charging)</button>
+<p style="font-size:12px;font-weight:900">💡 Printed report shows: Who Issued, Who Retrieved, Dates, Condition, Learner, Book, CAPS, Grade</p>
 <div id="principalList"></div></div>
+<div class="card" style="border:3px solid #16a34a"><h3>👩‍🏫 PRINCIPAL - ADD EDUCATORS - MY SCHOOL ONLY</h3>
+<p style="font-size:13px;font-weight:900">🎓 Principal ONLY - Add teachers for YOUR school. Educators issue ONLY their subject, return ANY book.</p>
+<input id="eName" placeholder="👩‍🏫 Educator Full Name e.g. Mrs Dlamini">
+<label>📚 CAPS Subject This Educator Teaches:</label>
+<select id="eSubject">
+<option value="ENG HL">ENG HL - English Home Language</option>
+<option value="ENG FAL">ENG FAL - English First Additional Language</option>
+<option value="MATH">MATH - Mathematics</option>
+<option value="MLIT">MLIT - Mathematical Literacy</option>
+<option value="LO">LO - Life Orientation</option>
+<option value="NS">NS - Natural Sciences</option>
+<option value="SS">SS - Social Sciences</option>
+<option value="EMS">EMS - Economic & Management Sciences</option>
+<option value="ACC">ACC - Accounting</option>
+<option value="BS">BS - Business Studies</option>
+<option value="ECON">ECON - Economics</option>
+<option value="PHYS">PHYS - Physical Sciences</option>
+<option value="LS">LS - Life Sciences</option>
+<option value="GEO">GEO - Geography</option>
+<option value="HIST">HIST - History</option>
+<option value="CAT">CAT - Computer Applications Technology</option>
+<option value="IT">IT - Information Technology</option>
+<option value="ALL">ALL - All Subjects / HOD / Deputy</option>
+</select>
+<input id="ePhone" placeholder="📱 Phone (Optional) e.g. 082 123 4567">
+<input type="password" id="ePass" placeholder="🔑 Create Educator Login Password e.g. 1234" autocomplete="off">
+<p style="font-size:12px">💡 Give this password to THAT educator ONLY - She will login as EDUCATOR with it!</p>
+<button class="big green" onclick="addEducator()">➕ ADD EDUCATOR TO MY SCHOOL</button>
+<div id="educatorList"></div>
+</div>
 <div class="card"><h3>📚 PRINCIPAL CREATES LIBRARIAN PASSWORD - FOR MY SCHOOL - ☁️ SAVED IN FIREBASE</h3>
 <p>School: <b id="prinSchoolName"></b><br>Current Librarian Password: <b id="showLibPass">Not Set Yet</b> <small>(Hidden - Saved in Firebase Cloud)</small></p>
 <input type="password" id="newLibPass" placeholder="🆕 Create Librarian Password" autocomplete="off">
@@ -235,10 +280,10 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 </div>
 <div style="text-align:center;padding:12px;background:#fff;margin-top:10px">
 <img src="logo.png" alt="XINTIMANI GROUP" class="footerLogo" onerror="this.style.display='none'">
-<p style="font-size:12px;color:#0a1a4d;font-weight:900">MAKHANANI DIGITAL LIBRARY<br><span style="color:#0f766e">Powered by Xintimani Group - Building Solutions. Empowering Communities.</span><br>🔒 FIREBASE LOGIN • CAPS • GRADE LOCK • BARCODE • NO DUPLICATE • © 2026 Xintimani Group</p>
+<p style="font-size:12px;color:#0a1a4d;font-weight:900">MAKHANANI DIGITAL LIBRARY<br><span style="color:#0f766e">Powered by Xintimani Group - Building Solutions. Empowering Communities.</span><br>🔒 FIREBASE LOGIN • CAPS • GRADE LOCK • EDUCATOR LOCK • TRACKING • PRINT HISTORY • © 2026 Xintimani Group</p>
 </div>
 <script>
-// === FIREBASE - MAKHANANI CLOUD + FIREBASE LOGIN ===
+// === FIREBASE ===
 const firebaseConfig = {
   apiKey: "AIzaSyDAVEvpVbVsIplT4KeMevEzOg-5WE_Q0VM",
   authDomain: "makhanani-digital-library.firebaseapp.com",
@@ -261,7 +306,7 @@ function getGradeNum(g){ let m=String(g||'').match(/\d+/); return m?m[0]:''; }
 function getNextBookCode(){ let max=0; books.forEach(x=>{ let m=String(x.code||'').match(/(\d+)/); if(m){ let n=parseInt(m[1]); if(n>max) max=n; } }); return 'BK-'+String(max+1).padStart(3,'0'); }
 function pushToCloud(){
   if(!cloudReady || isSyncingFromCloud) return;
-  db.ref('makhanani').set({learners:learners,books:books,loans:loans,schools:schools,adminPw:cloudAdminPw,updated:new Date().toISOString()}).catch(e=>{console.log('Cloud save error',e);});
+  db.ref('makhanani').set({learners:learners,books:books,loans:loans,schools:schools,educators:educators,adminPw:cloudAdminPw,updated:new Date().toISOString()}).catch(e=>{console.log('Cloud save error',e);});
 }
 function pullFromCloud(){
   db.ref('makhanani').once('value').then(snap=>{
@@ -271,12 +316,14 @@ function pullFromCloud(){
       if(d.books) books=d.books;
       if(d.loans) loans=d.loans;
       if(d.schools) schools=d.schools;
+      if(d.educators) educators=d.educators;
       if(d.adminPw){ cloudAdminPw=d.adminPw; localStorage.setItem('mk_admin_pw',d.adminPw); }
       books.forEach(b=>{if(b.totalQty===undefined){b.totalQty=1;b.availableQty=1;b.issuedQty=0;} if(!b.grade) b.grade='ALL'; if(!b.cat) b.cat='OTHER';});
       localStorage.setItem('mk_learners',JSON.stringify(learners));
       localStorage.setItem('mk_books',JSON.stringify(books));
       localStorage.setItem('mk_loans',JSON.stringify(loans));
       localStorage.setItem('mk_schools',JSON.stringify(schools));
+      localStorage.setItem('mk_educators',JSON.stringify(educators));
       render();
     }
     cloudReady=true;
@@ -292,7 +339,7 @@ function pullFromCloud(){
     if(!cloudReady) return;
     let d=snap.val(); if(!d) return;
     isSyncingFromCloud=true;
-    learners=d.learners||learners; books=d.books||books; loans=d.loans||loans; schools=d.schools||schools;
+    learners=d.learners||learners; books=d.books||books; loans=d.loans||loans; schools=d.schools||schools; educators=d.educators||educators;
     if(d.adminPw){ cloudAdminPw=d.adminPw; localStorage.setItem('mk_admin_pw',d.adminPw); }
     render();
     setTimeout(()=>{isSyncingFromCloud=false;},500);
@@ -307,11 +354,14 @@ let learners=JSON.parse(localStorage.getItem('mk_learners')||'[]');
 let books=JSON.parse(localStorage.getItem('mk_books')||'[]');
 let loans=JSON.parse(localStorage.getItem('mk_loans')||'[]');
 let schools=JSON.parse(localStorage.getItem('mk_schools')||'[]');
+let educators=JSON.parse(localStorage.getItem('mk_educators')||'[]');
 books.forEach(b=>{if(b.totalQty===undefined){b.totalQty=1;b.availableQty=1;b.issuedQty=0;} if(!b.grade) b.grade='ALL'; if(!b.cat) b.cat='OTHER';});
 let pendingSchools=[];let scanner=null;
 let currentRole=localStorage.getItem('mk_role')||'';
 let currentSchoolEmis=localStorage.getItem('mk_school')||'';
+let currentEducatorId=localStorage.getItem('mk_educator')||'';
 let selectedPrinEmis='';let selectedLibEmis='';
+let principalFilter='all';
 function normEmis(s){return String(s||'').trim();}
 function findDuplicateEmis(emis,list){let e=normEmis(emis);if(!e) return null;return (list||schools).find(x=>normEmis(x.emis)===e);}
 function getCurrentSchool(){return schools.find(s=>normEmis(s.emis)===normEmis(currentSchoolEmis))||null;}
@@ -320,6 +370,17 @@ function checkPw(stored,typed){if(!stored) return false;if(stored===hashPw(typed
 function myLearners(){if(currentRole==='admin'&&!currentSchoolEmis) return learners;if(!currentSchoolEmis) return [];return learners.filter(x=>normEmis(x.schoolEmis)===normEmis(currentSchoolEmis) || (!x.schoolEmis && normEmis(x.school)===normEmis(getSchoolName(currentSchoolEmis))) );}
 function myBooks(){if(currentRole==='admin'&&!currentSchoolEmis) return books;if(!currentSchoolEmis) return [];return books.filter(x=>normEmis(x.schoolEmis)===normEmis(currentSchoolEmis));}
 function myLoans(){if(currentRole==='admin'&&!currentSchoolEmis) return loans;if(!currentSchoolEmis) return [];return loans.filter(x=>normEmis(x.schoolEmis)===normEmis(currentSchoolEmis));}
+function myEducators(){if(currentRole==='admin'&&!currentSchoolEmis) return educators;if(!currentSchoolEmis) return [];return educators.filter(x=>normEmis(x.schoolEmis)===normEmis(currentSchoolEmis));}
+function getCurrentEducator(){ return educators.find(x=>x.id===currentEducatorId) || null; }
+function toggleEducatorLogin(){
+  let role=document.getElementById('loginRole').value;
+  let box=document.getElementById('educatorLoginBox');
+  if(role!=='educator'){ box.style.display='none'; return; }
+  let emis=document.getElementById('loginSchool').value;
+  let list=educators.filter(x=>normEmis(x.schoolEmis)===normEmis(emis));
+  box.style.display='block';
+  document.getElementById('loginEducator').innerHTML=list.length?list.map(e=>`<option value="${e.id}">${e.name} - ${e.subject}</option>`).join(''):'<option value="">No educators yet - Principal must add first!</option>';
+}
 function searchSchoolForPrincipal(){
   let q=(document.getElementById('adminPrinSearch').value||'').toLowerCase().trim();
   let box=document.getElementById('adminPrinSearchResults');
@@ -358,6 +419,7 @@ function filterLoginSchools(){
   let q=(document.getElementById('loginSchoolSearch').value||'').toLowerCase().trim();
   let list=q?schools.filter(s=>s.name.toLowerCase().includes(q)||String(s.emis).includes(q)):schools;
   document.getElementById('loginSchool').innerHTML='<option value="">-- Select School ('+list.length+' found) --</option>'+list.slice(0,100).map(s=>`<option value="${s.emis}">${s.emis} - ${s.name}</option>`).join('');
+  toggleEducatorLogin();
 }
 function filterSwitchSchools(){
   let q=(document.getElementById('switchSchoolSearch').value||'').toLowerCase().trim();
@@ -397,7 +459,8 @@ function updateRoleUI(){
 let school=getCurrentSchool();
 let schoolLabel=currentRole==='admin'?(currentSchoolEmis?'🏫 '+school.name+' (Admin Viewing)':'🌍 ALL SCHOOLS (Admin)'):school?('🏫 '+school.name):'NO SCHOOL SELECTED';
 document.getElementById('currentSchoolLabel').innerText=schoolLabel;
-let label=currentRole==='admin'?'👑 ADMINISTRATOR':currentRole==='principal'?'🎓 PRINCIPAL':currentRole==='librarian'?'📚 LIBRARIAN':'👤 NOT LOGGED IN';
+let edu=getCurrentEducator();
+let label=currentRole==='admin'?'👑 ADMINISTRATOR':currentRole==='principal'?'🎓 PRINCIPAL':currentRole==='librarian'?'📚 LIBRARIAN':currentRole==='educator'?'👩‍🏫 EDUCATOR - '+(edu?edu.name+' ('+edu.subject+')':''):'👤 NOT LOGGED IN';
 document.getElementById('whoIs').innerText=label+(school?' - '+school.name:'');
 document.getElementById('adminStatus').innerText=currentRole==='admin'?'👑 ADMIN UNLOCKED':'🔒 ADMIN LOCKED';
 document.getElementById('adminWelcome').innerText=currentRole==='admin'?'✅ LOGGED IN AS ADMIN — FIREBASE LOGIN - PROTECTED':currentRole?('✅ LOGGED IN AS '+currentRole.toUpperCase()+' - '+schoolLabel+' - FIREBASE LOGIN'):'🔒 ADMIN LOCKED - FIREBASE LOGIN';
@@ -427,6 +490,17 @@ if(role==='admin'){
   loginFails=0;setRole('admin','');document.getElementById('loginMsg').innerHTML='✅ WELCOME ADMINISTRATOR! ☁️ Firebase Login Success!';return;
 }
 if(!schoolEmis){document.getElementById('loginMsg').innerHTML='❌ Select YOUR School first!';return;}
+if(role==='educator'){
+  let eduId=document.getElementById('loginEducator').value;
+  let edu=educators.find(x=>x.id===eduId && normEmis(x.schoolEmis)===normEmis(schoolEmis));
+  if(!edu){ document.getElementById('loginMsg').innerHTML='❌ Select YOUR Name! Principal must add you first!'; return; }
+  if(!checkPw(edu.pw,typed)){ document.getElementById('loginMsg').innerHTML='❌ WRONG Educator Password for '+edu.name+'!'; return; }
+  currentEducatorId=edu.id; localStorage.setItem('mk_educator',edu.id);
+  setRole('educator',schoolEmis);
+  document.getElementById('loginMsg').innerHTML='✅ WELCOME '+edu.name+'! 👩‍🏫 Subject: '+edu.subject+' - You can ISSUE ONLY '+edu.subject+' books, but RETURN ANY book!';
+  document.getElementById('loginPass').value='';
+  return;
+}
 let sc=schools.find(s=>normEmis(s.emis)===normEmis(schoolEmis));
 if(!sc){document.getElementById('loginMsg').innerHTML='❌ School not found! Wait 3 sec & try again!';return;}
 let correct=role==='principal'?sc.principalPw:sc.librarianPw;
@@ -434,7 +508,7 @@ if(!correct){document.getElementById('loginMsg').innerHTML='❌ No password set 
 if(!checkPw(correct,typed)){loginFails++;if(loginFails>=3){lockUntil=Date.now()+60000;loginFails=0;document.getElementById('loginMsg').innerHTML='🔒 LOCKED 1 MIN - Too many wrong tries!';return;}document.getElementById('loginMsg').innerHTML='❌ WRONG PASSWORD for '+role.toUpperCase()+' at '+sc.name+'! (Firebase) Try '+(3-loginFails)+' left!';return;}
 loginFails=0;setRole(role,schoolEmis);document.getElementById('loginMsg').innerHTML='✅ WELCOME '+role.toUpperCase()+' of '+sc.name+'! ☁️ Firebase Login - You see ONLY '+sc.name+'!';document.getElementById('loginPass').value='';
 }
-function doLogout(){currentRole='';currentSchoolEmis='';localStorage.removeItem('mk_role');localStorage.removeItem('mk_school');auth.signOut().catch(()=>{});updateRoleUI();render();document.getElementById('loginMsg').innerHTML='🔒 Logged Out All - Firebase Login Protected!';}
+function doLogout(){currentRole='';currentSchoolEmis='';currentEducatorId='';localStorage.removeItem('mk_role');localStorage.removeItem('mk_school');localStorage.removeItem('mk_educator');auth.signOut().catch(()=>{});updateRoleUI();render();document.getElementById('loginMsg').innerHTML='🔒 Logged Out All - Firebase Login Protected!';}
 function createAdminPassword(){let p1=document.getElementById('newAdminPass').value;let p2=document.getElementById('newAdminPass2').value;if(!p1||p1.length<4){alert('Password must be 4+ characters');return;}if(p1!==p2){alert('Passwords do NOT match!');return;}setAdminPw(hashPw(p1));save();setRole('admin','');alert('✅ ADMIN PASSWORD SAVED IN FIREBASE CLOUD! Now you can login on ANY phone! Write it down!');}
 function changeAdminPassword(){if(currentRole!=='admin'){alert('Only Admin!');return;}let oldP=document.getElementById('oldPass').value;if(!checkPw(getAdminPw(),oldP)){document.getElementById('changeMsg').innerHTML='<b style=color:red>❌ Old Wrong!</b>';return;}let n1=document.getElementById('changePass1').value;let n2=document.getElementById('changePass2').value;if(!n1||n1.length<4){document.getElementById('changeMsg').innerHTML='<b style=color:red>New must be 4+</b>';return;}if(n1!==n2){document.getElementById('changeMsg').innerHTML='<b style=color:red>Do NOT match!</b>';return;}setAdminPw(hashPw(n1));save();document.getElementById('changeMsg').innerHTML='✅ Admin Password Changed in FIREBASE! Works on ALL phones!';}
 function createPrincipalPassword(){
@@ -463,6 +537,7 @@ function save(){
   localStorage.setItem('mk_books',JSON.stringify(books));
   localStorage.setItem('mk_loans',JSON.stringify(loans));
   localStorage.setItem('mk_schools',JSON.stringify(schools));
+  localStorage.setItem('mk_educators',JSON.stringify(educators));
   localStorage.setItem('mk_admin_pw',getAdminPw());
   pushToCloud();
   render();
@@ -470,8 +545,47 @@ function save(){
 function show(p){document.querySelectorAll('.page').forEach(e=>e.classList.remove('active'));document.querySelectorAll('nav button').forEach(e=>e.classList.remove('active'));document.getElementById(p).classList.add('active');document.getElementById('b-'+p).classList.add('active');render();}
 function getDueDate(){let now=new Date();let year=now.getFullYear();let due=new Date(year,10,30);if(now>due){due=new Date(year+1,10,30);}return due;}
 function startScan(target){let map={'retBook':'reader2','quickScan':'reader-home','scanLearner':'reader','scanBook':'reader-issue2'};let boxId=map[target]||'reader';let box=document.getElementById(boxId);box.style.display='block';if(scanner){try{scanner.clear()}catch(e){}}scanner=new Html5Qrcode(boxId);scanner.start({facingMode:"environment"},{fps:10,qrbox:{width:250,height:150}},(txt)=>{document.getElementById(target).value=txt;scanner.stop().then(()=>{scanner.clear();box.style.display='none';});alert('✅ Scanned! '+txt);if(target==='quickScan')quickScan();},(err)=>{});}
-function needLogin(){if(!currentRole){alert('🔐 Please FIREBASE LOGIN first on HOME! Select School + Role + Password');show('home');return true;}if((currentRole==='principal'||currentRole==='librarian')&&!currentSchoolEmis){alert('🔐 Select YOUR School first!');show('home');return true;}return false;}
+function needLogin(){if(!currentRole){alert('🔐 Please FIREBASE LOGIN first on HOME! Select School + Role + Password');show('home');return true;}if((currentRole==='principal'||currentRole==='librarian'||currentRole==='educator')&&!currentSchoolEmis){alert('🔐 Select YOUR School first!');show('home');return true;}return false;}
 function addLearner(){if(needLogin())return;let n=document.getElementById('lName').value.trim();let g=document.getElementById('lGrade').value.trim();if(!n||!g){alert('Type Name + Grade');return;}let school=getCurrentSchool();let schoolName=school?school.name:'Your School';let maxL=0; learners.forEach(x=>{ let m=String(x.no||'').match(/(\d+)/); if(m){ let nn=parseInt(m[1]); if(nn>maxL) maxL=nn; } }); let no='L-'+String(maxL+1).padStart(4,'0');learners.push({no,name:n,grade:g,school:schoolName,schoolEmis:currentSchoolEmis||(school?school.emis:'')});save();document.getElementById('lName').value='';document.getElementById('lGrade').value='';alert('Done! '+n+' = '+no+' in '+schoolName);printOneCard(learners[learners.length-1]);}
+function addEducator(){
+  if(!(currentRole==='principal'||currentRole==='admin')){ alert('🔒 Only Principal / Admin can add Educators!'); return; }
+  if(currentRole==='admin'&&!currentSchoolEmis){ alert('👑 Admin: Select a School first - Use SWITCH SCHOOL!'); return; }
+  let n=document.getElementById('eName').value.trim();
+  let subj=document.getElementById('eSubject').value;
+  let ph=document.getElementById('ePhone').value.trim();
+  let ep=document.getElementById('ePass').value.trim();
+  if(!n){ alert('Type Educator Name'); return; }
+  if(!ep || ep.length<4){ alert('🔑 Educator Password must be 4+ characters!'); return; }
+  let dup=myEducators().find(x=>x.name.toLowerCase()===n.toLowerCase());
+  if(dup){ alert('🚫 '+n+' already exists in '+getSchoolName(currentSchoolEmis)+'!'); return; }
+  educators.push({id:'EDU-'+Date.now(),name:n,subject:subj,phone:ph,pw:hashPw(ep),schoolEmis:currentSchoolEmis,school:getSchoolName(currentSchoolEmis)});
+  save();
+  document.getElementById('eName').value=''; document.getElementById('ePhone').value=''; document.getElementById('ePass').value='';
+  alert('✅ Educator Added! '+n+' - '+subj+' - '+getSchoolName(currentSchoolEmis)+' - Password: '+ep+' (Give to educator!)');
+}
+function removeEducator(id){
+  if(!(currentRole==='principal'||currentRole==='admin')){ alert('🔒 Only Principal / Admin!'); return; }
+  let e=educators.find(x=>x.id===id);
+  if(!e) return;
+  if(!confirm('🗑️ REMOVE Educator?\n'+e.name+' - '+e.subject+'\nFrom '+getSchoolName(e.schoolEmis)+'?')) return;
+  educators=educators.filter(x=>x.id!==id);
+  save();
+  alert('✅ Removed: '+e.name);
+}
+function removeBook(code){
+  if(!(currentRole==='principal'||currentRole==='admin')){ alert('🔒 Only Principal / Admin can REMOVE books! Librarian CANNOT!'); return; }
+  let B=books.find(x=>x.code===code);
+  if(!B) return;
+  let outCount=loans.filter(x=>x.book===code && !x.returned).length;
+  if(outCount>0){
+    alert('🚫 CANNOT REMOVE!\n'+B.title+' ('+code+') has '+outCount+' copy OUT on loan!\nWait for RETURN first, then remove!');
+    return;
+  }
+  if(!confirm('🗑️ REMOVE BOOK FOREVER?\n'+code+' - '+B.title+'\n📚 '+B.cat+' - 🎓 '+B.grade+'\n📦 Qty was: '+(B.totalQty||1)+'\n\nThis CANNOT be undone!')) return;
+  books=books.filter(x=>x.code!==code);
+  save();
+  alert('✅ Book Removed: '+code+' - '+B.title);
+}
 function addBook(){
   if(needLogin())return;
   let t=document.getElementById('bTitle').value.trim();
@@ -520,21 +634,39 @@ function issueBook(){
     document.getElementById('issueMsg').innerHTML='<b style=color:red>🚫 GRADE MISMATCH BLOCKED!<br>Learner: '+L.name+' is '+L.grade+'<br>Book: '+B.title+' is for '+B.grade+'<br>❌ Grade '+learnerGradeNum+' Learner CANNOT take Grade '+bookGradeNum+' Book!</b>';
     return;
   }
+  if(currentRole==='educator'){
+    let edu=getCurrentEducator();
+    if(!edu){ document.getElementById('issueMsg').innerHTML='<b style=color:red>🔒 Educator not found - Login again!</b>'; return; }
+    let eduSubj=(edu.subject||'ALL').toUpperCase();
+    let bookSubj=(B.cat||'OTHER').toUpperCase();
+    if(eduSubj!=='ALL' && bookSubj!=='OTHER' && eduSubj!==bookSubj){
+      document.getElementById('issueMsg').innerHTML='<b style=color:red>🚫 SUBJECT BLOCKED!<br>👩‍🏫 You are '+edu.name+' - You teach '+edu.subject+'<br>📖 This book is '+B.cat+' - '+B.title+'<br>❌ You can ONLY issue '+edu.subject+' books!</b>';
+      return;
+    }
+  }
   let avail=B.availableQty ?? B.totalQty ?? 1;
   if(avail<=0){document.getElementById('issueMsg').innerHTML='<b style=color:red>❌ NO COPIES LEFT IN STORE for '+B.title+' - OUT OF STOCK! Total was '+(B.totalQty||1)+'</b>';return;}
   let d=getDueDate();
-  loans.push({learner:L.no,lname:L.name,book:B.code,btitle:B.title,date:new Date().toLocaleDateString(),due:d.toLocaleDateString(),returned:false,schoolEmis:currentSchoolEmis});
+  let eduNow=getCurrentEducator();
+  let issuedBy = currentRole==='educator' && eduNow ? '👩‍🏫 '+eduNow.name+' ('+eduNow.subject+')' : currentRole==='principal' ? '🎓 PRINCIPAL' : currentRole==='librarian' ? '📚 LIBRARIAN' : currentRole==='admin' ? '👑 ADMIN' : currentRole;
+  loans.push({learner:L.no,lname:L.name,book:B.code,btitle:B.title,cat:B.cat||'',grade:B.grade||'',date:new Date().toLocaleDateString(),due:d.toLocaleDateString(),returned:false,schoolEmis:currentSchoolEmis,issuedBy:issuedBy,issuedRole:currentRole,retrievedBy:'',retrievedDate:'',condition:''});
   B.availableQty=avail-1;
   B.issuedQty=(B.issuedQty||0)+1;
   save();
-  document.getElementById('issueMsg').innerHTML='✅ <b>'+B.title+' given to '+L.name+' - 📅 RETURN BY 30 NOVEMBER '+d.getFullYear()+' - '+getSchoolName(currentSchoolEmis)+' - 📦 Left: '+B.availableQty+' / '+B.totalQty+'</b>';
+  document.getElementById('issueMsg').innerHTML='✅ <b>'+B.title+' given to '+L.name+' by '+issuedBy+' - 📅 RETURN BY 30 NOVEMBER '+d.getFullYear()+' - '+getSchoolName(currentSchoolEmis)+' - 📦 Left: '+B.availableQty+' / '+B.totalQty+'</b>';
 }
 function returnBook(){
   if(needLogin())return;
   let bk=document.getElementById('retBook').value.trim();
   let loan=myLoans().find(x=>x.book===bk&&!x.returned);
   if(!loan){document.getElementById('retMsg').innerHTML='<b style=color:red>Not OUT in YOUR school! BLOCKED!</b>';return;}
+  let eduRet=getCurrentEducator();
+  let retrievedBy = currentRole==='educator' && eduRet ? '👩‍🏫 '+eduRet.name+' ('+eduRet.subject+')' : currentRole==='principal' ? '🎓 PRINCIPAL' : currentRole==='librarian' ? '📚 LIBRARIAN' : currentRole==='admin' ? '👑 ADMIN' : currentRole;
+  let cond=document.getElementById('retCondition') ? document.getElementById('retCondition').value : 'Good ✅';
   loan.returned=true;
+  loan.retrievedBy=retrievedBy;
+  loan.retrievedDate=new Date().toLocaleDateString()+' '+new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+  loan.condition=cond;
   let bkBook=books.find(x=>x.code===bk);
   if(bkBook){
     bkBook.availableQty=(bkBook.availableQty ?? bkBook.totalQty ?? 1)+1;
@@ -542,7 +674,7 @@ function returnBook(){
     if(bkBook.availableQty>bkBook.totalQty) bkBook.availableQty=bkBook.totalQty;
   }
   save();
-  document.getElementById('retMsg').innerHTML='✅ <b>'+loan.btitle+' returned by '+loan.lname+' - 📦 Back in Store: '+(bkBook?bkBook.availableQty:'')+'</b>';
+  document.getElementById('retMsg').innerHTML='✅ <b>'+loan.btitle+' retrieved from '+loan.lname+'<br>👤 Retrieved By: '+retrievedBy+'<br>📅 Retrieval Date: '+loan.retrievedDate+'<br>📖 Condition: '+cond+'<br>📦 Back in Store: '+(bkBook?bkBook.availableQty:'')+'</b>';
 }
 function quickScan(){let v=document.getElementById('quickScan').value.trim();let L=myLearners().find(x=>x.no===v);let B=myBooks().find(x=>x.code===v);if(L){document.getElementById('scanLearner').value=L.no;show('issue');}else if(B){document.getElementById('scanBook').value=B.code;show('issue');}else{document.getElementById('quickResult').innerHTML='Not found in YOUR school';}}
 function parentCheck(){let v=document.getElementById('parentNo').value.trim();let L=learners.find(x=>x.no===v);if(!L){document.getElementById('parentResult').innerHTML='Learner not found';return;}let my=loans.filter(x=>x.learner===v&&!x.returned);document.getElementById('parentResult').innerHTML='<b>'+L.name+' - '+L.grade+' - '+(L.school||'')+'</b><br>📅 All books due 30 November<br>'+(my.length?my.map(x=>x.btitle+' - Due '+x.due).join('<br>'):'✅ No books out - All returned!');}
@@ -567,6 +699,87 @@ function printAllBookBarcodes(){
 }
 function printOneCard(l){let w=window.open('','','width=800,height=600');w.document.write('<html><head><title>Card</title><style>body{font-family:Arial}.c{width:300px;border:3px solid #1a56db;border-radius:12px;padding:12px;text-align:center;margin:20px auto}svg{width:100%}</style><script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script></head><body><div class="c"><b>'+(l.school||'Your School')+' 💙</b><br>MAKHANANI DIGITAL LIBRARY<br>LEARNER CARD<br>Name: '+l.name+'<br>No: <b>'+l.no+'</b><br>Grade: '+l.grade+'<br><svg id="bc"></svg><br>'+l.no+'<br><small>XINTIMANI GROUP<br>📅 BOOKS RETURN 30 NOV EVERY YEAR</small></div><script>window.onload=function(){JsBarcode("#bc","'+l.no+'",{format:"CODE128",width:2,height:50,displayValue:false});setTimeout(()=>window.print(),500)}<\/script></body></html>');w.document.close();}
 function printAllCards(){let list=myLearners();if(!list.length){alert('No learners in YOUR school');return;}let w=window.open('','','width=900,height=800');let html='<html><head><title>All Cards</title><style>body{font-family:Arial}.c{width:280px;border:3px solid #1a56db;border-radius:12px;padding:10px;text-align:center;display:inline-block;margin:8px}svg{width:100%}</style><script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script></head><body>';list.forEach((l,i)=>{html+='<div class="c"><b>'+(l.school||'')+' 💙</b><br>MAKHANANI DIGITAL LIBRARY<br>'+l.name+'<br><b>'+l.no+'</b><br>'+l.grade+'<br><svg id="bc'+i+'"></svg><br>'+l.no+'</div>'});html+='<script>window.onload=function(){'+list.map((l,i)=>'JsBarcode("#bc'+i+'","'+l.no+'",{format:"CODE128",width:2,height:40,displayValue:false});').join('')+'setTimeout(()=>window.print(),800)}<\/script></body></html>';w.document.write(html);w.document.close();}
+// === PRINT HISTORY ===
+function getHistoryForPrint(){ return myLoans().slice().reverse(); }
+function historyToPrintHTML(list, title){
+  let schoolName=getSchoolName(currentSchoolEmis)||'My School';
+  let rows=list.map((x,i)=>{
+    let status=x.returned ? '📥 RETURNED' : '📤 OUT NOW';
+    let cond=x.returned ? (x.condition||'Good ✅') : '- Still Out -';
+    let condStyle=String(cond).includes('Lost')?'color:red;font-weight:900':String(cond).includes('Damaged')||String(cond).includes('Torn')?'color:#ea580c;font-weight:900':'';
+    return `<tr><td>${i+1}</td><td>${x.btitle}<br><small>${x.book} | ${x.cat||''} | ${x.grade||''}</small></td><td>${x.lname}<br><small>${x.learner}</small></td><td>${x.issuedBy||''}<br><small>${x.date}</small></td><td>${x.returned?(x.retrievedBy||'')+'<br><small>'+(x.retrievedDate||'')+'</small>':'- OUT -'}</td><td>${status}<br><small>Due: ${x.due}</small></td><td style="${condStyle}">${cond}</td></tr>`;
+  }).join('') || '<tr><td colspan="7">No history yet</td></tr>';
+  return '<html><head><title>'+title+'</title><style>body{font-family:Arial;font-size:12px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #000;padding:6px;text-align:left}th{background:#1a56db;color:#fff}h2{text-align:center}.head{text-align:center}</style></head><body><div class="head"><h2>MAKHANANI DIGITAL LIBRARY 💙</h2><b>'+schoolName+'</b><br><h3>'+title+'</h3><p>📅 Printed: '+new Date().toLocaleString()+' | 👑 By: '+currentRole.toUpperCase()+' | Powered by Xintimani Group</p></div><table><tr><th>#</th><th>📖 Book</th><th>👧 Learner</th><th>👤 Issued By + Date</th><th>👤 Retrieved By + Date</th><th>Status</th><th>📖 Condition</th></tr>'+rows+'</table><br><p>Principal Signature: ___________________________ &nbsp;&nbsp; Date: ______________</p><p>Librarian Signature: ___________________________ &nbsp;&nbsp; Date: ______________</p><p style="font-size:11px">📅 All books due 30 November every year | 🔒 MAKHANANI DIGITAL LIBRARY - XINTIMANI GROUP © 2026</p><script>window.onload=function(){setTimeout(()=>window.print(),500)}<\/script></body></html>';
+}
+function printAllHistory(){
+  if(!currentRole){ alert('Login first!'); return; }
+  let list=getHistoryForPrint();
+  let w=window.open('','','width=1000,height=800');
+  w.document.write(historyToPrintHTML(list,'📚 FULL BOOK HISTORY - ALL - '+getSchoolName(currentSchoolEmis)));
+  w.document.close();
+}
+function printDamagedHistory(){
+  let list=getHistoryForPrint().filter(x=>x.returned && (String(x.condition||'').includes('Damaged')||String(x.condition||'').includes('Torn')||String(x.condition||'').includes('Lost')));
+  if(!list.length){ alert('🎉 No Damaged / Lost books! All Good!'); return; }
+  let w=window.open('','','width=1000,height=800');
+  w.document.write(historyToPrintHTML(list,'⚠️ DAMAGED / TORN / LOST BOOKS - FOR CHARGING - '+getSchoolName(currentSchoolEmis)));
+  w.document.close();
+}
+function printHistoryByPerson(){
+  let person=document.getElementById('printHistoryPerson').value;
+  let list=getHistoryForPrint();
+  let title='';
+  if(person==='ALL'){
+    title='📚 HISTORY BY EVERYONE - ALL - '+getSchoolName(currentSchoolEmis);
+  } else if(person.startsWith('LEARNER:')){
+    let no=person.replace('LEARNER:','');
+    list=list.filter(x=>x.learner===no);
+    let L=learners.find(x=>x.no===no);
+    title='👧 HISTORY FOR LEARNER: '+(L?L.name+' ('+no+')':no);
+  } else {
+    list=list.filter(x=>String(x.issuedBy||'').includes(person)||String(x.retrievedBy||'').includes(person));
+    title='👤 HISTORY FOR: '+person;
+  }
+  if(!list.length){ alert('No history for '+person); return; }
+  let w=window.open('','','width=1000,height=800');
+  w.document.write(historyToPrintHTML(list,title));
+  w.document.close();
+}
+function fillPrintHistoryPersons(){
+  let el=document.getElementById('printHistoryPerson');
+  if(!el) return;
+  let persons=new Set();
+  myLoans().forEach(x=>{
+    if(x.issuedBy) persons.add(x.issuedBy.replace(/👩‍🏫 |📚 |🎓 |👑 /g,'').split(' (')[0].trim());
+    if(x.retrievedBy) persons.add(x.retrievedBy.replace(/👩‍🏫 |📚 |🎓 |👑 /g,'').split(' (')[0].trim());
+  });
+  myEducators().forEach(e=>persons.add(e.name));
+  persons.add('LIBRARIAN'); persons.add('PRINCIPAL');
+  let opts='<option value="ALL">🌍 ALL - Everyone in My School</option>';
+  [...persons].filter(Boolean).sort().forEach(p=>{
+    opts+='<option value="'+p+'">👤 '+p+' - Issued / Retrieved</option>';
+  });
+  myLearners().forEach(l=>{
+    opts+='<option value="LEARNER:'+l.no+'">👧 Learner: '+l.name+' ('+l.no+')</option>';
+  });
+  el.innerHTML=opts;
+}
+function filterPrincipalHistory(f){ principalFilter=f; render(); }
+function renderPrincipalHistory(list){
+  let filtered=list;
+  if(principalFilter==='out') filtered=list.filter(x=>!x.returned);
+  if(principalFilter==='returned') filtered=list.filter(x=>x.returned);
+  if(principalFilter==='damaged') filtered=list.filter(x=>x.returned && (String(x.condition||'').includes('Damaged')||String(x.condition||'').includes('Torn')||String(x.condition||'').includes('Lost')));
+  if(!filtered.length) return 'No records for this filter - All clean! 🎉';
+  return filtered.slice(0,100).map(x=>{
+    if(!x.returned){
+      return `<div class="badge" style="border-left:6px solid #ea580c">📤 <b>OUT NOW</b> - ${x.btitle} (${x.cat||''} - ${x.grade||''})<br>👧 Learner: ${x.lname} (${x.learner})<br>👤 <b>Issued By: ${x.issuedBy||'Unknown'}</b><br>📅 Issued Date: ${x.date} | 📅 Due: ${x.due} ${isOverdue(x)?'⏰ OVERDUE':''}</div>`;
+    } else {
+      let condColor=String(x.condition||'').includes('Good')?'#16a34a':(String(x.condition||'').includes('Lost')?'#dc2626':'#ea580c');
+      return `<div class="badge" style="border-left:6px solid ${condColor}">📥 <b>RETURNED</b> - ${x.btitle} (${x.cat||''} - ${x.grade||''})<br>👧 Learner: ${x.lname} (${x.learner})<br>👤 <b>Issued By: ${x.issuedBy||'Unknown'}</b> - 📅 ${x.date}<br>👤 <b>Retrieved By: ${x.retrievedBy||'Unknown'}</b><br>📅 <b>Retrieval Date: ${x.retrievedDate||''}</b><br>📖 <b>Condition: ${x.condition||'Good ✅'}</b></div>`;
+    }
+  }).join('');
+}
 function previewSchools(){let file=document.getElementById('schoolFile').files[0];let paste=document.getElementById('schoolPaste').value.trim();if(file){let r=new FileReader();r.onload=function(e){try{if(file.name.endsWith('.json')){pendingSchools=JSON.parse(e.target.result);}else if(file.name.endsWith('.csv')){pendingSchools=e.target.result.split('\n').slice(1).map(l=>{let p=l.split(',');return{emis:p[0],name:p[1]}}).filter(x=>x.name);}else{let wb=XLSX.read(e.target.result,{type:'array'});let ws=wb.Sheets[wb.SheetNames[0]];let rows=XLSX.utils.sheet_to_json(ws,{header:1});pendingSchools=rows.slice(1).map(row=>{let emis=row.find(c=>String(c).length>=6&&!isNaN(c));let name=row.find(c=>typeof c==='string'&&c.length>3);return{emis:emis||'',name:name||'',principalPw:'',librarianPw:''}}).filter(x=>x.name);}showPreview();}catch(err){alert('File error: '+err)}};if(file.name.endsWith('.xlsx')||file.name.endsWith('.xls'))r.readAsArrayBuffer(file);else r.readAsText(file);}else if(paste){pendingSchools=paste.split('\n').map(l=>{let p=l.split(',');return{emis:p[0]?.trim(),name:p[1]?.trim()||p[0],principalPw:'',librarianPw:''}}).filter(x=>x.name);showPreview();}else alert('Choose file or paste first');}
 function showPreview(){let unique=[];let dupCount=0;pendingSchools.forEach(s=>{if(findDuplicateEmis(s.emis,unique)||findDuplicateEmis(s.emis,schools)){dupCount++;}else{unique.push(s);}});document.getElementById('schoolPreview').innerHTML='<b>Preview: '+pendingSchools.length+' in file → ✅ '+unique.length+' NEW, 🚫 '+dupCount+' DUPLICATE EMIS skipped</b><br>'+unique.slice(0,5).map(s=>s.emis+' - '+s.name).join('<br>')+'...';document.getElementById('uploadStatus').innerText='⏳ UPLOADING '+unique.length+' NEW...';pendingSchools=unique;}
 function confirmSchools(){if(currentRole!=='admin'){alert('Only Admin!');return;}if(!pendingSchools.length){alert('Preview first!');return;}if(document.getElementById('replaceAll').checked){schools=[];}let added=0;let skipped=0;pendingSchools.forEach(s=>{if(findDuplicateEmis(s.emis,schools)){skipped++;}else{schools.push({emis:normEmis(s.emis),name:String(s.name).trim(),principalPw:s.principalPw||'',librarianPw:s.librarianPw||''});added++;}});save();alert('✅ Added '+added+' NEW schools! 🚫 Skipped '+skipped+' duplicate EMIS! Total '+schools.length);pendingSchools=[];}
@@ -593,13 +806,17 @@ let total=x.totalQty||1;let avail=x.availableQty??total;let issued=x.issuedQty||
 let status=avail>0?'🟢 IN - '+avail+' Available':'🔴 OUT OF STOCK';
 let safeTitle=String(x.title||'').replace(/'/g,"");
 let safeAuthor=String(x.author||'').replace(/'/g,"");
-return `<div class="badge"><b>${x.code}</b> - ${x.title} - ${x.author||''} - 📚 <b>${x.cat||'OTHER'}</b> - 🎓 <b>${x.grade||'ALL'}</b><br>📦 <b>IN STORE: ${total}</b> | ✅ Available: ${avail} | 🔴 Issued: ${issued} | ${status}<br><button onclick="document.getElementById('scanBook').value='${x.code}';show('issue')">ISSUE →</button> <button style="background:#facc15;color:#000" onclick="printOneBookBarcode({code:'${x.code}',title:'${safeTitle}',author:'${safeAuthor}',grade:'${x.grade||'ALL'}',cat:'${x.cat||'OTHER'}'})">🖨️ PRINT BARCODE</button></div>`;
+return `<div class="badge"><b>${x.code}</b> - ${x.title} - ${x.author||''} - 📚 <b>${x.cat||'OTHER'}</b> - 🎓 <b>${x.grade||'ALL'}</b><br>📦 <b>IN STORE: ${total}</b> | ✅ Available: ${avail} | 🔴 Issued: ${issued} | ${status}<br><button onclick="document.getElementById('scanBook').value='${x.code}';show('issue')">ISSUE →</button> <button style="background:#facc15;color:#000" onclick="printOneBookBarcode({code:'${x.code}',title:'${safeTitle}',author:'${safeAuthor}',grade:'${x.grade||'ALL'}',cat:'${x.cat||'OTHER'}'})">🖨️ PRINT BARCODE</button> ${(currentRole==='principal'||currentRole==='admin')?`<button style="background:#dc2626" onclick="removeBook('${x.code}')">🗑️ REMOVE</button>`:''}</div>`;
 }).join('')||'No books in YOUR school yet';
-document.getElementById('outList').innerHTML=myLoans().filter(x=>!x.returned).map(x=>`<div class="badge">${x.btitle} → ${x.lname}<br>📅 Due: 30 Nov ${new Date(x.due).getFullYear()} - ${x.due}</div>`).join('')||'All IN! 🎉';
+document.getElementById('outList').innerHTML=myLoans().filter(x=>!x.returned).map(x=>`<div class="badge">${x.btitle} → ${x.lname}<br>📅 Due: 30 Nov ${new Date(x.due).getFullYear()} - ${x.due}<br>👤 Issued By: ${x.issuedBy||''}</div>`).join('')||'All IN! 🎉';
 document.getElementById('overdueList').innerHTML=myLoans().filter(isOverdue).map(x=>`<div class="badge">⏰ ${x.btitle} → ${x.lname} - Was Due ${x.due} - OVERDUE AFTER 30 NOV!</div>`).join('')||'No overdue! 💚';
-document.getElementById('principalList').innerHTML=myLoans().filter(x=>!x.returned).map(x=>`<div class="badge">${x.btitle} → ${x.lname} - Due ${x.due} ${isOverdue(x)?'⏰ OVERDUE AFTER 30 NOV':''}</div>`).join('')||'All IN! 🎉';
+let allLoans=myLoans().slice().reverse();
+document.getElementById('principalList').innerHTML='<h4>📚 BOOK HISTORY - MY SCHOOL - Who Issued / Who Retrieved</h4><div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px"><button class="big yellow" style="width:auto;padding:8px" onclick="filterPrincipalHistory(\'all\')">ALL</button><button class="big" style="width:auto;padding:8px" onclick="filterPrincipalHistory(\'out\')">📤 OUT NOW</button><button class="big green" style="width:auto;padding:8px" onclick="filterPrincipalHistory(\'returned\')">📥 RETURNED</button><button class="big red" style="width:auto;padding:8px" onclick="filterPrincipalHistory(\'damaged\')">⚠️ DAMAGED / LOST</button></div><div>'+renderPrincipalHistory(allLoans)+'</div>';
+let eduEl=document.getElementById('educatorList');
+if(eduEl){ eduEl.innerHTML='<h4>👩‍🏫 Educators in '+getSchoolName(currentSchoolEmis)+' ('+myEducators().length+')</h4>'+myEducators().map(x=>`<div class="badge"><b>${x.name}</b> - 📚 ${x.subject} ${x.phone?' - 📱 '+x.phone:''}<br><button style="background:#dc2626" onclick="removeEducator('${x.id}')">🗑️ REMOVE EDUCATOR</button></div>`).join('')||'No educators yet - Add above!'; }
 document.getElementById('schoolList').innerHTML=schools.slice(0,20).map(s=>`<div class="badge">${s.emis} - ${s.name}<br>🎓 Principal: ${s.principalPw?'✅ SET - HIDDEN 🔒':'❌ Not Set'} | 📚 Librarian: ${s.librarianPw?'✅ SET - HIDDEN 🔒':'❌ Not Set'}</div>`).join('')||'No schools yet';
 document.getElementById('uploadStatus').innerText='⏳ UPLOADING '+schools.length+' / '+schools.length+'...';
+fillPrintHistoryPersons();
 updateRoleUI();
 }
 pullFromCloud();
