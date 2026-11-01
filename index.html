@@ -78,6 +78,9 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 <button onclick="show('parent')" id="b-parent">👨‍👩‍👧 PARENT</button>
 <button onclick="show('admin')" id="b-admin">👑 ADMIN 🔒</button>
 <button onclick="show('prices')" id="b-prices">💰 PRICES</button>
+<button class="big yellow" onclick="showAdminSubs()">💰 VIEW SUBSCRIPTION DASHBOARD ↓</button>
+<button class="big green" onclick="showActiveSubs()">✅ ACTIVE SUBSCRIBERS ONLY →</button>
+<button class="big purple" onclick="showAllSubs()">🌍 ALL SUBSCRIBERS + INCOME →</button>
 </nav>
 <div id="home" class="page active">
 <div class="schoolbar" id="homeSchoolBar">🏫 NO SCHOOL SELECTED - Login First</div>
@@ -435,6 +438,9 @@ const auth = firebase.auth();
 let cloudReady = false;
 let isSyncingFromCloud = false;
 let cloudAdminPw = localStorage.getItem('mk_admin_pw')||'';
+function showAdminSubs(){
+function showActiveSubs(){if(currentRole!=='admin'){alert('🔒 Login as ADMINISTRATOR first!');show('home');return;}show('admin');setTimeout(function(){var f=document.getElementById('dashFilter');if(f){f.value='ACTIVE';}renderSubscriptionDashboard();var el=document.getElementById('subsCard');if(el)el.scrollIntoView({behavior:'smooth',block:'center'});},300);}
+function showAllSubs(){if(currentRole!=='admin'){alert('🔒 Login as ADMINISTRATOR first!');show('home');return;}show('admin');setTimeout(function(){var f=document.getElementById('dashFilter');if(f){f.value='ALL';}renderSubscriptionDashboard();var el=document.getElementById('subsCard');if(el)el.scrollIntoView({behavior:'smooth',block:'center'});},300);}
 function getAdminPw(){ return cloudAdminPw || localStorage.getItem('mk_admin_pw')||''; }
 function setAdminPw(hashed){ cloudAdminPw = hashed; localStorage.setItem('mk_admin_pw',hashed); }
 function getGradeNum(g){ let m=String(g||'').match(/\d+/); return m?m[0]:''; }
