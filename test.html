@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html><body>
+<h1>TEST</h1><p id="s">Connecting...</p>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+<script>
+try{
+firebase.initializeApp({apiKey:"AIzaSyDAVEvpVbVsIplT4KeMevEzOg-5WE_Q0VM",authDomain:"makhanani-digital-library.firebaseapp.com",databaseURL:"https://makhanani-digital-library-default-rtdb.firebaseio.com",projectId:"makhanani-digital-library"});
+firebase.database().ref('makhanani').once('value').then(function(){document.getElementById('s').innerHTML='✅ CONNECTED - FIREBASE WORKS!';}).catch(function(e){document.getElementById('s').innerHTML='❌ RULES BLOCKED: '+e.message;});
+}catch(e){document.getElementById('s').innerHTML='❌ ERROR: '+e.message;}
+</script></body></html>
