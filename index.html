@@ -78,6 +78,7 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 <button onclick="show('parent')" id="b-parent">👨‍👩‍👧 PARENT</button>
 <button onclick="show('admin')" id="b-admin">👑 ADMIN 🔒</button>
 <button onclick="show('prices')" id="b-prices">💰 PRICES</button>
+<button onclick="show('manuals')" id="b-manuals">📚 MANUALS</button>
 </nav>
 <div id="home" class="page active">
 <div class="schoolbar" id="homeSchoolBar">🏫 NO SCHOOL SELECTED - Login First</div>
@@ -389,6 +390,44 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 <button class="big green" onclick="window.open('https://wa.me/27780233263?text='+encodeURIComponent('Hi Xintimani Group! I want MAKHANANI DIGITAL LIBRARY for my school. Please send me details!'),'__blank')">💬 WHATSAPP US TO ORDER — 078 023 3263</button>
 </div>
 </div>
+<div id="manuals" class="page">
+<div class="card" style="text-align:center;border:3px solid #c9a227">
+<img src="logo.png" alt="XINTIMANI GROUP" class="footerLogo" onerror="this.style.display='none'">
+<h2>📚 MAKHANANI MANUALS</h2>
+<p><b>Powered by Xintimani Group</b><br>Building Solutions. Empowering Communities.<br>📱 WhatsApp: 078 023 3263</p>
+<p id="manualsLockNote" style="font-weight:900;color:#dc2626">🔒 Only Administrator sees ALL 3 Manuals. Others see ONLY User Manual.</p>
+</div>
+<div class="card" id="founderManualCard" style="border:3px solid #dc2626;display:none">
+<h3>👑 1. FOUNDER MANUAL - ADMIN ONLY 🔒</h3>
+<p><b>Only YOU:</b> See ALL Schools | Add Schools | Create Principal + Librarian Passwords | Change Package DEMO / STANDARD / PREMIUM / UNPAID | Upload DBE Excel | Clean Duplicates</p>
+<p><b>Daily Flow:</b> Login as ADMINISTRATOR > Check ✅ CONNECTED > ADMIN tab > Add School > Search School > Create Principal Password > WhatsApp it to Principal ONLY! (Shows ONCE!)</p>
+<p><b>NEVER:</b> Give Admin Password to ANY Principal / Librarian! NEVER give 2 schools SAME EMIS!</p>
+<p><b>Prices:</b> DEMO FREE 7 Days | STARTER R2,500 + R350/m | STANDARD R3,500 + R550/m | PREMIUM R5,000 + R850/m</p>
+</div>
+<div class="card" id="userManualCard" style="border:3px solid #1a56db">
+<h3>📖 2. USER MANUAL - FOR ALL SCHOOLS ✅</h3>
+<p><b>🎓 PRINCIPAL:</b> Login YOUR School + PRINCIPAL > Add Educators > Create Librarian Password > Print Barcodes with Filters: ALL / SUBJECT / GRADE / EDUCATOR / SUBJECT+GRADE > Print Learner Cards: ALL / GRADE / CLASS (Grade 8A) > Track Who Issued / Who Retrieved / Date / Condition > Print History / Damaged / Lost for Charging!</p>
+<p><b>📚 LIBRARIAN:</b> ISSUE: Scan Learner L-0001 + Scan Book ENGHL-0001 > GIVE BOOK - DUE 30 NOV > DONE! RETURN: Scan Book > Pick Condition Good / Damaged / Torn / Lost > RETURN BOOK</p>
+<p><b>ADD Learner:</b> Name + Grade 8A > Gets L-0001 | <b>ADD Book:</b> Title + CAPS + Grade + Qty 10 > Gets ENGHL-0001 to ENGHL-0010 - Each OWN Barcode!</p>
+<p><b>👩‍🏫 EDUCATOR:</b> Can ISSUE ONLY YOUR Subject! Can RETURN ANY Book! | <b>👨‍👩‍👧 PARENT:</b> Type Child No L-0001 > CHECK > See Books OUT + Due Date</p>
+<p><b>Rules:</b> All Books DUE 30 NOV | Every Book = 1 Barcode | NO Duplicate | Same Name Allowed | Auto-Lock 30 min</p>
+</div>
+<div class="card" id="trainingManualCard" style="border:3px solid #16a34a;display:none">
+<h3>🎓 3. TRAINING MANUAL - ADMIN ONLY 🔒</h3>
+<p><b>0-10 min:</b> Show HOME + Barcode Sticker + One scan = Issue in 5 sec!</p>
+<p><b>10-20 min:</b> Principal + Librarian login > Educator login > Show SUBJECT BLOCK!</p>
+<p><b>20-35 min:</b> Together Add 5 Learners + Add 10 Books ENG HL Grade 12 > Print SUBJECT / SUBJECT+GRADE / CLASS Grade 8A > Stick 1 barcode!</p>
+<p><b>35-50 min:</b> Issue 1 book > Try WRONG Grade > Show BLOCKED! > Return Good > Return Damaged > Show History!</p>
+<p><b>50-60 min:</b> Show Principal Tracking + History By Person + Damaged Report > Give USER MANUAL + WhatsApp 078 023 3263 > Set DEMO 7 Days!</p>
+<p><b>Checklist Before You Leave:</b> ✅ Principal can login alone ✅ Librarian can ISSUE + RETURN alone ✅ Principal can ADD Educator ✅ School can PRINT with Filter alone ✅ Knows 30 NOV ✅ Knows WhatsApp</p>
+</div>
+<div class="card" id="pdfManualCard" style="text-align:center;display:none">
+<h3>📄 DOWNLOAD FULL PDF MANUALS - ADMIN ONLY 🔒</h3>
+<p>If you uploaded the PDF to GitHub as <b>Makhanani-Manuals.pdf</b>, tap below:</p>
+<button class="big yellow" onclick="window.open('Makhanani-Manuals.pdf','_blank')">📄 OPEN / DOWNLOAD PDF MANUALS</button>
+<p style="font-size:12px">To upload PDF: GitHub > Add file > Upload files > Choose Makhanani-Manuals.pdf > Commit</p>
+</div>
+</div>
 <div id="admin" class="page">
 <div id="adminLock" class="card lockbox"><h2>👑 ADMINISTRATOR LOGIN REQUIRED - ☁️ FIREBASE LOGIN</h2><p>🔒 Admin must login on HOME first. Password is now in Firebase Cloud - Works on ANY phone.</p><button class="big" onclick="show('home')">🔐 GO TO LOGIN</button>
 <div id="firstTimeBox" style="display:none"><hr><h3>👑 FIRST TIME SETUP - CREATE ADMIN PASSWORD - ☁️ SAVED IN FIREBASE</h3><input type="password" id="newAdminPass" placeholder="🆕 Create Admin Password" autocomplete="off"><input type="password" id="newAdminPass2" placeholder="🔁 Type Again" autocomplete="off"><button class="big yellow" onclick="createAdminPassword()">✅ CREATE ADMIN PASSWORD (Firebase)</button></div>
@@ -591,6 +630,14 @@ function fillSchoolDropdowns(){
 }
 function switchSchool(){if(currentRole!=='admin'){alert('Only Admin can switch schools!');return;}currentSchoolEmis=document.getElementById('switchSchoolSelect').value;localStorage.setItem('mk_school',currentSchoolEmis);updateRoleUI();render();alert('✅ Admin now viewing: '+(currentSchoolEmis?getSchoolName(currentSchoolEmis):'ALL SCHOOLS'));}
 function updateRoleUI(){
+let fCard=document.getElementById('founderManualCard');
+let tCard=document.getElementById('trainingManualCard');
+let pCard=document.getElementById('pdfManualCard');
+let uCard=document.getElementById('userManualCard');
+if(fCard) fCard.style.display=(currentRole==='admin')?'block':'none';
+if(tCard) tCard.style.display=(currentRole==='admin')?'block':'none';
+if(pCard) pCard.style.display=(currentRole==='admin')?'block':'none';
+if(uCard) uCard.style.display='block';
 let school=getCurrentSchool(); let schoolLabel=currentRole==='admin'?(currentSchoolEmis?'🏫 '+school.name+' (Admin Viewing)':'🌍 ALL SCHOOLS (Admin)'):school?('🏫 '+school.name):'NO SCHOOL SELECTED';
 document.getElementById('currentSchoolLabel').innerText=schoolLabel; let edu=getCurrentEducator(); let label=currentRole==='admin'?'👑 ADMINISTRATOR':currentRole==='principal'?'🎓 PRINCIPAL':currentRole==='librarian'?'📚 LIBRARIAN':currentRole==='educator'?'👩‍🏫 EDUCATOR - '+(edu?edu.name+' ('+edu.subject+')':''):'👤 NOT LOGGED IN';
 document.getElementById('whoIs').innerText=label+(school?' - '+school.name:''); document.getElementById('adminStatus').innerText=currentRole==='admin'?'👑 ADMIN UNLOCKED':'🔒 ADMIN LOCKED';
@@ -677,7 +724,10 @@ function printHistoryByPerson(){ let person=document.getElementById('printHistor
 function fillPrintHistoryPersons(){ let el=document.getElementById('printHistoryPerson'); if(!el) return; let persons=new Set(); myLoans().forEach(x=>{ if(x.issuedBy) persons.add(x.issuedBy.replace(/👩‍🏫 |📚 |🎓 |👑 /g,'').split(' (')[0].trim()); if(x.retrievedBy) persons.add(x.retrievedBy.replace(/👩‍🏫 |📚 |🎓 |👑 /g,'').split(' (')[0].trim()); }); myEducators().forEach(e=>persons.add(e.name)); persons.add('LIBRARIAN'); persons.add('PRINCIPAL'); let opts='<option value="ALL">🌍 ALL - Everyone in My School</option>'; [...persons].filter(Boolean).sort().forEach(p=>{ opts+='<option value="'+p+'">👤 '+p+' - Issued / Retrieved</option>'; }); myLearners().forEach(l=>{ opts+='<option value="LEARNER:'+l.no+'">👧 Learner: '+l.name+' ('+l.no+')</option>'; }); el.innerHTML=opts; }
 function filterPrincipalHistory(f){ principalFilter=f; render(); }
 function renderPrincipalHistory(list){ let filtered=list; if(principalFilter==='out') filtered=list.filter(x=>!x.returned); if(principalFilter==='returned') filtered=list.filter(x=>x.returned); if(principalFilter==='damaged') filtered=list.filter(x=>x.returned && (String(x.condition||'').includes('Damaged')||String(x.condition||'').includes('Torn')||String(x.condition||'').includes('Lost'))); if(!filtered.length) return 'No records for this filter - All clean! 🎉'; return filtered.slice(0,100).map(x=>{ if(!x.returned){ return `<div class="badge" style="border-left:6px solid #ea580c">📤 <b>OUT NOW</b> - ${x.btitle} (${x.cat||''} - ${x.grade||''})<br>👧 Learner: ${x.lname} (${x.learner})<br>👤 <b>Issued By: ${x.issuedBy||'Unknown'}</b><br>📅 Issued Date: ${x.date} | 📅 Due: ${x.due} ${isOverdue(x)?'⏰ OVERDUE':''}</div>`; } else { let condColor=String(x.condition||'').includes('Good')?'#16a34a':(String(x.condition||'').includes('Lost')?'#dc2626':'#ea580c'); return `<div class="badge" style="border-left:6px solid ${condColor}">📥 <b>RETURNED</b> - ${x.btitle} (${x.cat||''} - ${x.grade||''})<br>👧 Learner: ${x.lname} (${x.learner})<br>👤 <b>Issued By: ${x.issuedBy||'Unknown'}</b> - 📅 ${x.date}<br>👤 <b>Retrieved By: ${x.retrievedBy||'Unknown'}</b><br>📅 <b>Retrieval Date: ${x.retrievedDate||''}</b><br>📖 <b>Condition: ${x.condition||'Good ✅'}</b></div>`; } }).join(''); }
-function previewSchools(){let file=document.getElementById('schoolFile').files[0];let paste=document.getElementById('schoolPaste').value.trim();if(file){let r=new FileReader();r.onload=function(e){try{if(file.name.endsWith('.json')){pendingSchools=JSON.parse(e.target.result);}else if(file.name.endsWith('.csv')){pendingSchools=e.target.result.split('\n').slice(1).map(l=>{let p=l.split(',');return{emis:p[0],name:p[1]}}).filter(x=>x.name);}else{let wb=XLSX.read(e.target.result,{type:'array'});let ws=wb.Sheets[wb.SheetNames[0]];let rows=XLSX.utils.sheet_to_json(ws,{header:1});pendingSchools=rows.slice(1).map(row=>{let emis=row.find(c=>String(c).length>=6&&!isNaN(c));let name=row.find(c=>typeof c==='string'&&c.length>3);return{emis:emis||'',name:name||'',principalPw:'',librarianPw:'',package:'DEMO'}}).filter(x=>x.name);}showPreview();}catch(err){alert('File error: '+err)}};if(file.name.endsWith('.xlsx')||file.name.endsWith('.xls'))r.readAsArrayBuffer(file);else r.readAsText(file);}else if(paste){pendingSchools=paste.split('\n').map(l=>{let p=l.split(',');return{emis:p[0]?.trim(),name:p[1]?.trim()||p[0],principalPw:'',librarianPw:'',package:'DEMO'}}).filter(x=>x.name);showPreview();}else alert('Choose file or paste first');}
+function previewSchools(){let file=document.getElementById('schoolFile').files[0];let paste=document.getElementById('schoolPaste').value.trim();if(file){let r=new FileReader();r.onload=function(e){try{if(file.name.endsWith('.json')){pendingSchools=JSON.parse(e.target.result);}else if(file.name.endsWith('.csv')){pendingSchools=e.target.result.split('\n').slice(1).map(l=>{let p=l.split(',');return{emis:p[0],name:p[1]}}).filter(x=>x.name);}else{let wb=XLSX.read(e.target.result,{type:'array'});let ws=wb.Sheets[wb.SheetNames[0]];let rows=XLSX.utils.sheet_to_json(ws,{header:1});pendingSchools=rows.slice(1).map(row=>{let emis=row.find(c=>String(c).length>=6&&!isNaN(c));let name=row.find(c=>typeof c==='string'&&c.length>3);return{emis:emis||'',name:name||'',principalPw:'',librarianPw:'',package:'DEMO'}}).filter(x=>x.name);}showPreview();}catch(err){alert('File error: '+err)}};if(file.name.endsWith('.xlsx')||file.name.endsWith('.xls'))r.readAsArrayBuffer(file);else r.readAsText(file);}else if(paste){pendingSchools=paste.split('\n').map(l=>{let p=l.split(',');return{emis:p[0]?.trim(),name:p[1]?.trim()||p[0],principalPw:'',librarianPw:'',package:'DEMO'}}).filter(x...continuing from where it stopped — paste this to finish the file (do NOT re-paste the top):
+
+```html
+.split('\n').map(l=>{let p=l.split(',');return{emis:p[0]?.trim(),name:p[1]?.trim()||p[0],principalPw:'',librarianPw:'',package:'DEMO'}}).filter(x=>x.name);showPreview();}else alert('Choose file or paste first');}
 function showPreview(){let unique=[];let dupCount=0;pendingSchools.forEach(s=>{if(findDuplicateEmis(s.emis,unique)||findDuplicateEmis(s.emis,schools)){dupCount++;}else{unique.push(s);}});document.getElementById('schoolPreview').innerHTML='<b>Preview: '+pendingSchools.length+' in file → ✅ '+unique.length+' NEW, 🚫 '+dupCount+' DUPLICATE EMIS skipped</b><br>'+unique.slice(0,5).map(s=>s.emis+' - '+s.name).join('<br>')+'...';document.getElementById('uploadStatus').innerText='⏳ UPLOADING '+unique.length+' NEW...';pendingSchools=unique;}
 function confirmSchools(){if(currentRole!=='admin'){alert('Only Admin!');return;}if(!pendingSchools.length){alert('Preview first!');return;}if(document.getElementById('replaceAll').checked){schools=[];}let added=0;let skipped=0;pendingSchools.forEach(s=>{if(findDuplicateEmis(s.emis,schools)){skipped++;}else{let end='';if((s.package||'DEMO')==='DEMO'){let d=new Date();d.setDate(d.getDate()+7);end=d.toISOString().slice(0,10);}schools.push({emis:normEmis(s.emis),name:String(s.name).trim(),principalPw:s.principalPw||'',librarianPw:s.librarianPw||'',package:s.package||'DEMO',packageStart:new Date().toISOString().slice(0,10),packageEnd:end});added++;}});save();alert('✅ Added '+added+' NEW schools! 🚫 Skipped '+skipped+' duplicate EMIS! Total '+schools.length);pendingSchools=[];}
 function addSchoolManual(){if(currentRole!=='admin'){alert('Only Admin!');return;}let e=document.getElementById('newEmis').value.trim();let n=document.getElementById('newSchool').value.trim();if(!n){alert('Type school name');return;}if(!e){alert('⚠️ EMIS REQUIRED!');return;}let dup=findDuplicateEmis(e,schools);if(dup){let msg='🚫 DUPLICATE EMIS! '+e+' already exists: '+dup.name;document.getElementById('schoolDupMsg').innerText=msg;alert(msg);return;}document.getElementById('schoolDupMsg').innerText='';let pkg=document.getElementById('newSchoolPackage')?document.getElementById('newSchoolPackage').value:'DEMO';let pkgStart=document.getElementById('newSchoolPackageDate')?document.getElementById('newSchoolPackageDate').value:new Date().toISOString().slice(0,10);let pkgEnd=document.getElementById('newSchoolPackageEnd')?document.getElementById('newSchoolPackageEnd').value:'';if(pkg==='DEMO' && !pkgEnd){let d=new Date();d.setDate(d.getDate()+7);pkgEnd=d.toISOString().slice(0,10);}schools.push({emis:e,name:n,principalPw:'',librarianPw:'',package:pkg,packageStart:pkgStart,packageEnd:pkgEnd,packagePaid:(pkg!=='DEMO'&&pkg!=='UNPAID')});save();alert('✅ School Added!\n'+e+' - '+n+'\n💰 Package: '+getPackageLabel(pkg)+'\n📅 Start: '+pkgStart+' - Ends: '+(pkgEnd||'No End')+'\nNow Search it above to create Principal Password!');document.getElementById('newEmis').value='';document.getElementById('newSchool').value='';}
@@ -698,8 +748,7 @@ document.getElementById('pOver').innerText=myLoans().filter(isOverdue).length;
 let pkgEl=document.getElementById('principalPackageLabel');
 if(pkgEl){
 let sc=getCurrentSchool();
-if(!sc){pkgEl.innerText='💰 Package: No School Selected';
-}
+if(!sc){pkgEl.innerText='💰 Package: No School Selected';}
 else if(sc.package==='DEMO'){
 let today=new Date().toISOString().slice(0,10);
 let expired=sc.packageEnd && today>sc.packageEnd;
