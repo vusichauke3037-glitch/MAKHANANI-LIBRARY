@@ -89,7 +89,7 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 <div class="stat"><b id="sLearners">0</b><br>👧 LEARNERS (My School)</div>
 <div class="stat"><b id="sOut">0</b><br>📚 BORROWED (My School)</div>
 </div>
-<div class="card"><div class="greenbox">WELCOME TO MAKHANANI DIGITAL LIBRARY! 💚 EVER HAPPY!<br>🔒 FIREBASE LOGIN - WORKS ON ALL PHONES!<br>📚 CAPS SUBJECTS - Dropdown + CAPS Code on Sticker!<br>🎓 GRADE LOCK - Wrong Grade Blocked!<br>👩‍🏫 EDUCATOR LOCK - Issue ONLY My Subject / Return ANY!<br>🔍 PRINCIPAL TRACKING - Who Issued / Who Retrieved / Date / Condition<br>🖨️ PRINT HISTORY BY EVERYONE!<br>📦 QUANTITY - IN STORE / AVAILABLE / ISSUED<br>🚫 NO DUPLICATE ID / BOOK NUMBER - SAME NAME ALLOWED!<br>🏫 SCHOOL NAME ON EVERY BARCODE!<br>🧪 DEMO - FREE 7 DAYS - TRY BEFORE YOU PAY!<br>📅 RETURN BY 30 NOV EVERY YEAR!</div><p>👑 Admin → Creates Principal Password (Firebase)<br>🎓 Principal → Creates Librarian + Adds Educators<br>👩‍🏫 Educator → Issue ONLY My Subject, Return ANY<br>📚 Librarian → Scan Learner + Scan Book → Issue in 5 sec!</p></div>
+<div class="card"><div class="greenbox">WELCOME TO MAKHANANI DIGITAL LIBRARY! 💚 EVER HAPPY!<br>🔒 FIREBASE LOGIN - WORKS ON ALL PHONES!<br>📚 CAPS SUBJECTS - Dropdown + CAPS Code on Sticker!<br>🏷️ SUBJECT NUMBERING - ACC-001, MATH-001, MLIT-001!<br>🎓 GRADE LOCK - Wrong Grade Blocked!<br>👩‍🏫 EDUCATOR LOCK - Issue ONLY My Subject / Return ANY!<br>🔍 PRINCIPAL TRACKING - Who Issued / Who Retrieved / Date / Condition<br>🖨️ PRINT HISTORY BY EVERYONE!<br>📦 QUANTITY - IN STORE / AVAILABLE / ISSUED<br>🚫 NO DUPLICATE ID / BOOK NUMBER - SAME NAME ALLOWED!<br>🏫 SCHOOL NAME ON EVERY BARCODE!<br>🧪 DEMO - FREE 7 DAYS - TRY BEFORE YOU PAY!<br>📅 RETURN BY 30 NOV EVERY YEAR!</div><p>👑 Admin → Creates Principal Password (Firebase)<br>🎓 Principal → Creates Librarian + Adds Educators<br>👩‍🏫 Educator → Issue ONLY My Subject, Return ANY<br>📚 Librarian → Scan Learner + Scan Book → Issue in 5 sec!</p></div>
 <div class="card"><h3>🔍 Quick Scan</h3><input id="quickScan" placeholder="Scan Learner OR Book..."><button class="big yellow" onclick="startScan('quickScan')">📷 SCAN WITH CAMERA</button><div id="reader-home"></div><button class="big" onclick="quickScan()">GO →</button><div id="quickResult"></div></div>
 <div class="card" style="text-align:center;border:3px solid #c9a227"><h3>💰 SEE OUR PRICES — NO CONTRACT!</h3><p>🧪 DEMO FREE 7 Days | 🌱 Starter R2,500 + R350/m | ⭐ Standard R3,500 + R550/m | 👑 Premium R5,000 + R850/m<br>📱 WhatsApp: 078 023 3263</p><button class="big yellow" onclick="show('prices')">💰 VIEW FULL PRICE LIST →</button></div>
 </div>
@@ -99,7 +99,7 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 <input id="scanLearner" placeholder="Learner No e.g. L-0001">
 <button class="big yellow" onclick="startScan('scanLearner')">📷 SCAN LEARNER CARD</button>
 <div id="reader"></div>
-<input id="scanBook" placeholder="Book Code e.g. BK-001">
+<input id="scanBook" placeholder="Book Code e.g. ACC-001">
 <button class="big yellow" onclick="startScan('scanBook')">📷 SCAN BOOK</button>
 <div id="reader-issue2"></div>
 <button class="big green" onclick="issueBook()">📤 GIVE BOOK - DUE 30 NOV</button><div id="issueMsg"></div></div>
@@ -108,7 +108,7 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 <div id="return" class="page">
 <div class="schoolbar" id="returnSchoolBar"></div>
 <div class="card"><h3>📥 RETURN BOOK - ANY Book Can Be Retrieved By Anyone</h3>
-<input id="retBook" placeholder="Scan Book Code">
+<input id="retBook" placeholder="Scan Book Code e.g. ACC-001">
 <label>📖 BOOK CONDITION WHEN RETURNED:</label>
 <select id="retCondition">
 <option value="Good ✅">Good ✅ - Clean, Like New</option>
@@ -135,7 +135,7 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 <div id="books" class="page">
 <div class="schoolbar" id="bookSchoolBar"></div>
 <div class="card"><h3>➕ ADD BOOK - To MY School - 📚 CAPS + 🎓 GRADE + 📦 QTY - 🚫 NO DUPLICATE BOOK NUMBER</h3>
-<input id="bCodeManual" placeholder="🏷️ Book Number (Optional) e.g. BK-050 - Leave BLANK for Auto">
+<input id="bCodeManual" placeholder="🏷️ Book Number (Optional) e.g. ACC-050 - Leave BLANK for Auto: ACC-001, MATH-001...">
 <input id="bTitle" placeholder="Book Title e.g. Via Africa Grade 12 Mathematical Literacy">
 <input id="bAuthor" placeholder="Author e.g. Via Africa / Platinum / Focus">
 <label>📚 CAPS SUBJECT - Pick From Dropdown:</label>
@@ -181,12 +181,12 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 <option value="Grade 12">Grade 12</option>
 </select>
 <input type="number" id="bQty" placeholder="Quantity in Store e.g. 10" min="1" value="1">
-<button class="big" onclick="addBook()">➕ ADD BOOK - NO DUPLICATE CHECK</button>
-<p style="font-size:13px;font-weight:900;color:#0f766e">💡 Same title again → Quantity ADDS - no duplicate! | Leave Book Number blank = Auto MAX+1 | 🚫 BK-001 NEVER Repeats! | 🏫 School Name on Sticker!</p>
+<button class="big" onclick="addBook()">➕ ADD BOOK - AUTO NUMBER: ACC-001, MATH-001...</button>
+<p style="font-size:13px;font-weight:900;color:#0f766e">💡 Same title again → Quantity ADDS - no duplicate! | Leave Book Number blank = Auto SUBJECT-001 | 🚫 ACC-001 NEVER Repeats! | 🏫 School Name on Sticker!</p>
 </div>
 <div class="card"><h3>📖 ALL BOOKS - My School Only</h3>
 <button class="big yellow" onclick="printAllBookBarcodes()">🖨️ PRINT ALL BOOK BARCODES (My School) - CAPS Stickers + School Name!</button>
-<input id="searchBook" placeholder="Search book / CAPS e.g. MLIT / MATH / LO..." oninput="render()"><div id="bookList"></div></div>
+<input id="searchBook" placeholder="Search book / CAPS e.g. MLIT / MATH / LO / ACC..." oninput="render()"><div id="bookList"></div></div>
 </div>
 <div id="principal" class="page">
 <div id="principalLock" class="card lockbox"><h2>🎓 PRINCIPAL LOGIN REQUIRED</h2><p>🔒 Firebase Login - Principal must login with YOUR School + Password.</p><button class="big" onclick="show('home')">🔐 GO TO LOGIN</button></div>
@@ -362,7 +362,25 @@ let cloudAdminPw = localStorage.getItem('mk_admin_pw')||'';
 function getAdminPw(){ return cloudAdminPw || localStorage.getItem('mk_admin_pw')||''; }
 function setAdminPw(hashed){ cloudAdminPw = hashed; localStorage.setItem('mk_admin_pw',hashed); }
 function getGradeNum(g){ let m=String(g||'').match(/\d+/); return m?m[0]:''; }
-function getNextBookCode(){ let max=0; books.forEach(x=>{ let m=String(x.code||'').match(/(\d+)/); if(m){ let n=parseInt(m[1]); if(n>max) max=n; } }); return 'BK-'+String(max+1).padStart(3,'0'); }
+// 📚 SUBJECT CODE NUMBERING: ACC-001, MATH-001, MLIT-001, ENGHL-001
+function getBookPrefix(cat){
+  let c=String(cat||'OTHER').toUpperCase().trim();
+  c=c.replace(/[^A-Z0-9]/g,'');
+  if(!c) c='OTHER';
+  return c;
+}
+function getNextBookCode(cat){
+  let prefix=getBookPrefix(cat||document.getElementById('bCat')?.value||'OTHER');
+  let max=0;
+  books.forEach(x=>{
+    let code=String(x.code||'').toUpperCase();
+    if(code.startsWith(prefix+'-')){
+      let m=code.match(/(\d+)$/);
+      if(m){ let n=parseInt(m[1]); if(n>max) max=n; }
+    }
+  });
+  return prefix+'-'+String(max+1).padStart(3,'0');
+}
 function pushToCloud(){
   if(!cloudReady || isSyncingFromCloud) return;
   db.ref('makhanani').set({learners:learners,books:books,loans:loans,schools:schools,educators:educators,adminPw:cloudAdminPw,updated:new Date().toISOString()}).catch(e=>{console.log('Cloud save error',e);});
@@ -683,7 +701,7 @@ function addBook(){
   let manualCode=(document.getElementById('bCodeManual').value||'').trim().toUpperCase();
   if(manualCode){
     let dupCode=books.find(x=>String(x.code||'').toUpperCase()===manualCode);
-    if(dupCode){alert('🚫 DUPLICATE BOOK NUMBER BLOCKED!\n'+manualCode+' already exists!\nExisting: '+dupCode.title+' - '+getSchoolName(dupCode.schoolEmis)+'\n\nType a different number OR leave BLANK for Auto: '+getNextBookCode());return;}
+    if(dupCode){alert('🚫 DUPLICATE BOOK NUMBER BLOCKED!\n'+manualCode+' already exists!\nExisting: '+dupCode.title+' - '+getSchoolName(dupCode.schoolEmis)+'\n\nType a different number OR leave BLANK for Auto: '+getNextBookCode(c));return;}
   }
   let existing=books.find(x=>x.title.toLowerCase()===t.toLowerCase() && (x.cat||'').toUpperCase()===(c||'').toUpperCase() && normEmis(x.schoolEmis)===normEmis(currentSchoolEmis));
   if(existing){
@@ -696,8 +714,8 @@ function addBook(){
     alert('✅ Same Book Found! Added '+qty+' more copies! Total now: '+existing.totalQty+' - '+existing.title+' - SAME Number '+existing.code+' - No Duplicate!');
     return;
   }
-  let code=manualCode||getNextBookCode();
-  while(books.find(x=>String(x.code||'').toUpperCase()===code)){let m=code.match(/(\d+)/);let num=m?parseInt(m[1])+1:1;code='BK-'+String(num).padStart(3,'0');}
+  let code=manualCode||getNextBookCode(c);
+  while(books.find(x=>String(x.code||'').toUpperCase()===code)){let prefix=getBookPrefix(c);let m=code.match(/(\d+)$/);let num=m?parseInt(m[1])+1:1;code=prefix+'-'+String(num).padStart(3,'0');}
   books.push({code,title:t,author:a,cat:c,grade:bg,schoolEmis:currentSchoolEmis,totalQty:qty,availableQty:qty,issuedQty:0});
   save();
   document.getElementById('bTitle').value='';document.getElementById('bAuthor').value='';document.getElementById('bQty').value=1;document.getElementById('bCodeManual').value='';
@@ -897,7 +915,7 @@ let total=x.totalQty||1;let avail=x.availableQty??total;let issued=x.issuedQty||
 let status=avail>0?'🟢 IN - '+avail+' Available':'🔴 OUT OF STOCK';
 let safeTitle=String(x.title||'').replace(/'/g,"");
 let safeAuthor=String(x.author||'').replace(/'/g,"");
-return `<div class="badge"><b>${x.code}</b> - ${x.title} - ${x.author||''} - 📚 <b>${x.cat||'OTHER'}</b> - 🎓 <b>${x.grade||'ALL'}</b><br>📦 <b>IN STORE: ${total}</b> | ✅ Available: ${avail} | 🔴 Issued: ${issued} | ${status}<br><button onclick="document.getElementById('scanBook').value='${x.code}';show('issue')">ISSUE →</button> <button style="background:#facc15;color:#000" onclick="printOneBookBarcode({code:'${x.code}',title:'${safeTitle}',author:'${safeAuthor}',grade:'${x.grade||'ALL'}',cat:'${x.cat||'OTHER'}'})">🖨️ PRINT BARCODE</button> ${(currentRole==='principal'||currentRole==='admin')?`<button style="background:#dc2626" onclick="removeBook('${x.code}')">🗑️ REMOVE</button>`:''}</div>`;
+return `<div class="badge"><b>${x.code}</b> - ${x.title}${x.author?' - '+x.author:''} - 📚 <b>${x.cat||'OTHER'}</b> - 🎓 <b>${x.grade||'ALL'}</b><br>📦 <b>IN STORE: ${total}</b> | ✅ Available: ${avail} | 📤 Out: ${issued}<br><b>${status}</b><br><button onclick="document.getElementById('scanBook').value='${x.code}';show('issue')">ISSUE →</button> <button style="background:#facc15;color:#000" onclick="printOneBookBarcode({code:'${x.code}',title:'${safeTitle}',author:'${safeAuthor}',grade:'${x.grade||'ALL'}',cat:'${x.cat||'OTHER'}'})">🖨️ PRINT BARCODE</button> ${(currentRole==='principal'||currentRole==='admin')?`<button style="background:#dc2626" onclick="removeBook('${x.code}')">🗑️ REMOVE</button>`:''}</div>`;
 }).join('')||'No books in YOUR school yet';
 document.getElementById('outList').innerHTML=myLoans().filter(x=>!x.returned).map(x=>`<div class="badge">${x.btitle} → ${x.lname}<br>📅 Due: 30 Nov ${new Date(x.due).getFullYear()} - ${x.due}<br>👤 Issued By: ${x.issuedBy||''}</div>`).join('')||'All IN! 🎉';
 document.getElementById('overdueList').innerHTML=myLoans().filter(isOverdue).map(x=>`<div class="badge">⏰ ${x.btitle} → ${x.lname} - Was Due ${x.due} - OVERDUE AFTER 30 NOV!</div>`).join('')||'No overdue! 💚';
