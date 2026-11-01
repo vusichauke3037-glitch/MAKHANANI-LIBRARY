@@ -693,10 +693,22 @@ document.getElementById('sLearners').innerText=myLearners().length;
 document.getElementById('sOut').innerText=myLoans().filter(x=>!x.returned).length;
 document.getElementById('pLearners').innerText=myLearners().length;
 document.getElementById('pBooks').innerText=totalCopies+' (Avail: '+totalAvail+')';
-document.getElementById('pOut').innerText=myLoans().filter(x=>!x.returned).length;
+document.getElementById('pOut').innerText=myLoans().filter(x=>!x.returndocument.getElementById('pOut').innerText=myLoans().filter(x=>!x.returned).length;
 document.getElementById('pOver').innerText=myLoans().filter(isOverdue).length;
-let pkgEl=document.getElementById('principalPackageLabel');if(pkgEl){let sc=getCurrentSchool();```js
-if(!sc){pkgEl.innerText='💰 Package: No School Selected';}else if(sc.package==='DEMO'){let today=new Date().toISOString().slice(0,10);let expired=sc.packageEnd && today>sc.packageEnd;pkgEl.style.background=expired?'#fecaca':'#fef3c7';pkgEl.innerText=expired?('🧪 DEMO EXPIRED on '+sc.packageEnd+' - 📱 WhatsApp 078 023 3263 to Upgrade to Paid!'):('🧪 DEMO - FREE - Expires: '+(sc.packageEnd||'in 7 days')+' - 📱 WhatsApp 078 023 3263 to Upgrade!');}else{pkgEl.style.background='#fef3c7';pkgEl.innerText='💰 Your Package: '+getPackageLabel(sc.package||'STANDARD')+(sc.packageEnd?' - 📅 Renewal: '+sc.packageEnd:'');}}
+let pkgEl=document.getElementById('principalPackageLabel');
+if(pkgEl){
+let sc=getCurrentSchool();
+if(!sc){pkgEl.innerText='💰 Package: No School Selected';}
+else if(sc.package==='DEMO'){
+let today=new Date().toISOString().slice(0,10);
+let expired=sc.packageEnd && today>sc.packageEnd;
+pkgEl.style.background=expired?'#fecaca':'#fef3c7';
+pkgEl.innerText=expired?('🧪 DEMO EXPIRED on '+sc.packageEnd+' - 📱 WhatsApp 078 023 3263 to Upgrade to Paid!'):('🧪 DEMO - FREE - Expires: '+(sc.packageEnd||'in 7 days')+' - 📱 WhatsApp 078 023 3263 to Upgrade!');
+}else{
+pkgEl.style.background='#fef3c7';
+pkgEl.innerText='💰 Your Package: '+getPackageLabel(sc.package||'STANDARD')+(sc.packageEnd?' - 📅 Renewal: '+sc.packageEnd:'');
+}
+}
 let sl=(document.getElementById('searchLearner').value||'').toLowerCase();
 document.getElementById('learnerList').innerHTML=myLearners().filter(x=>x.name.toLowerCase().includes(sl)||x.no.toLowerCase().includes(sl)).map(x=>`<div class="badge"><b>${x.no}</b> - ${x.name} - ${x.grade} - ${x.school||''}<br><button onclick="document.getElementById('scanLearner').value='${x.no}';show('issue')">ISSUE →</button> <button onclick="printOneCard({no:'${x.no}',name:'${x.name}',grade:'${x.grade}',school:'${x.school}'})">🖨️ PRINT CARD</button></div>`).join('')||'No learners in YOUR school yet - Login first!';
 let sb=(document.getElementById('searchBook').value||'').toLowerCase();
