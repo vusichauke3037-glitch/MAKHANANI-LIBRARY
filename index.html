@@ -428,17 +428,7 @@ button.yellow{background:#facc15;color:#000}button.green{background:#16a34a}butt
 <p style="font-size:12px;color:#0a1a4d;font-weight:900">MAKHANANI DIGITAL LIBRARY<br><span style="color:#0f766e">Powered by Xintimani Group - Building Solutions. Empowering Communities.</span><br>📱 WhatsApp: 078 023 3263<br>🔒 FIREBASE LOGIN • CAPS • GRADE LOCK • EDUCATOR LOCK • TRACKING • PRINT HISTORY • © 2026 Xintimani Group</p>
 </div>
 <script>
-// === FIREBASE ===
-const firebaseConfig = {
-  apiKey: "AIzaSyDAVEvpVbVsIplT4KeMevEzOg-5WE_Q0VM",
-  authDomain: "makhanani-digital-library.firebaseapp.com",
-  databaseURL: "https://makhanani-digital-library-default-rtdb.firebaseio.com",
-  projectId: "makhanani-digital-library",
-  storageBucket: "makhanani-digital-library.firebasestorage.app",
-  messagingSenderId: "133966099448",
-  appId: "1:133966099448:web:260c2fb27b4f31e4765c0d",
-  measurementId: "G-6QB6WG4CG4"
-};
+const firebaseConfig = { apiKey: "AIzaSyDAVEvpVbVsIplT4KeMevEzOg-5WE_Q0VM", authDomain: "makhanani-digital-library.firebaseapp.com", databaseURL: "https://makhanani-digital-library-default-rtdb.firebaseio.com", projectId: "makhanani-digital-library", storageBucket: "makhanani-digital-library.firebasestorage.app", messagingSenderId: "133966099448", appId: "1:133966099448:web:260c2fb27b4f31e4765c0d", measurementId: "G-6QB6WG4CG4" };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 const auth = firebase.auth();
@@ -500,7 +490,6 @@ function myBooks(){if(currentRole==='admin'&&!currentSchoolEmis) return books;if
 function myLoans(){if(currentRole==='admin'&&!currentSchoolEmis) return loans;if(!currentSchoolEmis) return [];return loans.filter(x=>normEmis(x.schoolEmis)===normEmis(currentSchoolEmis));}
 function myEducators(){if(currentRole==='admin'&&!currentSchoolEmis) return educators;if(!currentSchoolEmis) return [];return educators.filter(x=>normEmis(x.schoolEmis)===normEmis(currentSchoolEmis));}
 function getCurrentEducator(){ return educators.find(x=>x.id===currentEducatorId) || null; }
-// 🖨️ PRINT FILTERS - Books + Learners - Prefix = home / books / prin / learners
 function toggleBookPrintFilters(p){
   let t=document.getElementById(p+'-printBookFilterType')?.value||'ALL';
   let subj=document.getElementById(p+'-bookSubjectFilterBox'); let grade=document.getElementById(p+'-bookGradeFilterBox'); let edu=document.getElementById(p+'-bookEducatorFilterBox');
@@ -696,12 +685,18 @@ function searchDBE(){let q=(document.getElementById('dbeSearch').value||'').toLo
 function downloadSchools(){let b=new Blob([JSON.stringify(schools,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='makhanani-schools.json';a.click();}
 function isOverdue(l){return !l.returned && new Date()>new Date(l.due);}
 function render(){
-let totalCopies=myBooks().reduce((s,b)=>s+(b.totalQty||1),0); let totalAvail=myBooks().reduce((s,b)=>s+(b.availableQty??b.totalQty??1),0);
-document.getElementById('sSchools').innerText=schools.length; document.getElementById('sBooks').innerText=totalCopies; document.getElementById('sLearners').innerText=myLearners().length; document.getElementById('sOut').innerText=myLoans().filter(x=>!x.returned).length;
-document.getElementById('pLearners').innerText=myLearners().length; document.getElementById('pBooks').innerText=totalCopies+' (Avail: '+totalAvail+')'; document.getElementById('```js
+let totalCopies=myBooks().reduce((s,b)=>s+(b.totalQty||1),0);
+let totalAvail=myBooks().reduce((s,b)=>s+(b.availableQty??b.totalQty??1),0);
+document.getElementById('sSchools').innerText=schools.length;
+document.getElementById('sBooks').innerText=totalCopies;
+document.getElementById('sLearners').innerText=myLearners().length;
+document.getElementById('sOut').innerText=myLoans().filter(x=>!x.returned).length;
+document.getElementById('pLearners').innerText=myLearners().length;
+document.getElementById('pBooks').innerText=totalCopies+' (Avail: '+totalAvail+')';
 document.getElementById('pOut').innerText=myLoans().filter(x=>!x.returned).length;
 document.getElementById('pOver').innerText=myLoans().filter(isOverdue).length;
-let pkgEl=document.getElementById('principalPackageLabel');if(pkgEl){let sc=getCurrentSchool();if(!sc){pkgEl.innerText='💰 Package: No School Selected';}else if(sc.package==='DEMO'){let today=new Date().toISOString().slice(0,10);let expired=sc.packageEnd && today>sc.packageEnd;pkgEl.style.background=expired?'#fecaca':'#fef3c7';pkgEl.innerText=expired?('🧪 DEMO EXPIRED on '+sc.packageEnd+' - 📱 WhatsApp 078 023 3263 to Upgrade to Paid!'):('🧪 DEMO - FREE - Expires: '+(sc.packageEnd||'in 7 days')+' - 📱 WhatsApp 078 023 3263 to Upgrade!');}else{pkgEl.style.background='#fef3c7';pkgEl.innerText='💰 Your Package: '+getPackageLabel(sc.package||'STANDARD')+(sc.packageEnd?' - 📅 Renewal: '+sc.packageEnd:'');}}
+let pkgEl=document.getElementById('principalPackageLabel');if(pkgEl){let sc=getCurrentSchool();```js
+if(!sc){pkgEl.innerText='💰 Package: No School Selected';}else if(sc.package==='DEMO'){let today=new Date().toISOString().slice(0,10);let expired=sc.packageEnd && today>sc.packageEnd;pkgEl.style.background=expired?'#fecaca':'#fef3c7';pkgEl.innerText=expired?('🧪 DEMO EXPIRED on '+sc.packageEnd+' - 📱 WhatsApp 078 023 3263 to Upgrade to Paid!'):('🧪 DEMO - FREE - Expires: '+(sc.packageEnd||'in 7 days')+' - 📱 WhatsApp 078 023 3263 to Upgrade!');}else{pkgEl.style.background='#fef3c7';pkgEl.innerText='💰 Your Package: '+getPackageLabel(sc.package||'STANDARD')+(sc.packageEnd?' - 📅 Renewal: '+sc.packageEnd:'');}}
 let sl=(document.getElementById('searchLearner').value||'').toLowerCase();
 document.getElementById('learnerList').innerHTML=myLearners().filter(x=>x.name.toLowerCase().includes(sl)||x.no.toLowerCase().includes(sl)).map(x=>`<div class="badge"><b>${x.no}</b> - ${x.name} - ${x.grade} - ${x.school||''}<br><button onclick="document.getElementById('scanLearner').value='${x.no}';show('issue')">ISSUE →</button> <button onclick="printOneCard({no:'${x.no}',name:'${x.name}',grade:'${x.grade}',school:'${x.school}'})">🖨️ PRINT CARD</button></div>`).join('')||'No learners in YOUR school yet - Login first!';
 let sb=(document.getElementById('searchBook').value||'').toLowerCase();
