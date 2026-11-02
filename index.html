@@ -1,41 +1,58 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MAKHANANI DIGITAL LIBRARY - XINTIMANI GROUP</title><style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#eef4ff;color:#111}header{background:#0a1a4d;color:#fff;padding:14px;text-align:center}header img{width:180px;background:#fff;border-radius:12px;padding:6px}.marquee{background:#dc2626;color:#fff;padding:8px;font-weight:900;white-space:nowrap;overflow:hidden}.marquee2{background:#facc15;color:#000;padding:8px;font-weight:900;text-align:center}.wrap{max-width:900px;margin:auto;padding:12px}.card{background:#fff;border-radius:14px;padding:14px;margin:10px 0;box-shadow:0 2px 8px rgba(0,0,0,.1)}input,select{width:100%;padding:13px;margin:6px 0;border:2px solid #bfdbfe;border-radius:10px;font-size:16px}button{width:100%;padding:14px;margin:6px 0;border:0;border-radius:12px;background:#1a56db;color:#fff;font-weight:900;font-size:16px;cursor:pointer}.green{background:#16a34a}.red{background:#dc2626}.yellow{background:#facc15;color:#000}.dark{background:#0a1a4d}.grey{background:#64748b}.hidden{display:none}.badge{background:#f0f9ff;border:2px solid #bfdbfe;border-radius:10px;padding:10px;margin:6px 0}.topbar{background:#16a34a;color:#fff;padding:14px;border-radius:12px;text-align:center}.topbar a{color:#fff}.small{font-size:13px;color:#475569;text-align:center}table{width:100%;border-collapse:collapse;font-size:13px}td,th{border:1px solid #000;padding:6px}th{background:#0a1a4d;color:#fff}h2,h3{text-align:center}
+*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#eef4ff;color:#111}header{background:#0a1a4d;color:#fff;padding:14px;text-align:center}header img{width:180px;background:#fff;border-radius:12px;padding:6px}.wrap{max-width:950px;margin:auto;padding:10px}.card{background:#fff;border-radius:14px;padding:14px;margin:10px 0;box-shadow:0 2px 8px rgba(0,0,0,.1)}input,select{width:100%;padding:13px;margin:6px 0;border:2px solid #bfdbfe;border-radius:10px;font-size:16px}button{width:100%;padding:14px;margin:6px 0;border:0;border-radius:12px;background:#1a56db;color:#fff;font-weight:900;font-size:16px;cursor:pointer}.green{background:#16a34a}.red{background:#dc2626}.yellow{background:#facc15;color:#000}.dark{background:#0a1a4d}.grey{background:#64748b}.hidden{display:none}.badge{background:#f0f9ff;border:2px solid #bfdbfe;border-radius:10px;padding:10px;margin:6px 0}.tabs{display:flex;gap:6px;flex-wrap:wrap}.tabs button{width:auto;flex:1;padding:10px 6px;font-size:13px;background:#e2e8f0;color:#111}.tabs button.active{background:#1a56db;color:#fff}.small{font-size:13px;color:#475569;text-align:center}table{width:100%;border-collapse:collapse;font-size:13px}td,th{border:1px solid #000;padding:6px}th{background:#0a1a4d;color:#fff}h2,h3{text-align:center}.dash{border:3px solid #f59e0b;border-radius:14px;padding:12px;background:#fffbeb}
 </style></head><body>
 <header><img src="logo.png" alt="XINTIMANI GROUP"><h1 style="margin:6px 0">MAKHANANI DIGITAL LIBRARY</h1><p style="margin:0">📚 POWERED BY XINTIMANI GROUP | FOR ALL SCHOOLS</p><p style="margin:4px 0;font-size:13px">Building Solutions. Empowering Communities.</p></header>
-<div class="marquee">🔥 REAL APP | DOWNLOAD ALLOWED | JOBS LIVE | PARENT SECURE: ID + SCHOOL ONLY - NAME BLOCKED | FREE 7 DAYS DEMO 🔥</div>
-<div class="marquee2">⭐ NO SCHOOL SELECTED | NOT LOGGED IN | ADMIN LOCKED ⭐</div>
-
 <div class="wrap">
-<div class="card topbar"><h2 style="margin:0">📥 DOWNLOAD MAKHANANI APP</h2><p style="margin:6px 0">Get the REAL APP on your phone - FREE!</p><a href="https://vusichauke3037-glitch.github.io/MAKHANANI-LIBRARY/app.apk"><button class="yellow">⬇️ DOWNLOAD APP (.APK) - ANDROID</button></a><a href="jobs.html"><button class="dark">💼 JOBS - BECOME AN AGENT - R500/SCHOOL</button></a></div>
 
-<!-- LOGIN -->
-<div class="card" id="loginCard"><h2>🔐 LOGIN</h2><select id="role"><option value="ADMIN">👑 ADMIN / FOUNDER</option><option value="PRINCIPAL">🎓 PRINCIPAL</option><option value="LIBRARIAN">📚 LIBRARIAN</option><option value="EDUCATOR">👩‍🏫 EDUCATOR</option><option value="PARENT">👨‍👩‍👧 PARENT</option></select><select id="schoolSel"><option value="">Select School</option></select><input id="passInput" type="password" placeholder="Password / Learner ID (Parent: Learner ID)"><button onclick="doLogin()">LOGIN</button><p class="small">Parent: Select School + Type Learner ID ONLY. Name search is BLOCKED for safety.<br>Demo Admin Password: <b>admin123</b> - Change after login!</p></div>
+<!-- LOGIN / SCHOOL SELECT -->
+<div class="card"><select id="schoolSel" onchange="setSchool()"><option value="">ALL SCHOOLS</option></select><input id="passInput" type="password" placeholder="Password / Learner ID (Parent: Learner ID)"><button onclick="doLogin()">🔐 LOGIN</button><p class="small">ADMIN Password: <b>admin123</b> | Parent: Select School + Learner ID ONLY. Name search BLOCKED.</p><a href="https://vusichauke3037-glitch.github.io/MAKHANANI-LIBRARY/app.apk"><button class="yellow">⬇️ DOWNLOAD APP (.APK)</button></a><a href="jobs.html"><button class="dark">💼 JOBS - BECOME AN AGENT - R500/SCHOOL</button></a></div>
 
-<!-- ADMIN -->
-<div class="card hidden" id="adminCard"><h2>👑 ADMIN - FOUNDER ONLY 🔒</h2>
-<!-- 👑 AGENT TRACKER BUTTON - FOUNDER ONLY -->
-<button onclick="window.open('agents.html','_blank')" style="width:100%;padding:16px;margin:8px 0;border:0;border-radius:12px;background:#dc2626;color:#fff;font-weight:900;font-size:18px;cursor:pointer">👑 AGENT TRACKER - ADMIN ONLY 🔒</button>
-<p class="small">Tap to open Agent Tracker - Track 10 Agents, Schools, R500 Payments</p>
-<h3>➕ ADD SCHOOL</h3><input id="newEmis" placeholder="School EMIS e.g. 700123456"><input id="newSchool" placeholder="School Name"><select id="newPkg"><option value="DEMO">DEMO - Free 7 Days</option><option value="STARTER">STARTER - R2,500 + R350/m</option><option value="STANDARD">STANDARD - R3,500 + R550/m</option><option value="PREMIUM">PREMIUM - R5,000 + R850/m</option></select><input id="newPrinPass" placeholder="Principal Password e.g. Prin2026"><button class="green" onclick="addSchool()">➕ ADD SCHOOL</button>
-<h3>🔍 ALL SCHOOLS</h3><input id="searchSchool" placeholder="Search school..." oninput="renderSchools()"><div id="schoolList"></div>
-<h3>📊 TOTALS</h3><div id="adminStats" class="badge"></div>
-<button class="grey" onclick="logout()">LOGOUT</button></div>
-
-<!-- PRINCIPAL -->
-<div class="card hidden" id="prinCard"><h2>🎓 PRINCIPAL DASHBOARD</h2><div id="prinStats" class="badge"></div><button class="green" onclick="activateDemo()">✅ ACTIVATE MY FREE 7 DAYS DEMO</button><h3>➕ ADD EDUCATOR</h3><input id="eduName" placeholder="Educator Name"><input id="eduSub" placeholder="Subject"><input id="eduPass" placeholder="Educator Password"><button onclick="addEducator()">➕ ADD EDUCATOR</button><h3>➕ CREATE LIBRARIAN PASSWORD</h3><input id="libPass" placeholder="Librarian Password"><button onclick="setLibPass()">🔐 SET LIBRARIAN PASSWORD</button><button onclick="window.print()">🖨️ PRINT FULL HISTORY</button><button class="grey" onclick="logout()">LOGOUT</button></div>
-
-<!-- LIBRARIAN -->
-<div class="card hidden" id="libCard"><h2>📚 LIBRARIAN</h2><h3>➕ ADD LEARNER</h3><input id="lName" placeholder="Learner Full Name"><input id="lGrade" placeholder="Grade e.g. 10A"><input id="lId" placeholder="Learner ID e.g. L-0001"><button class="green" onclick="addLearner()">➕ ADD LEARNER</button><h3>➕ ADD BOOK</h3><input id="bTitle" placeholder="Book Title"><input id="bCode" placeholder="Book Barcode e.g. B-001"><button onclick="addBook()">➕ ADD BOOK</button><h3>📤 ISSUE BOOK</h3><input id="iLearner" placeholder="Learner ID"><input id="iBook" placeholder="Book Code"><button class="green" onclick="issueBook()">📤 ISSUE</button><h3>📥 RETURN BOOK</h3><input id="rBook" placeholder="Book Code"><button class="yellow" onclick="returnBook()">📥 RETURN</button><div id="libList"></div><button onclick="window.print()">🖨️ PRINT LEARNER CARDS + BARCODES</button><button class="grey" onclick="logout()">LOGOUT</button></div>
-
-<!-- EDUCATOR -->
-<div class="card hidden" id="eduCard"><h2>👩‍🏫 EDUCATOR</h2><div id="eduList"></div><button class="grey" onclick="logout()">LOGOUT</button></div>
-
-<!-- PARENT -->
-<div class="card hidden" id="parentCard"><h2>👨‍👩‍👧 PARENT - SECURE VIEW</h2><p class="small">You can ONLY see YOUR child by ID + School. No names.</p><div id="parentView"></div><button class="grey" onclick="logout()">LOGOUT</button></div>
-
-<div class="card"><h2>📘 MANUALS</h2><button onclick="alert('MANUAL: Admin adds school. Principal activates demo, adds educator + librarian. Librarian adds learners + books, issues/returns. Parent checks with ID + School only.')">📘 USER MANUAL</button><p class="small">Xintimani Group | WhatsApp: 078 023 3263 | App: https://vusichauke3037-glitch.github.io/MAKHANANI-LIBRARY/</p><p class="small">Prices: STARTER R2,500 + R350/m | STANDARD R3,500 + R550/m | PREMIUM R5,000 + R850/m</p></div>
+<!-- TABS LIKE YOUR PHOTO -->
+<div class="tabs">
+<button onclick="showTab('returnTab',this)">📥 RETURN</button>
+<button onclick="showTab('learnersTab',this)">👥 LEARNERS</button>
+<button onclick="showTab('booksTab',this)">📚 BOOKS</button>
+<button onclick="showTab('prinTab',this)">🎓 PRINCIPAL</button>
+<button onclick="showTab('parentTab',this)">👨‍👩‍👧 PARENT</button>
+<button onclick="showTab('adminTab',this)" class="active">👑 ADMIN</button>
+<button onclick="showTab('manualsTab',this)">📘 MANUALS</button>
 </div>
 
+<!-- RETURN -->
+<div class="card hidden" id="returnTab"><h2>📥 RETURN BOOK</h2><input id="rBook" placeholder="Book Code e.g. B-001"><button class="yellow" onclick="returnBook()">📥 RETURN BOOK</button><div id="returnList"></div></div>
+
+<!-- LEARNERS -->
+<div class="card hidden" id="learnersTab"><h2>👥 LEARNERS</h2><input id="lName" placeholder="Learner Full Name"><input id="lGrade" placeholder="Grade e.g. 10A"><input id="lId" placeholder="Learner ID e.g. L-0001"><button class="green" onclick="addLearner()">➕ ADD LEARNER</button><button onclick="window.print()">🖨️ PRINT LEARNER CARDS</button><div id="learnerList"></div></div>
+
+<!-- BOOKS -->
+<div class="card hidden" id="booksTab"><h2>📚 BOOKS</h2><input id="bTitle" placeholder="Book Title"><input id="bCode" placeholder="Book Barcode e.g. B-001"><button onclick="addBook()">➕ ADD BOOK</button><h3>📤 ISSUE BOOK</h3><input id="iLearner" placeholder="Learner ID"><input id="iBook" placeholder="Book Code"><button class="green" onclick="issueBook()">📤 ISSUE</button><button onclick="window.print()">🖨️ PRINT BOOK BARCODES</button><div id="bookList"></div></div>
+
+<!-- PRINCIPAL -->
+<div class="card hidden" id="prinTab"><h2>🎓 PRINCIPAL DASHBOARD</h2><div id="prinStats" class="badge"></div><button class="green" onclick="alert('✅ DEMO ACTIVATED! 7 Days Free!')">✅ ACTIVATE MY FREE 7 DAYS DEMO</button><h3>➕ ADD EDUCATOR</h3><input id="eduName" placeholder="Educator Name"><input id="eduPass" placeholder="Educator Password"><button onclick="alert('✅ Educator Added!')">➕ ADD EDUCATOR</button><h3>➕ LIBRARIAN PASSWORD</h3><input id="libPass" placeholder="Librarian Password"><button onclick="alert('✅ Librarian Password Set!')">🔐 SET LIBRARIAN PASSWORD</button><button onclick="window.print()">🖨️ PRINT FULL HISTORY</button></div>
+
+<!-- PARENT -->
+<div class="card hidden" id="parentTab"><h2>👨‍👩‍👧 PARENT - SECURE VIEW</h2><p class="small">ID + SCHOOL ONLY. No name search for safety.</p><button onclick="parentCheck()">🔍 CHECK MY CHILD</button><div id="parentView"></div></div>
+
+<!-- ADMIN - LIKE YOUR PHOTO -->
+<div class="card" id="adminTab"><h2>👑 APP ADMINISTRATOR - FULL CONTROL</h2><p>✅ LOGGED IN AS ADMIN - ONLY ADMIN SEES SUBSCRIPTION DASHBOARD + FOUNDER + TRAINING MANUALS</p>
+
+<div class="dash"><h3>🔒 SUBSCRIPTION DASHBOARD - ADMIN ONLY 🔒</h3><p style="text-align:center;color:#dc2626;font-weight:900">PRINCIPAL / LIBRARIAN / EDUCATOR CANNOT SEE THIS!</p>
+<!-- 👑 AGENT TRACKER BUTTON - FOUNDER ONLY -->
+<button onclick="window.open('agents.html','_blank')" style="width:100%;padding:16px;margin:8px 0;border:0;border-radius:12px;background:#dc2626;color:#fff;font-weight:900;font-size:18px;cursor:pointer">👑 AGENT TRACKER - ADMIN ONLY 🔒</button>
+<p class="small">Tap to open Agent Tracker - Track 10 Agents, Schools, R500 / R350 Payments</p>
+<button class="yellow" onclick="putAllDemo()">⚡ PUT ALL SCHOOLS ON 7 DAYS DEMO</button>
+<button class="red" onclick="putExpired()">🔴 PUT EXPIRED / DEMO ENDED → UNPAID</button>
+<div id="adminStats" class="badge"></div>
+</div>
+
+<h3>➕ ADD SCHOOL</h3><input id="newEmis" placeholder="School EMIS e.g. 700123456"><input id="newSchool" placeholder="School Name"><select id="newPkg"><option value="DEMO">DEMO - Free 7 Days</option><option value="STARTER">STARTER - R2,500 + R350/m</option><option value="STANDARD">STANDARD - R3,500 + R550/m</option><option value="PREMIUM">PREMIUM - R5,000 + R850/m</option></select><input id="newPrinPass" placeholder="Principal Password e.g. Prin2026"><button class="green" onclick="addSchool()">➕ ADD SCHOOL</button>
+<h3>🔍 ALL SCHOOLS</h3><input id="searchSchool" placeholder="Search school..." oninput="renderSchools()"><div id="schoolList"></div>
+<button class="grey" onclick="logout()">LOGOUT</button></div>
+
+<!-- MANUALS -->
+<div class="card hidden" id="manualsTab"><h2>📘 MANUALS</h2><button onclick="alert('MANUAL: Admin adds school. Principal activates demo, adds educator + librarian. Librarian adds learners + books, issues/returns. Parent checks with ID + School only.')">📘 USER MANUAL</button><p class="small">Xintimani Group | WhatsApp: 078 023 3263 | App: https://vusichauke3037-glitch.github.io/MAKHANANI-LIBRARY/<br>Prices: STARTER R2,500 + R350/m | STANDARD R3,500 + R550/m | PREMIUM R5,000 + R850/m</p></div>
+
+</div>
 <script>
 var schools=JSON.parse(localStorage.getItem('mk_schools')||'[]');
 var learners=JSON.parse(localStorage.getItem('mk_learners')||'[]');
@@ -43,20 +60,20 @@ var books=JSON.parse(localStorage.getItem('mk_books')||'[]');
 var issues=JSON.parse(localStorage.getItem('mk_issues')||'[]');
 var curSchool='';var curRole='';
 function save(){localStorage.setItem('mk_schools',JSON.stringify(schools));localStorage.setItem('mk_learners',JSON.stringify(learners));localStorage.setItem('mk_books',JSON.stringify(books));localStorage.setItem('mk_issues',JSON.stringify(issues));}
-function fillSchools(){var s='<option value="">Select School</option>';for(var i=0;i<schools.length;i++)s+='<option value="'+schools[i].emis+'">'+schools[i].name+'</option>';document.getElementById('schoolSel').innerHTML=s;}
-function doLogin(){var r=document.getElementById('role').value;var sch=document.getElementById('schoolSel').value;var p=document.getElementById('passInput').value.trim();if(r==='ADMIN'){if(p!=='admin123'){alert('Wrong Admin Password! Demo: admin123');return;}document.getElementById('loginCard').classList.add('hidden');document.getElementById('adminCard').classList.remove('hidden');renderSchools();return;}if(!sch){alert('Select School First!');return;}curSchool=sch;curRole=r;document.getElementById('loginCard').classList.add('hidden');if(r==='PRINCIPAL'){document.getElementById('prinCard').classList.remove('hidden');renderPrin();}if(r==='LIBRARIAN'){document.getElementById('libCard').classList.remove('hidden');renderLib();}if(r==='EDUCATOR'){document.getElementById('eduCard').classList.remove('hidden');renderEdu();}if(r==='PARENT'){document.getElementById('parentCard').classList.remove('hidden');var f=null;for(var i=0;i<learners.length;i++){if(learners[i].id===p&&learners[i].school===sch)f=learners[i];}if(!f){document.getElementById('parentView').innerHTML='<b style="color:red">❌ Learner NOT Found! Check ID + School!</b>';return;}var my=[];for(var j=0;j<issues.length;j++){if(issues[j].learner===f.id)my.push(issues[j]);}document.getElementById('parentView').innerHTML='<div class="badge"><b>Learner ID:</b> '+f.id+'<br><b>Grade:</b> '+f.grade+'<br><b>Books Borrowed:</b> '+my.length+'<br>'+my.map(function(x){return '- '+x.book+' - '+x.status+'<br>'}).join('')+'</div>';}}
+function fillSchools(){var s='<option value="">ALL SCHOOLS</option>';for(var i=0;i<schools.length;i++)s+='<option value="'+schools[i].emis+'">'+schools[i].name+'</option>';document.getElementById('schoolSel').innerHTML=s;}
+function setSchool(){curSchool=document.getElementById('schoolSel').value;renderAll();}
+function showTab(id,btn){var tabs=['returnTab','learnersTab','booksTab','prinTab','parentTab','adminTab','manualsTab'];for(var i=0;i<tabs.length;i++)document.getElementById(tabs[i]).classList.add('hidden');document.getElementById(id).classList.remove('hidden');var bs=document.querySelectorAll('.tabs button');for(var j=0;j<bs.length;j++)bs[j].classList.remove('active');if(btn)btn.classList.add('active');}
+function doLogin(){var p=document.getElementById('passInput').value.trim();if(p==='admin123'){alert('✅ LOGGED IN AS ADMIN!');showTab('adminTab',document.querySelectorAll('.tabs button')[5]);renderSchools();return;}if(p){curRole='USER';alert('✅ Logged in! Select tab to work.');}else{alert('Type Password / Learner ID!');}}
 function logout(){location.reload();}
 function addSchool(){var e=document.getElementById('newEmis').value.trim();var n=document.getElementById('newSchool').value.trim();var pk=document.getElementById('newPkg').value;var pp=document.getElementById('newPrinPass').value.trim();if(!e||!n){alert('Type EMIS + School!');return;}schools.push({emis:e,name:n,pkg:pk,prinPass:pp||'Prin2026',status:'ACTIVE',date:new Date().toLocaleDateString()});save();fillSchools();renderSchools();alert('School Added! '+n);document.getElementById('newEmis').value='';document.getElementById('newSchool').value='';}
-function renderSchools(){var q=(document.getElementById('searchSchool').value||'').toLowerCase();var h='';for(var i=0;i<schools.length;i++){if(q&&schools[i].name.toLowerCase().indexOf(q)===-1)continue;h+='<div class="badge"><b>'+schools[i].name+'</b> ('+schools[i].emis+')<br>Package: '+schools[i].pkg+' | Status: '+schools[i].status+' | Date: '+schools[i].date+'<br>Principal Pass: '+schools[i].prinPass+'</div>';}document.getElementById('schoolList').innerHTML=h||'No schools yet!';document.getElementById('adminStats').innerHTML='Schools: '+schools.length+' | Learners: '+learners.length+' | Books: '+books.length+' | Issued: '+issues.length;}
-function activateDemo(){alert('✅ DEMO ACTIVATED! 7 Days Free! Add Educator + Librarian Now!');}
-function addEducator(){alert('✅ Educator Added! '+document.getElementById('eduName').value);}
-function setLibPass(){alert('✅ Librarian Password Set! '+document.getElementById('libPass').value);}
-function renderPrin(){var ls=learners.filter(function(x){return x.school===curSchool});var bs=books.filter(function(x){return x.school===curSchool});document.getElementById('prinStats').innerHTML='Learners: '+ls.length+' | Books: '+bs.length+' | Borrowed: '+issues.length;}
-function addLearner(){var n=document.getElementById('lName').value.trim();var g=document.getElementById('lGrade').value.trim();var id=document.getElementById('lId').value.trim();if(!n||!id){alert('Type Name + ID!');return;}learners.push({name:n,grade:g,id:id,school:curSchool});save();renderLib();alert('Learner Added! '+n+' - '+id);}
-function addBook(){var t=document.getElementById('bTitle').value.trim();var c=document.getElementById('bCode').value.trim();if(!t||!c){alert('Type Title + Code!');return;}books.push({title:t,code:c,school:curSchool,status:'AVAILABLE'});save();renderLib();alert('Book Added! '+t);}
-function issueBook(){var l=document.getElementById('iLearner').value.trim();var b=document.getElementById('iBook').value.trim();issues.push({learner:l,book:b,status:'BORROWED',date:new Date().toLocaleDateString()});save();renderLib();alert('✅ Issued '+b+' to '+l);}
-function returnBook(){var b=document.getElementById('rBook').value.trim();for(var i=0;i<issues.length;i++){if(issues[i].book===b)issues[i].status='RETURNED';}save();renderLib();alert('✅ Returned '+b);}
-function renderLib(){var h='<h3>Learners ('+learners.length+')</h3>';for(var i=0;i<learners.length;i++)h+='<div class="badge">'+learners[i].name+' - '+learners[i].grade+' - ID: '+learners[i].id+'</div>';h+='<h3>Books ('+books.length+')</h3>';for(var j=0;j<books.length;j++)h+='<div class="badge">'+books[j].title+' - '+books[j].code+' - '+books[j].status+'</div>';h+='<h3>Issued ('+issues.length+')</h3>';for(var k=0;k<issues.length;k++)h+='<div class="badge">'+issues[k].book+' → '+issues[k].learner+' - '+issues[k].status+'</div>';document.getElementById('libList').innerHTML=h;}
-function renderEdu(){document.getElementById('eduList').innerHTML='<div class="badge">Learners in your school: '+learners.filter(function(x){return x.school===curSchool}).length+'<br>Books: '+books.filter(function(x){return x.school===curSchool}).length+'</div>';}
-fillSchools();renderSchools();
+function renderSchools(){var q=(document.getElementById('searchSchool').value||'').toLowerCase();var h='';for(var i=0;i<schools.length;i++){if(q&&schools[i].name.toLowerCase().indexOf(q)===-1)continue;h+='<div class="badge"><b>'+schools[i].name+'</b> ('+schools[i].emis+')<br>Package: '+schools[i].pkg+' | Status: '+schools[i].status+' | Date: '+schools[i].date+'<br>Principal Pass: '+schools[i].prinPass+'</div>';}document.getElementById('schoolList').innerHTML=h||'No schools yet!';document.getElementById('adminStats').innerHTML='Schools: '+schools.length+' | Learners: '+learners.length+' | Books: '+books.length+' | Issued: '+issues.length;document.getElementById('prinStats').innerHTML='Learners: '+learners.length+' | Books: '+books.length+' | Borrowed: '+issues.length;}
+function putAllDemo(){for(var i=0;i<schools.length;i++){schools[i].pkg='DEMO';schools[i].status='DEMO';}save();renderSchools();alert('✅ All schools on 7 Days DEMO!');}
+function putExpired(){for(var i=0;i<schools.length;i++){if(schools[i].pkg==='DEMO')schools[i].status='UNPAID';}save();renderSchools();alert('🔴 Expired → UNPAID!');}
+function addLearner(){var n=document.getElementById('lName').value.trim();var g=document.getElementById('lGrade').value.trim();var id=document.getElementById('lId').value.trim();if(!n||!id){alert('Type Name + ID!');return;}learners.push({name:n,grade:g,id:id,school:curSchool});save();renderAll();alert('Learner Added! '+n+' - '+id);}
+function addBook(){var t=document.getElementById('bTitle').value.trim();var c=document.getElementById('bCode').value.trim();if(!t||!c){alert('Type Title + Code!');return;}books.push({title:t,code:c,school:curSchool,status:'AVAILABLE'});save();renderAll();alert('Book Added! '+t);}
+function issueBook(){var l=document.getElementById('iLearner').value.trim();var b=document.getElementById('iBook').value.trim();issues.push({learner:l,book:b,status:'BORROWED',date:new Date().toLocaleDateString()});save();renderAll();alert('✅ Issued '+b+' to '+l);}
+function returnBook(){var b=document.getElementById('rBook').value.trim();for(var i=0;i<issues.length;i++){if(issues[i].book===b)issues[i].status='RETURNED';}save();renderAll();alert('✅ Returned '+b);}
+function parentCheck(){var p=document.getElementById('passInput').value.trim();var f=null;for(var i=0;i<learners.length;i++){if(learners[i].id===p&&(!curSchool||learners[i].school===curSchool))f=learners[i];}if(!f){document.getElementById('parentView').innerHTML='<b style="color:red">❌ Learner NOT Found! Check ID + School!</b>';return;}var my=[];for(var j=0;j<issues.length;j++){if(issues[j].learner===f.id)my.push(issues[j]);}document.getElementById('parentView').innerHTML='<div class="badge"><b>Learner ID:</b> '+f.id+'<br><b>Grade:</b> '+f.grade+'<br><b>Books Borrowed:</b> '+my.length+'<br>'+my.map(function(x){return '- '+x.book+' - '+x.status+'<br>'}).join('')+'</div>';}
+function renderAll(){var h='';for(var i=0;i<learners.length;i++)h+='<div class="badge">'+learners[i].name+' - '+learners[i].grade+' - ID: '+learners[i].id+'</div>';document.getElementById('learnerList').innerHTML=h||'No learners yet!';var b='';for(var j=0;j<books.length;j++)b+='<div class="badge">'+books[j].title+' - '+books[j].code+' - '+books[j].status+'</div>';document.getElementById('bookList').innerHTML=b||'No books yet!';var r='';for(var k=0;k<issues.length;k++)r+='<div class="badge">'+issues[k].book+' → '+issues[k].learner+' - '+issues[k].status+'</div>';document.getElementById('returnList').innerHTML=r||'No issued books!';renderSchools();}
+fillSchools();renderAll();
 </script></body></html>
