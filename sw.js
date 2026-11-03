@@ -1,4 +1,8 @@
-var CACHE='makhanani-v1';
-var FILES=['./','./index.html','./logo.png','./manifest.json'];
-self.addEventListener('install',function(e){e.waitUntil(caches.open(CACHE).then(function(c){return c.addAll(FILES)}))});
-self.addEventListener('fetch',function(e){e.respondWith(caches.match(e.request).then(function(r){return r||fetch(e.request)}))});
+const CACHE_NAME = "makhanani-v2026-05-11-permissions-final";
+const urlsToCache = ["index.html","manual.html","founder-manual.html","training-manual.html","agents.html","jobs.html","logo.png","manifest.json"];
+self.addEventListener("install", event => {
+  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache)));
+});
+self.addEventListener("fetch", event => {
+  event.respondWith(caches.match(event.request).then(response => response || fetch(event.request)));
+});
