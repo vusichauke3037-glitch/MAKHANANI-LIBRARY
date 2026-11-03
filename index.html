@@ -13,7 +13,7 @@ header img{width:170px;background:#fff;border-radius:12px;padding:6px}
 .card{background:#fff;border-radius:14px;padding:14px;margin:10px 0;box-shadow:0 2px 8px rgba(0,0,0,.1)}
 input,select{width:100%;padding:13px;margin:6px 0;border:2px solid #bfdbfe;border-radius:10px;font-size:16px}
 button{width:100%;padding:13px;margin:6px 0;border:0;border-radius:12px;background:#1a56db;color:#fff;font-weight:900;font-size:15px;cursor:pointer}
-.green{background:#16a34a}.red{background:#dc2626}.yellow{background:#facc15;color:#000}.dark{background:#0a1a4d}.grey{background:#64748b}
+.green{background:#16a34a}.red{background:#dc2626}.yellow{background:#facc15;color:#000}.dark{background:#0a1a4d}.grey{background:#64748b}.orange{background:#ea580c}
 .hidden{display:none}
 .badge{background:#f0f9ff;border:2px solid #bfdbfe;border-radius:10px;padding:10px;margin:6px 0}
 .tabs{display:flex;gap:5px;flex-wrap:wrap}
@@ -22,6 +22,7 @@ button{width:100%;padding:13px;margin:6px 0;border:0;border-radius:12px;backgrou
 .small{font-size:13px;color:#475569;text-align:center}
 h2,h3{text-align:center}
 .dash{border:3px solid #f59e0b;border-radius:14px;padding:12px;background:#fffbeb}
+.redbox{border:3px solid #dc2626;border-radius:14px;padding:12px;background:#fef2f2;text-align:center;font-weight:900}
 </style>
 </head>
 <body>
@@ -30,16 +31,16 @@ h2,h3{text-align:center}
 <h1 style="margin:6px 0">MAKHANANI DIGITAL LIBRARY</h1>
 <p style="margin:0">📚 POWERED BY XINTIMANI GROUP | FOR ALL SCHOOLS</p>
 </header>
-
 <div class="wrap">
 
-<!-- TOP - LIKE YOUR PHOTO -->
+<!-- TOP -->
 <div class="card">
 <button class="red" onclick="logout()">🔓 LOGOUT</button>
 <h3 style="margin:4px 0">WELCOME ADMINISTRATOR!</h3>
 <input id="searchSchoolTop" placeholder="🔍 SWITCH SCHOOL (Admin Only) - SEARCH words" oninput="renderSchools()">
 <div id="topSchoolList"></div>
 <p class="small" id="topCount"></p>
+<button class="yellow" onclick="window.open('manual.html','_blank')">📘 OPEN USER MANUAL</button>
 </div>
 
 <!-- LOGIN -->
@@ -47,9 +48,10 @@ h2,h3{text-align:center}
 <select id="schoolSel"><option value="">Select School</option></select>
 <input id="passInput" type="password" placeholder="Password / Learner ID">
 <button onclick="doLogin()">🔐 LOGIN</button>
-<p class="small">ADMIN Password: <b>admin123</b> | Parent: School + Learner ID ONLY</p>
+<p class="small">ADMIN: admin123 | Principal: Principal Password | Librarian: Librarian Password | Parent: School + Learner ID ONLY</p>
 <a href="app.apk"><button class="yellow">⬇️ DOWNLOAD APP (.APK)</button></a>
 <a href="jobs.html"><button class="dark">💼 JOBS - BECOME AN AGENT - R500/SCHOOL</button></a>
+<button class="orange" onclick="window.open('manual.html','_blank')">📘 USER MANUAL - HOW TO USE APP</button>
 </div>
 
 <!-- TABS -->
@@ -68,14 +70,15 @@ h2,h3{text-align:center}
 <div class="card" id="homeTab">
 <h2>🏠 HOME</h2>
 <div id="homeStats" class="badge">Welcome to Makhanani!</div>
+<button class="yellow" onclick="window.open('manual.html','_blank')">📘 HOW TO USE - READ MANUAL</button>
 <p class="small">Use tabs above to work. Admin controls everything.</p>
 </div>
 
 <!-- ISSUE -->
 <div class="card hidden" id="issueTab">
 <h2>📤 ISSUE BOOK</h2>
-<input id="iLearner" placeholder="Learner ID">
-<input id="iBook" placeholder="Book Code">
+<input id="iLearner" placeholder="Learner ID e.g. L-0001">
+<input id="iBook" placeholder="Book Code e.g. B-001">
 <button class="green" onclick="issueBook()">📤 ISSUE</button>
 <div id="issueList"></div>
 </div>
@@ -117,17 +120,19 @@ h2,h3{text-align:center}
 <h3>➕ ADD EDUCATOR</h3>
 <input id="eduName" placeholder="Educator Name">
 <input id="eduPass" placeholder="Educator Password">
-<button onclick="alert('✅ Educator Added!')">➕ ADD EDUCATOR</button>
+<button onclick="alert('✅ Educator Added! '+document.getElementById('eduName').value)">➕ ADD EDUCATOR</button>
 <h3>🔐 LIBRARIAN PASSWORD</h3>
 <input id="libPass" placeholder="Librarian Password">
 <button onclick="alert('✅ Librarian Password Set!')">🔐 SET LIBRARIAN PASSWORD</button>
 <button onclick="window.print()">🖨️ PRINT FULL HISTORY</button>
+<button class="yellow" onclick="window.open('manual.html','_blank')">📘 PRINCIPAL MANUAL</button>
 </div>
 
 <!-- PARENT -->
 <div class="card hidden" id="parentTab">
 <h2>👨‍👩‍👧 PARENT - SECURE VIEW</h2>
-<p class="small">ID + SCHOOL ONLY. No name search.</p>
+<p class="small">ID + SCHOOL ONLY. No name search. You see ONLY your child.</p>
+<input id="parentId" placeholder="Type Learner ID e.g. L-0001">
 <button onclick="parentCheck()">🔍 CHECK MY CHILD</button>
 <div id="parentView"></div>
 </div>
@@ -136,14 +141,17 @@ h2,h3{text-align:center}
 <div class="card hidden" id="adminTab">
 <h2>👑 APP ADMINISTRATOR - FULL CONTROL</h2>
 <p class="small">✅ LOGGED IN AS ADMIN - ONLY ADMIN SEES SUBSCRIPTION DASHBOARD + FOUNDER + TRAINING MANUALS</p>
+<div class="redbox">PRINCIPAL / LIBRARIAN / EDUCATOR CANNOT SEE THIS!</div>
 
 <div class="dash">
 <h3>🔒 SUBSCRIPTION DASHBOARD - ADMIN ONLY 🔒</h3>
 <button onclick="window.open('agents.html','_blank')" style="width:100%;padding:16px;margin:8px 0;border:0;border-radius:12px;background:#dc2626;color:#fff;font-weight:900;font-size:18px;cursor:pointer">👑 AGENT TRACKER - ADMIN ONLY 🔒</button>
-<p class="small">Track 10 Agents, Schools, R500 / R350 Payments</p>
+<button class="dark" onclick="window.open('manual.html','_blank')">📘 USER MANUAL - ADMIN ONLY</button>
 <button class="yellow" onclick="putAllDemo()">⚡ PUT ALL SCHOOLS ON 7 DAYS DEMO</button>
 <button class="red" onclick="putExpired()">🔴 PUT EXPIRED / DEMO ENDED → UNPAID</button>
+<button class="grey" onclick="putAllUnpaid()">⚫ PUT ALL SCHOOLS → UNPAID</button>
 <div id="adminStats" class="badge"></div>
+<p class="small">Total Schools | Active Paid | Demo | Monthly Income</p>
 </div>
 
 <h3>➕ ADD SCHOOL</h3>
@@ -157,7 +165,8 @@ h2,h3{text-align:center}
 <div id="schoolList"></div>
 
 <h3>📘 MANUALS</h3>
-<button onclick="alert('MANUAL: Admin adds school. Principal activates demo. Librarian adds learners + books, issues/returns. Parent checks with ID + School only.')">📘 USER MANUAL</button>
+<button onclick="window.open('manual.html','_blank')">📘 OPEN FULL USER MANUAL</button>
+<button class="yellow" onclick="window.open('jobs.html','_blank')">💼 JOBS - AGENT FORM</button>
 <p class="small">Xintimani Group | WhatsApp: 078 023 3263<br>STARTER R2,500 + R350/m | STANDARD R3,500 + R550/m | PREMIUM R5,000 + R850/m</p>
 </div>
 
@@ -175,15 +184,16 @@ function showTab(id,btn){var t=['homeTab','issueTab','returnTab','learnersTab','
 function doLogin(){var p=document.getElementById('passInput').value.trim();if(p==='admin123'){alert('✅ LOGGED IN AS ADMIN!');showTab('adminTab',document.querySelectorAll('.tabs button')[7]);return;}if(p){alert('✅ Logged in!');}else{alert('Type Password / Learner ID!');}}
 function logout(){location.reload();}
 function addSchool(){var e=document.getElementById('newEmis').value.trim();var n=document.getElementById('newSchool').value.trim();var pk=document.getElementById('newPkg').value;var pp=document.getElementById('newPrinPass').value.trim();if(!e||!n){alert('Type EMIS + School!');return;}schools.push({emis:e,name:n,pkg:pk,prinPass:pp||'Prin2026',status:'ACTIVE',date:new Date().toLocaleDateString()});save();fillSchools();renderSchools();alert('School Added! '+n);document.getElementById('newEmis').value='';document.getElementById('newSchool').value='';}
-function renderSchools(){var q=((document.getElementById('searchSchool').value||'')+' '+(document.getElementById('searchSchoolTop').value||'')).toLowerCase();var h='';var c=0;for(var i=0;i<schools.length;i++){var q2=(document.getElementById('searchSchoolTop').value||'').toLowerCase();if(q2&&schools[i].name.toLowerCase().indexOf(q2)===-1&&schools[i].emis.indexOf(q2)===-1)continue;c++;h+='<div class="badge" onclick="selectSchool(\''+schools[i].emis+'\')"><b>'+schools[i].emis+' - '+schools[i].name+'</b><br>Package: '+schools[i].pkg+' | Status: '+schools[i].status+'</div>';}document.getElementById('schoolList').innerHTML=h||'No schools yet!';document.getElementById('topSchoolList').innerHTML=h||'';document.getElementById('topCount').innerHTML=c+' school(s) found - Tap one to SWITCH!';document.getElementById('adminStats').innerHTML='Schools: '+schools.length+' | Learners: '+learners.length+' | Books: '+books.length+' | Issued: '+issues.length;document.getElementById('homeStats').innerHTML='Schools: '+schools.length+' | Learners: '+learners.length+' | Books: '+books.length+' | Issued: '+issues.length;document.getElementById('prinStats').innerHTML='Learners: '+learners.length+' | Books: '+books.length+' | Borrowed: '+issues.length;}
+function renderSchools(){var q2=(document.getElementById('searchSchoolTop').value||'').toLowerCase();var q3=(document.getElementById('searchSchool').value||'').toLowerCase();var q=q2||q3;var h='';var c=0;for(var i=0;i<schools.length;i++){if(q&&schools[i].name.toLowerCase().indexOf(q)===-1&&schools[i].emis.indexOf(q)===-1)continue;c++;h+='<div class="badge" onclick="selectSchool(\''+schools[i].emis+'\')"><b>'+schools[i].emis+' - '+schools[i].name+'</b><br>Package: '+schools[i].pkg+' | Status: '+schools[i].status+'</div>';}document.getElementById('schoolList').innerHTML=h||'No schools yet!';document.getElementById('topSchoolList').innerHTML=h||'';document.getElementById('topCount').innerHTML=c+' school(s) found - Tap one to SWITCH!';var paid=0,demo=0;for(var j=0;j<schools.length;j++){if(schools[j].pkg==='DEMO')demo++;else paid++;}document.getElementById('adminStats').innerHTML='Schools: '+schools.length+' | ACTIVE PAID: '+paid+' | DEMO: '+demo+' | Learners: '+learners.length+' | Books: '+books.length+' | Issued: '+issues.length;document.getElementById('homeStats').innerHTML='Schools: '+schools.length+' | Learners: '+learners.length+' | Books: '+books.length+' | Issued: '+issues.length;document.getElementById('prinStats').innerHTML='Learners: '+learners.length+' | Books: '+books.length+' | Borrowed: '+issues.length;}
 function selectSchool(emis){curSchool=emis;document.getElementById('schoolSel').value=emis;alert('✅ Switched to '+emis);renderSchools();}
 function putAllDemo(){for(var i=0;i<schools.length;i++){schools[i].pkg='DEMO';schools[i].status='DEMO';}save();renderSchools();alert('✅ All schools on 7 Days DEMO!');}
 function putExpired(){for(var i=0;i<schools.length;i++){if(schools[i].pkg==='DEMO')schools[i].status='UNPAID';}save();renderSchools();alert('🔴 Expired → UNPAID!');}
+function putAllUnpaid(){for(var i=0;i<schools.length;i++){schools[i].status='UNPAID';}save();renderSchools();alert('⚫ All → UNPAID!');}
 function addLearner(){var n=document.getElementById('lName').value.trim();var g=document.getElementById('lGrade').value.trim();var id=document.getElementById('lId').value.trim();if(!n||!id){alert('Type Name + ID!');return;}learners.push({name:n,grade:g,id:id,school:curSchool});save();renderAll();alert('Learner Added! '+n);}
 function addBook(){var t=document.getElementById('bTitle').value.trim();var c=document.getElementById('bCode').value.trim();if(!t||!c){alert('Type Title + Code!');return;}books.push({title:t,code:c,school:curSchool,status:'AVAILABLE'});save();renderAll();alert('Book Added! '+t);}
 function issueBook(){var l=document.getElementById('iLearner').value.trim();var b=document.getElementById('iBook').value.trim();if(!l||!b){alert('Type Learner ID + Book Code!');return;}issues.push({learner:l,book:b,status:'BORROWED',date:new Date().toLocaleDateString()});save();renderAll();alert('✅ Issued '+b+' to '+l);}
 function returnBook(){var b=document.getElementById('rBook').value.trim();for(var i=0;i<issues.length;i++){if(issues[i].book===b)issues[i].status='RETURNED';}save();renderAll();alert('✅ Returned '+b);}
-function parentCheck(){var p=document.getElementById('passInput').value.trim();var f=null;for(var i=0;i<learners.length;i++){if(learners[i].id===p)f=learners[i];}if(!f){document.getElementById('parentView').innerHTML='<b style="color:red">❌ Learner NOT Found! Check ID + School!</b>';return;}var my=[];for(var j=0;j<issues.length;j++){if(issues[j].learner===f.id)my.push(issues[j]);}document.getElementById('parentView').innerHTML='<div class="badge"><b>ID:</b> '+f.id+'<br><b>Grade:</b> '+f.grade+'<br><b>Books:</b> '+my.length+'<br>'+my.map(function(x){return '- '+x.book+' - '+x.status+'<br>'}).join('')+'</div>';}
+function parentCheck(){var p=(document.getElementById('parentId').value||document.getElementById('passInput').value).trim();var f=null;for(var i=0;i<learners.length;i++){if(learners[i].id===p)f=learners[i];}if(!f){document.getElementById('parentView').innerHTML='<b style="color:red">❌ Learner NOT Found! Check ID + School!</b>';return;}var my=[];for(var j=0;j<issues.length;j++){if(issues[j].learner===f.id)my.push(issues[j]);}document.getElementById('parentView').innerHTML='<div class="badge"><b>ID:</b> '+f.id+'<br><b>Grade:</b> '+f.grade+'<br><b>Books:</b> '+my.length+'<br>'+my.map(function(x){return '- '+x.book+' - '+x.status+'<br>'}).join('')+'</div>';}
 function renderAll(){var h='';for(var i=0;i<learners.length;i++)h+='<div class="badge">'+learners[i].name+' - '+learners[i].grade+' - ID: '+learners[i].id+'</div>';document.getElementById('learnerList').innerHTML=h||'No learners yet!';var b='';for(var j=0;j<books.length;j++)b+='<div class="badge">'+books[j].title+' - '+books[j].code+'</div>';document.getElementById('bookList').innerHTML=b||'No books yet!';var r='';for(var k=0;k<issues.length;k++)r+='<div class="badge">'+issues[k].book+' → '+issues[k].learner+' - '+issues[k].status+'</div>';document.getElementById('issueList').innerHTML=r;document.getElementById('returnList').innerHTML=r||'No issued books!';renderSchools();}
 fillSchools();renderAll();
 </script>
