@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MAKHANANI - DBE + CAPS SUBJECTS</title>
+<title>MAKHANANI DIGITAL LIBRARY - SIMPLE NUMBERING</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial;background:#eef4ff}
 header{background:#0a1a4d;color:#fff;padding:14px;text-align:center}
@@ -11,22 +11,22 @@ header img{width:170px;background:#fff;border-radius:12px;padding:6px}
 .wrap{max-width:980px;margin:auto;padding:10px}
 .card{background:#fff;border-radius:14px;padding:14px;margin:10px 0;box-shadow:0 2px 8px rgba(0,0,0,.1)}
 input,select{width:100%;padding:13px;margin:6px 0;border:2px solid #bfdbfe;border-radius:10px;font-size:16px}
-button{width:100%;padding:13px;margin:6px 0;border:0;border-radius:12px;background:#1a56db;color:#fff;font-weight:900;font-size:15px}
+button{width:100%;padding:13px;margin:6px 0;border:0;border-radius:12px;background:#1a56db;color:#fff;font-weight:900;font-size:15px;cursor:pointer}
 .green{background:#16a34a}.red{background:#dc2626}.yellow{background:#facc15;color:#000}.dark{background:#0a1a4d}.grey{background:#64748b}.orange{background:#ea580c}
-.hidden{display:none}.badge{background:#f0f9ff;border:2px solid #bfdbfe;border-radius:10px;padding:10px;margin:6px 0}
-.tabs{display:flex;gap:5px;flex-wrap:wrap}.tabs button{flex:1;width:auto;padding:10px 4px;font-size:11px;background:#e2e8f0;color:#111}.tabs button.active{background:#1a56db;color:#fff}
+.hidden{display:none}.badge{background:#f0f9ff;border:2px solid #bfdbfe;border-radius:10px;padding:10px;margin:6px 0;word-break:break-word}
+.tabs{display:flex;gap:5px;flex-wrap:wrap}.tabs button{flex:1;width:auto;padding:10px 3px;font-size:10px;background:#e2e8f0;color:#111}.tabs button.active{background:#1a56db;color:#fff}
 .small{font-size:13px;color:#475569;text-align:center}h2,h3{text-align:center}
 .cloud{border:3px solid #16a34a;border-radius:14px;padding:12px;background:#f0fdf4;text-align:center;font-weight:900}
 .loginBox{border:3px solid #1a56db;border-radius:14px;padding:14px;background:#eff6ff}
 .searchBox{max-height:250px;overflow-y:auto;border:2px solid #bfdbfe;border-radius:10px;background:#fff}
-.barcodeCard{border:2px solid #0a1a4d;border-radius:12px;padding:10px;margin:8px 0;background:#fff;text-align:center}
-.barcodeCard .schoolName{font-weight:900;font-size:14px;background:#0a1a4d;color:#fff;padding:6px;border-radius:6px;margin-bottom:6px}
+.barcodeCard{border:2px solid #0a1a4d;border-radius:12px;padding:10px;margin:8px 0;background:#fff;text-align:center;page-break-inside:avoid}
 .printBox{border:3px solid #f59e0b;border-radius:14px;padding:12px;background:#fffbeb;margin:10px 0}
 .capsBox{border:3px solid #7c3aed;border-radius:14px;padding:12px;background:#f5f3ff;margin:10px 0}
-.subjectRow{display:flex;gap:6px;align-items:center}.subjectRow input{flex:1}.subjectRow button{width:80px}
+.inputGroup{border:2px solid #bfdbfe;border-radius:12px;padding:10px;margin:8px 0;background:#f8fafc}
+.subjectRow{display:flex;gap:6px}.subjectRow input{flex:1}.subjectRow button{width:80px}
 #reader{width:100%;border:3px solid #1a56db;border-radius:12px;overflow:hidden}
-table{width:100%;border-collapse:collapse;margin:8px 0}th,td{border:1px solid #bfdbfe;padding:8px;text-align:left;font-size:13px}th{background:#1a56db;color:#fff}
-@media print{ header,.tabs,#loginCard,.noPrint{display:none} }
+table{width:100%;border-collapse:collapse;margin:8px 0}th,td{border:1px solid #bfdbfe;padding:8px;text-align:left;font-size:12px}th{background:#1a56db;color:#fff}
+@media print{ header,.tabs,#loginCard,.noPrint,.inputGroup{display:none} .barcodeCard{border:2px solid #000} }
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -36,9 +36,9 @@ table{width:100%;border-collapse:collapse;margin:8px 0}th,td{border:1px solid #b
 </head>
 <body>
 <header>
-<img src="logo.png">
+<img src="logo.png" alt="XINTIMANI">
 <h1>MAKHANANI DIGITAL LIBRARY</h1>
-<p>📚 ADMIN UPLOAD DBE SCHOOLS + CAPS SUBJECTS & CODES</p>
+<p>📚 SIMPLE NUMBERING: SUBJECT-GRADE-NUMBER | Example: ACC-G10-001 | MAKHANANI BRANDING</p>
 </header>
 <div class="wrap">
 
@@ -52,12 +52,13 @@ table{width:100%;border-collapse:collapse;margin:8px 0}th,td{border:1px solid #b
 <div class="card" id="loginCard">
 <div class="loginBox">
 <h2>🔐 LOGIN - RANK + DBE SCHOOL</h2>
-<select id="rankSel"><option value="">-- Select Rank --</option><option>ADMIN</option><option>PRINCIPAL</option><option>LIBRARIAN</option><option>EDUCATOR</option><option>PARENT</option><option>LEARNER</option></select>
-<input id="schoolSearch" placeholder="Search DBE: WORDSWORTH or 700310854" oninput="searchDBESchools()">
+<select id="rankSel" onchange="onRankChange()"><option value="">-- Select Rank --</option><option>ADMIN</option><option>PRINCIPAL</option><option>LIBRARIAN</option><option>EDUCATOR</option><option>PARENT</option><option>LEARNER</option></select>
+<input id="schoolSearch" placeholder="Search DBE: WORDSWORTH or 700310854 or BENONI or GAUTENG" oninput="searchDBESchools()">
 <div id="schoolSearchResults" class="searchBox"></div>
 <input id="selectedSchool" type="hidden">
-<div class="badge" id="selectedSchoolDisplay">No DBE school selected</div>
-<input id="fbEmail" type="email" placeholder="Email"><input id="fbPass" type="password" placeholder="Password"><input id="learnerIdInput" class="hidden" placeholder="Learner ID"><button class="dark" onclick="firebaseLogin()">🔐 LOGIN</button>
+<div class="badge" id="selectedSchoolDisplay">No DBE school selected - EMIS+NAME+TOWN+PROVINCE</div>
+<input id="fbEmail" type="email" placeholder="Email"><input id="fbPass" type="password" placeholder="Password"><input id="learnerIdInput" class="hidden" placeholder="Learner ID e.g. L-0001"><button class="dark" onclick="firebaseLogin()">🔐 LOGIN</button>
+<p class="small" id="loginHelp">Select Rank + DBE School</p>
 </div>
 </div>
 
@@ -66,223 +67,385 @@ table{width:100%;border-collapse:collapse;margin:8px 0}th,td{border:1px solid #b
 <button onclick="showTab('scanTab',this)">📷 SCANNER</button>
 <button onclick="showTab('issueTab',this)">📤 ISSUE</button>
 <button onclick="showTab('returnTab',this)">📥 RETURN</button>
-<button onclick="showTab('booksTab',this)">📚 BOOKS</button>
+<button onclick="showTab('booksTab',this)">📚 BOOKS+QTY</button>
 <button onclick="showTab('learnersTab',this)">👥 LEARNERS</button>
-<button onclick="showTab('adminTab',this)">👑 ADMIN - DBE + CAPS</button>
+<button onclick="showTab('adminTab',this)">👑 ADMIN DBE+CAPS</button>
 </div>
 
-<div class="card" id="homeTab"><h2>🏠 HOME</h2><div id="homeStats" class="badge"></div><div class="badge" id="homeSchoolName"></div><div class="capsBox"><h3>📚 CAPS SUBJECTS LOADED</h3><div id="capsCount" class="badge"></div></div></div>
-<div class="card hidden" id="scanTab"><h2>📷 SCANNER</h2><div id="reader"></div><button class="dark" onclick="startScanner()">📷 START</button><button class="red" onclick="stopScanner()">🔴 STOP</button><input id="scanResult" placeholder="Scanned"><div class="badge" id="scanLog">Ready</div></div>
-<div class="card hidden" id="issueTab"><h2>📤 ISSUE - TYPE OR SCAN</h2><input id="iLearner" list="learnerIdList" placeholder="TYPE Learner ID OR SELECT OR SCAN" oninput="onLearnerTyping()"><datalist id="learnerIdList"></datalist><input id="iLearnerNameDisplay" disabled style="background:#e0f2fe" placeholder="Learner name"><div id="learnerSearchResults" class="searchBox"></div><input id="iBook" list="bookCodeList" placeholder="TYPE Book Unique Number OR SELECT OR SCAN" oninput="onBookTyping()"><datalist id="bookCodeList"></datalist><input id="iBookTitleDisplay" disabled style="background:#e0f2fe" placeholder="Book title"><div id="bookSearchResults" class="searchBox"></div><button class="green" onclick="issueBook()">📤 ISSUE</button><div id="issueList"></div></div>
-<div class="card hidden" id="returnTab"><h2>📥 RETURN - TYPE OR SCAN</h2><input id="rBook" list="borrowedBooksList" placeholder="TYPE Book Number OR SELECT OR SCAN" oninput="onReturnBookTyping()"><datalist id="borrowedBooksList"></datalist><input id="rBookTitleDisplay" disabled style="background:#e0f2fe" placeholder="Book title"><div id="returnSearchResults" class="searchBox"></div><button class="yellow" onclick="returnBook()">📥 RETURN</button><div id="returnList"></div></div>
+<div class="card" id="homeTab"><h2>🏠 HOME</h2><div id="homeStats" class="badge"></div><div class="badge" id="homeSchoolName">No school selected</div><div class="capsBox"><h3>📚 CAPS SUBJECTS + SIMPLE NUMBERING</h3><div class="badge" style="background:#fef9c3"><b>Format: SUBJECT-GRADE-NUMBER</b><br>Example: ACC-G10-001, MATH-G10-025, ENHL-G12-100<br>Each barcode includes MAKHANANI DIGITAL LIBRARY + School Name + Town + Province</div><div id="capsCount" class="badge"></div></div></div>
+
+<div class="card hidden" id="scanTab">
+<h2>📷 SCANNER - Optional, Typing Works!</h2>
+<div class="cloud">You can TYPE Learner ID + Book Number - Scanning optional!</div>
+<div id="reader"></div>
+<div style="display:flex;gap:6px"><button class="dark" onclick="startScanner()">📷 START CAMERA</button><button class="red" onclick="stopScanner()">🔴 STOP</button></div>
+<input id="scanResult" placeholder="Scanned code"><div style="display:flex;gap:6px"><button class="green" onclick="useScanForIssue()">USE FOR LEARNER ID</button><button class="yellow" onclick="useScanForBook()">USE FOR BOOK</button><button class="grey" onclick="useScanForReturn()">USE FOR RETURN</button></div>
+<div class="badge" id="scanLog">Ready</div>
+</div>
+
+<div class="card hidden" id="issueTab">
+<h2>📤 ISSUE BOOK - TYPE OR SCAN OR SELECT</h2>
+<div class="cloud">✅ TYPE: L-0001 + ACC-G10-001 OR SELECT OR SCAN</div>
+<div class="inputGroup">
+<label style="font-weight:900">1️⃣ LEARNER - TYPE / SELECT / SCAN:</label>
+<input id="iLearner" list="learnerIdList" placeholder="✅ TYPE Learner ID e.g. L-0001 OR SELECT OR SCAN" oninput="onLearnerTyping()">
+<datalist id="learnerIdList"></datalist>
+<input id="iLearnerNameDisplay" disabled style="background:#e0f2fe" placeholder="Learner name">
+<div id="learnerSearchResults" class="searchBox"></div>
+<button class="orange" onclick="startScannerForLearner()">📷 SCAN LEARNER BARCODE</button>
+</div>
+<div class="inputGroup">
+<label style="font-weight:900">2️⃣ TEXTBOOK - TYPE / SELECT / SCAN: FORMAT ACC-G10-001</label>
+<input id="iBook" list="bookCodeList" placeholder="✅ TYPE Book Number e.g. ACC-G10-001 OR MATH-G10-025 OR SELECT OR SCAN" oninput="onBookTyping()">
+<datalist id="bookCodeList"></datalist>
+<input id="iBookTitleDisplay" disabled style="background:#e0f2fe" placeholder="Book title">
+<div id="bookSearchResults" class="searchBox"></div>
+<button class="orange" onclick="startScannerForBook()">📷 SCAN BOOK BARCODE</button>
+</div>
+<button class="green" style="font-size:18px;padding:16px" onclick="issueBook()">📤 ISSUE BOOK - CONFIRM</button>
+<div class="badge" id="issueStatus">Type Learner ID + Book Number (ACC-G10-001 format), then Issue</div>
+<div id="issueList"></div>
+</div>
+
+<div class="card hidden" id="returnTab">
+<h2>📥 RETURN BOOK - TYPE OR SCAN OR SELECT - Format ACC-G10-001</h2>
+<div class="inputGroup">
+<label style="font-weight:900">TEXTBOOK TO RETURN - TYPE ACC-G10-001:</label>
+<input id="rBook" list="borrowedBooksList" placeholder="✅ TYPE e.g. ACC-G10-001 OR SELECT borrowed OR SCAN" oninput="onReturnBookTyping()">
+<datalist id="borrowedBooksList"></datalist>
+<input id="rBookTitleDisplay" disabled style="background:#e0f2fe" placeholder="Book title">
+<div id="returnSearchResults" class="searchBox"></div>
+<button class="orange" onclick="startScannerForReturn()">📷 SCAN BOOK TO RETURN</button>
+</div>
+<button class="yellow" style="font-size:18px;padding:16px;color:#000" onclick="returnBook()">📥 RETURN BOOK - CONFIRM</button>
+<div class="badge" id="returnStatus">Type ACC-G10-001, then Return</div>
+<div id="returnList"></div>
+</div>
 
 <div class="card hidden" id="booksTab">
-<h2>📚 BOOKS - CAPS SUBJECTS + UNIQUE</h2>
+<h2>📚 BOOKS - SIMPLE NUMBERING ACC-G10-001 + MAKHANANI BRANDING</h2>
 <div class="cloud">
-<h3>➕ ADD TEXTBOOK - CAPS SUBJECT CODE</h3>
-<input id="bTitle" placeholder="Book Title">
-<select id="bSubject"></select>
-<select id="bGrade"><option value="">Grade</option><option>G4</option><option>G5</option><option>G6</option><option>G7</option><option>G8</option><option>G9</option><option>G10</option><option>G11</option><option>G12</option></select>
-<input id="bTeacher" placeholder="Teacher e.g. Mr Nkosi">
-<input id="bCodeManual" placeholder="Manual Code (Auto)">
-<button class="green" onclick="addBookWithDBECode()">➕ ADD BOOK - GENERATE UNIQUE + BARCODE</button>
-<div class="badge" id="previewUnique">Preview: EMIS-SUBJECT-GRADE-####</div>
+<h3>➕ ADD TEXTBOOK - SIMPLE NUMBERING + QUANTITY</h3>
+<input id="bTitle" placeholder="Book Title e.g. Accounting Grade 10">
+<div style="display:flex;gap:6px">
+<select id="bSubject" style="flex:1"></select>
+<select id="bGrade" style="flex:0.6"><option value="">Grade</option><option>G4</option><option>G5</option><option>G6</option><option>G7</option><option>G8</option><option>G9</option><option>G10</option><option>G11</option><option>G12</option></select>
+<input id="bQty" type="number" min="1" max="500" value="1" placeholder="Qty" style="flex:0.5;background:#fef9c3;border:3px solid #f59e0b;font-weight:900;text-align:center">
 </div>
+<input id="bTeacher" placeholder="Teacher e.g. Mr Nkosi - Per Teacher Filter">
+<input id="bCondition" placeholder="Condition e.g. NEW" value="NEW">
+<input id="bCodeManual" placeholder="Manual Code e.g. ACC-G10-001 (Leave empty = Auto)">
+<button class="green" onclick="addBookWithDBECode()">➕ ADD BOOK(S) - SIMPLE NUMBERING ACC-G10-001 + QTY</button>
+<div class="badge" id="previewUnique">Preview: ACC-G10-001 | Format: SUBJECT-GRADE-NUMBER</div>
+<div class="badge" style="background:#fef9c3;border:2px solid #f59e0b">💡 Simple Format: SUBJECT-GRADE-NUMBER | Example ACC-G10-001<br>Qty 50 → ACC-G10-001 to ACC-G10-050 with MAKHANANI DIGITAL LIBRARY + School Name + Town + Province!</div>
+</div>
+
+<div class="printBox">
+<h3>🖨️ PRINT TEXTBOOK BARCODES - ALL / SUBJECT / TEACHER / GRADE</h3>
+<select id="bookPrintType" onchange="onBookPrintTypeChange()"><option value="ALL">📚 ALL TEXTBOOKS</option><option value="SUBJECT">📘 PER SUBJECT (ACC, MATH)</option><option value="TEACHER">👩‍🏫 PER TEACHER</option><option value="GRADE">🎓 PER GRADE (G10)</option></select>
+<div id="bookPrintSubjectBox" class="hidden"><label>Select CAPS Subject Code:</label><select id="bookPrintSubject" onchange="updateBookPrintCount()"><option value="">Select Subject</option></select></div>
+<div id="bookPrintTeacherBox" class="hidden"><label>Select Teacher:</label><input id="bookPrintTeacher" placeholder="Teacher e.g. Mr Nkosi" list="teacherList" oninput="updateBookPrintCount()"><datalist id="teacherList"></datalist></div>
+<div id="bookPrintGradeBox" class="hidden"><label>Select Grade:</label><select id="bookPrintGrade" onchange="updateBookPrintCount()"><option value="">Grade</option><option>G4</option><option>G5</option><option>G6</option><option>G7</option><option>G8</option><option>G9</option><option>G10</option><option>G11</option><option>G12</option></select></div>
+<button class="dark" onclick="printBookBarcodes()">🖨️ PRINT BARCODES - SIMPLE NUMBERING + MAKHANANI BRANDING</button>
+<div class="badge" id="bookPrintCount">Ready</div>
+</div>
+
 <div id="bookList"></div>
+<div id="bookBarcodePrintArea"></div>
 </div>
 
 <div class="card hidden" id="learnersTab">
-<h2>👥 LEARNERS + BARCODE</h2>
-<input id="lName" placeholder="Full Name"><input id="lGrade" placeholder="Grade e.g. G10"><input id="lClass" placeholder="Class e.g. 10A"><input id="lId" placeholder="Learner ID"><button class="green" onclick="addLearner()">➕ ADD LEARNER</button>
-<div id="learnerList"></div>
+<h2>👥 LEARNERS + BARCODE + MAKHANANI BRANDING</h2>
+<input id="lName" placeholder="Learner Full Name"><div style="display:flex;gap:6px"><input id="lGrade" placeholder="Grade e.g. G10" style="flex:1"><input id="lClass" placeholder="Class e.g. 10A" style="flex:1"></div><input id="lId" placeholder="Learner ID e.g. L-0001"><button class="green" onclick="addLearner()">➕ ADD LEARNER + BARCODE WITH MAKHANANI</button>
+<div class="printBox">
+<h3>🖨️ PRINT LEARNER CARDS - ALL / CLASS / GRADE</h3>
+<select id="learnerPrintType" onchange="onLearnerPrintTypeChange()"><option value="ALL">👥 ALL LEARNERS</option><option value="CLASS">🏫 PER CLASS (10A)</option><option value="GRADE">🎓 PER GRADE (G10)</option></select>
+<div id="learnerPrintClassBox" class="hidden"><input id="learnerPrintClass" placeholder="Class e.g. 10A" list="classList" oninput="updateLearnerPrintCount()"><datalist id="classList"></datalist></div>
+<div id="learnerPrintGradeBox" class="hidden"><select id="learnerPrintGrade" onchange="updateLearnerPrintCount()"><option value="">Grade</option><option>G4</option><option>G5</option><option>G6</option><option>G7</option><option>G8</option><option>G9</option><option>G10</option><option>G11</option><option>G12</option></select></div>
+<button class="dark" onclick="printLearnerBarcodes()">🖨️ PRINT LEARNER CARDS - MAKHANANI + SCHOOL NAME</button>
+<div class="badge" id="learnerPrintCount">Ready</div>
+</div>
+<div id="learnerList"></div><div id="learnerBarcodePrintArea"></div>
 </div>
 
 <div class="card hidden" id="adminTab">
-<h2>👑 ADMIN - DBE SCHOOLS + CAPS SUBJECTS MANAGER</h2>
-
+<h2>👑 ADMIN - DBE EMIS+NAME+TOWN+PROVINCE + CAPS SUBJECTS</h2>
 <div class="capsBox">
-<h3>📚 CAPS SUBJECTS & CODES - AS PER DBE CAPS DOCUMENT</h3>
-<p class="small">FET (G10-12) + Senior (G7-9) + Intermediate + Foundation - Official CAPS</p>
-
+<h3>📚 CAPS SUBJECTS & CODES - AS PER DBE CAPS - SIMPLE NUMBERING</h3>
 <div class="cloud">
 <h3>📤 UPLOAD CAPS SUBJECTS CSV</h3>
-<p class="small">Format: Code,Subject Name,Phase,NSC Code<br>Example: MATH,Mathematics,FET,100</p>
+<p class="small">Format: Code,Subject Name,Phase,NSC - Example: ACC,Accounting,FET,110 - Code used for ACC-G10-001</p>
 <input type="file" id="capsFile" accept=".csv">
 <button class="dark" onclick="uploadCAPSSubjects()">📚 UPLOAD CAPS SUBJECTS CSV</button>
-<button class="grey" onclick="downloadCAPSSample()">⬇️ DOWNLOAD CAPS SAMPLE CSV</button>
-<button class="yellow" onclick="loadDefaultCAPS()">⚡ LOAD DEFAULT CAPS SUBJECTS (DBE OFFICIAL)</button>
-<div class="badge" id="capsUploadStatus">Default CAPS: 25 subjects loaded - Add more or Upload CSV</div>
+<button class="grey" onclick="downloadCAPSSample()">⬇️ DOWNLOAD CAPS SAMPLE</button>
+<button class="yellow" onclick="loadDefaultCAPS()">⚡ LOAD DEFAULT CAPS (27 OFFICIAL - ACC, MATH, ENHL...)</button>
+<div class="badge" id="capsUploadStatus">CAPS loaded</div>
 </div>
-
-<h3>➕ ADD SINGLE CAPS SUBJECT</h3>
-<div class="subjectRow">
-<input id="newSubCode" placeholder="Code e.g. MATH">
-<input id="newSubName" placeholder="Subject e.g. Mathematics">
-<select id="newSubPhase" style="flex:1"><option value="FET">FET (G10-12)</option><option value="SENIOR">SENIOR (G7-9)</option><option value="INTER">INTER (G4-6)</option><option value="FOUND">FOUND (G1-3)</option></select>
-<input id="newSubNSC" placeholder="NSC e.g. 100" style="flex:0.5">
-<button class="green" onclick="addCAPSSubject()">➕ ADD</button>
-</div>
-
-<h3>📋 ALL CAPS SUBJECTS - DBE OFFICIAL LIST</h3>
-<div style="max-height:400px;overflow:auto">
-<table id="capsTable"><thead><tr><th>Code</th><th>Subject Name</th><th>Phase</th><th>NSC</th><th>Action</th></tr></thead><tbody id="capsTableBody"></tbody></table>
-</div>
+<h3>➕ ADD SINGLE CAPS SUBJECT - Code used for ACC-G10-001</h3>
+<div class="subjectRow"><input id="newSubCode" placeholder="Code e.g. ACC"><input id="newSubName" placeholder="Name e.g. Accounting"><select id="newSubPhase" style="flex:1"><option value="FET">FET G10-12</option><option value="SENIOR">SENIOR G7-9</option><option value="INTER">INTER G4-6</option><option value="FOUND">FOUND G1-3</option></select><input id="newSubNSC" placeholder="NSC" style="flex:0.5"><button class="green" onclick="addCAPSSubject()">➕ ADD</button></div>
+<div style="max-height:350px;overflow:auto"><table id="capsTable"><thead><tr><th>Code</th><th>Name</th><th>Phase</th><th>NSC</th><th>Del</th></tr></thead><tbody id="capsTableBody"></tbody></table></div>
 </div>
 
 <div class="cloud">
-<h3>📤 UPLOAD DBE SCHOOLS LIST - EMIS + NAME + TOWN + PROVINCE</h3>
-<p class="small">CSV: EMIS,School Name,Town,Province<br>Example: 700310854,WORDSWORTH HIGH SCHOOL,BENONI,GAUTENG</p>
+<h3>📤 UPLOAD DBE SCHOOLS - EMIS + NAME + TOWN + PROVINCE</h3>
+<p class="small">CSV: EMIS,School Name,Town,Province - 700310854,WORDSWORTH HIGH SCHOOL,BENONI,GAUTENG</p>
 <input type="file" id="csvFile" accept=".csv">
 <button class="green" onclick="uploadDBECSV()">📤 UPLOAD DBE SCHOOLS - EMIS NAME TOWN PROVINCE</button>
-<button class="yellow" onclick="downloadSampleCSV()">⬇️ DOWNLOAD SAMPLE - EMIS NAME TOWN PROVINCE</button>
-<div class="badge" id="uploadStatus">Select DBE CSV: EMIS,Name,Town,Province</div>
+<button class="yellow" onclick="downloadSampleCSV()">⬇️ SAMPLE - EMIS NAME TOWN PROVINCE</button>
+<div class="badge" id="uploadStatus">Select CSV: EMIS,Name,Town,Province</div>
 </div>
 
 <div class="cloud" style="margin-top:10px">
-<h3>📚 UPLOAD TEXTBOOKS BULK - With Teacher</h3>
-<p class="small">CSV: EMIS,Title,Subject Code (CAPS),Grade,Qty,Teacher</p>
+<h3>📚 UPLOAD TEXTBOOKS BULK - SIMPLE NUMBERING ACC-G10-001 + QTY</h3>
+<p class="small">CSV: EMIS,Title,Subject Code,Grade,Quantity,Teacher - Generates ACC-G10-001</p>
 <input type="file" id="textbookFile" accept=".csv">
-<button class="dark" onclick="uploadTextbooksCSV()">📚 UPLOAD TEXTBOOKS - CAPS CODE</button>
+<button class="dark" onclick="uploadTextbooksCSV()">📚 UPLOAD TEXTBOOKS BULK - SIMPLE NUMBERING</button>
 <button class="grey" onclick="downloadTextbookSampleCSV()">⬇️ SAMPLE TEXTBOOKS CSV</button>
 </div>
 
-<div class="badge" id="adminStats"></div>
-<button class="green" onclick="syncToCloud()">☁️ SYNC DBE + CAPS TO CLOUD</button>
-<button onclick="loadFromCloud()">⬇️ LOAD FROM CLOUD</button>
+<div class="badge" id="adminStats">Stats</div>
+<button class="green" onclick="syncToCloud()">☁️ SYNC DBE + CAPS + BOOKS TO CLOUD</button><button onclick="loadFromCloud()">⬇️ LOAD FROM CLOUD</button>
 
 <h3>➕ ADD SINGLE DBE SCHOOL - EMIS NAME TOWN PROVINCE</h3>
-<input id="newEmis" placeholder="EMIS e.g. 700310854"><input id="newSchool" placeholder="School Name e.g. WORDSWORTH HIGH"><input id="newTown" placeholder="Town e.g. BENONI"><input id="newProvince" placeholder="Province e.g. GAUTENG"><button class="green" onclick="addSchool()">➕ ADD TO DBE LIST</button>
+<input id="newEmis" placeholder="EMIS e.g. 700310854"><input id="newSchool" placeholder="School Name"><input id="newTown" placeholder="Town e.g. BENONI"><input id="newProvince" placeholder="Province e.g. GAUTENG"><button class="green" onclick="addSchool()">➕ ADD TO DBE LIST</button>
 
-<h3>🔍 DBE SCHOOLS LIST - EMIS NAME TOWN PROVINCE (20 ONLY - FAST)</h3>
-<input id="searchSchool" placeholder="Search DBE: WORDSWORTH or BENONI or GAUTENG" oninput="renderSchools()"><div id="schoolList"></div>
+<h3>🔍 DBE SCHOOLS LIST - EMIS NAME TOWN PROVINCE (20 ONLY)</h3>
+<input id="searchSchool" placeholder="Search: WORDSWORTH or BENONI or GAUTENG" oninput="renderSchools()"><div id="schoolList"></div>
 </div>
 </div>
 
 <script>
 var firebaseConfig = { apiKey: "AIzaSyBOsBx2q4C_nSvAzDfUloehkp2yQno_l1o", authDomain: "makhanani-library.firebaseapp.com", projectId: "makhanani-library", storageBucket: "makhanani-library.firebasestorage.app", messagingSenderId: "1050331837286", appId: "1:1050331837286:web:65c57818dee37605498ea7" };
-var db=null,auth=null,cloudOK=false; try{ firebase.initializeApp(firebaseConfig); db=firebase.firestore(); auth=firebase.auth(); cloudOK=true; document.getElementById('cloudStatus').innerHTML='☁️ ✅ CONNECTED'; }catch(e){}
+var db=null,auth=null,cloudOK=false; try{ firebase.initializeApp(firebaseConfig); db=firebase.firestore(); auth=firebase.auth(); cloudOK=true; document.getElementById('cloudStatus').innerHTML='☁️ ✅ CONNECTED'; }catch(e){ document.getElementById('cloudStatus').innerHTML='☁️ Local Mode'; }
 var schools=JSON.parse(localStorage.getItem('mk_schools')||'[{"emis":"700310854","name":"WORDSWORTH HIGH SCHOOL","town":"BENONI","province":"GAUTENG","pkg":"DEMO","status":"ACTIVE"}]');
 var learners=JSON.parse(localStorage.getItem('mk_learners')||'[]');
 var books=JSON.parse(localStorage.getItem('mk_books')||'[]');
 var issues=JSON.parse(localStorage.getItem('mk_issues')||'[]');
 var curSchool='',curSchoolName='',bookCounter=parseInt(localStorage.getItem('mk_bookCounter')||'1');
+var html5QrcodeScanner=null;
 
-// CAPS SUBJECTS - DEFAULT DBE OFFICIAL LIST AS PER CAPS
 var defaultCAPS=[
+{ code:"ACC", name:"Accounting", phase:"FET", nsc:"110" },
 { code:"MATH", name:"Mathematics", phase:"FET", nsc:"100" },
 { code:"MLIT", name:"Mathematical Literacy", phase:"FET", nsc:"101" },
 { code:"ENHL", name:"English Home Language", phase:"FET", nsc:"102" },
 { code:"ENFL", name:"English First Additional Language", phase:"FET", nsc:"103" },
 { code:"AFHL", name:"Afrikaans Home Language", phase:"FET", nsc:"104" },
-{ code:"AFAL", name:"Afrikaans First Additional Language", phase:"FET", nsc:"105" },
 { code:"PHSC", name:"Physical Sciences", phase:"FET", nsc:"106" },
 { code:"LFSC", name:"Life Sciences", phase:"FET", nsc:"107" },
 { code:"GEOG", name:"Geography", phase:"FET", nsc:"108" },
 { code:"HIST", name:"History", phase:"FET", nsc:"109" },
-{ code:"ACCN", name:"Accounting", phase:"FET", nsc:"110" },
 { code:"BSTD", name:"Business Studies", phase:"FET", nsc:"111" },
 { code:"ECON", name:"Economics", phase:"FET", nsc:"112" },
 { code:"COMP", name:"Computer Applications Technology", phase:"FET", nsc:"113" },
 { code:"LORT", name:"Life Orientation", phase:"FET", nsc:"114" },
 { code:"AGRS", name:"Agricultural Sciences", phase:"FET", nsc:"115" },
-{ code:"ARTE", name:"Visual Arts", phase:"FET", nsc:"116" },
-{ code:"DRAM", name:"Dramatic Arts", phase:"FET", nsc:"117" },
 { code:"NTSC", name:"Natural Sciences", phase:"SENIOR", nsc:"201" },
 { code:"TECH", name:"Technology", phase:"SENIOR", nsc:"202" },
 { code:"ARTS", name:"Creative Arts", phase:"SENIOR", nsc:"203" },
 { code:"SSCI", name:"Social Sciences", phase:"SENIOR", nsc:"204" },
 { code:"EMS", name:"Economic and Management Sciences", phase:"SENIOR", nsc:"205" },
 { code:"LSKL", name:"Life Skills", phase:"FOUND", nsc:"301" },
-{ code:"HL", name:"Home Language (Foundation)", phase:"FOUND", nsc:"302" },
+{ code:"HL", name:"Home Language", phase:"FOUND", nsc:"302" },
 { code:"FAL", name:"First Additional Language", phase:"FOUND", nsc:"303" },
 { code:"NSCT", name:"Natural Sciences and Technology", phase:"INTER", nsc:"401" }
 ];
 var capsSubjects=JSON.parse(localStorage.getItem('mk_caps')||JSON.stringify(defaultCAPS));
 
 function getSchoolNameByEmis(emis){ for(var i=0;i<schools.length;i++){ if(schools[i].emis===emis) return schools[i].name; } return emis; }
-function searchDBESchools(){ var q=document.getElementById('schoolSearch').value.toLowerCase().trim(); var box=document.getElementById('schoolSearchResults'); if(q.length<2){ box.innerHTML='<div class="small">'+schools.length+' DBE schools - Type to search EMIS/Name/Town/Province</div>'; return; } var h='',count=0; for(var i=0;i<schools.length && count<30;i++){ if(schools[i].name.toLowerCase().indexOf(q)!==-1 || schools[i].emis.indexOf(q)!==-1 || (schools[i].town||'').toLowerCase().indexOf(q)!==-1 || (schools[i].province||'').toLowerCase().indexOf(q)!==-1){ count++; h+='<div class="badge" onclick="selectDBESchool(\''+schools[i].emis+'\',\''+schools[i].name.replace(/'/g,"\\'")+'\')"><b>'+schools[i].emis+' - '+schools[i].name+'</b><br>'+(schools[i].town||'')+' | '+(schools[i].province||'')+' | '+schools[i].pkg+'</div>'; } } box.innerHTML=h||'Not found'; }
-function selectDBESchool(emis,name){ document.getElementById('selectedSchool').value=emis; document.getElementById('selectedSchoolDisplay').innerHTML='✅ SELECTED: <b>'+emis+' - '+name+'</b>'; curSchool=emis; curSchoolName=name; document.getElementById('schoolSearchResults').innerHTML=''; document.getElementById('schoolSearch').value=name; document.getElementById('homeSchoolName').innerHTML='Current DBE School: '+emis+' - '+name; document.getElementById('previewUnique').innerHTML='Preview: '+emis+'-SUBJECT-GRADE-####'; }
-function firebaseLogin(){ var school=document.getElementById('selectedSchool').value; if(!school){ alert('Select DBE School first! Search EMIS + NAME + TOWN + PROVINCE'); return; } curSchool=school; curSchoolName=getSchoolNameByEmis(school); var rank=document.getElementById('rankSel').value||'ADMIN'; var email=document.getElementById('fbEmail').value.trim(); var pass=document.getElementById('fbPass').value.trim(); var lid=document.getElementById('learnerIdInput').value.trim(); if(lid){ document.getElementById('loginCard').classList.add('hidden'); document.getElementById('welcomeText').innerHTML='WELCOME '+rank+' - '+lid; document.getElementById('userInfo').innerHTML='✅ '+rank+' | DBE: '+school+' - '+curSchoolName; return; } if(email==='admin@makhanani.com' && pass==='admin123'){ document.getElementById('loginCard').classList.add('hidden'); showTab('adminTab',document.querySelectorAll('.tabs button')[6]); document.getElementById('welcomeText').innerHTML='WELCOME ADMIN!'; return; } if(auth) auth.signInWithEmailAndPassword(email,pass).then(function(u){ document.getElementById('loginCard').classList.add('hidden'); document.getElementById('userInfo').innerHTML='✅ '+u.user.email+' | DBE: '+school+' - '+curSchoolName; }).catch(function(err){ alert(err.message); }); }
+function getSchoolTownProvince(emis){ for(var i=0;i<schools.length;i++){ if(schools[i].emis===emis) return {town:schools[i].town||'',province:schools[i].province||''}; } return {town:'',province:''}; }
+function onRankChange(){ var r=document.getElementById('rankSel').value; var email=document.getElementById('fbEmail'), pass=document.getElementById('fbPass'), lid=document.getElementById('learnerIdInput'), help=document.getElementById('loginHelp'); if(r==='PARENT'||r==='LEARNER'){ email.classList.add('hidden'); pass.classList.add('hidden'); lid.classList.remove('hidden'); help.innerHTML='PARENT/LEARNER: Enter Learner ID + Select DBE School'; } else { email.classList.remove('hidden'); pass.classList.remove('hidden'); lid.classList.add('hidden'); help.innerHTML=r+': Email + Password + DBE School'; } }
+function searchDBESchools(){ var q=document.getElementById('schoolSearch').value.toLowerCase().trim(); var box=document.getElementById('schoolSearchResults'); if(q.length<2){ box.innerHTML='<div class="small">Type 2+ letters - '+schools.length+' DBE schools</div>'; return; } var h='',count=0; for(var i=0;i<schools.length && count<30;i++){ if(schools[i].name.toLowerCase().indexOf(q)!==-1 || schools[i].emis.indexOf(q)!==-1 || (schools[i].town||'').toLowerCase().indexOf(q)!==-1 || (schools[i].province||'').toLowerCase().indexOf(q)!==-1){ count++; h+='<div class="badge" onclick="selectDBESchool(\''+schools[i].emis+'\',\''+schools[i].name.replace(/'/g,"\\'")+'\')"><b>'+schools[i].emis+' - '+schools[i].name+'</b><br>'+(schools[i].town||'')+' | '+(schools[i].province||'')+'</div>'; } } box.innerHTML=h||'<div class="badge" style="color:red">Not found</div>'; }
+function selectDBESchool(emis,name){ document.getElementById('selectedSchool').value=emis; document.getElementById('selectedSchoolDisplay').innerHTML='✅ SELECTED: <b>'+emis+' - '+name+'</b>'; curSchool=emis; curSchoolName=name; document.getElementById('schoolSearchResults').innerHTML=''; document.getElementById('schoolSearch').value=name; document.getElementById('homeSchoolName').innerHTML='Current DBE School: '+emis+' - '+name; var subj=document.getElementById('bSubject').value||'ACC'; var grd=document.getElementById('bGrade').value||'G10'; document.getElementById('previewUnique').innerHTML='Preview: '+subj+'-'+grd+'-'+String(bookCounter).padStart(3,'0')+' | Format: SUBJECT-GRADE-NUMBER | Example: ACC-G10-001'; }
+function firebaseLogin(){ var rank=document.getElementById('rankSel').value; var school=document.getElementById('selectedSchool').value; if(!rank){ alert('Select Rank!'); return; } if(!school && rank!=='ADMIN'){ alert('Select DBE School!'); return; } curSchool=school; curSchoolName=getSchoolNameByEmis(school); if(rank==='PARENT'||rank==='LEARNER'){ var lid=document.getElementById('learnerIdInput').value.trim(); if(!lid){ alert('Enter Learner ID!'); return; } document.getElementById('loginCard').classList.add('hidden'); document.getElementById('welcomeText').innerHTML='WELCOME '+rank+' - '+lid; document.getElementById('userInfo').innerHTML='✅ '+rank+' | DBE: '+school+' - '+curSchoolName; return; } var email=document.getElementById('fbEmail').value.trim(); var pass=document.getElementById('fbPass').value.trim(); if(email==='admin@makhanani.com' && pass==='admin123'){ document.getElementById('loginCard').classList.add('hidden'); showTab('adminTab',document.querySelectorAll('.tabs button')[6]); document.getElementById('welcomeText').innerHTML='WELCOME ADMIN!'; document.getElementById('userInfo').innerHTML='✅ ADMIN | DBE: '+(school||'All'); return; } if(auth) auth.signInWithEmailAndPassword(email,pass).then(function(u){ document.getElementById('loginCard').classList.add('hidden'); document.getElementById('userInfo').innerHTML='✅ '+rank+' | '+u.user.email+' | DBE: '+school+' - '+curSchoolName; }).catch(function(err){ alert(err.message); }); }
 function firebaseLogout(){ if(auth) auth.signOut().then(function(){ location.reload(); }); else location.reload(); }
+function startScanner(){ document.getElementById('scanLog').innerHTML='📷 Starting camera...'; html5QrcodeScanner=new Html5Qrcode("reader"); html5QrcodeScanner.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 150 } }, function(decoded){ document.getElementById('scanResult').value=decoded; document.getElementById('scanLog').innerHTML='✅ Scanned: '+decoded; if(!document.getElementById('issueTab').classList.contains('hidden')){ if(decoded.indexOf('-')!==-1 && decoded.split('-').length===3) document.getElementById('iBook').value=decoded; else if(decoded.length<10) document.getElementById('iLearner').value=decoded; else document.getElementById('iBook').value=decoded; onLearnerTyping(); onBookTyping(); } }, function(err){}); }
+function startScannerForLearner(){ showTab('scanTab',document.querySelectorAll('.tabs button')[1]); setTimeout(startScanner,300); }
+function startScannerForBook(){ showTab('scanTab',document.querySelectorAll('.tabs button')[1]); setTimeout(startScanner,300); }
+function startScannerForReturn(){ showTab('scanTab',document.querySelectorAll('.tabs button')[1]); setTimeout(startScanner,300); }
+function stopScanner(){ if(html5QrcodeScanner){ html5QrcodeScanner.stop().then(function(){ document.getElementById('scanLog').innerHTML='Scanner stopped'; }); } }
+function useScanForIssue(){ var c=document.getElementById('scanResult').value.trim(); if(c){ document.getElementById('iLearner').value=c; showTab('issueTab',document.querySelectorAll('.tabs button')[2]); onLearnerTyping(); } }
+function useScanForBook(){ var c=document.getElementById('scanResult').value.trim(); if(c){ document.getElementById('iBook').value=c; showTab('issueTab',document.querySelectorAll('.tabs button')[2]); onBookTyping(); } }
+function useScanForReturn(){ var c=document.getElementById('scanResult').value.trim(); if(c){ document.getElementById('rBook').value=c; showTab('returnTab',document.querySelectorAll('.tabs button')[3]); onReturnBookTyping(); } }
 
-// CAPS SUBJECTS FUNCTIONS
+function save(){ localStorage.setItem('mk_schools',JSON.stringify(schools)); localStorage.setItem('mk_learners',JSON.stringify(learners)); localStorage.setItem('mk_books',JSON.stringify(books)); localStorage.setItem('mk_issues',JSON.stringify(issues)); localStorage.setItem('mk_bookCounter',bookCounter.toString()); localStorage.setItem('mk_caps',JSON.stringify(capsSubjects)); if(cloudOK) syncToCloud(true); }
+function syncToCloud(silent){ if(!cloudOK){ if(!silent) alert('No cloud'); return; } db.collection('makhanani').doc('main').set({schools:schools,learners:learners,books:books,issues:issues,bookCounter:bookCounter,capsSubjects:capsSubjects,updated:new Date().toISOString()}).then(function(){ document.getElementById('cloudStatus').innerHTML='☁️ ✅ SYNCED '+new Date().toLocaleTimeString()+' - DBE: '+schools.length+' | CAPS: '+capsSubjects.length; if(!silent) alert('✅ Synced! DBE: '+schools.length+' | CAPS: '+capsSubjects.length+' | Books: '+books.length); }); }
+function loadFromCloud(){ db.collection('makhanani').doc('main').get().then(function(doc){ if(!doc.exists){ alert('No cloud data!'); return; } var d=doc.data(); if(d.schools) schools=d.schools; if(d.learners) learners=d.learners; if(d.books) books=d.books; if(d.issues) issues=d.issues; if(d.bookCounter) bookCounter=d.bookCounter; if(d.capsSubjects) capsSubjects=d.capsSubjects; save(); renderAll(); alert('✅ Loaded! DBE: '+schools.length+' | CAPS: '+capsSubjects.length); }); }
+function showTab(id,btn){ var t=['homeTab','scanTab','issueTab','returnTab','booksTab','learnersTab','adminTab']; for(var i=0;i<t.length;i++) document.getElementById(t[i]).classList.add('hidden'); document.getElementById(id).classList.remove('hidden'); var bs=document.querySelectorAll('.tabs button'); for(var j=0;j<bs.length;j++) bs[j].classList.remove('active'); if(btn) btn.classList.add('active'); if(id==='issueTab'||id==='returnTab') fillDatalists(); }
+
+// CAPS
 function saveCAPS(){ localStorage.setItem('mk_caps',JSON.stringify(capsSubjects)); renderCAPS(); fillSubjectDropdown(); if(cloudOK) syncToCloud(true); }
 function renderCAPS(){
-  var tbody=document.getElementById('capsTableBody'); var h='';
+  var tbody=document.getElementById('capsTableBody'); var h=''; var selSub=document.getElementById('bookPrintSubject');
+  var subOptions='<option value="">Select Subject</option>';
   for(var i=0;i<capsSubjects.length;i++){
-    h+='<tr><td><b>'+capsSubjects[i].code+'</b></td><td>'+capsSubjects[i].name+'</td><td>'+capsSubjects[i].phase+'</td><td>'+capsSubjects[i].nsc+'</td><td><button style="width:60px;padding:6px;background:#dc2626" onclick="deleteCAPS('+i+')">❌</button></td></tr>';
+    h+='<tr><td><b>'+capsSubjects[i].code+'</b></td><td>'+capsSubjects[i].name+'</td><td>'+capsSubjects[i].phase+'</td><td>'+capsSubjects[i].nsc+'</td><td><button style="width:50px;padding:4px;background:#dc2626" onclick="deleteCAPS('+i+')">❌</button></td></tr>';
+    subOptions+='<option value="'+capsSubjects[i].code+'">'+capsSubjects[i].code+' - '+capsSubjects[i].name+'</option>';
   }
-  tbody.innerHTML=h;
-  document.getElementById('capsCount').innerHTML='📚 CAPS Subjects Loaded: <b>'+capsSubjects.length+'</b> | FET: '+(capsSubjects.filter(function(s){return s.phase==='FET'}).length)+' | Senior: '+(capsSubjects.filter(function(s){return s.phase==='SENIOR'}).length);
-  document.getElementById('capsUploadStatus').innerHTML='✅ CAPS Subjects: '+capsSubjects.length+' loaded - Ready for textbook unique numbers';
+  tbody.innerHTML=h; if(selSub) selSub.innerHTML=subOptions;
+  document.getElementById('capsCount').innerHTML='📚 CAPS: <b>'+capsSubjects.length+'</b> | Example Numbering: ACC-G10-001, MATH-G10-001, ENHL-G12-001 | Format: SUBJECT-GRADE-NUMBER';
+  document.getElementById('capsUploadStatus').innerHTML='✅ CAPS: '+capsSubjects.length+' subjects - Code used for ACC-G10-001';
 }
-function fillSubjectDropdown(){
-  var sel=document.getElementById('bSubject'); var html='<option value="">Select CAPS Subject Code</option>';
-  for(var i=0;i<capsSubjects.length;i++){ html+='<option value="'+capsSubjects[i].code+'">'+capsSubjects[i].code+' - '+capsSubjects[i].name+' ('+capsSubjects[i].phase+')</option>'; }
-  sel.innerHTML=html;
-}
-function addCAPSSubject(){
-  var code=document.getElementById('newSubCode').value.trim().toUpperCase();
-  var name=document.getElementById('newSubName').value.trim();
-  var phase=document.getElementById('newSubPhase').value;
-  var nsc=document.getElementById('newSubNSC').value.trim();
-  if(!code||!name){ alert('Code + Name required!'); return; }
-  capsSubjects.push({code:code,name:name,phase:phase,nsc:nsc||''});
-  saveCAPS();
-  document.getElementById('newSubCode').value=''; document.getElementById('newSubName').value=''; document.getElementById('newSubNSC').value='';
-  alert('✅ CAPS Subject Added: '+code+' - '+name);
-}
-function deleteCAPS(idx){ if(confirm('Delete '+capsSubjects[idx].code+' - '+capsSubjects[idx].name+'?')){ capsSubjects.splice(idx,1); saveCAPS(); } }
-function uploadCAPSSubjects(){
-  var file=document.getElementById('capsFile').files[0]; if(!file){ alert('Select CAPS CSV!'); return; }
-  var reader=new FileReader(); reader.onload=function(e){
-    var text=e.target.result; var lines=text.split('\n'); var added=0;
-    for(var i=1;i<lines.length;i++){
-      var line=lines[i].trim(); if(!line) continue;
-      var parts=line.split(','); if(parts.length<2) continue;
-      var code=parts[0].trim().toUpperCase(); var name=parts[1].trim(); var phase=(parts[2]||'FET').trim().toUpperCase(); var nsc=(parts[3]||'').trim();
-      if(!code||!name) continue;
-      var exists=false; for(var j=0;j<capsSubjects.length;j++){ if(capsSubjects[j].code===code){ capsSubjects[j].name=name; capsSubjects[j].phase=phase; capsSubjects[j].nsc=nsc; exists=true; break; } }
-      if(!exists){ capsSubjects.push({code:code,name:name,phase:phase,nsc:nsc}); added++; }
+function fillSubjectDropdown(){ var sel=document.getElementById('bSubject'); var html='<option value="">Select CAPS Subject Code - For ACC-G10-001</option>'; for(var i=0;i<capsSubjects.length;i++){ html+='<option value="'+capsSubjects[i].code+'">'+capsSubjects[i].code+' - '+capsSubjects[i].name+' ('+capsSubjects[i].phase+')</option>'; } sel.innerHTML=html; }
+function addCAPSSubject(){ var code=document.getElementById('newSubCode').value.trim().toUpperCase(); var name=document.getElementById('newSubName').value.trim(); var phase=document.getElementById('newSubPhase').value; var nsc=document.getElementById('newSubNSC').value.trim(); if(!code||!name){ alert('Code + Name!'); return; } capsSubjects.push({code:code,name:name,phase:phase,nsc:nsc||''}); saveCAPS(); document.getElementById('newSubCode').value=''; document.getElementById('newSubName').value=''; document.getElementById('newSubNSC').value=''; alert('✅ CAPS Added: '+code+' - '+name+' - Will generate '+code+'-G10-001'); }
+function deleteCAPS(idx){ if(confirm('Delete '+capsSubjects[idx].code+'?')){ capsSubjects.splice(idx,1); saveCAPS(); } }
+function uploadCAPSSubjects(){ var file=document.getElementById('capsFile').files[0]; if(!file){ alert('Select CAPS CSV!'); return; } var reader=new FileReader(); reader.onload=function(e){ var text=e.target.result; var lines=text.split('\n'); var added=0; for(var i=1;i<lines.length;i++){ var line=lines[i].trim(); if(!line) continue; var parts=line.split(','); if(parts.length<2) continue; var code=parts[0].trim().toUpperCase(); var name=parts[1].trim(); var phase=(parts[2]||'FET').trim().toUpperCase(); var nsc=(parts[3]||'').trim(); if(!code||!name) continue; var exists=false; for(var j=0;j<capsSubjects.length;j++){ if(capsSubjects[j].code===code){ capsSubjects[j].name=name; capsSubjects[j].phase=phase; capsSubjects[j].nsc=nsc; exists=true; break; } } if(!exists){ capsSubjects.push({code:code,name:name,phase:phase,nsc:nsc}); added++; } } saveCAPS(); alert('✅ CAPS Uploaded! Added '+added+' | Total: '+capsSubjects.length); }; reader.readAsText(file); }
+function loadDefaultCAPS(){ if(confirm('Load Default CAPS (24) with ACC, MATH, ENHL etc?')){ capsSubjects=JSON.parse(JSON.stringify(defaultCAPS)); saveCAPS(); alert('✅ Default CAPS Loaded! Format: ACC-G10-001'); } }
+function downloadCAPSSample(){ var csv='Code,Subject Name,Phase,NSC Code\nACC,Accounting,FET,110\nMATH,Mathematics,FET,100\nENHL,English Home Language,FET,102\nPHSC,Physical Sciences,FET,106\nLFSC,Life Sciences,FET,107\nGEOG,Geography,FET,108\n'; var blob=new Blob([csv],{type:'text/csv'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='caps_subjects_simple_numbering.csv'; a.click(); }
+
+// DBE
+function addSchool(){ var e=document.getElementById('newEmis').value.trim(); var n=document.getElementById('newSchool').value.trim(); var town=document.getElementById('newTown').value.trim().toUpperCase(); var prov=document.getElementById('newProvince').value.trim().toUpperCase(); if(!e||!n){ alert('EMIS + Name!'); return; } schools.push({emis:e,name:n,town:town,province:prov,pkg:'DEMO',status:'ACTIVE'}); save(); renderSchools(); alert('✅ Added DBE: '+n+' - '+town+' - '+prov); }
+function renderSchools(){ var q=(document.getElementById('searchSchool').value||'').toLowerCase(); var h=''; var c=0,shown=0; for(var i=0;i<schools.length;i++){ if(q&&schools[i].name.toLowerCase().indexOf(q)===-1&&schools[i].emis.indexOf(q)===-1&&(schools[i].town||'').toLowerCase().indexOf(q)===-1&&(schools[i].province||'').toLowerCase().indexOf(q)===-1) continue; c++; if(shown<20){ shown++; h+='<div class="badge"><b>'+schools[i].emis+' - '+schools[i].name+'</b><br>Town: '+(schools[i].town||'')+' | Province: '+(schools[i].province||'')+'</div>'; } } if(c>20) h='<div class="badge" style="background:#fef9c3">Showing 20 of '+c+' DBE schools</div>'+h; document.getElementById('schoolList').innerHTML=h||'No DBE - Upload CSV!'; document.getElementById('adminStats').innerHTML='DBE: '+schools.length+' (EMIS+NAME+TOWN+PROVINCE) | CAPS: '+capsSubjects.length+' | Books: '+books.length+' (Format ACC-G10-001) | Learners: '+learners.length; document.getElementById('homeStats').innerHTML='DBE: '+schools.length+' | CAPS: '+capsSubjects.length+' | Books: '+books.length+' Format: SUBJECT-GRADE-NUMBER Example ACC-G10-001 | Learners: '+learners.length; }
+function uploadDBECSV(){ var file=document.getElementById('csvFile').files[0]; if(!file){ alert('Select DBE CSV!'); return; } var reader=new FileReader(); reader.onload=function(e){ var text=e.target.result; var lines=text.split('\n'); var added=0,updated=0; for(var i=1;i<lines.length;i++){ var line=lines[i].trim(); if(!line) continue; var parts=line.split(','); if(parts.length<2) continue; var emis=parts[0].trim(); var name=parts[1].trim().toUpperCase(); var town=(parts[2]||'').trim().toUpperCase(); var province=(parts[3]||'').trim().toUpperCase(); if(!emis||!name) continue; var exists=false; for(var j=0;j<schools.length;j++){ if(schools[j].emis===emis){ schools[j].name=name; schools[j].town=town; schools[j].province=province; exists=true; updated++; break; } } if(!exists){ schools.push({emis:emis,name:name,town:town,province:province,pkg:'DEMO',status:'ACTIVE'}); added++; } } save(); renderSchools(); document.getElementById('uploadStatus').innerHTML='✅ DBE Uploaded! Added '+added+' + Updated '+updated+' | Total: '+schools.length; alert('✅ DBE Uploaded! Added '+added+' Updated '+updated+' Total '+schools.length); }; reader.readAsText(file); }
+function uploadTextbooksCSV(){ var file=document.getElementById('textbookFile').files[0]; if(!file){ alert('Select!'); return; } var reader=new FileReader(); reader.onload=function(e){ var text=e.target.result; var lines=text.split('\n'); var added=0; for(var i=1;i<lines.length;i++){ var line=lines[i].trim(); if(!line) continue; var parts=line.split(','); if(parts.length<4) continue; var emis=parts[0].trim(); var title=parts[1].trim(); var subject=parts[2].trim().toUpperCase(); var grade=parts[3].trim().toUpperCase(); var qty=parseInt(parts[4]||'1'); var teacher=(parts[5]||'').trim(); for(var q=0;q<qty;q++){ var num=String(bookCounter).padStart(3,'0'); var unique=subject+'-'+grade+'-'+num; books.push({title:title,subject:subject,grade:grade,code:unique,school:emis||curSchool,emis:emis||curSchool,status:'AVAILABLE',teacher:teacher,condition:'NEW'}); bookCounter++; added++; } } save(); renderAll(); alert('✅ Textbooks Added: '+added+'\nFormat: SUBJECT-GRADE-NUMBER\nExample: ACC-G10-001\nEach with MAKHANANI DIGITAL LIBRARY branding!'); }; reader.readAsText(file); }
+function downloadSampleCSV(){ var csv='EMIS,School Name,Town,Province\n700310854,WORDSWORTH HIGH SCHOOL,BENONI,GAUTENG\n700310855,EXAMPLE PRIMARY SCHOOL,TEMBISA,GAUTENG\n'; var blob=new Blob([csv],{type:'text/csv'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='dbe_schools_EMIS_NAME_TOWN_PROVINCE.csv'; a.click(); }
+function downloadTextbookSampleCSV(){ var csv='EMIS,Book Title,Subject Code,Grade,Quantity,Teacher\n700310854,Accounting Grade 10 Textbook,ACC,G10,50,Mr Nkosi\n700310854,Mathematics Grade 10 Textbook,MATH,G10,30,Ms Dlamini\n700310854,English HL Grade 10,ENHL,G10,40,Ms Smith\n'; var blob=new Blob([csv],{type:'text/csv'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='textbooks_simple_ACC-G10-001_QTY_TEACHER.csv'; a.click(); }
+
+// BOOKS WITH SIMPLE NUMBERING + QTY
+function addBookWithDBECode(){
+  var title=document.getElementById('bTitle').value.trim();
+  var subject=document.getElementById('bSubject').value;
+  var grade=document.getElementById('bGrade').value;
+  var teacher=document.getElementById('bTeacher').value.trim();
+  var condition=document.getElementById('bCondition').value.trim()||'NEW';
+  var manual=document.getElementById('bCodeManual').value.trim().toUpperCase();
+  var qty=parseInt(document.getElementById('bQty').value||'1');
+  if(!title||!subject||!grade){ alert('❌ Title + CAPS Subject + Grade required!'); return; }
+  if(!curSchool){ alert('❌ Select DBE School first!'); return; }
+  if(qty<1) qty=1; if(qty>500){ if(!confirm('Qty '+qty+' creates '+qty+' barcodes! Continue?')) return; }
+  var addedCodes=[];
+  if(manual){
+    books.push({title:title,subject:subject,grade:grade,code:manual,school:curSchool,emis:curSchool,status:'AVAILABLE',teacher:teacher,condition:condition});
+    addedCodes.push(manual);
+  } else {
+    for(var i=0;i<qty;i++){
+      var num=String(bookCounter).padStart(3,'0');
+      var unique=subject+'-'+grade+'-'+num;
+      books.push({title:title,subject:subject,grade:grade,code:unique,school:curSchool,emis:curSchool,status:'AVAILABLE',teacher:teacher,condition:condition});
+      addedCodes.push(unique); bookCounter++;
     }
-    saveCAPS(); alert('✅ CAPS Subjects Uploaded! Added '+added+' new. Total: '+capsSubjects.length);
-  }; reader.readAsText(file);
+  }
+  save(); renderAll();
+  document.getElementById('previewUnique').innerHTML='✅ Added Qty '+addedCodes.length+': '+addedCodes[0]+' to '+addedCodes[addedCodes.length-1]+' | Format: SUBJECT-GRADE-NUMBER';
+  alert('✅ BOOKS ADDED - SIMPLE NUMBERING!\n\n📚 MAKHANANI DIGITAL LIBRARY\n🏫 '+getSchoolNameByEmis(curSchool)+'\n📘 '+title+'\nCAPS: '+subject+' Grade: '+grade+'\nTeacher: '+(teacher||'N/A')+'\nQty: '+addedCodes.length+'\nFormat: SUBJECT-GRADE-NUMBER\n\nFirst: '+addedCodes[0]+'\nLast: '+addedCodes[addedCodes.length-1]+'\n\nExample: ACC-G10-001\nBarcode includes MAKHANANI DIGITAL LIBRARY + School Name + Town + Province');
+  document.getElementById('bTitle').value=''; document.getElementById('bQty').value='1'; document.getElementById('bCodeManual').value='';
 }
-function loadDefaultCAPS(){ if(confirm('Load Default DBE CAPS Subjects? This will add '+defaultCAPS.length+' official subjects')){ capsSubjects=JSON.parse(JSON.stringify(defaultCAPS)); saveCAPS(); alert('✅ Default CAPS Loaded! '+capsSubjects.length+' subjects'); } }
-function downloadCAPSSample(){
-  var csv='Code,Subject Name,Phase,NSC Code\nMATH,Mathematics,FET,100\nMLIT,Mathematical Literacy,FET,101\nENHL,English Home Language,FET,102\nENFL,English First Additional Language,FET,103\nPHSC,Physical Sciences,FET,106\nLFSC,Life Sciences,FET,107\nGEOG,Geography,FET,108\nHIST,History,FET,109\nACCN,Accounting,FET,110\nBSTD,Business Studies,FET,111\nNTSC,Natural Sciences,SENIOR,201\nTECH,Technology,SENIOR,202\nARTS,Creative Arts,SENIOR,203\nLSKL,Life Skills,FOUND,301\n';
-  var blob=new Blob([csv],{type:'text/csv'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='caps_subjects_CAPS_DBE_official.csv'; a.click();
-}
+function addLearner(){ var n=document.getElementById('lName').value.trim(); var g=document.getElementById('lGrade').value.trim().toUpperCase(); var cls=document.getElementById('lClass').value.trim().toUpperCase(); var id=document.getElementById('lId').value.trim(); if(!n||!id){ alert('Name + ID!'); return; } if(!curSchool){ alert('Select DBE School!'); return; } learners.push({name:n,grade:g,class:cls||g,id:id,school:curSchool,schoolName:curSchoolName||getSchoolNameByEmis(curSchool)}); save(); renderAll(); alert('✅ Learner Added: '+n+' - Barcode includes MAKHANANI DIGITAL LIBRARY'); }
 
-// DBE SCHOOLS
-function save(){ localStorage.setItem('mk_schools',JSON.stringify(schools)); localStorage.setItem('mk_learners',JSON.stringify(learners)); localStorage.setItem('mk_books',JSON.stringify(books)); localStorage.setItem('mk_issues',JSON.stringify(issues)); localStorage.setItem('mk_bookCounter',bookCounter.toString()); localStorage.setItem('mk_caps',JSON.stringify(capsSubjects)); if(cloudOK) syncToCloud(true); }
-function syncToCloud(silent){ if(!cloudOK) return; db.collection('makhanani').doc('main').set({schools:schools,learners:learners,books:books,issues:issues,bookCounter:bookCounter,capsSubjects:capsSubjects,updated:new Date().toISOString()}).then(function(){ document.getElementById('cloudStatus').innerHTML='☁️ ✅ SYNCED '+new Date().toLocaleTimeString()+' - DBE: '+schools.length+' Schools, CAPS: '+capsSubjects.length+' Subjects'; if(!silent) alert('✅ Synced! DBE Schools: '+schools.length+' | CAPS Subjects: '+capsSubjects.length); }); }
-function loadFromCloud(){ db.collection('makhanani').doc('main').get().then(function(doc){ if(!doc.exists){ alert('No cloud data!'); return; } var d=doc.data(); if(d.schools) schools=d.schools; if(d.learners) learners=d.learners; if(d.books) books=d.books; if(d.issues) issues=d.issues; if(d.bookCounter) bookCounter=d.bookCounter; if(d.capsSubjects) capsSubjects=d.capsSubjects; save(); renderAll(); alert('✅ Loaded! DBE Schools: '+schools.length+' | CAPS: '+capsSubjects.length); }); }
-function showTab(id,btn){ var t=['homeTab','scanTab','issueTab','returnTab','booksTab','learnersTab','adminTab']; for(var i=0;i<t.length;i++) document.getElementById(t[i]).classList.add('hidden'); document.getElementById(id).classList.remove('hidden'); var bs=document.querySelectorAll('.tabs button'); for(var j=0;j<bs.length;j++) bs[j].classList.remove('active'); if(btn) btn.classList.add('active'); if(id==='issueTab'||id==='returnTab') fillDatalists(); }
-function addSchool(){ var e=document.getElementById('newEmis').value.trim(); var n=document.getElementById('newSchool').value.trim(); var town=document.getElementById('newTown').value.trim().toUpperCase(); var prov=document.getElementById('newProvince').value.trim().toUpperCase(); if(!e||!n){ alert('EMIS + Name!'); return; } schools.push({emis:e,name:n,town:town,province:prov,pkg:'DEMO',status:'ACTIVE'}); save(); renderSchools(); alert('✅ Added to DBE List: '+n+' - '+town+' - '+prov); }
-function renderSchools(){ var q=(document.getElementById('searchSchool').value||'').toLowerCase(); var h=''; var c=0,shown=0; for(var i=0;i<schools.length;i++){ if(q&&schools[i].name.toLowerCase().indexOf(q)===-1&&schools[i].emis.indexOf(q)===-1&&(schools[i].town||'').toLowerCase().indexOf(q)===-1&&(schools[i].province||'').toLowerCase().indexOf(q)===-1) continue; c++; if(shown<20){ shown++; h+='<div class="badge"><b>'+schools[i].emis+' - '+schools[i].name+'</b><br>Town: '+(schools[i].town||'')+' | Province: '+(schools[i].province||'')+' | '+schools[i].pkg+'</div>'; } } if(c>20) h='<div class="badge" style="background:#fef9c3">⚡ Showing 20 of '+c+' DBE schools - Search: EMIS/Name/Town/Province</div>'+h; document.getElementById('schoolList').innerHTML=h||'No DBE schools - Upload CSV!'; document.getElementById('adminStats').innerHTML='DBE Schools: '+schools.length+' | Town+Province Format | Books: '+books.length+' | Learners: '+learners.length+' | CAPS Subjects: '+capsSubjects.length; document.getElementById('homeStats').innerHTML='DBE Schools: '+schools.length+' (EMIS+NAME+TOWN+PROVINCE) | CAPS Subjects: '+capsSubjects.length+' | Learners: '+learners.length+' | Books: '+books.length; }
-function uploadDBECSV(){ var file=document.getElementById('csvFile').files[0]; if(!file){ alert('Select DBE CSV! Format EMIS,Name,Town,Province'); return; } var reader=new FileReader(); reader.onload=function(e){ var text=e.target.result; var lines=text.split('\n'); var added=0,updated=0; for(var i=1;i<lines.length;i++){ var line=lines[i].trim(); if(!line) continue; var parts=line.split(','); if(parts.length<2) continue; var emis=parts[0].trim(); var name=parts[1].trim().toUpperCase(); var town=(parts[2]||'').trim().toUpperCase(); var province=(parts[3]||'').trim().toUpperCase(); if(!emis||!name) continue; var exists=false; for(var j=0;j<schools.length;j++){ if(schools[j].emis===emis){ schools[j].name=name; schools[j].town=town; schools[j].province=province; exists=true; updated++; break; } } if(!exists){ schools.push({emis:emis,name:name,town:town,province:province,pkg:'DEMO',status:'ACTIVE'}); added++; } } save(); renderSchools(); document.getElementById('uploadStatus').innerHTML='✅ DBE Uploaded! Added '+added+' new + Updated '+updated+' | Total: '+schools.length+' | Format: EMIS+NAME+TOWN+PROVINCE'; alert('✅ DBE Schools Uploaded!\nFormat: EMIS + NAME + TOWN + PROVINCE\nAdded: '+added+'\nUpdated: '+updated+'\nTotal: '+schools.length); }; reader.readAsText(file); }
-function uploadTextbooksCSV(){ var file=document.getElementById('textbookFile').files[0]; if(!file){ alert('Select!'); return; } var reader=new FileReader(); reader.onload=function(e){ var text=e.target.result; var lines=text.split('\n'); var added=0; for(var i=1;i<lines.length;i++){ var line=lines[i].trim(); if(!line) continue; var parts=line.split(','); if(parts.length<4) continue; var emis=parts[0].trim(); var title=parts[1].trim(); var subject=parts[2].trim().toUpperCase(); var grade=parts[3].trim().toUpperCase(); var qty=parseInt(parts[4]||'1'); var teacher=(parts[5]||'').trim(); for(var q=0;q<qty;q++){ var num=String(bookCounter).padStart(4,'0'); var unique=emis+'-'+subject+'-'+grade+'-'+num; books.push({title:title,subject:subject,grade:grade,code:unique,school:emis,emis:emis,status:'AVAILABLE',teacher:teacher}); bookCounter++; added++; } } save(); renderAll(); alert('✅ Textbooks Added: '+added+' with CAPS Code - Unique: EMIS-SUBJECT-GRADE-####'); }; reader.readAsText(file); }
-function downloadSampleCSV(){ var csv='EMIS,School Name,Town,Province\n700310854,WORDSWORTH HIGH SCHOOL,BENONI,GAUTENG\n700310855,EXAMPLE PRIMARY SCHOOL,TEMBISA,GAUTENG\n700310856,MTHUNZI SECONDARY,DURBAN,KWAZULU-NATAL\n700310857,LIMPOPO HIGH,POLOKWANE,LIMPOPO\n'; var blob=new Blob([csv],{type:'text/csv'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='dbe_schools_EMIS_NAME_TOWN_PROVINCE.csv'; a.click(); }
-function downloadTextbookSampleCSV(){ var csv='EMIS,Book Title,Subject Code CAPS,Grade,Quantity,Teacher\n700310854,Mathematics Grade 10 Textbook,MATH,G10,50,Mr Nkosi\n700310854,English Home Language Grade 10,ENHL,G10,50,Ms Dlamini\n700310854,Physical Sciences Grade 12,PHSC,G12,30,Mr Smith\n'; var blob=new Blob([csv],{type:'text/csv'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='textbooks_EMIS_TITLE_CAPS_CODE_GRADE_QTY_TEACHER.csv'; a.click(); }
+// TYPING SUPPORT - SIMPLE NUMBERING
+function onLearnerTyping(){ var id=document.getElementById('iLearner').value.trim(); var display=document.getElementById('iLearnerNameDisplay'); var results=document.getElementById('learnerSearchResults'); if(!id){ display.value=''; results.innerHTML=''; return; } var found=null; var matches=[]; for(var i=0;i<learners.length;i++){ if(curSchool && learners[i].school!==curSchool) continue; if(learners[i].id.toLowerCase()===id.toLowerCase()) found=learners[i]; if(learners[i].id.toLowerCase().indexOf(id.toLowerCase())!==-1 || learners[i].name.toLowerCase().indexOf(id.toLowerCase())!==-1) matches.push(learners[i]); } if(found) display.value='✅ '+found.name+' - Grade '+found.grade+' Class '+(found.class||'')+' - School: '+(found.schoolName||getSchoolNameByEmis(found.school)); else display.value='❌ Not found - Keep typing or select below'; if(matches.length>0 && matches.length<15){ var h='<div class="small">Matches - Tap:</div>'; for(var j=0;j<Math.min(matches.length,10);j++){ h+='<div class="badge" onclick="selectLearnerForIssue(\''+matches[j].id+'\')"><b>'+matches[j].id+'</b> - '+matches[j].name+' - '+matches[j].grade+'</div>'; } results.innerHTML=h; } else if(id.length>=2 && matches.length===0) results.innerHTML='<div class="badge" style="color:red">No learner with "'+id+'" - Add in Learners tab</div>'; else results.innerHTML=''; }
+function selectLearnerForIssue(id){ document.getElementById('iLearner').value=id; onLearnerTyping(); document.getElementById('learnerSearchResults').innerHTML=''; }
+function onBookTyping(){ var code=document.getElementById('iBook').value.trim(); var display=document.getElementById('iBookTitleDisplay'); var results=document.getElementById('bookSearchResults'); if(!code){ display.value=''; results.innerHTML=''; return; } var found=null; var matches=[]; for(var i=0;i<books.length;i++){ if(curSchool && books[i].emis!==curSchool && books[i].school!==curSchool) continue; if(books[i].code.toLowerCase()===code.toLowerCase()) found=books[i]; if(books[i].code.toLowerCase().indexOf(code.toLowerCase())!==-1 || books[i].title.toLowerCase().indexOf(code.toLowerCase())!==-1 || books[i].subject.toLowerCase().indexOf(code.toLowerCase())!==-1) matches.push(books[i]); } if(found) display.value='✅ '+found.title+' | CAPS: '+found.subject+' | Grade: '+found.grade+' | Teacher: '+(found.teacher||'N/A')+' | Status: '+found.status+' | Format: SUBJECT-GRADE-NUMBER'; else display.value='❌ Book not found - Format e.g. ACC-G10-001 - Keep typing or select below'; if(matches.length>0 && matches.length<15){ var h='<div class="small">Matches - Tap (Format ACC-G10-001):</div>'; for(var j=0;j<Math.min(matches.length,10);j++){ h+='<div class="badge" onclick="selectBookForIssue(\''+matches[j].code+'\')"><b>'+matches[j].code+'</b> - '+matches[j].title+' - '+matches[j].subject+'</div>'; } results.innerHTML=h; } else if(code.length>=2 && matches.length===0) results.innerHTML='<div class="badge" style="color:red">No book with "'+code+'" - Format ACC-G10-001 - Add in Books tab</div>'; else results.innerHTML=''; }
+function selectBookForIssue(code){ document.getElementById('iBook').value=code; onBookTyping(); document.getElementById('bookSearchResults').innerHTML=''; }
+function onReturnBookTyping(){ var code=document.getElementById('rBook').value.trim(); var display=document.getElementById('rBookTitleDisplay'); var results=document.getElementById('returnSearchResults'); if(!code){ display.value=''; results.innerHTML=''; return; } var found=null; var borrowed=[]; for(var i=0;i<issues.length;i++){ if(issues[i].status==='BORROWED'){ borrowed.push(issues[i]); if(issues[i].book.toLowerCase()===code.toLowerCase()) found=issues[i]; } } var bookTitle=''; for(var b=0;b<books.length;b++){ if(books[b].code===code) bookTitle=books[b].title; } if(found) display.value='✅ Borrowed - '+(bookTitle||'')+' | Learner: '+found.learner+' | Date: '+found.date+' | Format ACC-G10-001'; else display.value=bookTitle? 'ℹ️ '+bookTitle+' - Not marked as borrowed? Check list' : '❌ Not in borrowed list - Format ACC-G10-001'; if(borrowed.length>0){ var matches=[]; for(var j=0;j<borrowed.length;j++){ if(borrowed[j].book.toLowerCase().indexOf(code.toLowerCase())!==-1 || borrowed[j].learner.toLowerCase().indexOf(code.toLowerCase())!==-1) matches.push(borrowed[j]); } if(matches.length>0 && matches.length<15){ var h='<div class="small">Borrowed matching - Tap:</div>'; for(var k=0;k<Math.min(matches.length,10);k++){ h+='<div class="badge" onclick="selectBookForReturn(\''+matches[k].book+'\')"><b>'+matches[k].book+'</b> → '+matches[k].learner+'</div>'; } results.innerHTML=h; } } }
+function selectBookForReturn(code){ document.getElementById('rBook').value=code; onReturnBookTyping(); document.getElementById('returnSearchResults').innerHTML=''; }
+function fillDatalists(){ var learnerDL=document.getElementById('learnerIdList'); var bookDL=document.getElementById('bookCodeList'); var borrowedDL=document.getElementById('borrowedBooksList'); var lHtml='', bHtml='', borHtml=''; for(var i=0;i<Math.min(learners.length,200);i++){ if(curSchool && learners[i].school!==curSchool) continue; lHtml+='<option value="'+learners[i].id+'">'+learners[i].name+' - '+learners[i].grade+' '+(learners[i].class||'')+'</option>'; } for(var j=0;j<Math.min(books.length,200);j++){ if(curSchool && books[j].emis!==curSchool && books[j].school!==curSchool) continue; bHtml+='<option value="'+books[j].code+'">'+books[j].title+' - '+books[j].subject+' '+books[j].grade+' - '+books[j].code+'</option>'; } var borrowed=[]; for(var k=0;k<issues.length;k++){ if(issues[k].status==='BORROWED') borrowed.push(issues[k]); } for(var l=0;l<Math.min(borrowed.length,200);l++){ borHtml+='<option value="'+borrowed[l].book+'">Learner: '+borrowed[l].learner+' - '+borrowed[l].date+'</option>'; } if(learnerDL) learnerDL.innerHTML=lHtml; if(bookDL) bookDL.innerHTML=bHtml; if(borrowedDL) borrowedDL.innerHTML=borHtml; }
 
-function addBookWithDBECode(){ var title=document.getElementById('bTitle').value.trim(); var subject=document.getElementById('bSubject').value; var grade=document.getElementById('bGrade').value; var teacher=document.getElementById('bTeacher').value.trim(); var manual=document.getElementById('bCodeManual').value.trim(); if(!title||!subject||!grade){ alert('Title + CAPS Subject + Grade!'); return; } if(!curSchool){ alert('Select DBE School first!'); return; } var unique=manual||curSchool+'-'+subject+'-'+grade+'-'+String(bookCounter).padStart(4,'0'); if(!manual) bookCounter++; books.push({title:title,subject:subject,grade:grade,code:unique,school:curSchool,emis:curSchool,status:'AVAILABLE',teacher:teacher}); save(); renderAll(); document.getElementById('previewUnique').innerHTML='✅ Last: '+unique+' - CAPS: '+subject+' - Teacher: '+(teacher||'N/A'); alert('✅ Book Added with CAPS Code: '+unique); }
-function addLearner(){ var n=document.getElementById('lName').value.trim(); var g=document.getElementById('lGrade').value.trim().toUpperCase(); var cls=document.getElementById('lClass')?document.getElementById('lClass').value.trim().toUpperCase():g; var id=document.getElementById('lId').value.trim(); if(!n||!id){ alert('Name + ID!'); return; } if(!curSchool){ alert('Select DBE School!'); return; } learners.push({name:n,grade:g,class:cls,id:id,school:curSchool,schoolName:curSchoolName||getSchoolNameByEmis(curSchool)}); save(); renderAll(); alert('Learner Added: '+n); }
-function fillDatalists(){ var learnerDL=document.getElementById('learnerIdList'); var bookDL=document.getElementById('bookCodeList'); var borrowedDL=document.getElementById('borrowedBooksList'); var lHtml='', bHtml='', borHtml=''; for(var i=0;i<Math.min(learners.length,200);i++){ if(curSchool && learners[i].school!==curSchool) continue; lHtml+='<option value="'+learners[i].id+'">'+learners[i].name+' - '+learners[i].grade+'</option>'; } for(var j=0;j<Math.min(books.length,200);j++){ if(curSchool && books[j].emis!==curSchool && books[j].school!==curSchool) continue; bHtml+='<option value="'+books[j].code+'">'+books[j].title+' - '+books[j].subject+'</option>'; } var borrowed=[]; for(var k=0;k<issues.length;k++){ if(issues[k].status==='BORROWED') borrowed.push(issues[k]); } for(var l=0;l<Math.min(borrowed.length,200);l++){ borHtml+='<option value="'+borrowed[l].book+'">Learner: '+borrowed[l].learner+'</option>'; } if(learnerDL) learnerDL.innerHTML=lHtml; if(bookDL) bookDL.innerHTML=bHtml; if(borrowedDL) borrowedDL.innerHTML=borHtml; }
-function onLearnerTyping(){ var id=document.getElementById('iLearner').value.trim(); var display=document.getElementById('iLearnerNameDisplay'); var results=document.getElementById('learnerSearchResults'); if(!id){ display.value=''; results.innerHTML=''; return; } var found=null; var matches=[]; for(var i=0;i<learners.length;i++){ if(curSchool && learners[i].school!==curSchool) continue; if(learners[i].id.toLowerCase()===id.toLowerCase()) found=learners[i]; if(learners[i].id.toLowerCase().indexOf(id.toLowerCase())!==-1 || learners[i].name.toLowerCase().indexOf(id.toLowerCase())!==-1) matches.push(learners[i]); } if(found) display.value='✅ '+found.name+' - Grade '+found.grade; else display.value='❌ Not found - Select from list below'; if(matches.length>0 && matches.length<20){ var h=''; for(var j=0;j<Math.min(matches.length,10);j++){ h+='<div class="badge" onclick="document.getElementById(\'iLearner\').value=\''+matches[j].id+'\';onLearnerTyping()"><b>'+matches[j].id+'</b> - '+matches[j].name+'</div>'; } results.innerHTML=h; } else results.innerHTML=''; }
-function onBookTyping(){ var code=document.getElementById('iBook').value.trim(); var display=document.getElementById('iBookTitleDisplay'); var results=document.getElementById('bookSearchResults'); if(!code){ display.value=''; results.innerHTML=''; return; } var found=null; var matches=[]; for(var i=0;i<books.length;i++){ if(curSchool && books[i].emis!==curSchool && books[i].school!==curSchool) continue; if(books[i].code.toLowerCase()===code.toLowerCase()) found=books[i]; if(books[i].code.toLowerCase().indexOf(code.toLowerCase())!==-1 || books[i].title.toLowerCase().indexOf(code.toLowerCase())!==-1) matches.push(books[i]); } if(found) display.value='✅ '+found.title+' | '+found.subject; else display.value='❌ Not found'; if(matches.length>0 && matches.length<20){ var h=''; for(var j=0;j<Math.min(matches.length,10);j++){ h+='<div class="badge" onclick="document.getElementById(\'iBook\').value=\''+matches[j].code+'\';onBookTyping()"><b>'+matches[j].code+'</b> - '+matches[j].title+'</div>'; } results.innerHTML=h; } else results.innerHTML=''; }
-function onReturnBookTyping(){ var code=document.getElementById('rBook').value.trim(); var display=document.getElementById('rBookTitleDisplay'); if(!code){ display.value=''; return; } var found=null; for(var i=0;i<issues.length;i++){ if(issues[i].book.toLowerCase()===code.toLowerCase() && issues[i].status==='BORROWED') found=issues[i]; } if(found) display.value='✅ Borrowed by '+found.learner; else display.value='Checking...'; }
-function startScanner(){ var reader=document.getElementById('reader'); if(!reader) return; var html5Qr=new Html5Qrcode("reader"); html5Qr.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 150 } }, function(decoded){ document.getElementById('scanResult').value=decoded; document.getElementById('scanLog').innerHTML='✅ Scanned: '+decoded; }, function(err){}); }
-function stopScanner(){}
-function issueBook(){ var l=document.getElementById('iLearner').value.trim(); var b=document.getElementById('iBook').value.trim(); if(!l||!b){ alert('Type Learner ID + Book Number!'); return; } issues.push({learner:l,book:b,status:'BORROWED',date:new Date().toLocaleDateString(),school:curSchool}); save(); renderAll(); alert('✅ Issued '+b+' to '+l); document.getElementById('iLearner').value=''; document.getElementById('iBook').value=''; }
-function returnBook(){ var b=document.getElementById('rBook').value.trim(); if(!b){ alert('Type Book Number!'); return; } var found=false; for(var i=0;i<issues.length;i++){ if(issues[i].book===b && issues[i].status==='BORROWED'){ issues[i].status='RETURNED'; found=true; } } if(!found){ alert('Not found as borrowed!'); return; } save(); renderAll(); alert('✅ Returned '+b); document.getElementById('rBook').value=''; }
+// DROPDOWN PRINT
+function onBookPrintTypeChange(){ var t=document.getElementById('bookPrintType').value; document.getElementById('bookPrintSubjectBox').classList.add('hidden'); document.getElementById('bookPrintTeacherBox').classList.add('hidden'); document.getElementById('bookPrintGradeBox').classList.add('hidden'); if(t==='SUBJECT') document.getElementById('bookPrintSubjectBox').classList.remove('hidden'); if(t==='TEACHER') document.getElementById('bookPrintTeacherBox').classList.remove('hidden'); if(t==='GRADE') document.getElementById('bookPrintGradeBox').classList.remove('hidden'); updateBookPrintCount(); }
+function onLearnerPrintTypeChange(){ var t=document.getElementById('learnerPrintType').value; document.getElementById('learnerPrintClassBox').classList.add('hidden'); document.getElementById('learnerPrintGradeBox').classList.add('hidden'); if(t==='CLASS') document.getElementById('learnerPrintClassBox').classList.remove('hidden'); if(t==='GRADE') document.getElementById('learnerPrintGradeBox').classList.remove('hidden'); updateLearnerPrintCount(); }
+function updateBookPrintCount(){ var f=getFilteredBooks(); document.getElementById('bookPrintCount').innerHTML='📚 Ready to print: <b>'+f.length+'</b> books - Format SUBJECT-GRADE-NUMBER e.g. ACC-G10-001 - Each with MAKHANANI DIGITAL LIBRARY + School Name'; }
+function updateLearnerPrintCount(){ var f=getFilteredLearners(); document.getElementById('learnerPrintCount').innerHTML='👥 Ready to print: <b>'+f.length+'</b> learners - Each with MAKHANANI DIGITAL LIBRARY'; }
+function getFilteredBooks(){ var type=document.getElementById('bookPrintType').value; var list=[]; for(var i=0;i<books.length;i++){ if(curSchool && books[i].emis!==curSchool && books[i].school!==curSchool) continue; if(type==='ALL') list.push(books[i]); else if(type==='SUBJECT'){ var sub=document.getElementById('bookPrintSubject').value; if(!sub || books[i].subject===sub) list.push(books[i]); } else if(type==='TEACHER'){ var teach=(document.getElementById('bookPrintTeacher').value||'').toLowerCase(); if(!teach || (books[i].teacher||'').toLowerCase().indexOf(teach)!==-1) list.push(books[i]); } else if(type==='GRADE'){ var g=document.getElementById('bookPrintGrade').value; if(!g || books[i].grade===g) list.push(books[i]); } } return list; }
+function getFilteredLearners(){ var type=document.getElementById('learnerPrintType').value; var list=[]; for(var i=0;i<learners.length;i++){ if(curSchool && learners[i].school!==curSchool) continue; if(type==='ALL') list.push(learners[i]); else if(type==='CLASS'){ var cls=(document.getElementById('learnerPrintClass').value||'').toLowerCase(); if(!cls || (learners[i].class||'').toLowerCase()===cls) list.push(learners[i]); } else if(type==='GRADE'){ var g=document.getElementById('learnerPrintGrade').value; if(!g || (learners[i].grade||'').toUpperCase().indexOf(g)!==-1) list.push(learners[i]); } } return list; }
+
 function renderAll(){
-  var h=''; for(var i=0;i<Math.min(learners.length,50);i++){ var sName=learners[i].schoolName||getSchoolNameByEmis(learners[i].school); h+='<div class="barcodeCard"><div class="schoolName">🏫 '+sName+' | EMIS: '+learners[i].school+'</div><div>'+learners[i].name+' - '+learners[i].grade+' - ID: '+learners[i].id+'</div><svg class="barcodeLearner" data-code="'+learners[i].id+'"></svg></div>'; } document.getElementById('learnerList').innerHTML=h||'No learners!';
+  var teachersSet={}; var classesSet={};
+  for(var i=0;i<books.length;i++){ if(books[i].teacher) teachersSet[books[i].teacher]=true; }
+  for(var j=0;j<learners.length;j++){ if(learners[j].class) classesSet[learners[j].class]=true; if(learners[j].grade) classesSet[learners[j].grade]=true; }
+  var tHtml=''; for(var t in teachersSet){ tHtml+='<option value="'+t+'">'; } document.getElementById('teacherList').innerHTML=tHtml;
+  var cHtml=''; for(var c in classesSet){ cHtml+='<option value="'+c+'">'; } document.getElementById('classList').innerHTML=cHtml;
+
+  var h=''; for(var i=0;i<Math.min(learners.length,50);i++){
+    var sName=learners[i].schoolName||getSchoolNameByEmis(learners[i].school);
+    var tp=getSchoolTownProvince(learners[i].school);
+    h+='<div class="barcodeCard">'
+      +'<div style="background:#0a1a4d;color:#fff;padding:8px;border-radius:8px;margin-bottom:6px">'
+      +'<div style="font-size:11px;letter-spacing:1px">MAKHANANI DIGITAL LIBRARY</div>'
+      +'<div style="font-size:14px;font-weight:900">🏫 '+sName+'</div>'
+      +'<div style="font-size:10px">EMIS: '+learners[i].school+' | '+tp.town+' | '+tp.province+'</div>'
+      +'<div style="font-size:9px;opacity:0.9">POWERED BY XINTIMANI GROUP</div></div>'
+      +'<div style="font-weight:900;font-size:13px">'+learners[i].name+' - Grade '+learners[i].grade+' Class '+(learners[i].class||'')+'</div>'
+      +'<div style="font-size:11px">Learner ID: <b>'+learners[i].id+'</b></div>'
+      +'<svg class="barcodeLearner" data-code="'+learners[i].id+'"></svg>'
+      +'<div style="font-size:9px;color:#666;margin-top:4px">MAKHANANI DIGITAL LIBRARY | XINTIMANI GROUP | 078 023 3263</div></div>';
+  }
+  document.getElementById('learnerList').innerHTML=h||'No learners!';
   setTimeout(function(){ document.querySelectorAll('.barcodeLearner').forEach(function(el){ try{ JsBarcode(el, el.getAttribute('data-code'), {format:"CODE128", width:1.8, height:60, displayValue:true}); }catch(e){} }); }, 300);
-  var b=''; for(var k=0;k<Math.min(books.length,50);k++){ var sNameB=getSchoolNameByEmis(books[k].emis||books[k].school); b+='<div class="barcodeCard"><div class="schoolName">🏫 '+sNameB+' | EMIS: '+(books[k].emis||books[k].school)+'</div><div>'+books[k].title+' | CAPS: '+books[k].subject+' '+books[k].grade+' | Teacher: '+(books[k].teacher||'N/A')+'</div><div><b>'+books[k].code+'</b></div><svg class="barcodeBook" data-code="'+books[k].code+'"></svg></div>'; } document.getElementById('bookList').innerHTML=b||'No books!';
+
+  var b=''; for(var k=0;k<Math.min(books.length,50);k++){
+    var sNameB=getSchoolNameByEmis(books[k].emis||books[k].school);
+    var tpB=getSchoolTownProvince(books[k].emis||books[k].school);
+    b+='<div class="barcodeCard">'
+      +'<div style="background:#0a1a4d;color:#fff;padding:8px;border-radius:8px;margin-bottom:6px">'
+      +'<div style="font-size:11px;letter-spacing:1px">MAKHANANI DIGITAL LIBRARY</div>'
+      +'<div style="font-size:14px;font-weight:900">🏫 '+sNameB+'</div>'
+      +'<div style="font-size:10px">EMIS: '+(books[k].emis||books[k].school)+' | '+tpB.town+' | '+tpB.province+'</div>'
+      +'<div style="font-size:9px;opacity:0.9">POWERED BY XINTIMANI GROUP</div></div>'
+      +'<div style="font-weight:900;font-size:13px">'+books[k].title+' | CAPS: '+books[k].subject+' '+books[k].grade+' | Teacher: '+(books[k].teacher||'N/A')+'</div>'
+      +'<div style="font-size:14px"><b>'+books[k].code+'</b> | Format: SUBJECT-GRADE-NUMBER</div>'
+      +'<svg class="barcodeBook" data-code="'+books[k].code+'"></svg>'
+      +'<div style="font-size:9px;color:#666;margin-top:4px">MAKHANANI DIGITAL LIBRARY | SIMPLE NUMBERING: SUBJECT-GRADE-NUMBER | Example: ACC-G10-001 | XINTIMANI</div></div>';
+  }
+  document.getElementById('bookList').innerHTML=b||'No books!';
   setTimeout(function(){ document.querySelectorAll('.barcodeBook').forEach(function(el){ try{ JsBarcode(el, el.getAttribute('data-code'), {format:"CODE128", width:1.5, height:50, displayValue:true, fontSize:12}); }catch(e){} }); }, 300);
-  var r=''; for(var l=0;l<Math.min(issues.length,50);l++) r+='<div class="badge">'+issues[l].book+' → '+issues[l].learner+' - '+issues[l].status+'</div>'; document.getElementById('issueList').innerHTML=r; document.getElementById('returnList').innerHTML=r||'No issued!'; renderSchools(); renderCAPS(); fillSubjectDropdown(); fillDatalists();
+
+  var r=''; for(var l=0;l<Math.min(issues.length,50);l++) r+='<div class="badge">'+issues[l].book+' → '+issues[l].learner+' - '+issues[l].status+' | '+(issues[l].date||'')+'</div>'; 
+  document.getElementById('issueList').innerHTML=r; document.getElementById('returnList').innerHTML=r||'No issued!'; 
+  renderSchools(); renderCAPS(); fillSubjectDropdown(); fillDatalists(); updateBookPrintCount(); updateLearnerPrintCount();
 }
+
+function printBookBarcodes(){
+  var filtered=getFilteredBooks();
+  if(filtered.length===0){ alert('No books to print!'); return; }
+  var area=document.getElementById('bookBarcodePrintArea');
+  var html='<div style="text-align:center;padding:10px;background:#0a1a4d;color:#fff;border-radius:12px;margin-bottom:10px">'
+    +'<h2 style="margin:0">MAKHANANI DIGITAL LIBRARY</h2><p style="margin:0;font-size:12px">POWERED BY XINTIMANI GROUP | BOOK BARCODES | SIMPLE NUMBERING SUBJECT-GRADE-NUMBER | '+curSchoolName+' | Count: '+filtered.length+'</p></div>';
+  for(var i=0;i<filtered.length;i++){
+    var sName=getSchoolNameByEmis(filtered[i].emis||filtered[i].school);
+    var tp=getSchoolTownProvince(filtered[i].emis||filtered[i].school);
+    html+='<div class="barcodeCard">'
+      +'<div style="background:#0a1a4d;color:#fff;padding:8px;border-radius:8px;margin-bottom:6px">'
+      +'<div style="font-size:11px;letter-spacing:1px">MAKHANANI DIGITAL LIBRARY</div>'
+      +'<div style="font-size:14px;font-weight:900">🏫 '+sName+'</div>'
+      +'<div style="font-size:10px">EMIS: '+(filtered[i].emis||filtered[i].school)+' | '+tp.town+' | '+tp.province+'</div>'
+      +'<div style="font-size:9px;opacity:0.9">POWERED BY XINTIMANI GROUP</div></div>'
+      +'<div style="font-weight:900">'+filtered[i].title+' | Teacher: '+(filtered[i].teacher||'N/A')+'</div>'
+      +'<div style="font-size:14px">CAPS: '+filtered[i].subject+' '+filtered[i].grade+' | <b>'+filtered[i].code+'</b></div>'
+      +'<svg class="printBarcodeBook" data-code="'+filtered[i].code+'"></svg>'
+      +'<div style="font-size:9px;color:#666">MAKHANANI DIGITAL LIBRARY | SIMPLE: SUBJECT-GRADE-NUMBER e.g. ACC-G10-001 | XINTIMANI 078 023 3263</div></div>';
+  }
+  area.innerHTML=html;
+  setTimeout(function(){ document.querySelectorAll('.printBarcodeBook').forEach(function(el){ try{ JsBarcode(el, el.getAttribute('data-code'), {format:"CODE128", width:1.5, height:60, displayValue:true}); }catch(e){} }); window.print(); }, 600);
+}
+
+function printLearnerBarcodes(){
+  var filtered=getFilteredLearners();
+  if(filtered.length===0){ alert('No learners!'); return; }
+  var area=document.getElementById('learnerBarcodePrintArea');
+  var html='<div style="text-align:center;padding:10px;background:#0a1a4d;color:#fff;border-radius:12px;margin-bottom:10px">'
+    +'<h2 style="margin:0">MAKHANANI DIGITAL LIBRARY</h2><p style="margin:0;font-size:12px">POWERED BY XINTIMANI GROUP | LEARNER CARDS | '+curSchoolName+' | Count: '+filtered.length+'</p></div>';
+  for(var i=0;i<filtered.length;i++){
+    var sName=filtered[i].schoolName||getSchoolNameByEmis(filtered[i].school);
+    var tp=getSchoolTownProvince(filtered[i].school);
+    html+='<div class="barcodeCard">'
+      +'<div style="background:#0a1a4d;color:#fff;padding:8px;border-radius:8px;margin-bottom:6px">'
+      +'<div style="font-size:11px;letter-spacing:1px">MAKHANANI DIGITAL LIBRARY</div>'
+      +'<div style="font-size:14px;font-weight:900">🏫 '+sName+'</div>'
+      +'<div style="font-size:10px">EMIS: '+filtered[i].school+' | '+tp.town+' | '+tp.province+'</div>'
+      +'<div style="font-size:9px;opacity:0.9">POWERED BY XINTIMANI GROUP</div></div>'
+      +'<div style="font-weight:900;font-size:13px">'+filtered[i].name+' - Grade '+filtered[i].grade+' Class '+(filtered[i].class||'')+'</div>'
+      +'<div style="font-size:11px">Learner ID: <b>'+filtered[i].id+'</b></div>'
+      +'<svg class="printBarcodeLearner" data-code="'+filtered[i].id+'"></svg>'
+      +'<div style="font-size:9px;color:#666">MAKHANANI DIGITAL LIBRARY | LEARNER CARD | XINTIMANI | 078 023 3263</div></div>';
+  }
+  area.innerHTML=html;
+  setTimeout(function(){ document.querySelectorAll('.printBarcodeLearner').forEach(function(el){ try{ JsBarcode(el, el.getAttribute('data-code'), {format:"CODE128", width:2, height:60, displayValue:true}); }catch(e){} }); window.print(); }, 600);
+}
+
+function issueBook(){ var l=document.getElementById('iLearner').value.trim(); var b=document.getElementById('iBook').value.trim().toUpperCase(); if(!l||!b){ alert('❌ TYPE Learner ID + Book Number! Format e.g. ACC-G10-001'); return; } issues.push({learner:l,book:b,status:'BORROWED',date:new Date().toLocaleDateString(),school:curSchool}); save(); renderAll(); document.getElementById('issueStatus').innerHTML='✅ Issued '+b+' to '+l; alert('✅ Issued!\n📚 MAKHANANI DIGITAL LIBRARY\nBook: '+b+' (Format SUBJECT-GRADE-NUMBER)\nTo Learner: '+l); document.getElementById('iLearner').value=''; document.getElementById('iBook').value=''; document.getElementById('iLearnerNameDisplay').value=''; document.getElementById('iBookTitleDisplay').value=''; }
+function returnBook(){ var b=document.getElementById('rBook').value.trim().toUpperCase(); if(!b){ alert('❌ TYPE Book Number! Format ACC-G10-001'); return; } var found=false; for(var i=0;i<issues.length;i++){ if(issues[i].book===b && issues[i].status==='BORROWED'){ issues[i].status='RETURNED'; found=true; } } if(!found){ alert('Book not found as borrowed! You typed: '+b+' - Format ACC-G10-001'); return; } save(); renderAll(); document.getElementById('returnStatus').innerHTML='✅ Returned '+b; alert('✅ Returned '+b); document.getElementById('rBook').value=''; document.getElementById('rBookTitleDisplay').value=''; }
+
 renderAll();
 </script>
 </body>
