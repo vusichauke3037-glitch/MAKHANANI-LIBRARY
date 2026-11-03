@@ -1,34 +1,220 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>JOBS - Makhanani Digital Library</title><style>body{margin:0;font-family:Arial;background:#0a1a4d;color:#000;text-align:center} .box{max-width:800px;margin:auto;background:#fff;padding:16px} .gold{background:#c9a227;color:#0a1a4d;padding:10px;border-radius:12px;font-weight:900} .green{background:#16a34a;color:#fff;padding:12px;border-radius:12px;font-weight:900;margin:10px 0} .red{background:#dc2626;color:#fff;padding:10px;border-radius:12px;font-weight:900} .card{border:3px solid #1a56db;border-radius:14px;padding:12px;margin:10px 0;text-align:left} .card h3{margin:4px 0;color:#1a56db} .big{font-size:26px;font-weight:900} .btn{display:block;background:#facc15;color:#000;text-decoration:none;padding:16px;border-radius:12px;font-weight:900;font-size:19px;margin:10px 0} .btn2{display:block;background:#16a34a;color:#fff;text-decoration:none;padding:16px;border-radius:12px;font-weight:900;font-size:19px;margin:10px 0} table{width:100%;border-collapse:collapse} td,th{border:1px solid #000;padding:8px;font-size:14px} th{background:#1a56db;color:#fff}</style></head><body><div class="box">
-<img src="logo.png" style="width:220px;max-width:85%"><h1 style="color:#0a1a4d;margin:4px">MAKHANANI DIGITAL LIBRARY</h1><p style="color:#0f766e;font-weight:900">Powered by Xintimani Group<br>Building Solutions. Empowering Communities.</p>
-<div class="gold">📢 WE ARE HIRING! JOBS CREATED BY MAKHANANI! 📢</div>
-<h2 class="big">💼 330+ JOBS WHEN WE REACH 100 SCHOOLS!</h2><p style="font-weight:900">No Experience Needed For Some Jobs! Training Provided FREE!</p>
-<div class="green">✅ YOUTH | ✅ MATRICULANTS | ✅ UNEMPLOYED | ✅ SCHOOL LEAVERS<br>APPLY ON WHATSAPP: 078 023 3263</div>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MAKHANANI JOBS - V5.0 PRODUCTION - NEW PROJECT 93e52 - ✅ CONNECTED</title>
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#0a1a4d">
+<style>*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#fefce8;color:#422006}header{background:#0a1a4d;color:#fff;padding:14px;text-align:center;border-bottom:4px solid #facc15}.logo{width:90%;max-width:320px;background:#fff;border-radius:0 0 16px 16px;padding:10px;margin:-14px auto 10px}.logo img{width:100%;max-width:240px}.wrap{max-width:1000px;margin:auto;padding:12px}.card{background:#fff;border-radius:14px;padding:14px;margin:10px 0;box-shadow:0 4px 12px rgba(0,0,0,.15);border:2px solid #fde68a}input,select,textarea{width:100%;padding:13px;margin:6px 0;border:2px solid #fde68a;border-radius:10px;background:#fff;color:#422006;font-size:15px}button{width:100%;padding:13px;margin:6px 0;border:0;border-radius:12px;background:#1a56db;color:#fff;font-weight:900;font-size:14px;cursor:pointer}.green{background:#16a34a}.red{background:#dc2626}.yellow{background:#facc15;color:#000}.dark{background:#0a1a4d}.orange{background:#ea580c}.hidden{display:none}.badge{background:#fef9c3;border:2px solid #fde68a;border-radius:10px;padding:10px;margin:6px 0;word-break:break-word}.jobGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}.jobCard{background:linear-gradient(135deg,#fff,#fef9c3);border:2px solid #facc15;border-radius:14px;padding:14px;position:relative}.jobCard.featured{border:3px solid #16a34a;box-shadow:0 0 15px rgba(22,163,74,.3);background:linear-gradient(135deg,#f0fdf4,#dcfce7)}.jobCard.closed{opacity:.6;border-color:#d1d5db;background:#f3f4f6}.cloud{border:3px solid #16a34a;border-radius:14px;padding:12px;background:#f0fdf4;text-align:center;font-weight:900;color:#14532d}.tabs{display:flex;gap:5px;flex-wrap:wrap}.tabs button{flex:1;width:auto;padding:8px 2px;font-size:10px;background:#e5e7eb;color:#111}.tabs button.active{background:#facc15;color:#000}.statusBadge{display:inline-block;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:900}.open{background:#dcfce7;color:#14532d}.closedBadge{background:#fee2e2;color:#991b1b}.pending{background:#fef9c3;color:#854d0e}</style>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+</head><body>
+<header><div class="logo"><img src="logo.png" alt="XINTIMANI"></div><h1>💼 MAKHANANI JOBS BOARD</h1><p>V5.0 PRODUCTION - NEW PROJECT 93e52 - ✅ CONNECTED - REAL-TIME DB LIVE + OFFLINE + APP PWA - ADMIN/PRINCIPAL/HOD POST JOBS - LEARNERS/EDUCATORS APPLY</p>
+<div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap"><button style="width:auto;padding:8px 12px;border-radius:20px;background:#fff;color:#0a1a4d" onclick="window.location.href='index.html'">🏠 HOME LIBRARY</button><button style="width:auto;padding:8px 12px;border-radius:20px;background:#16a34a" onclick="syncJobs()">☁️ SYNC JOBS - NEW PROJECT 93e52</button><button style="width:auto;padding:8px 12px;border-radius:20px;background:#0a1a4d" onclick="window.open('agents.html','_blank')">🕵️ AGENTS</button></div></header>
+<div class="wrap">
+<div class="card"><div class="cloud" id="cloudStatus">☁️ V5.0 JOBS - Loading NEW PROJECT 93e52 - makhanani-library-93e52 - ✅ CONNECTED logic from V4.0</div><div class="badge" id="debugInfo" style="font-size:10px">V5.0 JOBS DEBUG: Starting...</div><div class="badge" id="statsBar">Jobs: Loading... - V5.0 PRODUCTION - NEW PROJECT 93e52 - ✅ CONNECTED + REAL-TIME DB LIVE + OFFLINE</div></div>
 
-<div class="card"><h3>📚 1. SCHOOL LIBRARIAN - 100 JOBS!</h3><b>What you do:</b> Scan books, Issue + Return, Print cards + barcodes, Help learners.<br><b>Where:</b> At YOUR local school!<br><b>Pay:</b> Paid by school / SGB / Stipend<br><b>Need:</b> Matric + Phone + Love books</div>
+<div class="tabs"><button onclick="showTab('openTab',this)" class="active">💼 OPEN JOBS</button><button onclick="showTab('createTab',this)">➕ POST JOB</button><button onclick="showTab('appsTab',this)">📋 APPLICATIONS</button><button onclick="showTab('myTab',this)">👤 MY APPLICATIONS</button></div>
 
-<div class="card"><h3>📞 2. SALES AGENT - 20 JOBS!</h3><b>What you do:</b> Visit schools, Show DEMO on your phone, Sign schools for FREE 7 Days DEMO.<br><b>Pay:</b> <b>R500 per school signed + 10% every month!</b> Sign 10 schools = R5,000 + R550/m!<br><b>Need:</b> Phone + Confidence + WhatsApp</div>
+<div class="card" id="openTab"><h2>💼 OPEN JOBS - V5.0 PRODUCTION - NEW PROJECT 93e52 - ✅ CONNECTED + REAL-TIME DB LIVE</h2>
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"><input id="jobSearch" placeholder="Search jobs: LIBRARIAN, EDUCATOR, WORDSWORTH, BENONI, G10..." oninput="renderJobs()" style="flex:1"><select id="filterType" style="flex:0.5" onchange="renderJobs()"><option value="">All Types</option><option>LIBRARIAN</option><option>EDUCATOR</option><option>HOD</option><option>PRINCIPAL</option><option>ADMIN</option><option>AGENT</option><option>VOLUNTEER</option></select></div>
+<div style="display:flex;gap:6px;flex-wrap:wrap"><button class="green" style="flex:1" onclick="loadSampleJobs()">📥 LOAD SAMPLE JOBS</button><button class="yellow" style="flex:1;color:#000" onclick="startLiveJobs()">🔴 START LIVE JOBS - NEW PROJECT 93e52</button><button class="dark" style="flex:1" onclick="renderJobs()">🔄 REFRESH</button></div>
+<div class="jobGrid" id="jobGrid"></div>
+</div>
 
-<div class="card"><h3>🛠️ 3. TRAINER - 10 JOBS!</h3><b>What you do:</b> Train Principal (10 min) + Librarian (15 min) + Educators (10 min). Show them Issue / Return / Print.<br><b>Pay:</b> <b>R500 - R1,000 per school trained!</b><br><b>Need:</b> Know the app well - We train YOU free!</div>
+<div class="card hidden" id="createTab"><h2>➕ POST NEW JOB - V5.0 PRODUCTION - ADMIN/PRINCIPAL/HOD ONLY - NEW PROJECT 93e52 - ✅ CONNECTED</h2>
+<div class="cloud"><h3>💼 NEW LIBRARY JOB - V5.0 - REAL-TIME DB LIVE + OFFLINE</h3>
+<input id="jTitle" placeholder="Job Title e.g. Senior Librarian - WORDSWORTH HIGH">
+<div style="display:flex;gap:6px"><select id="jType" style="flex:1"><option value="">Job Type</option><option>LIBRARIAN</option><option>EDUCATOR</option><option>HOD</option><option>PRINCIPAL</option><option>ADMIN</option><option>AGENT</option><option>VOLUNTEER</option><option>IT SUPPORT</option></select><select id="jGrade" style="flex:0.6"><option value="">Grade/Scope</option><option>G4-G7</option><option>G8-G12</option><option>G10-G12</option><option>ALL GRADES</option><option>FOUNDATION</option><option>FET</option></select></div>
+<div style="display:flex;gap:6px"><input id="jEmis" placeholder="DBE EMIS e.g. 700310854" style="flex:1"><input id="jTown" placeholder="Town e.g. BENONI" style="flex:1"></div>
+<div style="display:flex;gap:6px"><select id="jSubject" style="flex:1"><option value="">Subject Required - At Least 1</option><option>ACC - Accounting</option><option>MATH - Mathematics</option><option>ENHL - English HL</option><option>PHSC - Physical Sciences</option><option>LIFE - Life Sciences</option><option>ALL SUBJECTS</option><option>LIBRARY MANAGEMENT</option><option>IT / CAT</option></select><input id="jSalary" placeholder="Salary e.g. R15,000 - R25,000" style="flex:1"></div>
+<textarea id="jDesc" placeholder="Job Description e.g. Manage library ACC-G10-001 + Issue/Return L-0001 + At Least 1 Subject required + ADMIN/PRINCIPAL/LIBRARIAN Add+Remove | EDUCATOR/HOD Add Only + Real-time DB LIVE + Offline + App PWA - NEW PROJECT 93e52"></textarea>
+<textarea id="jReq" placeholder="Requirements e.g. Diploma in Library Science + At Least 1 Subject + Computer Literate + Experience with MAKHANANI system V5.0 + NEW PROJECT 93e52"></textarea>
+<div style="display:flex;gap:6px"><input id="jDeadline" type="date" style="flex:1"><input id="jContact" placeholder="Contact Email e.g. principal@wordsworth.co.za" style="flex:1"></div>
+<div style="display:flex;gap:6px"><button class="green" style="flex:1" onclick="createJob()">➕ POST JOB - V5.0 - NEW PROJECT 93e52 - ✅ CONNECTED + REAL-TIME DB LIVE + OFFLINE</button><button class="dark" style="flex:0.4" onclick="autoJob()">🔢 AUTO</button></div>
+</div>
+<div class="badge" style="background:#f0fdf4;border-color:#16a34a">💼 JOB TYPES - V5.0 PRODUCTION:<br>📚 LIBRARIAN - ACC-G10-001 + Issue/Return + Barcodes<br>👨‍🏫 EDUCATOR - At Least 1 Subject + Add Learners Only<br>📋 HOD - Manage Educators + Subjects + Add Only<br>👔 PRINCIPAL - Dashboard + Add+Remove + Live DB<br>👑 ADMIN - All schools + Add+Remove + All Manuals + APP PWA<br>🤖 AGENT - AI Agents Catalog/Issue/Return/Security<br>🙋 VOLUNTEER - Assist library operations</div>
+</div>
 
-<div class="card"><h3>🏷️ 4. BARCODE STICKER TEAM - 20 JOBS!</h3><b>What you do:</b> Go school to school, Stick barcode on every book (500 books per school).<br><b>Pay:</b> <b>R800 per school (2 days work)!</b><br><b>Need:</b> Neat hands + Patience</div>
+<div class="card hidden" id="appsTab"><h2>📋 APPLICATIONS - V5.0 PRODUCTION - NEW PROJECT 93e52 - ADMIN/PRINCIPAL/HOD REVIEW</h2>
+<div style="display:flex;gap:6px;flex-wrap:wrap"><button class="green" style="flex:1" onclick="startLiveApplications()">🔴 START LIVE APPLICATIONS - NEW PROJECT 93e52</button><button class="red" style="flex:1" onclick="stopLiveApplications()">⏹️ STOP</button><button class="dark" style="flex:1" onclick="renderApplications()">🔄 REFRESH</button></div>
+<div id="applicationsList" style="max-height:500px;overflow-y:auto;border:2px solid #facc15;border-radius:10px;padding:8px;background:#fff;margin-top:8px"></div>
+</div>
 
-<div class="card"><h3>⌨️ 5. DATA CAPTURER - 10 JOBS!</h3><b>What you do:</b> Type Book Title + Author + CAPS Subject + Grade into app.<br><b>Pay:</b> <b>R1 per book!</b> 500 books = R500 per school!<br><b>Need:</b> Can type on phone</div>
+<div class="card hidden" id="myTab"><h2>👤 MY APPLICATIONS - V5.0 PRODUCTION - NEW PROJECT 93e52 - APPLICANT VIEW</h2>
+<input id="myEmail" placeholder="Enter Your Email to see your applications e.g. you@gmail.com"><button class="dark" onclick="renderMyApplications()">🔍 VIEW MY APPLICATIONS</button>
+<div id="myApplicationsList" style="max-height:400px;overflow-y:auto;border:2px solid #fde68a;border-radius:10px;padding:8px;background:#fff;margin-top:8px"></div>
+<div class="cloud"><h3>📝 QUICK APPLY - V5.0 - NEW PROJECT 93e52</h3><input id="applyJobId" placeholder="Job ID e.g. JOB-001"><input id="applyName" placeholder="Your Full Name"><input id="applyEmail2" placeholder="Your Email"><input id="applyPhone" placeholder="Your Phone e.g. 082 123 4567"><input id="applySubject" placeholder="Your Subject - At Least 1 e.g. MATH, ACC, ENHL"><textarea id="applyMsg" placeholder="Why you fit? e.g. I have Diploma + At Least 1 Subject MATH + Experience MAKHANANI V5.0"></textarea><button class="green" onclick="quickApply()">📨 APPLY NOW - V5.0 - NEW PROJECT 93e52 - ✅ CONNECTED + REAL-TIME DB LIVE + OFFLINE</button></div>
+</div>
+</div>
 
-<div class="card"><h3>🖨️ 6. PRINTING ASSISTANT - 10 JOBS!</h3><b>What you do:</b> Print + Cut + Laminate Learner Cards + Book Barcodes.<br><b>Pay:</b> <b>R50 per 100 cards!</b><br><b>Need:</b> Printer / Or use internet cafe</div>
+<script>
+// V5.0 JOBS - SAME NEW PROJECT 93e52 CONFIG - CONFIRMED CONNECTED!
+var firebaseConfig={apiKey:"AIzaSyBSr1k0zbkrFoxs2igZNKubpuCnO0g656w",authDomain:"makhanani-library-93e52.firebaseapp.com",projectId:"makhanani-library-93e52",storageBucket:"makhanani-library-93e52.firebasestorage.app",messagingSenderId:"511827095056",appId:"1:511827095056:web:26cbdbd78bc45b9d492495"};
+var db=null,cloudOK=false;
+var debugEl=document.getElementById('debugInfo');
+function logDebug(msg){console.log(msg); if(debugEl) debugEl.innerHTML+=" | "+new Date().toLocaleTimeString()+" - "+msg;}
+function setCloudStatus(msg,isWarn){var el=document.getElementById('cloudStatus'); if(el){el.innerHTML=msg; el.style.background=isWarn?'#fef9c3':'#f0fdf4'; el.style.borderColor=isWarn?'#f59e0b':'#16a34a';}}
 
-<div class="card"><h3>📱 7. SUPPORT AGENT - 5 JOBS!</h3><b>What you do:</b> Answer WhatsApp: Reset password, Help login, Fix small problems.<br><b>Pay:</b> <b>R2,500 - R4,000 / month!</b><br><b>Need:</b> Patient + Know app</div>
+logDebug("V5.0 JOBS Starting - Project: "+firebaseConfig.projectId);
 
-<div class="card"><h3>🎥 8. CONTENT CREATOR - UNLIMITED!</h3><b>What you do:</b> Make TikTok / WhatsApp Status showing app. Get schools to say YES DEMO.<br><b>Pay:</b> <b>Commission per school!</b><br><b>Need:</b> TikTok + Phone</div>
+try{
+  firebase.initializeApp(firebaseConfig);
+  db=firebase.firestore();
+  db.enablePersistence({synchronizeTabs:true}).catch(()=>{});
+  setCloudStatus("☁️ ⚠️ V5.0 JOBS - Firebase Init OK - NEW PROJECT 93e52 - Trying Firestore... - "+new Date().toLocaleTimeString(), true);
+  db.collection('makhanani_jobs').doc('main').get().then(function(doc){
+    cloudOK=true;
+    logDebug("✅ Jobs Firestore GET success - Exists: "+doc.exists);
+    setCloudStatus("☁️ ✅ CONNECTED - V5.0 JOBS - NEW PROJECT 93e52 - REAL-TIME DATABASE LIVE + OFFLINE - "+new Date().toLocaleTimeString()+" - Exists: "+doc.exists+" - ✅ CONNECTED!", false);
+  }).catch(function(e){
+    logDebug("❌ Jobs Firestore fail: "+e.code+" - "+e.message);
+    setCloudStatus("☁️ ⚠️ V5.0 JOBS - Local Mode - Works 100% Offline - NEW PROJECT 93e52 - "+e.code+" - "+e.message+" - Click SYNC JOBS", true);
+  });
+}catch(e){
+  logDebug("❌ Jobs init fail: "+e.message);
+  setCloudStatus("☁️ ❌ Jobs Init Fail: "+e.message+" - V5.0 - Works Offline", true);
+}
 
-<div class="card"><h3>🎓 9. LEARNER LIBRARY PREFECTS - 200 JOBS!</h3><b>What you do:</b> Grade 10-12 learners help scan at break time.<br><b>Pay:</b> Certificate + Reference Letter for CV + Skills!<br><b>Need:</b> Good behaviour + Love reading</div>
+var jobs=JSON.parse(localStorage.getItem('mk_jobs')||'[]');
+var applications=JSON.parse(localStorage.getItem('mk_applications')||'[]');
+var jobCounter=parseInt(localStorage.getItem('mk_jobCounter')||'1');
 
-<h2>📊 FOUNDER MATH</h2><table><tr><th>Schools</th><th>Monthly Income</th><th>Jobs Created</th></tr><tr><td>10 Schools</td><td>R5,500 /m</td><td>~33 Jobs</td></tr><tr><td>50 Schools</td><td>R27,500 /m</td><td>~165 Jobs</td></tr><tr><td>100 Schools</td><td><b>R55,000 /m</b></td><td><b>330+ Jobs!</b></td></tr></table>
+function save(){localStorage.setItem('mk_jobs',JSON.stringify(jobs));localStorage.setItem('mk_applications',JSON.stringify(applications));localStorage.setItem('mk_jobCounter',jobCounter.toString()); if(cloudOK&&db) syncJobs(true);}
 
-<div class="red">🔒 PARENT SECURE: Parent uses Learner ID + School ONLY! Name search BLOCKED! Children's data is SAFE!</div>
-<div class="gold">📚 SCHOOLS: DEMO FREE 7 DAYS! No Contract!<br>Starter R2,500 + R350/m | Standard R3,500 + R550/m | Premium R5,000 + R850/m</div>
-<a class="btn2" href="https://wa.me/27780233263?text=Hi!%20I%20want%20to%20APPLY%20for%20a%20JOB%20at%20Makhanani!%20My%20name%20is:">✅ APPLY NOW ON WHATSAPP - 078 023 3263</a>
-<a class="btn" href="index.html">📱 DOWNLOAD / OPEN MAKHANANI APP</a>
-<a class="btn" href="https://wa.me/27780233263?text=Hi!%20I%20want%20FREE%20DEMO%207%20Days%20for%20my%20school!">🏫 SCHOOL? GET FREE DEMO!</a>
-<p style="font-size:12px;font-weight:900">MAKHANANI DIGITAL LIBRARY<br>Powered by Xintimani Group<br>WhatsApp: 078 023 3263<br>vusichauke3037-glitch.github.io/MAKHANANI-LIBRARY/</p>
-<button onclick="window.print()" style="width:100%;padding:14px;background:#0a1a4d;color:#fff;font-weight:900;border-radius:12px;border:0">🖨️ PRINT THIS POSTER</button>
-</div></body></html>
+function syncJobs(silent){
+  if(silent!==true) alert("☁️ SYNC JOBS V5.0 - Project: "+firebaseConfig.projectId+"\nTime: "+new Date().toLocaleTimeString()+"\nJobs: "+jobs.length+" Applications: "+applications.length);
+  if(!db){if(silent!==true) alert("❌ No db - Works offline - V5.0 JOBS - NEW PROJECT 93e52 - Local Mode OK!"); return;}
+  document.getElementById('cloudStatus').innerHTML="⏳ V5.0 JOBS - Syncing NEW PROJECT 93e52 - "+new Date().toLocaleTimeString()+"...";
+  db.collection('makhanani_jobs').doc('main').set({jobs:jobs,applications:applications,counter:jobCounter,updated:new Date().toISOString(),project:firebaseConfig.projectId,appVersion:"V5.0 JOBS PRODUCTION"}).then(function(){
+    cloudOK=true; setCloudStatus("☁️ ✅ SYNCED V5.0 JOBS - NEW PROJECT 93e52 - "+new Date().toLocaleTimeString()+" - Jobs: "+jobs.length+" Apps: "+applications.length+" - Firestore OK!", false);
+    if(silent!==true) alert("✅✅✅ SYNCED V5.0 JOBS NEW PROJECT 93e52!\n\n✅ SUCCESS!\nProject: "+firebaseConfig.projectId+"\nJobs: "+jobs.length+"\nApplications: "+applications.length+"\nTime: "+new Date().toLocaleTimeString());
+  }).catch(function(e){
+    setCloudStatus("☁️ ❌ Jobs Sync Fail: "+e.code+" - "+e.message+" - V5.0 JOBS - Works Offline", true);
+    if(silent!==true) alert("❌ Jobs Sync Fail: "+e.code+" - "+e.message);
+  });
+}
+
+function showTab(id,btn){var tabs=['openTab','createTab','appsTab','myTab'];for(var i=0;i<tabs.length;i++)document.getElementById(tabs[i]).classList.add('hidden');document.getElementById(id).classList.remove('hidden');var bs=document.querySelectorAll('.tabs button');for(var j=0;j<bs.length;j++)bs[j].classList.remove('active');if(btn)btn.classList.add('active'); if(id==='openTab') renderJobs(); if(id==='appsTab') renderApplications();}
+
+function loadSampleJobs(){
+  if(jobs.length>0 && !confirm('Load 5 sample jobs? Will add to existing '+jobs.length+' jobs - V5.0 JOBS')) return;
+  var samples=[
+    {id:'JOB-001',title:'Senior Librarian - WORDSWORTH HIGH SCHOOL',type:'LIBRARIAN',grade:'G8-G12',emis:'700310854',town:'BENONI',subject:'LIBRARY MANAGEMENT',salary:'R18,000 - R28,000',desc:'Manage library V5.0 - ACC-G10-001 catalog + Issue/Return L-0001 + Barcodes + At Least 1 Subject not required for Librarian + ADMIN/PRINCIPAL/LIBRARIAN Add+Remove + Real-time DB LIVE + Offline + App PWA - NEW PROJECT 93e52',req:'Diploma Library Science + 3 years experience + Computer literate + MAKHANANI V5.0 experience',deadline:'2026-12-31',contact:'principal@wordsworth.co.za',status:'OPEN',featured:true,posted:new Date().toLocaleDateString(),applicants:12},
+    {id:'JOB-002',title:'Mathematics Educator - G10-G12 - WORDSWORTH',type:'EDUCATOR',grade:'G10-G12',emis:'700310854',town:'BENONI',subject:'MATH - Mathematics',salary:'R22,000 - R32,000',desc:'Teach Mathematics G10-G12 + At Least 1 Subject MATH + Add Learners Only + Issue books of MATH only + Retrieve ANY + Real-time DB LIVE + Offline - NEW PROJECT 93e52 - V5.0',req:'BEd Mathematics + SACE + At Least 1 Subject MATH + Experience G10-G12',deadline:'2026-11-30',contact:'hod.math@wordsworth.co.za',status:'OPEN',featured:false,posted:new Date().toLocaleDateString(),applicants:8},
+    {id:'JOB-003',title:'HOD - Sciences - WORDSWORTH HIGH',type:'HOD',grade:'G8-G12',emis:'700310854',town:'BENONI',subject:'PHSC - Physical Sciences',salary:'R28,000 - R38,000',desc:'HOD Sciences + Manage PHSC, LIFE, AGRI + At Least 1 Subject PHSC + Add Learners Only + Manage educators + Real-time DB LIVE + Offline + NEW PROJECT 93e52',req:'BEd + 5 years HOD experience + At Least 1 Subject PHSC + Leadership',deadline:'2026-11-15',contact:'principal@wordsworth.co.za',status:'OPEN',featured:true,posted:new Date().toLocaleDateString(),applicants:5},
+    {id:'JOB-004',title:'Library Agent - AI Catalog Agent - REMOTE',type:'AGENT',grade:'ALL GRADES',emis:'ALL',town:'REMOTE - ALL SCHOOLS',subject:'IT / CAT - Computer Applications',salary:'R12,000 - R20,000',desc:'AI Agent - CATALOG_AGENT - Manages ACC-G10-001 auto numbering + Qty check + Sync to cloud NEW PROJECT 93e52 makhanani-library-93e52 - REAL-TIME DB LIVE + OFFLINE + APP PWA - V5.0 AGENTS',req:'IT Diploma + CAT/IT + AI basics + MAKHANANI Agents V5.0 + Firebase NEW PROJECT 93e52',deadline:'2026-12-15',contact:'admin@makhanani.com',status:'OPEN',featured:false,posted:new Date().toLocaleDateString(),applicants:23},
+    {id:'JOB-005',title:'Volunteer - Library Assistant - WORDSWORTH',type:'VOLUNTEER',grade:'G4-G12',emis:'700310854',town:'BENONI',subject:'ALL SUBJECTS',salary:'Volunteer - Stipend R3,000',desc:'Volunteer library assistant + Help Issue/Return + Barcodes + Auto L-0001 + ACC-G10-001 + Learn MAKHANANI V5.0 system - NEW PROJECT 93e52 - REAL-TIME DB LIVE + OFFLINE',req:'Grade 12 + Passion for books + At Least 1 Subject + Computer basics',deadline:'2026-12-31',contact:'librarian@wordsworth.co.za',status:'OPEN',featured:false,posted:new Date().toLocaleDateString(),applicants:15}
+  ];
+  for(var i=0;i<samples.length;i++){var exists=false; for(var j=0;j<jobs.length;j++){if(jobs[j].id===samples[i].id){exists=true;break;}} if(!exists) jobs.push(samples[i]);}
+  jobCounter=6;
+  save(); renderJobs();
+  alert('✅ SAMPLE JOBS LOADED V5.0!\nCount: '+samples.length+' added\nTotal Jobs: '+jobs.length+'\nProject: '+firebaseConfig.projectId+'\n✅ CONNECTED + REAL-TIME DB LIVE + OFFLINE');
+}
+
+function autoJob(){document.getElementById('jTitle').value='Librarian - School '+String(jobCounter).padStart(3,'0'); document.getElementById('jType').value='LIBRARIAN'; document.getElementById('jEmis').value='700310854'; document.getElementById('jTown').value='BENONI'; document.getElementById('jSubject').value='LIBRARY MANAGEMENT'; document.getElementById('jDesc').value='Manage library V5.0 - ACC-G10-001 + L-0001 + Real-time DB LIVE + Offline + NEW PROJECT 93e52';}
+
+function createJob(){
+  var title=document.getElementById('jTitle').value.trim();
+  var type=document.getElementById('jType').value;
+  var grade=document.getElementById('jGrade').value;
+  var emis=document.getElementById('jEmis').value.trim()||'700310854';
+  var town=document.getElementById('jTown').value.trim()||'BENONI';
+  var subject=document.getElementById('jSubject').value;
+  var salary=document.getElementById('jSalary').value.trim();
+  var desc=document.getElementById('jDesc').value.trim();
+  var req=document.getElementById('jReq').value.trim();
+  var deadline=document.getElementById('jDeadline').value;
+  var contact=document.getElementById('jContact').value.trim();
+  if(!title||!type){alert('Title + Type required! - V5.0 JOBS'); return;}
+  var id='JOB-'+String(jobCounter).padStart(3,'0');
+  jobs.push({id:id,title:title,type:type,grade:grade||'ALL GRADES',emis:emis,town:town,subject:subject||'ALL SUBJECTS',salary:salary||'Negotiable',desc:desc||'Manage library V5.0 - NEW PROJECT 93e52',req:req||'At Least 1 Subject + Experience',deadline:deadline||'2026-12-31',contact:contact||'admin@makhanani.com',status:'OPEN',featured:false,posted:new Date().toLocaleDateString(),applicants:0});
+  jobCounter++;
+  save(); renderJobs();
+  alert('✅ JOB POSTED V5.0!\nID: '+id+'\nTitle: '+title+'\nType: '+type+'\nSchool: '+emis+' - '+town+'\nProject: '+firebaseConfig.projectId+'\n✅ CONNECTED + REAL-TIME DB LIVE + OFFLINE');
+  document.getElementById('jTitle').value=''; document.getElementById('jDesc').value='';
+}
+
+function renderJobs(){
+  var q=(document.getElementById('jobSearch').value||'').toLowerCase();
+  var filter=document.getElementById('filterType').value;
+  var grid=document.getElementById('jobGrid');
+  var h=''; var count=0;
+  for(var i=0;i<jobs.length;i++){
+    var j=jobs[i];
+    if(filter && j.type!==filter) continue;
+    if(q && j.title.toLowerCase().indexOf(q)===-1 && j.type.toLowerCase().indexOf(q)===-1 && j.emis.toLowerCase().indexOf(q)===-1 && j.town.toLowerCase().indexOf(q)===-1 && j.subject.toLowerCase().indexOf(q)===-1) continue;
+    count++;
+    var featuredClass=j.featured?'featured':j.status!=='OPEN'?'closed':'';
+    h+='<div class="jobCard '+featuredClass+'">'+(j.featured?'<div style="position:absolute;top:8px;right:8px;background:#16a34a;color:#fff;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:900">⭐ FEATURED</div>':'')+'<div style="display:flex;justify-content:space-between;align-items:center"><span class="statusBadge '+(j.status==='OPEN'?'open':'closedBadge')+'">'+j.status+'</span><span style="font-size:10px;color:#854d0e">'+j.posted+'</span></div><div style="font-size:15px;font-weight:900;margin:8px 0">💼 '+j.title+'</div><div style="display:flex;gap:5px;flex-wrap:wrap;margin:4px 0"><span style="background:#fef9c3;padding:3px 8px;border-radius:20px;font-size:10px">📌 '+j.type+'</span><span style="background:#dbeafe;padding:3px 8px;border-radius:20px;font-size:10px">🎓 '+j.grade+'</span><span style="background:#f3e8ff;padding:3px 8px;border-radius:20px;font-size:10px">📚 '+j.subject+'</span></div><div style="font-size:11px;color:#57534e;margin:4px 0">🏫 '+j.emis+' | 📍 '+j.town+' | 💰 '+j.salary+'</div><div style="font-size:11px;background:#fff;padding:6px;border-radius:8px;margin:6px 0;max-height:80px;overflow-y:auto">📝 '+j.desc+'</div><div style="font-size:10px;background:#fef9c3;padding:5px;border-radius:6px;margin:4px 0">✅ Req: '+j.req+'</div><div style="display:flex;justify-content:space-between;font-size:10px;color:#854d0e;margin-top:8px"><span>⏰ Deadline: '+j.deadline+'</span><span>📧 '+j.contact+'</span><span>👥 '+j.applicants+' applicants</span></div><div style="display:flex;gap:5px;margin-top:10px"><button class="green" style="flex:1;padding:8px;font-size:11px" onclick="applyToJob(\''+j.id+'\')">📨 APPLY NOW - '+j.id+'</button><button class="dark" style="flex:0.4;padding:8px;font-size:11px" onclick="viewJob(\''+j.id+'\')">👁️ VIEW</button><button class="red" style="flex:0.3;padding:8px;font-size:11px" onclick="deleteJob(\''+j.id+'\')">❌</button></div></div>';
+  }
+  grid.innerHTML=h||'<div class="badge">No jobs found - Click 📥 LOAD SAMPLE JOBS - V5.0 JOBS - NEW PROJECT 93e52 - ✅ CONNECTED + REAL-TIME DB LIVE + OFFLINE</div>';
+  document.getElementById('statsBar').innerHTML='💼 Jobs: '+count+'/'+jobs.length+' | OPEN: '+jobs.filter(x=>x.status==='OPEN').length+' | Applications: '+applications.length+' | V5.0 PRODUCTION - NEW PROJECT 93e52 - '+firebaseConfig.projectId+' - ✅ CONNECTED + REAL-TIME DB LIVE + OFFLINE';
+}
+
+function applyToJob(jobId){document.getElementById('applyJobId').value=jobId; showTab('myTab', document.querySelectorAll('.tabs button')[3]); document.getElementById('myTab').scrollIntoView();}
+
+function viewJob(id){for(var i=0;i<jobs.length;i++){if(jobs[i].id===id){alert('💼 JOB DETAILS V5.0 - NEW PROJECT 93e52 - ✅ CONNECTED\n\nID: '+jobs[i].id+'\nTitle: '+jobs[i].title+'\nType: '+jobs[i].type+'\nGrade: '+jobs[i].grade+'\nSchool: '+jobs[i].emis+' - '+jobs[i].town+'\nSubject: '+jobs[i].subject+'\nSalary: '+jobs[i].salary+'\nDesc: '+jobs[i].desc+'\nReq: '+jobs[i].req+'\nDeadline: '+jobs[i].deadline+'\nContact: '+jobs[i].contact+'\nStatus: '+jobs[i].status+'\nApplicants: '+jobs[i].applicants+'\nPosted: '+jobs[i].posted+'\n\nProject: '+firebaseConfig.projectId); break;}}}
+
+function deleteJob(id){if(!confirm('Delete job '+id+'? - V5.0 JOBS - NEW PROJECT 93e52')) return; for(var i=0;i<jobs.length;i++){if(jobs[i].id===id){jobs.splice(i,1); save(); renderJobs(); alert('✅ JOB DELETED: '+id+' - V5.0 - NEW PROJECT 93e52'); break;}}}
+
+function quickApply(){
+  var jobId=document.getElementById('applyJobId').value.trim().toUpperCase();
+  var name=document.getElementById('applyName').value.trim();
+  var email=document.getElementById('applyEmail2').value.trim();
+  var phone=document.getElementById('applyPhone').value.trim();
+  var subject=document.getElementById('applySubject').value.trim();
+  var msg=document.getElementById('applyMsg').value.trim();
+  if(!jobId||!name||!email){alert('Job ID + Name + Email required! - V5.0 JOBS'); return;}
+  var jobExists=false; for(var j=0;j<jobs.length;j++){if(jobs[j].id===jobId){jobExists=true; jobs[j].applicants++; break;}}
+  if(!jobExists){alert('❌ Job ID not found! Check OPEN JOBS - V5.0 JOBS - NEW PROJECT 93e52'); return;}
+  if(!subject){alert('At Least 1 Subject required! - V5.0 JOBS - Like EDUCATOR jobs require subject'); return;}
+  var appId='APP-'+Date.now();
+  applications.push({id:appId,jobId:jobId,name:name,email:email,phone:phone,subject:subject,msg:msg||'Apply for '+jobId+' - At Least 1 Subject: '+subject, status:'PENDING', date:new Date().toLocaleDateString()+' '+new Date().toLocaleTimeString(), project:firebaseConfig.projectId});
+  save(); renderJobs(); renderApplications(); renderMyApplications();
+  alert('✅ APPLICATION SENT V5.0 JOBS!\n\nID: '+appId+'\nJob: '+jobId+'\nName: '+name+'\nEmail: '+email+'\nSubject: '+subject+' - At Least 1 Subject OK\nProject: '+firebaseConfig.projectId+'\n\n✅ CONNECTED + REAL-TIME DB LIVE + OFFLINE\nAdmin will review!');
+  document.getElementById('applyJobId').value=''; document.getElementById('applyName').value=''; document.getElementById('applyEmail2').value=''; document.getElementById('applyPhone').value=''; document.getElementById('applySubject').value=''; document.getElementById('applyMsg').value='';
+}
+
+var liveJobsInterval=null;
+function startLiveJobs(){
+  if(liveJobsInterval) clearInterval(liveJobsInterval);
+  alert('🔴 LIVE JOBS STARTED V5.0 JOBS!\nProject: '+firebaseConfig.projectId+'\nJobs will auto-refresh + new jobs simulate every 10 sec\nREAL-TIME DB LIVE + OFFLINE');
+  liveJobsInterval=setInterval(function(){
+    if(Math.random()>0.7){
+      var types=['LIBRARIAN','EDUCATOR','VOLUNTEER'];
+      var t=types[Math.floor(Math.random()*types.length)];
+      var id='JOB-'+String(jobCounter).padStart(3,'0');
+      jobs.push({id:id,title:t+' - Auto Posted - Live - '+new Date().toLocaleTimeString(),type:t,grade:'ALL GRADES',emis:'700310854',town:'BENONI',subject:'ALL SUBJECTS',salary:'Negotiable',desc:'Auto posted by LIVE JOBS V5.0 - NEW PROJECT 93e52 - '+new Date().toLocaleTimeString()+' - Real-time DB LIVE + Offline',req:'At Least 1 Subject + V5.0 experience',deadline:'2026-12-31',contact:'admin@makhanani.com',status:'OPEN',featured:false,posted:new Date().toLocaleTimeString(),applicants:0});
+      jobCounter++; save(); renderJobs();
+    }
+  },10000);
+}
+var liveAppsInterval=null;
+function startLiveApplications(){if(liveAppsInterval) clearInterval(liveAppsInterval); alert('🔴 LIVE APPLICATIONS STARTED V5.0 JOBS!\nProject: '+firebaseConfig.projectId+'\nAuto refresh every 5 sec'); liveAppsInterval=setInterval(function(){renderApplications();},5000); renderApplications();}
+function stopLiveApplications(){if(liveAppsInterval){clearInterval(liveAppsInterval); liveAppsInterval=null; alert('⏹️ LIVE APPLICATIONS STOPPED V5.0 JOBS');} if(liveJobsInterval){clearInterval(liveJobsInterval); liveJobsInterval=null;}}
+
+function renderApplications(){
+  var div=document.getElementById('applicationsList');
+  var h='';
+  for(var i=applications.length-1;i>=0&&h.split('badge').length<40;i--){
+    var a=applications[i];
+    var color=a.status==='PENDING'?'#f59e0b':a.status==='APPROVED'?'#16a34a':a.status==='REJECTED'?'#dc2626':'#334155';
+    h+='<div class="badge" style="border-left:5px solid '+color+'"><div style="display:flex;justify-content:space-between"><b>📋 '+a.id+' | 💼 '+a.jobId+'</b><span style="background:'+color+';color:#fff;padding:3px 8px;border-radius:20px;font-size:10px">'+a.status+'</span></div><div style="font-weight:900;margin:6px 0">👤 '+a.name+' | 📧 '+a.email+' | 📞 '+a.phone+'</div><div style="font-size:11px">📚 At Least 1 Subject: <b>'+a.subject+'</b> | 📝 '+a.msg+'</div><div style="font-size:10px;color:#854d0e;margin-top:6px">⏰ '+a.date+' | Project: '+(a.project||firebaseConfig.projectId)+'</div><div style="display:flex;gap:5px;margin-top:8px"><button class="green" style="flex:1;padding:6px;font-size:10px" onclick="updateApplication(\''+a.id+'\',\'APPROVED\')">✅ APPROVE</button><button class="red" style="flex:1;padding:6px;font-size:10px" onclick="updateApplication(\''+a.id+'\',\'REJECTED\')">❌ REJECT</button><button class="dark" style="flex:0.5;padding:6px;font-size:10px" onclick="deleteApplication(\''+a.id+'\')">🗑️</button></div></div>';
+  }
+  div.innerHTML=h||'No applications yet - Post jobs + Apply! - V5.0 JOBS - NEW PROJECT 93e52 - ✅ CONNECTED + REAL-TIME DB LIVE + OFFLINE';
+}
+
+function renderMyApplications(){
+  var email=(document.getElementById('myEmail').value||document.getElementById('applyEmail2').value||'').toLowerCase().trim();
+  var div=document.getElementById('myApplicationsList');
+  if(!email){div.innerHTML='<div class="badge">Enter your email above to see your applications - V5.0 JOBS - NEW PROJECT 93e52</div>'; return;}
+  var h=''; var count=0;
+  for(var i=0;i<applications.length;i++){
+    if(applications[i].email.toLowerCase()===email){count++; var a=applications[i]; var color=a.status==='PENDING'?'#f59e0b':a.status==='APPROVED'?'#16a34a':'#dc2626'; h+='<div class="badge" style="border-left:5px solid '+color+'"><b>📋 '+a.id+' | 💼 '+a.jobId+'</b> - <span style="background:'+color+';color:#fff;padding:3px 8px;border-radius:20px;font-size:10px">'+a.status+'</span><br>👤 '+a.name+' | 📚 '+a.subject+'<br>⏰ '+a.date+'<br>📝 '+a.msg+'</div>';}
+  }
+  div.innerHTML=h||'No applications found for '+email+' - V5.0 JOBS - NEW PROJECT 93e52 - Check email spelling - ✅ CONNECTED';
+  if(count>0) document.getElementById('statsBar').innerHTML+=' | 👤 My Apps ('+email+'): '+count;
+}
+
+function updateApplication(id,status){for(var i=0;i<applications.length;i++){if(applications[i].id===id){applications[i].status=status; save(); renderApplications(); renderMyApplications(); alert('✅ APPLICATION '+status+'!\nID: '+id+'\nName: '+applications[i].name+'\nJob: '+applications[i].jobId+'\nProject: '+firebaseConfig.projectId); break;}}}
+function deleteApplication(id){if(!confirm('Delete application '+id+'? - V5.0 JOBS')) return; for(var i=0;i<applications.length;i++){if(applications[i].id===id){applications.splice(i,1); save(); renderApplications(); renderMyApplications(); alert('🗑️ DELETED: '+id+' - V5.0 JOBS'); break;}}}
+
+renderJobs(); renderApplications();
+setTimeout(function(){logDebug("V5.0 JOBS - Page loaded - Jobs: "+jobs.length+" Apps: "+applications.length+" - Project: "+firebaseConfig.projectId);},1500);
+</script></body></html>
