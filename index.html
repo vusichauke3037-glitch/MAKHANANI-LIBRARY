@@ -19,37 +19,48 @@ button{width:100%;padding:13px;margin:6px 0;border:0;border-radius:12px;backgrou
 .dash{border:3px solid #f59e0b;border-radius:14px;padding:12px;background:#fffbeb}
 .redbox{border:3px solid #dc2626;border-radius:14px;padding:12px;background:#fef2f2;text-align:center;font-weight:900}
 .cloud{border:3px solid #16a34a;border-radius:14px;padding:12px;background:#f0fdf4;text-align:center;font-weight:900}
+.loginBox{border:3px solid #1a56db;border-radius:14px;padding:12px;background:#eff6ff}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 <header>
 <img src="logo.png" alt="XINTIMANI GROUP">
 <h1 style="margin:6px 0">MAKHANANI DIGITAL LIBRARY</h1>
-<p style="margin:0">📚 POWERED BY XINTIMANI GROUP | ☁️ FIREBASE CLOUD SYNC</p>
+<p style="margin:0">📚 POWERED BY XINTIMANI GROUP | 🔐 FIREBASE LOGIN</p>
 </header>
 <div class="wrap">
 
 <div class="card">
-<button class="red" onclick="logout()">🔓 LOGOUT</button>
-<h3 style="margin:4px 0">WELCOME ADMINISTRATOR!</h3>
+<button class="red" onclick="firebaseLogout()">🔓 LOGOUT</button>
+<h3 style="margin:4px 0" id="welcomeText">WELCOME ADMINISTRATOR!</h3>
 <div class="cloud" id="cloudStatus">☁️ Cloud: Connecting...</div>
+<div class="badge" id="userInfo">Not logged in</div>
 <button class="green" onclick="syncToCloud()">☁️ SYNC TO CLOUD NOW</button>
 <button onclick="loadFromCloud()">⬇️ LOAD FROM CLOUD</button>
 <input id="searchSchoolTop" placeholder="🔍 SWITCH SCHOOL - SEARCH words" oninput="renderSchools()">
 <div id="topSchoolList"></div>
 <p class="small" id="topCount"></p>
-<button class="yellow" onclick="window.open('manual.html','_blank')">📘 OPEN USER MANUAL</button>
 </div>
 
 <div class="card" id="loginCard">
+<div class="loginBox">
+<h2>🔐 FIREBASE LOGIN</h2>
+<input id="fbEmail" type="email" placeholder="Email e.g. admin@makhanani.com">
+<input id="fbPass" type="password" placeholder="Password">
+<button class="dark" onclick="firebaseLogin()">🔐 LOGIN WITH FIREBASE</button>
+<button class="grey" onclick="firebaseSignup()">➕ CREATE ACCOUNT (Principal / Admin)</button>
+<p class="small">Admin: admin@makhanani.com / admin123<br>Principal: principal@wordsworth.com / Prin2026</p>
+</div>
+<hr>
+<h3>OLD LOGIN - STILL WORKS</h3>
 <select id="schoolSel"><option value="">Select School</option></select>
-<input id="passInput" type="password" placeholder="Password / Learner ID">
-<button onclick="doLogin()">🔐 LOGIN</button>
-<p class="small">ADMIN: admin123 | Principal: Principal Password | Parent: School + Learner ID ONLY</p>
+<input id="passInput" type="password" placeholder="Password / Learner ID (admin123)">
+<button onclick="doLogin()">🔐 LOGIN (OLD - LOCAL)</button>
 <a href="app.apk"><button class="yellow">⬇️ DOWNLOAD APP (.APK)</button></a>
-<a href="jobs.html"><button class="dark">💼 JOBS - BECOME AN AGENT - R500/SCHOOL</button></a>
+<a href="jobs.html"><button class="dark">💼 JOBS - BECOME AGENT - R500/SCHOOL</button></a>
 <button class="orange" onclick="window.open('manual.html','_blank')">📘 USER MANUAL</button>
 </div>
 
@@ -64,13 +75,13 @@ button{width:100%;padding:13px;margin:6px 0;border:0;border-radius:12px;backgrou
 <button onclick="showTab('adminTab',this)">👑 ADMIN</button>
 </div>
 
-<div class="card" id="homeTab"><h2>🏠 HOME</h2><div id="homeStats" class="badge">Welcome!</div><button class="yellow" onclick="window.open('manual.html','_blank')">📘 HOW TO USE</button></div>
+<div class="card" id="homeTab"><h2>🏠 HOME</h2><div id="homeStats" class="badge">Welcome!</div></div>
 <div class="card hidden" id="issueTab"><h2>📤 ISSUE BOOK</h2><input id="iLearner" placeholder="Learner ID e.g. L-0001"><input id="iBook" placeholder="Book Code e.g. B-001"><button class="green" onclick="issueBook()">📤 ISSUE</button><div id="issueList"></div></div>
 <div class="card hidden" id="returnTab"><h2>📥 RETURN BOOK</h2><input id="rBook" placeholder="Book Code e.g. B-001"><button class="yellow" onclick="returnBook()">📥 RETURN BOOK</button><div id="returnList"></div></div>
 <div class="card hidden" id="learnersTab"><h2>👥 LEARNERS</h2><input id="lName" placeholder="Learner Full Name"><input id="lGrade" placeholder="Grade e.g. 10A"><input id="lId" placeholder="Learner ID e.g. L-0001"><button class="green" onclick="addLearner()">➕ ADD LEARNER</button><button onclick="window.print()">🖨️ PRINT LEARNER CARDS</button><div id="learnerList"></div></div>
 <div class="card hidden" id="booksTab"><h2>📚 BOOKS</h2><input id="bTitle" placeholder="Book Title"><input id="bCode" placeholder="Book Code e.g. B-001"><button onclick="addBook()">➕ ADD BOOK</button><button onclick="window.print()">🖨️ PRINT BOOK BARCODES</button><div id="bookList"></div></div>
 <div class="card hidden" id="prinTab"><h2>🎓 PRINCIPAL DASHBOARD</h2><div id="prinStats" class="badge"></div><button class="green" onclick="alert('✅ DEMO ACTIVATED! 7 Days Free!')">✅ ACTIVATE MY FREE 7 DAYS DEMO</button><h3>➕ ADD EDUCATOR</h3><input id="eduName" placeholder="Educator Name"><input id="eduPass" placeholder="Educator Password"><button onclick="alert('✅ Educator Added!')">➕ ADD EDUCATOR</button><h3>🔐 LIBRARIAN PASSWORD</h3><input id="libPass" placeholder="Librarian Password"><button onclick="alert('✅ Librarian Password Set!')">🔐 SET LIBRARIAN PASSWORD</button><button onclick="window.print()">🖨️ PRINT FULL HISTORY</button></div>
-<div class="card hidden" id="parentTab"><h2>👨‍👩‍👧 PARENT - SECURE VIEW</h2><p class="small">ID + SCHOOL ONLY. No name search. ONLY your child.</p><input id="parentId" placeholder="Type Learner ID e.g. L-0001"><button onclick="parentCheck()">🔍 CHECK MY CHILD</button><div id="parentView"></div></div>
+<div class="card hidden" id="parentTab"><h2>👨‍👩‍👧 PARENT - SECURE VIEW</h2><p class="small">ID + SCHOOL ONLY. ONLY your child.</p><input id="parentId" placeholder="Type Learner ID e.g. L-0001"><button onclick="parentCheck()">🔍 CHECK MY CHILD</button><div id="parentView"></div></div>
 
 <div class="card hidden" id="adminTab">
 <h2>👑 APP ADMINISTRATOR - FULL CONTROL</h2>
@@ -88,12 +99,10 @@ button{width:100%;padding:13px;margin:6px 0;border:0;border-radius:12px;backgrou
 <input id="newPrinPass" placeholder="Principal Password"><button class="green" onclick="addSchool()">➕ ADD SCHOOL</button>
 <h3>🔍 ALL SCHOOLS - FAST SEARCH (20 ONLY)</h3><input id="searchSchool" placeholder="Type to search..." oninput="renderSchools()"><div id="schoolList"></div>
 <h3>📘 MANUALS</h3><button onclick="window.open('manual.html','_blank')">📘 OPEN FULL USER MANUAL</button><button class="yellow" onclick="window.open('jobs.html','_blank')">💼 JOBS - AGENT FORM</button>
-<p class="small">Xintimani Group | WhatsApp: 078 023 3263<br>STARTER R2,500 + R350/m | STANDARD R3,500 + R550/m | PREMIUM R5,000 + R850/m</p>
 </div>
 </div>
 
 <script>
-// ===== 🔥 YOUR FIREBASE - INSERTED =====
 var firebaseConfig = {
   apiKey: "AIzaSyBOsBx2q4C_nSvAzDfUloehkp2yQno_l1o",
   authDomain: "makhanani-library.firebaseapp.com",
@@ -103,13 +112,38 @@ var firebaseConfig = {
   appId: "1:1050331837286:web:65c57818dee37605498ea7",
   measurementId: "G-4DJVM5S56H"
 };
-var db=null; var cloudOK=false;
+var db=null; var auth=null; var cloudOK=false;
 try{
   firebase.initializeApp(firebaseConfig);
   db=firebase.firestore();
+  auth=firebase.auth();
   cloudOK=true;
-  document.getElementById('cloudStatus').innerHTML='☁️ Cloud: ✅ CONNECTED - makhanani-library';
+  document.getElementById('cloudStatus').innerHTML='☁️ Cloud: ✅ CONNECTED - Login Ready';
+  auth.onAuthStateChanged(function(user){
+    if(user){
+      document.getElementById('userInfo').innerHTML='✅ Logged in as: '+user.email;
+      document.getElementById('welcomeText').innerHTML='WELCOME '+user.email.toUpperCase()+'!';
+      document.getElementById('loginCard').classList.add('hidden');
+      if(user.email.indexOf('admin')!==-1){ showTab('adminTab',document.querySelectorAll('.tabs button')[7]); }
+    } else {
+      document.getElementById('userInfo').innerHTML='Not logged in - Use Firebase Login below';
+    }
+  });
 }catch(e){ document.getElementById('cloudStatus').innerHTML='☁️ Cloud Error: '+e.message; }
+
+function firebaseLogin(){
+  var email=document.getElementById('fbEmail').value.trim();
+  var pass=document.getElementById('fbPass').value.trim();
+  if(!email||!pass){alert('Type Email + Password!');return;}
+  auth.signInWithEmailAndPassword(email,pass).then(function(){alert('✅ Logged in! '+email);}).catch(function(err){alert('Login Error: '+err.message);});
+}
+function firebaseSignup(){
+  var email=document.getElementById('fbEmail').value.trim();
+  var pass=document.getElementById('fbPass').value.trim();
+  if(!email||!pass){alert('Type Email + Password!');return;}
+  auth.createUserWithEmailAndPassword(email,pass).then(function(){alert('✅ Account Created! '+email+' - Now login!');}).catch(function(err){alert('Signup Error: '+err.message);});
+}
+function firebaseLogout(){ auth.signOut().then(function(){alert('Logged out!');location.reload();}); }
 
 var schools=JSON.parse(localStorage.getItem('mk_schools')||'[{"emis":"700310854","name":"WORDSWORTH HIGH SCHOOL","pkg":"DEMO","prinPass":"Prin2026","status":"ACTIVE","date":""}]');
 var learners=JSON.parse(localStorage.getItem('mk_learners')||'[]');
@@ -133,7 +167,7 @@ function loadFromCloud(){
   if(!cloudOK){ alert('⚠️ Firebase not connected!'); return; }
   document.getElementById('cloudStatus').innerHTML='☁️ Cloud: ⬇️ Loading...';
   db.collection('makhanani').doc('main').get().then(function(doc){
-    if(!doc.exists){ alert('No cloud data yet! Tap SYNC TO CLOUD first!'); document.getElementById('cloudStatus').innerHTML='☁️ Cloud: ✅ Connected - No data yet'; return; }
+    if(!doc.exists){ alert('No cloud data yet! Tap SYNC TO CLOUD first!'); return; }
     var d=doc.data();
     if(d.schools) schools=d.schools;
     if(d.learners) learners=d.learners;
@@ -144,11 +178,11 @@ function loadFromCloud(){
     localStorage.setItem('mk_books',JSON.stringify(books));
     localStorage.setItem('mk_issues',JSON.stringify(issues));
     fillSchools(); renderAll(); document.getElementById('cloudStatus').innerHTML='☁️ Cloud: ✅ LOADED '+schools.length+' schools'; alert('✅ Loaded from Cloud! '+schools.length+' schools');
-  }).catch(function(e){ alert('Load error: '+e.message); });
+  });
 }
 function fillSchools(){var s='<option value="">Select School</option>';var lim=Math.min(schools.length,100);for(var i=0;i<lim;i++)s+='<option value="'+schools[i].emis+'">'+schools[i].name+'</option>';document.getElementById('schoolSel').innerHTML=s;}
 function showTab(id,btn){var t=['homeTab','issueTab','returnTab','learnersTab','booksTab','prinTab','parentTab','adminTab'];for(var i=0;i<t.length;i++)document.getElementById(t[i]).classList.add('hidden');document.getElementById(id).classList.remove('hidden');var bs=document.querySelectorAll('.tabs button');for(var j=0;j<bs.length;j++)bs[j].classList.remove('active');if(btn)btn.classList.add('active');}
-function doLogin(){var p=document.getElementById('passInput').value.trim();if(p==='admin123'){alert('✅ LOGGED IN AS ADMIN!');showTab('adminTab',document.querySelectorAll('.tabs button')[7]);return;}if(p){alert('✅ Logged in!');}else{alert('Type Password / Learner ID!');}}
+function doLogin(){var p=document.getElementById('passInput').value.trim();if(p==='admin123'){alert('✅ LOGGED IN AS ADMIN (LOCAL)!');showTab('adminTab',document.querySelectorAll('.tabs button')[7]);return;}if(p){alert('✅ Logged in (LOCAL)!');}else{alert('Type Password / Learner ID!');}}
 function logout(){location.reload();}
 function addSchool(){var e=document.getElementById('newEmis').value.trim();var n=document.getElementById('newSchool').value.trim();var pk=document.getElementById('newPkg').value;var pp=document.getElementById('newPrinPass').value.trim();if(!e||!n){alert('Type EMIS + School!');return;}schools.push({emis:e,name:n,pkg:pk,prinPass:pp||'Prin2026',status:'ACTIVE',date:new Date().toLocaleDateString()});save();fillSchools();renderSchools();alert('School Added! '+n);document.getElementById('newEmis').value='';document.getElementById('newSchool').value='';}
 function renderSchools(){
