@@ -33,7 +33,6 @@ h2,h3{text-align:center}
 </header>
 <div class="wrap">
 
-<!-- TOP -->
 <div class="card">
 <button class="red" onclick="logout()">🔓 LOGOUT</button>
 <h3 style="margin:4px 0">WELCOME ADMINISTRATOR!</h3>
@@ -43,7 +42,6 @@ h2,h3{text-align:center}
 <button class="yellow" onclick="window.open('manual.html','_blank')">📘 OPEN USER MANUAL</button>
 </div>
 
-<!-- LOGIN -->
 <div class="card" id="loginCard">
 <select id="schoolSel"><option value="">Select School</option></select>
 <input id="passInput" type="password" placeholder="Password / Learner ID">
@@ -54,7 +52,6 @@ h2,h3{text-align:center}
 <button class="orange" onclick="window.open('manual.html','_blank')">📘 USER MANUAL - HOW TO USE APP</button>
 </div>
 
-<!-- TABS -->
 <div class="tabs">
 <button onclick="showTab('homeTab',this)" class="active">🏠 HOME</button>
 <button onclick="showTab('issueTab',this)">📤 ISSUE</button>
@@ -66,7 +63,6 @@ h2,h3{text-align:center}
 <button onclick="showTab('adminTab',this)">👑 ADMIN</button>
 </div>
 
-<!-- HOME -->
 <div class="card" id="homeTab">
 <h2>🏠 HOME</h2>
 <div id="homeStats" class="badge">Welcome to Makhanani!</div>
@@ -74,7 +70,6 @@ h2,h3{text-align:center}
 <p class="small">Use tabs above to work. Admin controls everything.</p>
 </div>
 
-<!-- ISSUE -->
 <div class="card hidden" id="issueTab">
 <h2>📤 ISSUE BOOK</h2>
 <input id="iLearner" placeholder="Learner ID e.g. L-0001">
@@ -83,7 +78,6 @@ h2,h3{text-align:center}
 <div id="issueList"></div>
 </div>
 
-<!-- RETURN -->
 <div class="card hidden" id="returnTab">
 <h2>📥 RETURN BOOK</h2>
 <input id="rBook" placeholder="Book Code e.g. B-001">
@@ -91,7 +85,6 @@ h2,h3{text-align:center}
 <div id="returnList"></div>
 </div>
 
-<!-- LEARNERS -->
 <div class="card hidden" id="learnersTab">
 <h2>👥 LEARNERS</h2>
 <input id="lName" placeholder="Learner Full Name">
@@ -102,7 +95,6 @@ h2,h3{text-align:center}
 <div id="learnerList"></div>
 </div>
 
-<!-- BOOKS -->
 <div class="card hidden" id="booksTab">
 <h2>📚 BOOKS</h2>
 <input id="bTitle" placeholder="Book Title">
@@ -112,7 +104,6 @@ h2,h3{text-align:center}
 <div id="bookList"></div>
 </div>
 
-<!-- PRINCIPAL -->
 <div class="card hidden" id="prinTab">
 <h2>🎓 PRINCIPAL DASHBOARD</h2>
 <div id="prinStats" class="badge"></div>
@@ -128,7 +119,6 @@ h2,h3{text-align:center}
 <button class="yellow" onclick="window.open('manual.html','_blank')">📘 PRINCIPAL MANUAL</button>
 </div>
 
-<!-- PARENT -->
 <div class="card hidden" id="parentTab">
 <h2>👨‍👩‍👧 PARENT - SECURE VIEW</h2>
 <p class="small">ID + SCHOOL ONLY. No name search. You see ONLY your child.</p>
@@ -137,12 +127,10 @@ h2,h3{text-align:center}
 <div id="parentView"></div>
 </div>
 
-<!-- ADMIN -->
 <div class="card hidden" id="adminTab">
 <h2>👑 APP ADMINISTRATOR - FULL CONTROL</h2>
 <p class="small">✅ LOGGED IN AS ADMIN - ONLY ADMIN SEES SUBSCRIPTION DASHBOARD + FOUNDER + TRAINING MANUALS</p>
 <div class="redbox">PRINCIPAL / LIBRARIAN / EDUCATOR CANNOT SEE THIS!</div>
-
 <div class="dash">
 <h3>🔒 SUBSCRIPTION DASHBOARD - ADMIN ONLY 🔒</h3>
 <button onclick="window.open('agents.html','_blank')" style="width:100%;padding:16px;margin:8px 0;border:0;border-radius:12px;background:#dc2626;color:#fff;font-weight:900;font-size:18px;cursor:pointer">👑 AGENT TRACKER - ADMIN ONLY 🔒</button>
@@ -153,17 +141,15 @@ h2,h3{text-align:center}
 <div id="adminStats" class="badge"></div>
 <p class="small">Total Schools | Active Paid | Demo | Monthly Income</p>
 </div>
-
 <h3>➕ ADD SCHOOL</h3>
 <input id="newEmis" placeholder="School EMIS e.g. 700310854">
 <input id="newSchool" placeholder="School Name e.g. WORDSWORTH HIGH SCHOOL">
 <select id="newPkg"><option value="DEMO">DEMO - Free 7 Days</option><option value="STARTER">STARTER - R2,500 + R350/m</option><option value="STANDARD">STANDARD - R3,500 + R550/m</option><option value="PREMIUM">PREMIUM - R5,000 + R850/m</option></select>
 <input id="newPrinPass" placeholder="Principal Password">
 <button class="green" onclick="addSchool()">➕ ADD SCHOOL</button>
-<h3>🔍 ALL SCHOOLS</h3>
-<input id="searchSchool" placeholder="Search school..." oninput="renderSchools()">
+<h3>🔍 ALL SCHOOLS - FAST SEARCH</h3>
+<input id="searchSchool" placeholder="Type to search school... (Shows only 20 - FAST!)" oninput="renderSchools()">
 <div id="schoolList"></div>
-
 <h3>📘 MANUALS</h3>
 <button onclick="window.open('manual.html','_blank')">📘 OPEN FULL USER MANUAL</button>
 <button class="yellow" onclick="window.open('jobs.html','_blank')">💼 JOBS - AGENT FORM</button>
@@ -178,13 +164,31 @@ var learners=JSON.parse(localStorage.getItem('mk_learners')||'[]');
 var books=JSON.parse(localStorage.getItem('mk_books')||'[]');
 var issues=JSON.parse(localStorage.getItem('mk_issues')||'[]');
 var curSchool='';
-function save(){localStorage.setItem('mk_schools',JSON.stringify(schools));localStorage.setItem('mk_learners',JSON.stringify(learners));localStorage.setItem('mk_books',JSON.stringify(books));localStorage.setItem('mk_issues',JSON.stringify(issues));}
-function fillSchools(){var s='<option value="">Select School</option>';for(var i=0;i<schools.length;i++)s+='<option value="'+schools[i].emis+'">'+schools[i].name+'</option>';document.getElementById('schoolSel').innerHTML=s;}
+function save(){try{localStorage.setItem('mk_schools',JSON.stringify(schools));localStorage.setItem('mk_learners',JSON.stringify(learners));localStorage.setItem('mk_books',JSON.stringify(books));localStorage.setItem('mk_issues',JSON.stringify(issues));}catch(e){alert('⚠️ Storage full! Delete old data!');}}
+function fillSchools(){var s='<option value="">Select School</option>';var lim=Math.min(schools.length,100);for(var i=0;i<lim;i++)s+='<option value="'+schools[i].emis+'">'+schools[i].name+'</option>';if(schools.length>100)s+='<option value="">... Type to search for more schools ...</option>';document.getElementById('schoolSel').innerHTML=s;}
 function showTab(id,btn){var t=['homeTab','issueTab','returnTab','learnersTab','booksTab','prinTab','parentTab','adminTab'];for(var i=0;i<t.length;i++)document.getElementById(t[i]).classList.add('hidden');document.getElementById(id).classList.remove('hidden');var bs=document.querySelectorAll('.tabs button');for(var j=0;j<bs.length;j++)bs[j].classList.remove('active');if(btn)btn.classList.add('active');}
 function doLogin(){var p=document.getElementById('passInput').value.trim();if(p==='admin123'){alert('✅ LOGGED IN AS ADMIN!');showTab('adminTab',document.querySelectorAll('.tabs button')[7]);return;}if(p){alert('✅ Logged in!');}else{alert('Type Password / Learner ID!');}}
 function logout(){location.reload();}
 function addSchool(){var e=document.getElementById('newEmis').value.trim();var n=document.getElementById('newSchool').value.trim();var pk=document.getElementById('newPkg').value;var pp=document.getElementById('newPrinPass').value.trim();if(!e||!n){alert('Type EMIS + School!');return;}schools.push({emis:e,name:n,pkg:pk,prinPass:pp||'Prin2026',status:'ACTIVE',date:new Date().toLocaleDateString()});save();fillSchools();renderSchools();alert('School Added! '+n);document.getElementById('newEmis').value='';document.getElementById('newSchool').value='';}
-function renderSchools(){var q2=(document.getElementById('searchSchoolTop').value||'').toLowerCase();var q3=(document.getElementById('searchSchool').value||'').toLowerCase();var q=q2||q3;var h='';var c=0;for(var i=0;i<schools.length;i++){if(q&&schools[i].name.toLowerCase().indexOf(q)===-1&&schools[i].emis.indexOf(q)===-1)continue;c++;h+='<div class="badge" onclick="selectSchool(\''+schools[i].emis+'\')"><b>'+schools[i].emis+' - '+schools[i].name+'</b><br>Package: '+schools[i].pkg+' | Status: '+schools[i].status+'</div>';}document.getElementById('schoolList').innerHTML=h||'No schools yet!';document.getElementById('topSchoolList').innerHTML=h||'';document.getElementById('topCount').innerHTML=c+' school(s) found - Tap one to SWITCH!';var paid=0,demo=0;for(var j=0;j<schools.length;j++){if(schools[j].pkg==='DEMO')demo++;else paid++;}document.getElementById('adminStats').innerHTML='Schools: '+schools.length+' | ACTIVE PAID: '+paid+' | DEMO: '+demo+' | Learners: '+learners.length+' | Books: '+books.length+' | Issued: '+issues.length;document.getElementById('homeStats').innerHTML='Schools: '+schools.length+' | Learners: '+learners.length+' | Books: '+books.length+' | Issued: '+issues.length;document.getElementById('prinStats').innerHTML='Learners: '+learners.length+' | Books: '+books.length+' | Borrowed: '+issues.length;}
+function renderSchools(){
+var q2=(document.getElementById('searchSchoolTop').value||'').toLowerCase();
+var q3=(document.getElementById('searchSchool').value||'').toLowerCase();
+var q=q2||q3;
+var h='';var c=0;var shown=0;
+for(var i=0;i<schools.length;i++){
+if(q&&schools[i].name.toLowerCase().indexOf(q)===-1&&schools[i].emis.indexOf(q)===-1)continue;
+c++;
+if(shown<20){shown++;h+='<div class="badge" onclick="selectSchool(\''+schools[i].emis+'\')"><b>'+schools[i].emis+' - '+schools[i].name+'</b><br>Package: '+schools[i].pkg+' | Status: '+schools[i].status+'</div>';}
+}
+if(c>20)h='<div class="badge" style="background:#fef9c3">⚡ Showing 20 of '+c+' schools. TYPE to search to find more!</div>'+h;
+document.getElementById('schoolList').innerHTML=h||'No schools yet!';
+document.getElementById('topSchoolList').innerHTML=h||'';
+document.getElementById('topCount').innerHTML=c+' school(s) found - Type to search!';
+var paid=0,demo=0;for(var j=0;j<schools.length;j++){if(schools[j].pkg==='DEMO')demo++;else paid++;}
+document.getElementById('adminStats').innerHTML='Schools: '+schools.length+' | ACTIVE PAID: '+paid+' | DEMO: '+demo+' | Learners: '+learners.length+' | Books: '+books.length+' | Issued: '+issues.length;
+document.getElementById('homeStats').innerHTML='Schools: '+schools.length+' | Learners: '+learners.length+' | Books: '+books.length+' | Issued: '+issues.length;
+document.getElementById('prinStats').innerHTML='Learners: '+learners.length+' | Books: '+books.length+' | Borrowed: '+issues.length;
+}
 function selectSchool(emis){curSchool=emis;document.getElementById('schoolSel').value=emis;alert('✅ Switched to '+emis);renderSchools();}
 function putAllDemo(){for(var i=0;i<schools.length;i++){schools[i].pkg='DEMO';schools[i].status='DEMO';}save();renderSchools();alert('✅ All schools on 7 Days DEMO!');}
 function putExpired(){for(var i=0;i<schools.length;i++){if(schools[i].pkg==='DEMO')schools[i].status='UNPAID';}save();renderSchools();alert('🔴 Expired → UNPAID!');}
@@ -194,7 +198,11 @@ function addBook(){var t=document.getElementById('bTitle').value.trim();var c=do
 function issueBook(){var l=document.getElementById('iLearner').value.trim();var b=document.getElementById('iBook').value.trim();if(!l||!b){alert('Type Learner ID + Book Code!');return;}issues.push({learner:l,book:b,status:'BORROWED',date:new Date().toLocaleDateString()});save();renderAll();alert('✅ Issued '+b+' to '+l);}
 function returnBook(){var b=document.getElementById('rBook').value.trim();for(var i=0;i<issues.length;i++){if(issues[i].book===b)issues[i].status='RETURNED';}save();renderAll();alert('✅ Returned '+b);}
 function parentCheck(){var p=(document.getElementById('parentId').value||document.getElementById('passInput').value).trim();var f=null;for(var i=0;i<learners.length;i++){if(learners[i].id===p)f=learners[i];}if(!f){document.getElementById('parentView').innerHTML='<b style="color:red">❌ Learner NOT Found! Check ID + School!</b>';return;}var my=[];for(var j=0;j<issues.length;j++){if(issues[j].learner===f.id)my.push(issues[j]);}document.getElementById('parentView').innerHTML='<div class="badge"><b>ID:</b> '+f.id+'<br><b>Grade:</b> '+f.grade+'<br><b>Books:</b> '+my.length+'<br>'+my.map(function(x){return '- '+x.book+' - '+x.status+'<br>'}).join('')+'</div>';}
-function renderAll(){var h='';for(var i=0;i<learners.length;i++)h+='<div class="badge">'+learners[i].name+' - '+learners[i].grade+' - ID: '+learners[i].id+'</div>';document.getElementById('learnerList').innerHTML=h||'No learners yet!';var b='';for(var j=0;j<books.length;j++)b+='<div class="badge">'+books[j].title+' - '+books[j].code+'</div>';document.getElementById('bookList').innerHTML=b||'No books yet!';var r='';for(var k=0;k<issues.length;k++)r+='<div class="badge">'+issues[k].book+' → '+issues[k].learner+' - '+issues[k].status+'</div>';document.getElementById('issueList').innerHTML=r;document.getElementById('returnList').innerHTML=r||'No issued books!';renderSchools();}
+function renderAll(){
+var h='';var limL=Math.min(learners.length,50);for(var i=0;i<limL;i++)h+='<div class="badge">'+learners[i].name+' - '+learners[i].grade+' - ID: '+learners[i].id+'</div>';if(learners.length>50)h+='<div class="badge">Showing 50 of '+learners.length+' - Search coming</div>';document.getElementById('learnerList').innerHTML=h||'No learners yet!';
+var b='';var limB=Math.min(books.length,50);for(var j=0;j<limB;j++)b+='<div class="badge">'+books[j].title+' - '+books[j].code+'</div>';if(books.length>50)b+='<div class="badge">Showing 50 of '+books.length+'</div>';document.getElementById('bookList').innerHTML=b||'No books yet!';
+var r='';var limI=Math.min(issues.length,50);for(var k=0;k<limI;k++)r+='<div class="badge">'+issues[k].book+' → '+issues[k].learner+' - '+issues[k].status+'</div>';document.getElementById('issueList').innerHTML=r;document.getElementById('returnList').innerHTML=r||'No issued books!';renderSchools();
+}
 fillSchools();renderAll();
 </script>
 </body>
