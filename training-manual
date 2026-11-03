@@ -1,0 +1,77 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TRAINING MANUAL - ADMIN ONLY</title><style>body{margin:0;font-family:Arial;background:#fff7ed;padding:20px;line-height:1.6}.badge{background:#fff;border:2px solid #ea580c;border-radius:10px;padding:12px;margin:10px 0}h2{background:#ea580c;color:#fff;padding:12px;border-radius:10px}h3{background:#ffedd5;padding:8px;border-radius:8px;border-left:4px solid #ea580c}</style></head><body>
+<h1>🎓 TRAINING MANUAL - ADMIN ONLY - MAKHANANI DIGITAL LIBRARY</h1><p><b>Admin trains Principal, HOD, Librarian, Educator, Learner - At Least 1 Subject + Auto L-0001 + ACC-G10-001 - Principal can add staff for own school - At Least 1 Subject Required</b></p>
+<div class="badge" style="background:#ffedd5;border-color:#ea580c"><b>⚠️ ADMIN ONLY:</b> This Training Manual is for Admin to train others - Contains step-by-step training sessions - Do NOT give to non-admin directly, Admin trains using this - User Manual for all is manual.html - This is Training Manual for Admin</div>
+
+<h2>📅 TRAINING SESSION 1: ADMIN SETUP (30 mins) - ADMIN ONLY</h2><div class="badge"><h3>Objective: Setup DBE Schools + Principals + CAPS + Subscriptions</h3>
+<b>Step 1 - Login as Admin:</b> Open https://vusichauke3037-glitch.github.io/MAKHANANI-LIBRARY/ → Rank ADMIN → Search DBE School WORDSWORTH → Select 700310854 WORDSWORTH HIGH SCHOOL BENONI GAUTENG → Email admin@makhanani.com → Password admin123 → LOGIN → Welcome ADMIN<br>
+<b>Step 2 - Add DBE Schools:</b> Go to ⚙️ MANAGE tab → Upload DBE CSV or Add Single DBE School - EMIS 700310854 Name WORDSWORTH HIGH SCHOOL Town BENONI Province GAUTENG → Add → Block EMIS dup, Allow Name dup - Example: Same name WORDSWORTH HIGH SCHOOL but different EMIS 700310855 Town TEMBISA Province GAUTENG allowed, same EMIS 700310854 blocked<br>
+<b>Step 3 - Add Principals with At Least 1 Subject:</b> In MANAGE tab → Add Staff → Name Mr Principal → Email principal@wordsworth.co.za → Rank PRINCIPAL → Teaching Subjects MATH, ACC, ENHL (at least 1 required, comma separated) → EMIS 700310854 → ADD STAFF → Only Admin can add Principals - At least 1 subject required - Single MATH or Multiple MATH, ACC, ENHL<br>
+<b>Step 4 - Setup CAPS Subjects:</b> In MANAGE tab → CAPS Subjects → Load Default CAPS (24) or Upload CAPS CSV → Codes like ACC, MATH, ENHL for ACC-G10-001 format<br>
+<b>Step 5 - Setup Subscription:</b> Go to 💳 SUBSCRIBE tab → Search School WORDSWORTH → Select → Package PREMIUM R1500/month → Duration 12 Months → Amount R18000 auto or manual → Status ACTIVE → Paid By SGB → ADD/RENEW SUBSCRIPTION → Admin only<br>
+<b>Check:</b> Admin Dashboard 👑 ADMIN shows Schools Performance, Principals List, Staff by School, System Transactions - Print Admin System Report
+</div>
+
+<h2>📅 TRAINING SESSION 2: PRINCIPAL TRAINING (45 mins) - PRINCIPAL + ADMIN</h2><div class="badge"><h3>Objective: Principal can Add Staff + Books + Approve HOD + Print Logs + Jobs for Own School</h3>
+<b>Step 1 - Login as Principal:</b> Logout Admin → Login as PRINCIPAL → Rank PRINCIPAL → School 700310854 WORDSWORTH HIGH SCHOOL → Email principal@wordsworth.co.za (created by Admin) → Password (set in Firebase or local) → LOGIN → Welcome PRINCIPAL with subjects MATH, ACC, ENHL<br>
+<b>Step 2 - Add Staff with At Least 1 Subject (Principal can add staff for own school):</b> Go to ⚙️ MANAGE tab → Add Staff → Name Ms Librarian → Email lib@wordsworth.co.za → Rank LIBRARIAN → Teaching Subjects ENHL, LIFE (at least 1 required) → EMIS 700310854 → ADD → Success - Librarian can approve HOD requests + Print logs<br>
+Add Educator: Name Mr Nkosi → Email nkosi@wordsworth.co.za → Rank EDUCATOR → Teaching Subjects MATH (single) or MATH, ACC, ENHL (multiple) → EMIS 700310854 → ADD → Educator can issue only MATH books but retrieve any book<br>
+Add HOD: Name Ms Dlamini → Email hod@wordsworth.co.za → Rank HOD → Teaching Subjects PHSC, LFSC, NSCT (multiple) → EMIS 700310854 → ADD → HOD can request books for PHSC, LFSC, NSCT departments<br>
+<b>Rule:</b> Principal can only add staff for own school 700310854 - If tries to add for 700310855 different school → BLOCKED - Principal can only add Librarian/Educator/HOD, cannot add Principal/Schools (Admin only)<br>
+<b>Step 3 - Add Books ACC-G10-001:</b> Go to 📚 BOOKS tab → Title Accounting Grade 10 Textbook → CAPS Subject ACC → Grade G10 → Qty 50 → Teacher Mr Nkosi → Condition NEW → Manual Code empty → ADD BOOKS → Generates ACC-G10-001 to ACC-G10-050 - Simple Numbering SUBJECT-GRADE-NUMBER<br>
+<b>Step 4 - Principal Dashboard:</b> Go to 👔 PRINCIPAL tab → Shows Own School Stats: Books 50, Learners, Staff with at least 1 subject, Borrowed, Returned, HOD Pending - Books by Subject - Staff by Subject - Recent Transactions - Pending HOD - Quick Actions<br>
+<b>Step 5 - Create Jobs for Staff:</b> Go to 💼 JOBS tab or jobs.html → Title Catalog 50 New Textbooks → Description Add 50 Accounting Grade 10 books with barcode printing → Priority HIGH → Due Date 2026-05-20 → Search Staff Nkosi or MATH → Select Mr Nkosi - EDUCATOR - MATH, ACC → School Use Current School → Status PENDING → CREATE JOB → Principal can only assign to staff in own school, staff must have at least 1 subject
+</div>
+
+<h2>📅 TRAINING SESSION 3: LIBRARIAN + EDUCATOR + HOD TRAINING (45 mins) - LIBRARIAN/HOD/EDUCATOR</h2><div class="badge"><h3>Objective: Issue/Return with At Least 1 Subject Check + HOD Request + Print Logs</h3>
+<b>Step 1 - Login as Librarian:</b> Rank LIBRARIAN → Email lib@wordsworth.co.za → School 700310854 → LOGIN → Welcome LIBRARIAN with subjects ENHL, LIFE<br>
+<b>Step 2 - Add Learners Auto L-0001:</b> Go to 👥 LEARNERS tab → Name John Doe → Grade G10 → Class 10A → Learner ID Leave empty → ADD LEARNER → Auto allocates L-0001 - Next Auto ID: L-0002 - Block ID dup per school: Same ID + Same School = BLOCKED, Allow Name dup: Same Name + Same School = ALLOWED (different ID) - Example: L-0001 John Doe and L-0002 John Doe both in same school allowed with different ID, but L-0001 John Doe and L-0001 Jane Smith same school blocked<br>
+Add Learner with Manual ID: Name Jane Smith → ID L-0010 → ADD → Allowed if not duplicate per school<br>
+<b>Step 3 - Issue Book with At Least 1 Subject Check:</b> Go to 📤 ISSUE tab → Learner ID L-0001 → Select John Doe - Grade G10 - Auto L-0001 → Book Code ACC-G10-001 → Select Accounting Grade 10 Textbook → ISSUE BOOK → If Librarian has no subject restriction? Librarian can issue any? In code: Educator/HOD/Principal have subject restriction, Librarian can issue any? Actually Librarian has at least 1 subject but can issue any? Check: In issueBook() only EDUCATOR/HOD/PRINCIPAL have subject check, LIBRARIAN can issue any - But all staff must have at least 1 subject for knowledge<br>
+Login as Educator MATH: Email nkosi@wordsworth.co.za → Subjects MATH - Try Issue MATH-G10-001 → Allowed (own subject) - Try Issue ACC-G10-001 → BLOCKED - Your Subjects: MATH, Book Subject: ACC, Allowed: MATH ONLY, but can retrieve any<br>
+Login as Educator MATH, ACC, ENHL: Email dlamini@wordsworth.co.za → Subjects MATH, ACC, ENHL → Can Issue MATH-G10-001 ✅, ACC-G10-001 ✅, ENHL-G10-001 ✅, but PHSC-G10-001 ❌ Blocked - Can Retrieve ANY book including PHSC-G10-001 ✅<br>
+<b>Step 4 - Return Book - Retrieve Any:</b> Go to 📥 RETURN tab → Book Code ACC-G10-001 → Select → RETURN BOOK → Educators with at least 1 subject can retrieve any book even if not their subject - Example: MATH educator can return ENHL-G10-001<br>
+<b>Step 5 - HOD Request + Sign Log:</b> Login as HOD PHSC, LFSC → Rank HOD → Email hod@wordsworth.co.za → Go to 📋 HOD LOG tab → HOD Name Mr HOD → Email hod@wordsworth.co.za → Subject PHSC → Grade G10 → Qty 20 → Reason 50 learners need textbooks → SUBMIT REQUEST → Request ID REQ-123456 - Status REQUESTED<br>
+Login as Librarian/Principal → Go to 📋 HOD LOG tab → Filter REQUESTED → See Request → APPROVE → Allocated 20 books ACC-G10-001 etc → Status APPROVED<br>
+Login as HOD → CONFIRM RECEIPT + HOD SIGN → Enter Signature Full Name → Status RECEIVED - Signed by: Signature - Print Log Form → PRINT LOG FORM with signatures: Requested By (HOD), Approved By (Librarian/Principal), Receipt Confirmed<br>
+<b>Step 6 - Printable Records:</b> Issue Tab → PRINT ISSUE LOG → Filter ALL/BORROWED ONLY/TODAY ONLY → Print with signatures: Issued By (Librarian/Educator with at least 1 subject), Received By (Learner Auto L-0001), Verified By (Principal/Librarian)<br>
+Return Tab → PRINT RETURN LOG → Filter ALL RETURNED/TODAY → Print with signatures: Returned By (Learner), Retrieved By (Educator/Librarian with at least 1 subject - Note Educators can retrieve any), Verified By<br>
+Full Transaction Log → PRINT FULL TRANSACTION LOG → Issue + Return combined - Borrowed count, Returned count, Total - Signatures Librarian + Principal
+</div>
+
+<h2>📅 TRAINING SESSION 4: LEARNER + PARENT VIEW (15 mins) - PARENT/LEARNER</h2><div class="badge"><h3>Objective: View Only - Learner can see own issued books</h3>
+<b>Step 1 - Login as Learner:</b> Rank LEARNER → School 700310854 → Learner ID L-0001 → LOGIN → Welcome LEARNER - View Only<br>
+<b>Step 2 - View Issued Books:</b> Home shows stats but cannot add - Can view own transactions? In issueList, returnList shows all for school but learner view only? Currently view only - Learner can see issueList filtered by school<br>
+<b>Step 3 - Parent View:</b> Rank PARENT → Learner ID L-0001 → LOGIN → View child's books - View only - Cannot add/issue/return<br>
+<b>Manual:</b> Learner/Parent gets User Manual Only - manual.html - How to view issued books, how to return, how to search
+</div>
+
+<h2>📅 TRAINING SESSION 5: AGENTS TRACKER + JOBS TRACKER (20 mins) - ALL STAFF</h2><div class="badge"><h3>Objective: Use agents.html + jobs.html standalone pages</h3>
+<b>Agents Tracker - agents.html:</b> Open https://vusichauke3037-glitch.github.io/MAKHANANI-LIBRARY/agents.html → Search Agents - At Least 1 Subject Required - Search Name or Email or Subject e.g. MATH or Nkosi or LIBRARIAN → Filter Rank ALL/PRINCIPAL/HOD/LIBRARIAN/EDUCATOR → Filter Subject ALL/MATH/ACC/ENHL etc → Stats Total Agents, Filtered - All have at least 1 subject - List Name, Email, Rank, Teaching Subjects (count), School, Jobs Assigned count - Add Agent: Name, Email, Rank, Subjects at least 1 e.g. MATH or MATH, ACC, ENHL, EMIS → ADD AGENT<br>
+<b>Jobs Tracker - jobs.html:</b> Open jobs.html → Stats Pending, In Progress, Completed, Total → Create Job: Title, Description, Priority LOW/MEDIUM/HIGH/URGENT, Due Date, Search Staff e.g. Nkosi or MATH - At Least 1 Subject Required, Select Staff, Status PENDING/IN_PROGRESS/COMPLETED → CREATE JOB → List All Jobs - Filter ALL/PENDING/IN_PROGRESS/COMPLETED/MY_JOBS → Update Status buttons PENDING, IN PROGRESS, COMPLETED → Print Jobs Report<br>
+<b>Jobs Dashboard in main app:</b> 💼 JOBS tab → Same as jobs.html but integrated - Principal can create for own school only, Admin any school - Staff must have at least 1 subject - Assigned staff can update own job status
+</div>
+
+<h2>✅ TRAINING CHECKLIST - ADMIN TO COMPLETE</h2><div class="badge">
+<b>After Training, Each Trainee Should Be Able To:</b><br>
+☑️ Login with Rank + DBE School + Email/Learner ID<br>
+☑️ Understand Auto L-0001 - Leave empty = auto, Block ID dup per school, Allow Name dup<br>
+☑️ Understand At Least 1 Teaching Subject Required - MATH or MATH, ACC, ENHL - Educator issue only own subjects but retrieve any<br>
+☑️ Understand ACC-G10-001 - Simple Numbering SUBJECT-GRADE-NUMBER - Qty generates range<br>
+☑️ Understand Block EMIS dup, Allow Name dup for DBE Schools - Same EMIS blocked, same name different EMIS allowed<br>
+☑️ Add Books (Principal/Admin only) with ACC-G10-001 + Qty + Teacher<br>
+☑️ Add Learners with Auto L-0001 (Librarian/Educator/HOD/Principal/Admin)<br>
+☑️ Issue Book - TYPE L-0001 + ACC-G10-001 OR SELECT OR SCAN - At Least 1 Subject Check for Educator/HOD/Principal<br>
+☑️ Return Book - TYPE ACC-G10-001 - Retrieve any book even if not own subject<br>
+☑️ HOD Request - Submit, Approve (Librarian/Principal), Confirm Receipt + Sign, Print Log<br>
+☑️ Print Issue Log + Return Log + Full Transaction Log with Signatures<br>
+☑️ Use Principal Dashboard - Own school stats + Books by Subject + Staff by Subject + Recent Transactions + Pending HOD<br>
+☑️ Use Admin Dashboard - All schools + Principals + Staff by School + System Transactions (Admin only)<br>
+☑️ Use Subscription Dashboard - Add/Renew DEMO/BASIC/PREMIUM/ENTERPRISE - Admin only<br>
+☑️ Use Jobs Dashboard / jobs.html - Create job, assign to staff with at least 1 subject, update status, print report<br>
+☑️ Use Agents Tracker - agents.html - Search agents with at least 1 subject, add agent<br>
+☑️ Understand Manual Access: Admin = All 3 Manuals (Founder + User + Training), Rest = User Manual Only<br>
+<b>Training Duration:</b> Admin 30 mins + Principal 45 mins + Librarian/Educator/HOD 45 mins + Learner/Parent 15 mins + Agents/Jobs 20 mins = Total ~2.5 hours<br>
+<b>Materials:</b> User Manual manual.html for all, Founder Manual founder-manual.html for Admin only, Training Manual training-manual.html for Admin only, Logo logo.png, Sample CSVs for DBE and Textbooks and CAPS
+</div>
+
+<p style="text-align:center"><b>MAKHANANI DIGITAL LIBRARY - TRAINING MANUAL - ADMIN ONLY</b> | Powered by XINTIMANI GROUP | 078 023 3263 | m.vusichauKe@wordsworthhigh.co.za | Admin trains Principal, Principal trains HOD/Librarian/Educator, All use User Manual - At Least 1 Subject Required - Auto L-0001 - ACC-G10-001</p></body></html>
