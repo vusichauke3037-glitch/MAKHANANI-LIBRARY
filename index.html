@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MAKHANANI DIGITAL LIBRARY</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial;background:#eef4ff}
+*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#eef4ff}
 header{background:#0a1a4d;color:#fff;padding:14px;text-align:center}
 header img{width:170px;background:#fff;border-radius:12px;padding:6px}
 .wrap{max-width:950px;margin:auto;padding:10px}
@@ -14,29 +13,31 @@ header img{width:170px;background:#fff;border-radius:12px;padding:6px}
 input,select{width:100%;padding:13px;margin:6px 0;border:2px solid #bfdbfe;border-radius:10px;font-size:16px}
 button{width:100%;padding:13px;margin:6px 0;border:0;border-radius:12px;background:#1a56db;color:#fff;font-weight:900;font-size:15px;cursor:pointer}
 .green{background:#16a34a}.red{background:#dc2626}.yellow{background:#facc15;color:#000}.dark{background:#0a1a4d}.grey{background:#64748b}.orange{background:#ea580c}
-.hidden{display:none}
-.badge{background:#f0f9ff;border:2px solid #bfdbfe;border-radius:10px;padding:10px;margin:6px 0}
-.tabs{display:flex;gap:5px;flex-wrap:wrap}
-.tabs button{flex:1;width:auto;padding:10px 4px;font-size:12px;background:#e2e8f0;color:#111}
-.tabs button.active{background:#1a56db;color:#fff}
-.small{font-size:13px;color:#475569;text-align:center}
-h2,h3{text-align:center}
+.hidden{display:none}.badge{background:#f0f9ff;border:2px solid #bfdbfe;border-radius:10px;padding:10px;margin:6px 0}
+.tabs{display:flex;gap:5px;flex-wrap:wrap}.tabs button{flex:1;width:auto;padding:10px 4px;font-size:12px;background:#e2e8f0;color:#111}.tabs button.active{background:#1a56db;color:#fff}
+.small{font-size:13px;color:#475569;text-align:center}h2,h3{text-align:center}
 .dash{border:3px solid #f59e0b;border-radius:14px;padding:12px;background:#fffbeb}
 .redbox{border:3px solid #dc2626;border-radius:14px;padding:12px;background:#fef2f2;text-align:center;font-weight:900}
+.cloud{border:3px solid #16a34a;border-radius:14px;padding:12px;background:#f0fdf4;text-align:center;font-weight:900}
 </style>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 <header>
 <img src="logo.png" alt="XINTIMANI GROUP">
 <h1 style="margin:6px 0">MAKHANANI DIGITAL LIBRARY</h1>
-<p style="margin:0">📚 POWERED BY XINTIMANI GROUP | FOR ALL SCHOOLS</p>
+<p style="margin:0">📚 POWERED BY XINTIMANI GROUP | ☁️ FIREBASE CLOUD SYNC</p>
 </header>
 <div class="wrap">
 
 <div class="card">
 <button class="red" onclick="logout()">🔓 LOGOUT</button>
 <h3 style="margin:4px 0">WELCOME ADMINISTRATOR!</h3>
-<input id="searchSchoolTop" placeholder="🔍 SWITCH SCHOOL (Admin Only) - SEARCH words" oninput="renderSchools()">
+<div class="cloud" id="cloudStatus">☁️ Cloud: Connecting...</div>
+<button class="green" onclick="syncToCloud()">☁️ SYNC TO CLOUD NOW</button>
+<button onclick="loadFromCloud()">⬇️ LOAD FROM CLOUD</button>
+<input id="searchSchoolTop" placeholder="🔍 SWITCH SCHOOL - SEARCH words" oninput="renderSchools()">
 <div id="topSchoolList"></div>
 <p class="small" id="topCount"></p>
 <button class="yellow" onclick="window.open('manual.html','_blank')">📘 OPEN USER MANUAL</button>
@@ -46,10 +47,10 @@ h2,h3{text-align:center}
 <select id="schoolSel"><option value="">Select School</option></select>
 <input id="passInput" type="password" placeholder="Password / Learner ID">
 <button onclick="doLogin()">🔐 LOGIN</button>
-<p class="small">ADMIN: admin123 | Principal: Principal Password | Librarian: Librarian Password | Parent: School + Learner ID ONLY</p>
+<p class="small">ADMIN: admin123 | Principal: Principal Password | Parent: School + Learner ID ONLY</p>
 <a href="app.apk"><button class="yellow">⬇️ DOWNLOAD APP (.APK)</button></a>
 <a href="jobs.html"><button class="dark">💼 JOBS - BECOME AN AGENT - R500/SCHOOL</button></a>
-<button class="orange" onclick="window.open('manual.html','_blank')">📘 USER MANUAL - HOW TO USE APP</button>
+<button class="orange" onclick="window.open('manual.html','_blank')">📘 USER MANUAL</button>
 </div>
 
 <div class="tabs">
@@ -63,109 +64,89 @@ h2,h3{text-align:center}
 <button onclick="showTab('adminTab',this)">👑 ADMIN</button>
 </div>
 
-<div class="card" id="homeTab">
-<h2>🏠 HOME</h2>
-<div id="homeStats" class="badge">Welcome to Makhanani!</div>
-<button class="yellow" onclick="window.open('manual.html','_blank')">📘 HOW TO USE - READ MANUAL</button>
-<p class="small">Use tabs above to work. Admin controls everything.</p>
-</div>
-
-<div class="card hidden" id="issueTab">
-<h2>📤 ISSUE BOOK</h2>
-<input id="iLearner" placeholder="Learner ID e.g. L-0001">
-<input id="iBook" placeholder="Book Code e.g. B-001">
-<button class="green" onclick="issueBook()">📤 ISSUE</button>
-<div id="issueList"></div>
-</div>
-
-<div class="card hidden" id="returnTab">
-<h2>📥 RETURN BOOK</h2>
-<input id="rBook" placeholder="Book Code e.g. B-001">
-<button class="yellow" onclick="returnBook()">📥 RETURN BOOK</button>
-<div id="returnList"></div>
-</div>
-
-<div class="card hidden" id="learnersTab">
-<h2>👥 LEARNERS</h2>
-<input id="lName" placeholder="Learner Full Name">
-<input id="lGrade" placeholder="Grade e.g. 10A">
-<input id="lId" placeholder="Learner ID e.g. L-0001">
-<button class="green" onclick="addLearner()">➕ ADD LEARNER</button>
-<button onclick="window.print()">🖨️ PRINT LEARNER CARDS</button>
-<div id="learnerList"></div>
-</div>
-
-<div class="card hidden" id="booksTab">
-<h2>📚 BOOKS</h2>
-<input id="bTitle" placeholder="Book Title">
-<input id="bCode" placeholder="Book Code e.g. B-001">
-<button onclick="addBook()">➕ ADD BOOK</button>
-<button onclick="window.print()">🖨️ PRINT BOOK BARCODES</button>
-<div id="bookList"></div>
-</div>
-
-<div class="card hidden" id="prinTab">
-<h2>🎓 PRINCIPAL DASHBOARD</h2>
-<div id="prinStats" class="badge"></div>
-<button class="green" onclick="alert('✅ DEMO ACTIVATED! 7 Days Free!')">✅ ACTIVATE MY FREE 7 DAYS DEMO</button>
-<h3>➕ ADD EDUCATOR</h3>
-<input id="eduName" placeholder="Educator Name">
-<input id="eduPass" placeholder="Educator Password">
-<button onclick="alert('✅ Educator Added! '+document.getElementById('eduName').value)">➕ ADD EDUCATOR</button>
-<h3>🔐 LIBRARIAN PASSWORD</h3>
-<input id="libPass" placeholder="Librarian Password">
-<button onclick="alert('✅ Librarian Password Set!')">🔐 SET LIBRARIAN PASSWORD</button>
-<button onclick="window.print()">🖨️ PRINT FULL HISTORY</button>
-<button class="yellow" onclick="window.open('manual.html','_blank')">📘 PRINCIPAL MANUAL</button>
-</div>
-
-<div class="card hidden" id="parentTab">
-<h2>👨‍👩‍👧 PARENT - SECURE VIEW</h2>
-<p class="small">ID + SCHOOL ONLY. No name search. You see ONLY your child.</p>
-<input id="parentId" placeholder="Type Learner ID e.g. L-0001">
-<button onclick="parentCheck()">🔍 CHECK MY CHILD</button>
-<div id="parentView"></div>
-</div>
+<div class="card" id="homeTab"><h2>🏠 HOME</h2><div id="homeStats" class="badge">Welcome!</div><button class="yellow" onclick="window.open('manual.html','_blank')">📘 HOW TO USE</button></div>
+<div class="card hidden" id="issueTab"><h2>📤 ISSUE BOOK</h2><input id="iLearner" placeholder="Learner ID e.g. L-0001"><input id="iBook" placeholder="Book Code e.g. B-001"><button class="green" onclick="issueBook()">📤 ISSUE</button><div id="issueList"></div></div>
+<div class="card hidden" id="returnTab"><h2>📥 RETURN BOOK</h2><input id="rBook" placeholder="Book Code e.g. B-001"><button class="yellow" onclick="returnBook()">📥 RETURN BOOK</button><div id="returnList"></div></div>
+<div class="card hidden" id="learnersTab"><h2>👥 LEARNERS</h2><input id="lName" placeholder="Learner Full Name"><input id="lGrade" placeholder="Grade e.g. 10A"><input id="lId" placeholder="Learner ID e.g. L-0001"><button class="green" onclick="addLearner()">➕ ADD LEARNER</button><button onclick="window.print()">🖨️ PRINT LEARNER CARDS</button><div id="learnerList"></div></div>
+<div class="card hidden" id="booksTab"><h2>📚 BOOKS</h2><input id="bTitle" placeholder="Book Title"><input id="bCode" placeholder="Book Code e.g. B-001"><button onclick="addBook()">➕ ADD BOOK</button><button onclick="window.print()">🖨️ PRINT BOOK BARCODES</button><div id="bookList"></div></div>
+<div class="card hidden" id="prinTab"><h2>🎓 PRINCIPAL DASHBOARD</h2><div id="prinStats" class="badge"></div><button class="green" onclick="alert('✅ DEMO ACTIVATED! 7 Days Free!')">✅ ACTIVATE MY FREE 7 DAYS DEMO</button><h3>➕ ADD EDUCATOR</h3><input id="eduName" placeholder="Educator Name"><input id="eduPass" placeholder="Educator Password"><button onclick="alert('✅ Educator Added!')">➕ ADD EDUCATOR</button><h3>🔐 LIBRARIAN PASSWORD</h3><input id="libPass" placeholder="Librarian Password"><button onclick="alert('✅ Librarian Password Set!')">🔐 SET LIBRARIAN PASSWORD</button><button onclick="window.print()">🖨️ PRINT FULL HISTORY</button></div>
+<div class="card hidden" id="parentTab"><h2>👨‍👩‍👧 PARENT - SECURE VIEW</h2><p class="small">ID + SCHOOL ONLY. No name search. ONLY your child.</p><input id="parentId" placeholder="Type Learner ID e.g. L-0001"><button onclick="parentCheck()">🔍 CHECK MY CHILD</button><div id="parentView"></div></div>
 
 <div class="card hidden" id="adminTab">
 <h2>👑 APP ADMINISTRATOR - FULL CONTROL</h2>
-<p class="small">✅ LOGGED IN AS ADMIN - ONLY ADMIN SEES SUBSCRIPTION DASHBOARD + FOUNDER + TRAINING MANUALS</p>
 <div class="redbox">PRINCIPAL / LIBRARIAN / EDUCATOR CANNOT SEE THIS!</div>
-<div class="dash">
-<h3>🔒 SUBSCRIPTION DASHBOARD - ADMIN ONLY 🔒</h3>
+<div class="dash"><h3>🔒 SUBSCRIPTION DASHBOARD - ADMIN ONLY 🔒</h3>
 <button onclick="window.open('agents.html','_blank')" style="width:100%;padding:16px;margin:8px 0;border:0;border-radius:12px;background:#dc2626;color:#fff;font-weight:900;font-size:18px;cursor:pointer">👑 AGENT TRACKER - ADMIN ONLY 🔒</button>
 <button class="dark" onclick="window.open('manual.html','_blank')">📘 USER MANUAL - ADMIN ONLY</button>
 <button class="yellow" onclick="putAllDemo()">⚡ PUT ALL SCHOOLS ON 7 DAYS DEMO</button>
-<button class="red" onclick="putExpired()">🔴 PUT EXPIRED / DEMO ENDED → UNPAID</button>
+<button class="red" onclick="putExpired()">🔴 PUT EXPIRED → UNPAID</button>
 <button class="grey" onclick="putAllUnpaid()">⚫ PUT ALL SCHOOLS → UNPAID</button>
-<div id="adminStats" class="badge"></div>
-<p class="small">Total Schools | Active Paid | Demo | Monthly Income</p>
-</div>
+<div id="adminStats" class="badge"></div></div>
 <h3>➕ ADD SCHOOL</h3>
-<input id="newEmis" placeholder="School EMIS e.g. 700310854">
-<input id="newSchool" placeholder="School Name e.g. WORDSWORTH HIGH SCHOOL">
+<input id="newEmis" placeholder="School EMIS e.g. 700310854"><input id="newSchool" placeholder="School Name e.g. WORDSWORTH HIGH SCHOOL">
 <select id="newPkg"><option value="DEMO">DEMO - Free 7 Days</option><option value="STARTER">STARTER - R2,500 + R350/m</option><option value="STANDARD">STANDARD - R3,500 + R550/m</option><option value="PREMIUM">PREMIUM - R5,000 + R850/m</option></select>
-<input id="newPrinPass" placeholder="Principal Password">
-<button class="green" onclick="addSchool()">➕ ADD SCHOOL</button>
-<h3>🔍 ALL SCHOOLS - FAST SEARCH</h3>
-<input id="searchSchool" placeholder="Type to search school... (Shows only 20 - FAST!)" oninput="renderSchools()">
-<div id="schoolList"></div>
-<h3>📘 MANUALS</h3>
-<button onclick="window.open('manual.html','_blank')">📘 OPEN FULL USER MANUAL</button>
-<button class="yellow" onclick="window.open('jobs.html','_blank')">💼 JOBS - AGENT FORM</button>
+<input id="newPrinPass" placeholder="Principal Password"><button class="green" onclick="addSchool()">➕ ADD SCHOOL</button>
+<h3>🔍 ALL SCHOOLS - FAST SEARCH (20 ONLY)</h3><input id="searchSchool" placeholder="Type to search..." oninput="renderSchools()"><div id="schoolList"></div>
+<h3>📘 MANUALS</h3><button onclick="window.open('manual.html','_blank')">📘 OPEN FULL USER MANUAL</button><button class="yellow" onclick="window.open('jobs.html','_blank')">💼 JOBS - AGENT FORM</button>
 <p class="small">Xintimani Group | WhatsApp: 078 023 3263<br>STARTER R2,500 + R350/m | STANDARD R3,500 + R550/m | PREMIUM R5,000 + R850/m</p>
 </div>
-
 </div>
 
 <script>
+// ===== 🔥 YOUR FIREBASE - INSERTED =====
+var firebaseConfig = {
+  apiKey: "AIzaSyBOsBx2q4C_nSvAzDfUloehkp2yQno_l1o",
+  authDomain: "makhanani-library.firebaseapp.com",
+  projectId: "makhanani-library",
+  storageBucket: "makhanani-library.firebasestorage.app",
+  messagingSenderId: "1050331837286",
+  appId: "1:1050331837286:web:65c57818dee37605498ea7",
+  measurementId: "G-4DJVM5S56H"
+};
+var db=null; var cloudOK=false;
+try{
+  firebase.initializeApp(firebaseConfig);
+  db=firebase.firestore();
+  cloudOK=true;
+  document.getElementById('cloudStatus').innerHTML='☁️ Cloud: ✅ CONNECTED - makhanani-library';
+}catch(e){ document.getElementById('cloudStatus').innerHTML='☁️ Cloud Error: '+e.message; }
+
 var schools=JSON.parse(localStorage.getItem('mk_schools')||'[{"emis":"700310854","name":"WORDSWORTH HIGH SCHOOL","pkg":"DEMO","prinPass":"Prin2026","status":"ACTIVE","date":""}]');
 var learners=JSON.parse(localStorage.getItem('mk_learners')||'[]');
 var books=JSON.parse(localStorage.getItem('mk_books')||'[]');
 var issues=JSON.parse(localStorage.getItem('mk_issues')||'[]');
 var curSchool='';
-function save(){try{localStorage.setItem('mk_schools',JSON.stringify(schools));localStorage.setItem('mk_learners',JSON.stringify(learners));localStorage.setItem('mk_books',JSON.stringify(books));localStorage.setItem('mk_issues',JSON.stringify(issues));}catch(e){alert('⚠️ Storage full! Delete old data!');}}
-function fillSchools(){var s='<option value="">Select School</option>';var lim=Math.min(schools.length,100);for(var i=0;i<lim;i++)s+='<option value="'+schools[i].emis+'">'+schools[i].name+'</option>';if(schools.length>100)s+='<option value="">... Type to search for more schools ...</option>';document.getElementById('schoolSel').innerHTML=s;}
+function save(){
+  localStorage.setItem('mk_schools',JSON.stringify(schools));
+  localStorage.setItem('mk_learners',JSON.stringify(learners));
+  localStorage.setItem('mk_books',JSON.stringify(books));
+  localStorage.setItem('mk_issues',JSON.stringify(issues));
+  if(cloudOK) syncToCloud(true);
+}
+function syncToCloud(silent){
+  if(!cloudOK){ if(!silent) alert('⚠️ Firebase not connected!'); return; }
+  db.collection('makhanani').doc('main').set({schools:schools,learners:learners,books:books,issues:issues,updated:new Date().toISOString()})
+  .then(function(){ document.getElementById('cloudStatus').innerHTML='☁️ Cloud: ✅ SYNCED '+new Date().toLocaleTimeString(); if(!silent) alert('✅ Synced to Cloud!'); })
+  .catch(function(e){ if(!silent) alert('Cloud error: '+e.message); });
+}
+function loadFromCloud(){
+  if(!cloudOK){ alert('⚠️ Firebase not connected!'); return; }
+  document.getElementById('cloudStatus').innerHTML='☁️ Cloud: ⬇️ Loading...';
+  db.collection('makhanani').doc('main').get().then(function(doc){
+    if(!doc.exists){ alert('No cloud data yet! Tap SYNC TO CLOUD first!'); document.getElementById('cloudStatus').innerHTML='☁️ Cloud: ✅ Connected - No data yet'; return; }
+    var d=doc.data();
+    if(d.schools) schools=d.schools;
+    if(d.learners) learners=d.learners;
+    if(d.books) books=d.books;
+    if(d.issues) issues=d.issues;
+    localStorage.setItem('mk_schools',JSON.stringify(schools));
+    localStorage.setItem('mk_learners',JSON.stringify(learners));
+    localStorage.setItem('mk_books',JSON.stringify(books));
+    localStorage.setItem('mk_issues',JSON.stringify(issues));
+    fillSchools(); renderAll(); document.getElementById('cloudStatus').innerHTML='☁️ Cloud: ✅ LOADED '+schools.length+' schools'; alert('✅ Loaded from Cloud! '+schools.length+' schools');
+  }).catch(function(e){ alert('Load error: '+e.message); });
+}
+function fillSchools(){var s='<option value="">Select School</option>';var lim=Math.min(schools.length,100);for(var i=0;i<lim;i++)s+='<option value="'+schools[i].emis+'">'+schools[i].name+'</option>';document.getElementById('schoolSel').innerHTML=s;}
 function showTab(id,btn){var t=['homeTab','issueTab','returnTab','learnersTab','booksTab','prinTab','parentTab','adminTab'];for(var i=0;i<t.length;i++)document.getElementById(t[i]).classList.add('hidden');document.getElementById(id).classList.remove('hidden');var bs=document.querySelectorAll('.tabs button');for(var j=0;j<bs.length;j++)bs[j].classList.remove('active');if(btn)btn.classList.add('active');}
 function doLogin(){var p=document.getElementById('passInput').value.trim();if(p==='admin123'){alert('✅ LOGGED IN AS ADMIN!');showTab('adminTab',document.querySelectorAll('.tabs button')[7]);return;}if(p){alert('✅ Logged in!');}else{alert('Type Password / Learner ID!');}}
 function logout(){location.reload();}
@@ -173,34 +154,31 @@ function addSchool(){var e=document.getElementById('newEmis').value.trim();var n
 function renderSchools(){
 var q2=(document.getElementById('searchSchoolTop').value||'').toLowerCase();
 var q3=(document.getElementById('searchSchool').value||'').toLowerCase();
-var q=q2||q3;
-var h='';var c=0;var shown=0;
+var q=q2||q3;var h='';var c=0;var shown=0;
 for(var i=0;i<schools.length;i++){
 if(q&&schools[i].name.toLowerCase().indexOf(q)===-1&&schools[i].emis.indexOf(q)===-1)continue;
-c++;
-if(shown<20){shown++;h+='<div class="badge" onclick="selectSchool(\''+schools[i].emis+'\')"><b>'+schools[i].emis+' - '+schools[i].name+'</b><br>Package: '+schools[i].pkg+' | Status: '+schools[i].status+'</div>';}
+c++; if(shown<20){shown++;h+='<div class="badge" onclick="selectSchool(\''+schools[i].emis+'\')"><b>'+schools[i].emis+' - '+schools[i].name+'</b><br>Package: '+schools[i].pkg+' | Status: '+schools[i].status+'</div>';}
 }
-if(c>20)h='<div class="badge" style="background:#fef9c3">⚡ Showing 20 of '+c+' schools. TYPE to search to find more!</div>'+h;
-document.getElementById('schoolList').innerHTML=h||'No schools yet!';
-document.getElementById('topSchoolList').innerHTML=h||'';
-document.getElementById('topCount').innerHTML=c+' school(s) found - Type to search!';
+if(c>20)h='<div class="badge" style="background:#fef9c3">⚡ Showing 20 of '+c+' schools. TYPE to search!</div>'+h;
+document.getElementById('schoolList').innerHTML=h||'No schools yet!';document.getElementById('topSchoolList').innerHTML=h||'';
+document.getElementById('topCount').innerHTML=c+' school(s) found';
 var paid=0,demo=0;for(var j=0;j<schools.length;j++){if(schools[j].pkg==='DEMO')demo++;else paid++;}
 document.getElementById('adminStats').innerHTML='Schools: '+schools.length+' | ACTIVE PAID: '+paid+' | DEMO: '+demo+' | Learners: '+learners.length+' | Books: '+books.length+' | Issued: '+issues.length;
 document.getElementById('homeStats').innerHTML='Schools: '+schools.length+' | Learners: '+learners.length+' | Books: '+books.length+' | Issued: '+issues.length;
 document.getElementById('prinStats').innerHTML='Learners: '+learners.length+' | Books: '+books.length+' | Borrowed: '+issues.length;
 }
 function selectSchool(emis){curSchool=emis;document.getElementById('schoolSel').value=emis;alert('✅ Switched to '+emis);renderSchools();}
-function putAllDemo(){for(var i=0;i<schools.length;i++){schools[i].pkg='DEMO';schools[i].status='DEMO';}save();renderSchools();alert('✅ All schools on 7 Days DEMO!');}
+function putAllDemo(){for(var i=0;i<schools.length;i++){schools[i].pkg='DEMO';schools[i].status='DEMO';}save();renderSchools();alert('✅ All on DEMO!');}
 function putExpired(){for(var i=0;i<schools.length;i++){if(schools[i].pkg==='DEMO')schools[i].status='UNPAID';}save();renderSchools();alert('🔴 Expired → UNPAID!');}
 function putAllUnpaid(){for(var i=0;i<schools.length;i++){schools[i].status='UNPAID';}save();renderSchools();alert('⚫ All → UNPAID!');}
 function addLearner(){var n=document.getElementById('lName').value.trim();var g=document.getElementById('lGrade').value.trim();var id=document.getElementById('lId').value.trim();if(!n||!id){alert('Type Name + ID!');return;}learners.push({name:n,grade:g,id:id,school:curSchool});save();renderAll();alert('Learner Added! '+n);}
 function addBook(){var t=document.getElementById('bTitle').value.trim();var c=document.getElementById('bCode').value.trim();if(!t||!c){alert('Type Title + Code!');return;}books.push({title:t,code:c,school:curSchool,status:'AVAILABLE'});save();renderAll();alert('Book Added! '+t);}
 function issueBook(){var l=document.getElementById('iLearner').value.trim();var b=document.getElementById('iBook').value.trim();if(!l||!b){alert('Type Learner ID + Book Code!');return;}issues.push({learner:l,book:b,status:'BORROWED',date:new Date().toLocaleDateString()});save();renderAll();alert('✅ Issued '+b+' to '+l);}
 function returnBook(){var b=document.getElementById('rBook').value.trim();for(var i=0;i<issues.length;i++){if(issues[i].book===b)issues[i].status='RETURNED';}save();renderAll();alert('✅ Returned '+b);}
-function parentCheck(){var p=(document.getElementById('parentId').value||document.getElementById('passInput').value).trim();var f=null;for(var i=0;i<learners.length;i++){if(learners[i].id===p)f=learners[i];}if(!f){document.getElementById('parentView').innerHTML='<b style="color:red">❌ Learner NOT Found! Check ID + School!</b>';return;}var my=[];for(var j=0;j<issues.length;j++){if(issues[j].learner===f.id)my.push(issues[j]);}document.getElementById('parentView').innerHTML='<div class="badge"><b>ID:</b> '+f.id+'<br><b>Grade:</b> '+f.grade+'<br><b>Books:</b> '+my.length+'<br>'+my.map(function(x){return '- '+x.book+' - '+x.status+'<br>'}).join('')+'</div>';}
+function parentCheck(){var p=(document.getElementById('parentId').value||document.getElementById('passInput').value).trim();var f=null;for(var i=0;i<learners.length;i++){if(learners[i].id===p)f=learners[i];}if(!f){document.getElementById('parentView').innerHTML='<b style="color:red">❌ Learner NOT Found!</b>';return;}var my=[];for(var j=0;j<issues.length;j++){if(issues[j].learner===f.id)my.push(issues[j]);}document.getElementById('parentView').innerHTML='<div class="badge"><b>ID:</b> '+f.id+'<br><b>Grade:</b> '+f.grade+'<br><b>Books:</b> '+my.length+'<br>'+my.map(function(x){return '- '+x.book+' - '+x.status+'<br>'}).join('')+'</div>';}
 function renderAll(){
-var h='';var limL=Math.min(learners.length,50);for(var i=0;i<limL;i++)h+='<div class="badge">'+learners[i].name+' - '+learners[i].grade+' - ID: '+learners[i].id+'</div>';if(learners.length>50)h+='<div class="badge">Showing 50 of '+learners.length+' - Search coming</div>';document.getElementById('learnerList').innerHTML=h||'No learners yet!';
-var b='';var limB=Math.min(books.length,50);for(var j=0;j<limB;j++)b+='<div class="badge">'+books[j].title+' - '+books[j].code+'</div>';if(books.length>50)b+='<div class="badge">Showing 50 of '+books.length+'</div>';document.getElementById('bookList').innerHTML=b||'No books yet!';
+var h='';var limL=Math.min(learners.length,50);for(var i=0;i<limL;i++)h+='<div class="badge">'+learners[i].name+' - '+learners[i].grade+' - ID: '+learners[i].id+'</div>';document.getElementById('learnerList').innerHTML=h||'No learners yet!';
+var b='';var limB=Math.min(books.length,50);for(var j=0;j<limB;j++)b+='<div class="badge">'+books[j].title+' - '+books[j].code+'</div>';document.getElementById('bookList').innerHTML=b||'No books yet!';
 var r='';var limI=Math.min(issues.length,50);for(var k=0;k<limI;k++)r+='<div class="badge">'+issues[k].book+' → '+issues[k].learner+' - '+issues[k].status+'</div>';document.getElementById('issueList').innerHTML=r;document.getElementById('returnList').innerHTML=r||'No issued books!';renderSchools();
 }
 fillSchools();renderAll();
