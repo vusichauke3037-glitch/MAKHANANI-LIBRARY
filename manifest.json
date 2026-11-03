@@ -1,12 +1,13 @@
 {
-  "name": "MAKHANANI DIGITAL LIBRARY",
+  "name": "MAKHANANI DIGITAL LIBRARY - V5.0 PRODUCTION - NEW PROJECT 93e52 - ✅ CONNECTED",
   "short_name": "MAKHANANI",
-  "description": "Powered by XINTIMANI GROUP - ADMIN/PRINCIPAL/LIBRARIAN ADD+REMOVE BOOKS+LEARNERS | REST ADD LEARNERS ONLY | AUTO L-0001 | AT LEAST 1 SUBJECT | ACC-G10-001",
+  "description": "MAKHANANI DIGITAL LIBRARY - V5.0 PRODUCTION - NEW PROJECT 93e52 - ✅ CONNECTED - REAL-TIME DATABASE LIVE + OFFLINE + APP PWA - Auto L-0001 - ACC-G10-001 - ADMIN/PRINCIPAL/LIBRARIAN Add+Remove | EDUCATOR/HOD Add Only - At Least 1 Subject - Project: makhanani-library-93e52 - By XINTIMANI GROUP",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#0a1a4d",
   "theme_color": "#0a1a4d",
-  "orientation": "portrait",
+  "orientation": "portrait-primary",
+  "scope": "/MAKHANANI-LIBRARY/",
   "icons": [
     {
       "src": "logo.png",
@@ -19,6 +20,37 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "productivity", "utilities"],
+  "shortcuts": [
+    {
+      "name": "HOME LIVE DB - V5.0 PRODUCTION",
+      "short_name": "HOME LIVE",
+      "description": "HOME LIVE DB - REAL-TIME DATABASE LIVE - NEW PROJECT 93e52 - ✅ CONNECTED",
+      "url": "index.html",
+      "icons": [{ "src": "logo.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "AGENTS - V5.0 PRODUCTION",
+      "short_name": "AGENTS",
+      "description": "AGENTS - AI Library Agents - NEW PROJECT 93e52",
+      "url": "agents.html",
+      "icons": [{ "src": "logo.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "JOBS - V5.0 PRODUCTION",
+      "short_name": "JOBS",
+      "description": "JOBS BOARD - Library Jobs - NEW PROJECT 93e52",
+      "url": "jobs.html",
+      "icons": [{ "src": "logo.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "SYNC NOW - V5.0 PRODUCTION - NEW PROJECT 93e52",
+      "short_name": "SYNC NOW",
+      "description": "SYNC TO CLOUD - NEW PROJECT 93e52 - makhanani-library-93e52 - ✅ CONNECTED",
+      "url": "index.html",
+      "icons": [{ "src": "logo.png", "sizes": "192x192" }]
     }
   ]
 }
