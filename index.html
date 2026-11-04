@@ -1,225 +1,353 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MAKHANANI V6.4 - FIX EMPTY SCHOOLS FROM SCREENSHOT - RESTORE FROM CLOUD - makhanani-digital</title>
-<link rel="manifest" href="manifest.json?v=64"><meta name="theme-color" content="#0a1a4d"><link rel="apple-touch-icon" href="logo.png?v=64">
-<style>*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#eef4ff}header{background:#0a1a4d;color:#fff;padding:0 0 12px;text-align:center}header .logoCard{background:#fff;width:80%;max-width:320px;margin:0 auto;border-radius:0 0 18px 18px;padding:10px}header .logoCard img{width:100%;max-width:220px}header h1{margin:10px 0 2px;font-size:18px}.wrap{max-width:980px;margin:auto;padding:8px}.card{background:#fff;border-radius:14px;padding:12px;margin:8px 0;box-shadow:0 2px 8px rgba(0,0,0,.08)}input,select{width:100%;padding:11px;margin:4px 0;border:2px solid #bfdbfe;border-radius:10px;font-size:14px}button{width:100%;padding:11px;margin:4px 0;border:0;border-radius:12px;background:#1a56db;color:#fff;font-weight:900;font-size:12px;cursor:pointer;touch-action:manipulation}.green{background:#16a34a}.red{background:#dc2626}.yellow{background:#facc15;color:#000}.dark{background:#0a1a4d}.grey{background:#64748b}.hidden{display:none}.badge{background:#f0f9ff;border:2px solid #bfdbfe;border-radius:10px;padding:7px;margin:4px 0;font-size:11px}.tabs{display:flex;gap:4px;flex-wrap:wrap}.tabs button{flex:1;width:auto;padding:10px 2px;font-size:9px;background:#e2e8f0;color:#111;border-radius:10px;border:2px solid #cbd5e1}.tabs button.active{background:#1a56db;color:#fff;border-color:#1a56db}.tabs.ltsm button{font-size:9px;padding:10px 2px;background:#0a1a4d;color:#fff;border-color:#facc15}.tabs.ltsm button.active{background:#facc15;color:#000;border-color:#facc15}.cloud{border:2px solid #16a34a;border-radius:12px;padding:10px;background:#f0fdf4;text-align:center;font-weight:900;font-size:12px}.loginBox{border:2px solid #1a56db;border-radius:14px;padding:12px;background:#eff6ff}.searchBox{max-height:220px;overflow-y:auto;border:3px solid #0a1a4d;border-radius:10px;background:#fff}.barcodeCard{border:2px solid #0a1a4d;border-radius:14px;padding:10px;margin:8px 0;background:#fff;text-align:center}.headerBtns{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;padding:6px}.headerBtns button{width:auto;padding:8px 10px;border-radius:20px;font-size:9px}.liveBox{border:2px solid #dc2626;background:#fef2f2;border-radius:12px;padding:10px;margin:8px 0}.printPanel{border:2px solid #0a1a4d;background:#eff6ff;border-radius:12px;padding:10px;margin:8px 0}.ltsmHeader{background:#0a1a4d;color:#fff;padding:12px;border-radius:12px;text-align:center;margin-bottom:8px;border:3px solid #facc15}.schoolBtn{padding:14px 10px;margin:5px;border-radius:12px;font-size:12px;font-weight:900;width:auto;flex:1 1 auto;min-width:160px;border:3px solid #0a1a4d}.schoolBtn.selected{background:#16a34a;color:#fff;border-color:#16a34a;box-shadow:0 0 12px #16a34a}.schoolBtnQuick{background:#16a34a;color:#fff;border:3px solid #16a34a;box-shadow:0 2px 8px rgba(0,0,0,.2)}.schoolBtns{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0;background:#dcfce7;padding:10px;border-radius:12px;border:3px solid #16a34a;min-height:60px}</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MAKHANANI V6.5 CLEAN - NO AUTO SELECT - FIX 1MB - makhanani-digital</title>
+<link rel="manifest" href="manifest.json?v=65">
+<meta name="theme-color" content="#0a1a4d">
+<link rel="apple-touch-icon" href="logo.png?v=65">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial;background:#eef4ff}
+header{background:#0a1a4d;color:#fff;padding:0 0 12px;text-align:center}
+header .logoCard{background:#fff;width:80%;max-width:320px;margin:0 auto;border-radius:0 0 18px 18px;padding:10px}
+header .logoCard img{width:100%;max-width:220px}
+.wrap{max-width:980px;margin:auto;padding:8px}
+.card{background:#fff;border-radius:14px;padding:12px;margin:8px 0;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+input,select{width:100%;padding:12px;margin:4px 0;border:2px solid #bfdbfe;border-radius:10px;font-size:14px}
+button{width:100%;padding:12px;margin:4px 0;border:0;border-radius:12px;background:#1a56db;color:#fff;font-weight:900;font-size:12px;cursor:pointer}
+.green{background:#16a34a}.red{background:#dc2626}.yellow{background:#facc15;color:#000}.dark{background:#0a1a4d}.grey{background:#64748b}.hidden{display:none}
+.badge{background:#f0f9ff;border:2px solid #bfdbfe;border-radius:10px;padding:8px;margin:4px 0;font-size:11px}
+.tabs{display:flex;gap:4px;flex-wrap:wrap}.tabs button{flex:1;width:auto;padding:10px 2px;font-size:9px;background:#e2e8f0;color:#111;border-radius:10px;border:2px solid #cbd5e1}.tabs button.active{background:#1a56db;color:#fff;border-color:#1a56db}
+.tabs.ltsm button{background:#0a1a4d;color:#fff;border-color:#facc15}.tabs.ltsm button.active{background:#facc15;color:#000}
+.cloud{border:2px solid #16a34a;border-radius:12px;padding:10px;background:#f0fdf4;text-align:center;font-weight:900;font-size:12px}
+.loginBox{border:2px solid #1a56db;border-radius:14px;padding:12px;background:#eff6ff}
+.searchBox{max-height:220px;overflow-y:auto;border:2px solid #0a1a4d;border-radius:10px;background:#fff}
+.schoolBtn{padding:14px 10px;margin:5px;border-radius:12px;font-size:12px;font-weight:900;flex:1 1 auto;min-width:160px;border:3px solid #0a1a4d}
+.schoolBtnQuick{background:#fff;color:#0a1a4d;border:3px solid #0a1a4d}
+.schoolBtn.selected{background:#16a34a;color:#fff;border-color:#16a34a}
+.schoolBtns{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0;background:#eff6ff;padding:10px;border-radius:12px;border:2px solid #0a1a4d;min-height:60px}
+.barcodeCard{border:2px solid #0a1a4d;border-radius:14px;padding:10px;margin:8px 0;background:#fff;text-align:center}
+.ltsmHeader{background:#0a1a4d;color:#fff;padding:12px;border-radius:12px;text-align:center;margin-bottom:8px;border:3px solid #facc15}
+</style>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-</head><body>
-<header><div class="logoCard"><img src="logo.png?v=64" alt="XINTIMANI"></div><h1>MAKHANANI DIGITAL LIBRARY</h1><p>V6.4 FIX EMPTY SCHOOLS - YOUR SCREENSHOT SHOWS NO BUTTONS - RESTORE FROM CLOUD - makhanani-digital</p>
-<div class="headerBtns noPrint"><button type="button" style="background:#16a34a;color:#fff;padding:10px 14px;font-size:11px;border:3px solid #fff" onclick="restoreSchoolsFromCloud();return false;">🔄 RESTORE SCHOOLS FROM CLOUD - TAP IF EMPTY!</button><button type="button" style="background:#fff;color:#0a1a4d;padding:10px 14px;font-size:11px;border:2px solid #0a1a4d" onclick="restoreDefaultSchools();return false;">🏫 RESTORE WORDSWORTH DEFAULT</button></div></header>
+</head>
+<body>
+<header>
+<div class="logoCard"><img src="logo.png?v=65" alt="XINTIMANI"></div>
+<h1>MAKHANANI DIGITAL LIBRARY</h1>
+<p>V6.5 CLEAN - NO AUTO SELECT - MANUAL TAP ONLY - FIX 1MB - makhanani-digital</p>
+</header>
 <div class="wrap">
-<div class="card noPrint"><div class="cloud" id="cloudStatus" style="background:#fee2e2;border-color:#dc2626">☁️ V6.4 FIX YOUR SCREENSHOT - Your schools local = 0! Dashed empty box in screenshot = No buttons! - V6.4 will AUTO RESTORE from cloud makhanani_dbe_schools + Always show WORDSWORTH button!</div><div class="badge" id="autoSyncStatus" style="background:#fee2e2;border:3px solid #dc2626">❌ EMPTY SCHOOLS - YOUR SCREENSHOT SHOWS NO BUTTONS - TAP 🔄 RESTORE SCHOOLS FROM CLOUD BUTTON ABOVE!</div></div>
-<div class="card" id="loginCard"><div class="loginBox"><h2>🔐 LOGIN V6.4 - FIX EMPTY SCHOOLS - YOUR SCREENSHOT</h2><div class="badge" style="background:#fee2e2;border:3px solid #dc2626">❌ YOUR SCREENSHOT DIAGNOSIS: Dashed empty box = No school buttons! Dropdown empty = No schools local! You cleared cache OR new device = mk_schools = 0! So no WORDSWORTH button to TAP! - V6.4 FIX: 1. Auto restore from cloud makhanani_dbe_schools (your 25,529 synced) in 2 seconds! 2. WORDSWORTH button ALWAYS visible even if 0 schools! 3. TAP 🔄 RESTORE SCHOOLS FROM CLOUD button above!</div><div class="badge" style="background:#dcfce7;border:3px solid #16a34a">✅ V6.4 FIX: After page loads, wait 2 seconds - Will auto fetch from cloud! OR TAP 🔄 RESTORE SCHOOLS FROM CLOUD button in header! OR TAP 🏫 RESTORE WORDSWORTH DEFAULT - Then buttons appear! Then TAP WORDSWORTH button! Then shows ✅ SELECTED!</div>
-<select id="rankSel" onchange="onRankChange()"><option value="">-- Select Rank --</option><option selected>ADMIN</option><option>PRINCIPAL</option><option>HOD</option><option>LIBRARIAN</option><option>EDUCATOR</option><option>PARENT</option><option>LEARNER</option></select>
-<div style="background:#fff;border:4px solid #dc2626;border-radius:12px;padding:10px;margin:8px 0">
-<h3 style="margin:2px 0;font-size:14px;color:#dc2626;text-align:center">🏫 SELECT DBE SCHOOL - FIX EMPTY SCHOOLS - V6.4</h3>
-<div style="background:#fee2e2;border:3px solid #dc2626;border-radius:10px;padding:8px;margin:6px 0;text-align:center;font-weight:900;font-size:12px">❌ YOUR SCREENSHOT: Dashed empty box = No buttons because schools local = 0! - V6.4 FIX: Buttons ALWAYS visible + Auto restore from cloud!<br>👇 WORDSWORTH BUTTON ALWAYS BELOW - TAP IT! - V6.4 FIX 👇</div>
-<div class="schoolBtns" id="schoolQuickBtns"><button type="button" class="schoolBtn schoolBtnQuick" onclick="selectDBESchool('700310854','WORDSWORTH HIGH SCHOOL');return false;" style="background:#16a34a;color:#fff;border:3px solid #16a34a">🏫 WORDSWORTH HIGH SCHOOL<br><span style="font-size:10px">700310854</span><br><span style="font-size:9px;background:#facc15;color:#000;padding:3px 8px;border-radius:10px">TAP TO SELECT - ALWAYS VISIBLE!</span></button></div>
-<div style="background:#dcfce7;border:3px solid #16a34a;border-radius:10px;padding:6px;margin:6px 0;text-align:center"><button type="button" class="green" style="padding:14px;font-size:12px" onclick="restoreSchoolsFromCloud();return false;">🔄 RESTORE 25K SCHOOLS FROM CLOUD - YOUR 25,529 SYNCED SCHOOLS - TAP HERE IF EMPTY!</button><button type="button" class="yellow" style="padding:12px;font-size:11px;color:#000;margin-top:4px" onclick="restoreDefaultSchools();return false;">🏫 RESTORE WORDSWORTH DEFAULT ONLY - TAP IF STILL EMPTY!</button></div>
-<select id="schoolDropdown" onchange="selectSchoolFromDropdown()" style="background:#fef9c3;border:3px solid #f59e0b;font-weight:900;padding:14px;font-size:13px"><option value="">-- TAP TO SELECT SCHOOL FROM LIST --</option><option value="700310854">700310854 - WORDSWORTH HIGH SCHOOL - BENONI</option></select>
-<input id="schoolSearch" placeholder="Type WORDSWORTH or 700310854 or George Sonto - V6.4 FIX EMPTY" oninput="searchDBESchools()" style="background:#fff;border:3px solid #0a1a4d;padding:14px;font-size:13px">
-<div id="schoolSearchResults" class="searchBox"></div>
-<button type="button" id="useTypedBtn" class="green hidden" style="padding:14px;font-size:12px;border:3px solid #fff;background:#16a34a" onclick="useTypedSchool();return false;">✅ USE TYPED SCHOOL - TAP TO CONFIRM</button>
-<input id="selectedSchool" type="hidden">
-<div class="badge" id="selectedSchoolDisplay" style="background:#fee2e2;border:3px solid #dc2626;font-weight:900;padding:12px;font-size:12px;text-align:center">❌ No DBE school selected - V6.4 FIX EMPTY SCHOOLS - TAP WORDSWORTH BUTTON ABOVE - ALWAYS VISIBLE! - OR TAP 🔄 RESTORE SCHOOLS FROM CLOUD!</div>
-<div class="badge" id="restoreStatus" style="background:#e0f2fe;border:2px solid #0ea5e9;font-size:10px">Restore Status: Checking local schools... V6.4 - If 0 schools, will auto restore from cloud in 2 sec - Your screenshot shows 0 local schools - Need to restore from makhanani_dbe_schools cloud where you synced 25,529 schools!</div>
+
+<div class="card" id="loginCard">
+<div class="loginBox">
+<h2>🔐 LOGIN V6.5 CLEAN - NO AUTO SELECT</h2>
+<div class="badge" style="background:#dcfce7;border:3px solid #16a34a">
+✅ CLEAN - NO AUTO SELECT - MANUAL TAP ONLY<br>
+1. TAP a green school button OR<br>
+2. TAP dropdown -- TAP TO SELECT SCHOOL FROM LIST -- and select inside OR<br>
+3. Type in search box, then TAP result badge that appears below<br>
+No auto-select when typing - You must TAP!
 </div>
-<input id="fbEmail" type="email" placeholder="Email" value="admin@makhanani.com"><input id="fbPass" type="password" placeholder="Password" value="admin123"><input id="learnerIdInput" class="hidden" placeholder="Learner ID e.g. L-0001">
-<button type="button" class="dark" onclick="firebaseLogin();return false;" style="padding:16px;font-size:14px;background:#16a34a;border:3px solid #fff">🔐 LOGIN - V6.4 FIX EMPTY SCHOOLS - TAP WORDSWORTH BUTTON FIRST - THEN THIS BUTTON TURNS GREEN ✅ SELECTED!</button>
-</div></div>
-<div class="tabs noPrint"><button type="button" onclick="showTab('homeTab',this);return false;" class="active">🏠 HOME</button><button type="button" onclick="showTab('ltsmTab',this);return false;" style="background:#0a1a4d;color:#facc15;border:3px solid #facc15;font-weight:900" id="ltsmMainBtn">📦 LTSM - ACTIVE</button><button type="button" onclick="showTab('adminTab',this);return false;">⚙️ MANAGE + DBE</button></div>
-<div class="card" id="homeTab"><h2>🏠 HOME - V6.4 FIX EMPTY SCHOOLS</h2><div id="homeStats" class="badge">Loading... V6.4</div><div class="badge" id="homeSchoolName">No school selected - V6.4 FIX EMPTY - TAP WORDSWORTH BUTTON - ALWAYS VISIBLE!</div></div>
-<div class="card hidden" id="ltsmTab"><div class="ltsmHeader"><h2>📦 LTSM - V6.4 FIX EMPTY SCHOOLS</h2></div><div class="tabs ltsm noPrint" style="margin-bottom:8px"><button type="button" onclick="showLTSMTab('ltsmScanTab',this);return false;" class="active">📷 SCAN</button><button type="button" onclick="showLTSMTab('ltsmBooksTab',this);return false;">📚 BOOKS</button><button type="button" onclick="showLTSMTab('ltsmLearnersTab',this);return false;">👥 LEARNERS</button><button type="button" onclick="showLTSMTab('ltsmIssueTab',this);return false;">📤 ISSUE</button><button type="button" onclick="showLTSMTab('ltsmReturnTab',this);return false;">📥 RETURN</button></div><div id="ltsmScanTab"><div class="card" style="margin:0;border:3px solid #16a34a"><h2>📷 SCANNER</h2><div id="reader"></div><div style="display:flex;gap:4px"><button type="button" class="dark" onclick="startScanner();return false;">📷 START SCAN</button><button type="button" class="red" onclick="stopScanner();return false;">🔴 STOP</button></div><input id="scanResult" placeholder="Scanned"><div class="badge" id="scanLog">Ready - V6.4</div></div></div><div id="ltsmBooksTab" class="hidden"><div class="card" style="margin:0;border:3px solid #f59e0b"><h2>📚 BOOKS - V6.4 AUTO SYNC ON</h2><div class="cloud"><input id="bTitle" placeholder="Book Title"><div style="display:flex;gap:4px"><select id="bSubject" style="flex:1"></select><select id="bGrade" style="flex:0.6"><option value="">Grade</option><option>G4</option><option>G5</option><option>G6</option><option>G7</option><option>G8</option><option>G9</option><option>G10</option><option>G11</option><option>G12</option></select><input id="bQty" type="number" min="1" max="500" value="1" style="flex:0.5"></div><input id="bTeacher" placeholder="Teacher"><input id="bCodeManual" placeholder="Manual Code"><button type="button" class="green" id="addBookBtn" onclick="addBookWithDBECode();return false;">➕ ADD BOOK(S) - AUTO SYNC ON</button></div><div id="bookList"></div></div></div><div id="ltsmLearnersTab" class="hidden"><div class="card" style="margin:0;border:3px solid #16a34a"><h2>👥 LEARNERS</h2><div class="cloud"><div class="badge" id="nextLearnerIdPreview" style="background:#fef9c3;border:2px solid #f59e0b">Next Auto ID: L-0001</div><input id="lName" placeholder="Learner Full Name"><div style="display:flex;gap:4px"><input id="lGrade" placeholder="Grade e.g. G10" style="flex:1"><input id="lClass" placeholder="Class e.g. 10A" style="flex:1"></div><div style="display:flex;gap:4px"><input id="lId" placeholder="Learner ID - Leave empty = Auto" style="flex:1"><button type="button" class="yellow" style="flex:0.4;color:#000" onclick="autoGenerateLearnerId();return false;">🔢 AUTO</button></div><button type="button" class="green" id="addLearnerBtn" onclick="addLearner();return false;">➕ ADD LEARNER - AUTO SYNC ON</button></div><div id="learnerList"></div></div></div><div id="ltsmIssueTab" class="hidden"><div class="card" style="margin:0;border:3px solid #16a34a"><h2>📤 ISSUE</h2><input id="iLearner" placeholder="Learner ID" oninput="onLearnerTyping()"><div id="learnerSearchResults" class="searchBox"></div><input id="iBook" placeholder="Book Code" oninput="onBookTyping()"><div id="bookSearchResults" class="searchBox"></div><button type="button" class="green" onclick="issueBook();return false;">📤 ISSUE BOOK</button><div class="badge" id="issueStatus">Ready</div><div id="issueList"></div></div></div><div id="ltsmReturnTab" class="hidden"><div class="card" style="margin:0;border:3px solid #facc15"><h2>📥 RETURN</h2><input id="rBook" placeholder="Book Code" oninput="onReturnBookTyping()"><div id="returnSearchResults" class="searchBox"></div><button type="button" class="yellow" style="color:#000" onclick="returnBook();return false;">📥 RETURN BOOK</button><div class="badge" id="returnStatus">Ready</div><div id="returnList"></div></div></div></div>
-<div class="card hidden" id="adminTab"><h2>⚙️ MANAGE + DBE - V6.4 FIX EMPTY SCHOOLS</h2><div class="cloud"><button type="button" class="green" style="padding:14px" onclick="restoreSchoolsFromCloud();return false;">🔄 RESTORE 25K SCHOOLS FROM CLOUD - TAP IF EMPTY - Your 25,529 schools in makhanani_dbe_schools</button><button type="button" class="yellow" style="color:#000;padding:12px;margin-top:4px" onclick="restoreDefaultSchools();return false;">🏫 RESTORE WORDSWORTH DEFAULT - TAP IF STILL EMPTY</button><div class="badge" id="dbeUploadStatus">Ready - Current: <span id="dbeCurrentCount">0</span> schools local</div><div class="badge" id="dbeCloudSyncStatus">Cloud DBE Sync Status: Not started</div></div><div id="adminStats" class="badge">Stats</div><input id="searchSchool" placeholder="Search school" oninput="renderSchools()"><div id="schoolList"></div></div>
+
+<select id="rankSel" onchange="onRankChange()">
+<option value="">-- Select Rank --</option>
+<option selected>ADMIN</option>
+<option>PRINCIPAL</option>
+<option>HOD</option>
+<option>LIBRARIAN</option>
+<option>EDUCATOR</option>
+<option>PARENT</option>
+<option>LEARNER</option>
+</select>
+
+<div style="background:#fff;border:3px solid #0a1a4d;border-radius:12px;padding:10px;margin:8px 0">
+<h3 style="margin:2px 0;font-size:13px;text-align:center">🏫 SELECT DBE SCHOOL - MANUAL TAP ONLY - V6.5 CLEAN</h3>
+
+<div class="schoolBtns" id="schoolQuickBtns"></div>
+
+<select id="schoolDropdown" onchange="selectSchoolFromDropdown()" style="background:#fef9c3;border:3px solid #f59e0b;font-weight:900;padding:14px">
+<option value="">-- TAP TO SELECT SCHOOL FROM LIST --</option>
+</select>
+
+<input id="schoolSearch" placeholder="Search: WORDSWORTH or 700310854 or George Sonto - Then TAP result badge below" oninput="searchDBESchools()" style="border:3px solid #0a1a4d">
+<div id="schoolSearchResults" class="searchBox"></div>
+
+<input id="selectedSchool" type="hidden">
+<div class="badge" id="selectedSchoolDisplay" style="background:#fee2e2;border:3px solid #dc2626;font-weight:900;padding:12px;text-align:center">
+❌ No DBE school selected - TAP A SCHOOL BUTTON ABOVE OR TAP DROPDOWN OR TYPE AND TAP RESULT BADGE - MANUAL TAP ONLY - V6.5 CLEAN
+</div>
+</div>
+
+<input id="fbEmail" type="email" placeholder="Email" value="admin@makhanani.com">
+<input id="fbPass" type="password" placeholder="Password" value="admin123">
+<input id="learnerIdInput" class="hidden" placeholder="Learner ID e.g. L-0001">
+
+<button type="button" class="dark" onclick="firebaseLogin();return false;" style="padding:16px;background:#16a34a;border:3px solid #fff">🔐 LOGIN - TAP AFTER SELECTING SCHOOL - MANUAL TAP ONLY</button>
+
+<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:8px">
+<button type="button" class="green" style="flex:1" onclick="createCloudDatabase();return false;">🔧 CREATE CLOUD DB - SMALL DOC</button>
+<button type="button" style="flex:1;background:#facc15;color:#000;border:2px solid #000" onclick="syncDBEChunked();return false;">🏫 SYNC DBE 25K CHUNKED</button>
+<button type="button" style="flex:1" class="dark" onclick="restoreSchoolsFromCloud();return false;">🔄 RESTORE SCHOOLS FROM CLOUD</button>
+</div>
+
+<div class="badge" id="cloudStatus" style="margin-top:8px">☁️ V6.5 CLEAN - Local Mode Ready - Manual TAP only - No auto select - FIX 1MB</div>
+<div class="badge" id="restoreStatus" style="background:#e0f2fe">Restore: Ready - V6.5 CLEAN - No auto restore - TAP RESTORE button if empty</div>
+</div>
+</div>
+
+<div class="tabs noPrint">
+<button type="button" onclick="showTab('homeTab',this);return false;" class="active">🏠 HOME</button>
+<button type="button" onclick="showTab('ltsmTab',this);return false;" style="background:#0a1a4d;color:#facc15;border:3px solid #facc15;font-weight:900" id="ltsmMainBtn">📦 LTSM</button>
+<button type="button" onclick="showTab('adminTab',this);return false;">⚙️ MANAGE + DBE</button>
+</div>
+
+<div class="card" id="homeTab">
+<h2>🏠 HOME - V6.5 CLEAN - NO AUTO SELECT</h2>
+<div id="homeStats" class="badge">Loading...</div>
+<div class="badge" id="homeSchoolName">No school selected - TAP SCHOOL BUTTON - MANUAL TAP ONLY - V6.5 CLEAN</div>
+<div class="badge" id="userInfo">Not logged in - ADMIN: admin@makhanani.com / admin123 - V6.5 CLEAN</div>
+</div>
+
+<div class="card hidden" id="ltsmTab">
+<div class="ltsmHeader"><h2>📦 LTSM - V6.5 CLEAN - MANUAL TAP ONLY</h2></div>
+<div class="tabs ltsm noPrint" style="margin-bottom:8px">
+<button type="button" onclick="showLTSMTab('ltsmScanTab',this);return false;" class="active">📷 SCAN</button>
+<button type="button" onclick="showLTSMTab('ltsmBooksTab',this);return false;">📚 BOOKS</button>
+<button type="button" onclick="showLTSMTab('ltsmLearnersTab',this);return false;">👥 LEARNERS</button>
+<button type="button" onclick="showLTSMTab('ltsmIssueTab',this);return false;">📤 ISSUE</button>
+<button type="button" onclick="showLTSMTab('ltsmReturnTab',this);return false;">📥 RETURN</button>
+</div>
+<div id="ltsmScanTab"><div class="card" style="margin:0;border:3px solid #16a34a"><h2>📷 SCANNER</h2><div id="reader"></div><div style="display:flex;gap:4px"><button type="button" class="dark" onclick="startScanner();return false;">📷 START</button><button type="button" class="red" onclick="stopScanner();return false;">🔴 STOP</button></div><input id="scanResult" placeholder="Scanned"><div class="badge" id="scanLog">Ready</div></div></div>
+<div id="ltsmBooksTab" class="hidden"><div class="card" style="margin:0;border:3px solid #f59e0b"><h2>📚 BOOKS</h2><input id="bTitle" placeholder="Book Title"><div style="display:flex;gap:4px"><select id="bSubject" style="flex:1"></select><select id="bGrade" style="flex:0.6"><option value="">Grade</option><option>G4</option><option>G5</option><option>G6</option><option>G7</option><option>G8</option><option>G9</option><option>G10</option><option>G11</option><option>G12</option></select><input id="bQty" type="number" min="1" value="1" style="flex:0.5"></div><input id="bTeacher" placeholder="Teacher"><input id="bCodeManual" placeholder="Manual Code"><button type="button" class="green" id="addBookBtn" onclick="addBookWithDBECode();return false;">➕ ADD BOOK(S)</button><div id="bookList"></div></div></div>
+<div id="ltsmLearnersTab" class="hidden"><div class="card" style="margin:0;border:3px solid #16a34a"><h2>👥 LEARNERS</h2><div class="badge" id="nextLearnerIdPreview">Next Auto ID: L-0001</div><input id="lName" placeholder="Learner Full Name"><div style="display:flex;gap:4px"><input id="lGrade" placeholder="Grade e.g. G10" style="flex:1"><input id="lClass" placeholder="Class e.g. 10A" style="flex:1"></div><div style="display:flex;gap:4px"><input id="lId" placeholder="Learner ID - Leave empty = Auto" style="flex:1"><button type="button" class="yellow" style="flex:0.4;color:#000" onclick="autoGenerateLearnerId();return false;">🔢 AUTO</button></div><button type="button" class="green" id="addLearnerBtn" onclick="addLearner();return false;">➕ ADD LEARNER</button><div id="learnerList"></div></div></div>
+<div id="ltsmIssueTab" class="hidden"><div class="card" style="margin:0;border:3px solid #16a34a"><h2>📤 ISSUE</h2><input id="iLearner" placeholder="Learner ID"><input id="iBook" placeholder="Book Code"><button type="button" class="green" onclick="issueBook();return false;">📤 ISSUE BOOK</button><div class="badge" id="issueStatus">Ready</div><div id="issueList"></div></div></div>
+<div id="ltsmReturnTab" class="hidden"><div class="card" style="margin:0;border:3px solid #facc15"><h2>📥 RETURN</h2><input id="rBook" placeholder="Book Code"><button type="button" class="yellow" style="color:#000" onclick="returnBook();return false;">📥 RETURN BOOK</button><div class="badge" id="returnStatus">Ready</div><div id="returnList"></div></div></div>
+</div>
+
+<div class="card hidden" id="adminTab">
+<h2>⚙️ MANAGE + DBE - V6.5 CLEAN</h2>
+<div class="cloud">
+<button type="button" class="green" onclick="restoreSchoolsFromCloud();return false;">🔄 RESTORE 25K SCHOOLS FROM CLOUD - MANUAL TAP ONLY</button>
+<button type="button" class="yellow" style="color:#000" onclick="restoreDefaultSchools();return false;">🏫 RESTORE WORDSWORTH DEFAULT</button>
+<div class="badge" id="dbeUploadStatus">Ready - Current: <span id="dbeCurrentCount">0</span> schools</div>
+</div>
+<div id="adminStats" class="badge">Stats</div>
+<input id="searchSchool" placeholder="Search school" oninput="renderSchools()">
+<div id="schoolList"></div>
+</div>
+
 </div>
 <script>
 var firebaseConfig = {apiKey: "AIzaSyDMdnrjBRGElJWAqXST67zjZZ4bvEpTWXc",authDomain: "makhanani-digital.firebaseapp.com",projectId: "makhanani-digital",storageBucket: "makhanani-digital.firebasestorage.app",messagingSenderId: "1018865654685",appId: "1:1018865654685:web:b4974747ac8d56d975ad74",measurementId: "G-BZZ51G1Y3G"};
-var db=null,auth=null,cloudOK=false,autoSyncEnabled=true,lastSyncTime=null,autoSyncInterval=null,pendingSync=false;
-function setCloudStatus(msg,isWarn){var el=document.getElementById('cloudStatus'); if(!el) return; el.innerHTML=msg; el.style.background=isWarn?'#fef9c3':'#f0fdf4';}
-function setAutoSyncStatus(msg,isOn){var el=document.getElementById('autoSyncStatus'); if(el){ el.innerHTML=msg; } }
-function restoreDefaultSchools(){
-  schools=[{"emis":"700310854","name":"WORDSWORTH HIGH SCHOOL","town":"BENONI","province":"GAUTENG","pkg":"DEMO","status":"ACTIVE"},{"emis":"700310855","name":"EXAMPLE PRIMARY SCHOOL","town":"JOHANNESBURG","province":"GAUTENG","pkg":"DEMO","status":"ACTIVE"},{"emis":"700310856","name":"TEST HIGH SCHOOL","town":"PRETORIA","province":"GAUTENG","pkg":"DEMO","status":"ACTIVE"}];
-  save(); renderSchoolButtons(); renderSchools(); renderAll();
-  document.getElementById('restoreStatus').innerHTML='✅ RESTORED DEFAULT 3 SCHOOLS - WORDSWORTH HIGH SCHOOL 700310854 - V6.4 FIX EMPTY - TAP WORDSWORTH BUTTON NOW! - '+new Date().toLocaleTimeString();
-  document.getElementById('autoSyncStatus').innerHTML='✅ RESTORED DEFAULT - WORDSWORTH button now visible - TAP IT! - V6.4 FIX EMPTY SCHOOLS';
-  alert("✅ RESTORED DEFAULT 3 SCHOOLS!\n\nWORDSWORTH HIGH SCHOOL 700310854 now visible!\n\nTAP the green WORDSWORTH button above!\n\nThen shows ✅ SELECTED!\n\nV6.4 FIX YOUR SCREENSHOT - Dashed empty box fixed!");
-  return false;
-}
-function restoreSchoolsFromCloud(){
-  if(!db){ alert("❌ No db yet - Wait 3 sec for auto create - Or TAP RESTORE WORDSWORTH DEFAULT first! - V6.4"); restoreDefaultSchools(); return false; }
-  document.getElementById('restoreStatus').innerHTML='🔄 RESTORING 25K SCHOOLS FROM CLOUD makhanani_dbe_schools collection - Please wait... - Fetching... - V6.4 FIX EMPTY - '+new Date().toLocaleTimeString();
-  document.getElementById('autoSyncStatus').innerHTML='🔄 RESTORING FROM CLOUD - Fetching 25K schools from makhanani_dbe_schools - Please wait... - V6.4 FIX EMPTY SCHOOLS';
-  alert("🔄 RESTORE FROM CLOUD V6.4\n\nFetching 25,529 schools from makhanani_dbe_schools collection (where you synced)!\n\nPlease wait... Fetching first 500 schools local (rest stays in cloud, searchable via cloud search)...");
-  db.collection('makhanani_dbe_schools').limit(500).get().then(function(snapshot){
-    var added=0;
-    snapshot.forEach(function(doc){
-      var data=doc.data();
-      var exists=false;
-      for(var i=0;i<schools.length;i++){ if(schools[i].emis===data.emis){ exists=true; break; } }
-      if(!exists){ schools.push({emis:data.emis, name:data.name, town:data.town||'', province:data.province||'', pkg:data.pkg||'DEMO', status:data.status||'ACTIVE'}); added++; }
-    });
-    if(schools.length===0){
-      schools=[{"emis":"700310854","name":"WORDSWORTH HIGH SCHOOL","town":"BENONI","province":"GAUTENG","pkg":"DEMO","status":"ACTIVE"},{"emis":"700310855","name":"EXAMPLE PRIMARY SCHOOL","town":"JOHANNESBURG","province":"GAUTENG","pkg":"DEMO","status":"ACTIVE"}];
-      added=2;
-    }
-    save(); renderSchoolButtons(); renderSchools(); renderAll();
-    document.getElementById('restoreStatus').innerHTML='✅ RESTORED FROM CLOUD - Added: '+added+' schools from makhanani_dbe_schools - Total local now: '+schools.length+' - WORDSWORTH button visible - TAP IT NOW! - '+new Date().toLocaleTimeString()+' - V6.4 FIX EMPTY - Full 25K in cloud, 500 local for speed!';
-    document.getElementById('autoSyncStatus').innerHTML='✅ RESTORED FROM CLOUD - Total: '+schools.length+' local schools - WORDSWORTH button visible - TAP IT NOW! - Full 25K in cloud - V6.4 FIX EMPTY SCHOOLS';
-    alert("✅ RESTORED FROM CLOUD!\n\nAdded: "+added+" schools from cloud makhanani_dbe_schools\nTotal local now: "+schools.length+"\n\nWORDSWORTH button now visible!\n\nTAP the green WORDSWORTH HIGH SCHOOL button above!\n\nThen shows ✅ SELECTED!\n\nFull 25K still in cloud collection!\n\nV6.4 FIX YOUR SCREENSHOT - Dashed empty box fixed!");
-  }).catch(function(e){
-    document.getElementById('restoreStatus').innerHTML='❌ RESTORE FROM CLOUD FAILED: '+e.code+' - '+e.message+' - Will restore default WORDSWORTH instead - V6.4';
-    alert("❌ RESTORE FROM CLOUD FAILED: "+e.code+" - "+e.message+"\n\nWill restore default WORDSWORTH instead - TAP WORDSWORTH button!\n\nIf you have not synced 25K to cloud yet, first TAP CREATE CLOUD DB + SYNC DBE CHUNKED on device that has 25K local!");
-    restoreDefaultSchools();
-  });
-  return false;
-}
+var db=null,auth=null,cloudOK=false;
+function setCloudStatus(msg){var el=document.getElementById('cloudStatus'); if(el) el.innerHTML=msg;}
+
 try{
   firebase.initializeApp(firebaseConfig);
   db=firebase.firestore();
   try{ auth=firebase.auth(); }catch(e){ auth=null; }
-  setCloudStatus("☁️ V6.4 FIX EMPTY SCHOOLS - Checking local schools - Your screenshot shows 0 local = No buttons - Will auto restore from cloud in 2 sec - Or TAP RESTORE button!", true);
-  setTimeout(function(){
-    var localSchools=JSON.parse(localStorage.getItem('mk_schools')||'[]');
-    if(localSchools.length===0){
-      document.getElementById('restoreStatus').innerHTML='⚠️ LOCAL SCHOOLS = 0! - Your screenshot shows dashed empty box = No buttons! - Auto restoring from cloud makhanani_dbe_schools in 2 sec... - Or TAP RESTORE button! - V6.4 FIX EMPTY - '+new Date().toLocaleTimeString();
-      if(db){ restoreSchoolsFromCloud(); } else { restoreDefaultSchools(); }
-    } else {
-      document.getElementById('restoreStatus').innerHTML='✅ LOCAL SCHOOLS: '+localSchools.length+' - Buttons should be visible - If not, TAP RESTORE button - V6.4 - '+new Date().toLocaleTimeString();
-    }
-  }, 2000);
-}catch(e){ setCloudStatus("☁️ ❌ Init Fail V6.4: "+e.message, true); }
-var schools=JSON.parse(localStorage.getItem('mk_schools')||'[{"emis":"700310854","name":"WORDSWORTH HIGH SCHOOL","town":"BENONI","province":"GAUTENG","pkg":"DEMO","status":"ACTIVE"},{"emis":"700310855","name":"EXAMPLE PRIMARY SCHOOL","town":"JOHANNESBURG","province":"GAUTENG","pkg":"DEMO","status":"ACTIVE"},{"emis":"700310856","name":"TEST HIGH SCHOOL","town":"PRETORIA","province":"GAUTENG","pkg":"DEMO","status":"ACTIVE"}]');var learners=JSON.parse(localStorage.getItem('mk_learners')||'[]');var books=JSON.parse(localStorage.getItem('mk_books')||'[]');var issues=JSON.parse(localStorage.getItem('mk_issues')||'[]');var curSchool='',curSchoolName='',curRank='',curUserEmail='',bookCounter=parseInt(localStorage.getItem('mk_bookCounter')||'1'),learnerCounter=parseInt(localStorage.getItem('mk_learnerCounter')||'1');var html5QrcodeScanner=null;var staff=JSON.parse(localStorage.getItem('mk_staff')||'[]');
+  setCloudStatus("☁️ V6.5 CLEAN - NO AUTO SELECT - Local Mode Ready - Manual TAP only - FIX 1MB - Project: makhanani-digital - "+new Date().toLocaleTimeString());
+}catch(e){ setCloudStatus("☁️ ❌ Init Fail V6.5 CLEAN: "+e.message); }
+
+var schools=JSON.parse(localStorage.getItem('mk_schools')||'[{"emis":"700310854","name":"WORDSWORTH HIGH SCHOOL","town":"BENONI","province":"GAUTENG","pkg":"DEMO","status":"ACTIVE"},{"emis":"700310855","name":"EXAMPLE PRIMARY SCHOOL","town":"JOHANNESBURG","province":"GAUTENG","pkg":"DEMO","status":"ACTIVE"},{"emis":"700310856","name":"TEST HIGH SCHOOL","town":"PRETORIA","province":"GAUTENG","pkg":"DEMO","status":"ACTIVE"}]');
+var learners=JSON.parse(localStorage.getItem('mk_learners')||'[]');
+var books=JSON.parse(localStorage.getItem('mk_books')||'[]');
+var issues=JSON.parse(localStorage.getItem('mk_issues')||'[]');
+var curSchool='',curSchoolName='',curRank='',curUserEmail='',bookCounter=parseInt(localStorage.getItem('mk_bookCounter')||'1'),learnerCounter=parseInt(localStorage.getItem('mk_learnerCounter')||'1');
+var html5QrcodeScanner=null;
+
 function getSchoolNameByEmis(emis){for(var i=0;i<schools.length;i++){if(schools[i].emis===emis)return schools[i].name;}return emis;}
-function getSchoolTownProvince(emis){for(var i=0;i<schools.length;i++){if(schools[i].emis===emis)return{town:schools[i].town||'',province:schools[i].province||''};}return{town:'',province:''};}
 function onRankChange(){var r=document.getElementById('rankSel').value;var email=document.getElementById('fbEmail'),pass=document.getElementById('fbPass'),lid=document.getElementById('learnerIdInput');if(r==='PARENT'||r==='LEARNER'){email.classList.add('hidden');pass.classList.add('hidden');lid.classList.remove('hidden');}else{email.classList.remove('hidden');pass.classList.remove('hidden');lid.classList.add('hidden');}}
+
+// CLEAN - NO AUTO SELECT - MANUAL TAP ONLY
 function renderSchoolButtons(){
   var btnContainer=document.getElementById('schoolQuickBtns');
   var dropdown=document.getElementById('schoolDropdown');
   if(!btnContainer) return;
   var btnHtml='';
   if(schools.length===0){
-    btnHtml='<button type="button" class="schoolBtn schoolBtnQuick" onclick="selectDBESchool(\'700310854\',\'WORDSWORTH HIGH SCHOOL\');return false;" style="background:#16a34a;color:#fff;border:3px solid #fff;box-shadow:0 0 12px #16a34a">🏫 WORDSWORTH HIGH SCHOOL<br><span style="font-size:10px">700310854 - BENONI - ALWAYS VISIBLE!</span><br><span style="font-size:9px;background:#facc15;color:#000;padding:4px 10px;border-radius:20px">👆 TAP THIS BUTTON NOW! - FIX YOUR SCREENSHOT!</span></button>';
-    btnHtml+='<button type="button" class="schoolBtn" style="background:#facc15;color:#000;border:3px solid #000" onclick="restoreSchoolsFromCloud();return false;">🔄 RESTORE 25K FROM CLOUD<br><span style="font-size:8px">Your 25,529 synced schools</span></button>';
+    btnHtml='<button type="button" class="schoolBtn" style="background:#fee2e2;color:#dc2626;border:3px dashed #dc2626" onclick="restoreDefaultSchools();return false;">❌ No schools local - TAP TO RESTORE WORDSWORTH<br><span style="font-size:10px">Manual TAP only - V6.5 CLEAN</span></button>';
   } else {
     for(var i=0;i<Math.min(schools.length,8);i++){
       var isSelected = curSchool===schools[i].emis ? 'selected' : 'schoolBtnQuick';
       var shortName = schools[i].name.length>22 ? schools[i].name.substring(0,22)+'...' : schools[i].name;
-      btnHtml+='<button type="button" class="schoolBtn '+isSelected+'" onclick="selectDBESchool(\''+schools[i].emis+'\',\''+schools[i].name.replace(/\'/g,"\\'")+'\');return false;" style="background:'+(isSelected==='selected'?'#16a34a':'#16a34a')+';color:#fff;border:3px solid '+(isSelected==='selected'?'#fff':'#0a1a4d')+';">🏫 '+shortName+'<br><span style="font-size:9px">'+schools[i].emis+'</span><br><span style="font-size:8px;background:#facc15;color:#000;padding:2px 6px;border-radius:10px">TAP TO SELECT</span></button>';
+      btnHtml+='<button type="button" class="schoolBtn '+isSelected+'" onclick="selectDBESchool(\''+schools[i].emis+'\',\''+schools[i].name.replace(/\'/g,"\\'")+'\');return false;">🏫 '+shortName+'<br><span style="font-size:9px">'+schools[i].emis+'</span><br><span style="font-size:8px;background:#facc15;color:#000;padding:2px 6px;border-radius:10px">TAP TO SELECT - MANUAL</span></button>';
     }
   }
   btnContainer.innerHTML=btnHtml;
   if(dropdown){
-    var currentVal=dropdown.value;
-    var dropdownHtml='<option value="">-- TAP TO SELECT SCHOOL FROM LIST -- ('+schools.length+' schools) - V6.4 FIX EMPTY</option>';
-    if(schools.length===0){ dropdownHtml+='<option value="700310854">700310854 - WORDSWORTH HIGH SCHOOL - BENONI - ALWAYS VISIBLE - TAP THIS!</option>'; }
+    var dropdownHtml='<option value="">-- TAP TO SELECT SCHOOL FROM LIST -- ('+schools.length+' schools) - MANUAL TAP ONLY</option>';
+    if(schools.length===0){ dropdownHtml+='<option value="700310854">700310854 - WORDSWORTH HIGH SCHOOL - BENONI - TAP TO RESTORE</option>'; }
     for(var j=0;j<Math.min(schools.length,500);j++){
       var selected = curSchool===schools[j].emis ? 'selected' : '';
-      dropdownHtml+='<option value="'+schools[j].emis+'" '+selected+'>'+schools[j].emis+' - '+schools[j].name+' - '+(schools[j].town||'')+'</option>';
+      dropdownHtml+='<option value="'+schools[j].emis+'" '+selected+'>'+schools[j].emis+' - '+schools[j].name+'</option>';
     }
     dropdown.innerHTML=dropdownHtml;
-    if(currentVal) dropdown.value=currentVal;
   }
 }
-function selectSchoolFromDropdown(){ var dropdown=document.getElementById('schoolDropdown'); var emis=dropdown.value; if(!emis){ return; } var name=getSchoolNameByEmis(emis); selectDBESchool(emis,name); }
+
+function selectSchoolFromDropdown(){
+  var dropdown=document.getElementById('schoolDropdown');
+  var emis=dropdown.value;
+  if(!emis) return;
+  var name=getSchoolNameByEmis(emis);
+  selectDBESchool(emis,name);
+}
+
+// CLEAN - NO AUTO SELECT - Only shows badges, user must TAP badge
 function searchDBESchools(){
   var q=document.getElementById('schoolSearch').value.toLowerCase().trim();
   var box=document.getElementById('schoolSearchResults');
-  var useBtn=document.getElementById('useTypedBtn');
-  if(q.length<2){box.innerHTML='<div style="font-size:11px;padding:8px;background:#fff;border-radius:8px">Type 2+ letters - '+schools.length+' schools local - V6.4 FIX EMPTY - If 0 schools, TAP RESTORE FROM CLOUD button above! - WORDSWORTH button ALWAYS visible above!</div>'; if(useBtn) useBtn.classList.add('hidden'); return;}
-  var h='',count=0; var exactMatch=null;
+  if(q.length<2){
+    box.innerHTML='<div style="font-size:11px;padding:8px;background:#fff;border-radius:8px">Type 2+ letters to search - '+schools.length+' schools local - V6.5 CLEAN - NO AUTO SELECT - Type WORDSWORTH, then TAP badge below - Manual TAP only!</div>';
+    return;
+  }
+  var h='',count=0;
   for(var i=0;i<schools.length&&count<20;i++){
     if(schools[i].name.toLowerCase().indexOf(q)!==-1||schools[i].emis.indexOf(q)!==-1){
       count++;
-      if(schools[i].name.toLowerCase().indexOf(q)===0) { if(!exactMatch) exactMatch=schools[i]; }
-      h+='<div class="badge" style="cursor:pointer;background:#fff;border:3px solid #0a1a4d;padding:12px" onclick="selectDBESchool(\''+schools[i].emis+'\',\''+schools[i].name.replace(/\'/g,"\\'")+'\');return false;"><b>🏫 TAP TO SELECT: '+schools[i].emis+' - '+schools[i].name+'</b><br><span style="font-size:10px">'+(schools[i].town||'')+'</span><br><span style="background:#16a34a;color:#fff;padding:3px 8px;border-radius:10px;font-size:9px">👆 TAP THIS BADGE TO SELECT</span></div>';
+      h+='<div class="badge" style="cursor:pointer;background:#fff;border:3px solid #0a1a4d;padding:12px" onclick="selectDBESchool(\''+schools[i].emis+'\',\''+schools[i].name.replace(/\'/g,"\\'")+'\');return false;"><b>🏫 TAP TO SELECT: '+schools[i].emis+' - '+schools[i].name+'</b><br><span style="font-size:10px">'+(schools[i].town||'')+'</span><br><span style="background:#16a34a;color:#fff;padding:3px 8px;border-radius:10px;font-size:9px">👆 TAP THIS BADGE TO SELECT - MANUAL</span></div>';
     }
   }
-  box.innerHTML=h||'<div class="badge" style="background:#fee2e2;border:2px solid #dc2626">No school found for "'+q+'" - You have '+schools.length+' schools local - If 0, TAP RESTORE FROM CLOUD button! - Try WORDSWORTH - V6.4 FIX EMPTY</div>';
-  if(useBtn){ if(count>0){ useBtn.classList.remove('hidden'); useBtn.innerHTML='✅ USE TYPED: "'+q.toUpperCase()+'" - TAP TO CONFIRM - Found '+count+' - Top: '+(exactMatch?exactMatch.name:'' )+' - TAP HERE!'; } else { useBtn.classList.add('hidden'); } }
-  if(exactMatch && q.length>4){ setTimeout(function(){ if(document.getElementById('schoolSearch').value.toLowerCase().trim()===q){ selectDBESchool(exactMatch.emis, exactMatch.name); } }, 1000); }
+  box.innerHTML=h||'<div class="badge" style="background:#fee2e2">No school found for "'+q+'" - Try WORDSWORTH - V6.5 CLEAN - NO AUTO SELECT</div>';
+  // NO AUTO SELECT - User must TAP badge manually
 }
-function useTypedSchool(){
-  var q=document.getElementById('schoolSearch').value.trim();
-  if(!q){ alert("Type school name first! - V6.4 FIX EMPTY - Type WORDSWORTH then TAP this"); return; }
-  var qLower=q.toLowerCase();
-  var found=null;
-  for(var i=0;i<schools.length;i++){ if(schools[i].name.toLowerCase().indexOf(qLower)!==-1 || schools[i].emis===q){ found=schools[i]; break; } }
-  if(found){ selectDBESchool(found.emis, found.name); alert("✅ SELECTED FROM TYPED: "+found.emis+" - "+found.name+"\nYou typed: "+q+"\nV6.4 FIX EMPTY - Now ✅ SELECTED! TAP LOGIN NOW!"); } else { if(schools.length===0){ selectDBESchool('700310854','WORDSWORTH HIGH SCHOOL'); alert("✅ No schools local - Auto selected WORDSWORTH HIGH SCHOOL 700310854 for typed: "+q+"\nV6.4 FIX EMPTY - Now ✅ SELECTED! TAP LOGIN NOW!"); } else { alert("❌ No school found for typed: "+q+"\nYou have "+schools.length+" schools local\nTry WORDSWORTH or TAP RESTORE FROM CLOUD!\nV6.4 FIX EMPTY"); } }
-  return false;
-}
+
+// CLEAN - NO AUTO SELECT - Manual TAP only
 function selectDBESchool(emis,name){
   document.getElementById('selectedSchool').value=emis;
-  document.getElementById('selectedSchoolDisplay').innerHTML='✅ SELECTED: <b>🏫 '+emis+' - '+name+'</b> - V6.4 FIX EMPTY SCHOOLS - TAP LOGIN NOW! - ✅ SELECTED! READY TO LOGIN! - '+new Date().toLocaleTimeString();
+  document.getElementById('selectedSchoolDisplay').innerHTML='✅ SELECTED: <b>🏫 '+emis+' - '+name+'</b> - V6.5 CLEAN - MANUAL TAP - TAP LOGIN NOW! - '+new Date().toLocaleTimeString();
   document.getElementById('selectedSchoolDisplay').style.background='#dcfce7';
   document.getElementById('selectedSchoolDisplay').style.borderColor='#16a34a';
   curSchool=emis; curSchoolName=name;
-  document.getElementById('schoolSearchResults').innerHTML='<div class="badge" style="background:#dcfce7;border:3px solid #16a34a;padding:12px;text-align:center">✅ SELECTED: '+emis+' - '+name+' - V6.4 FIX EMPTY - Ready to LOGIN! - ✅ SELECTED! TAP LOGIN BUTTON BELOW NOW!<br><span style="background:#16a34a;color:#fff;padding:4px 10px;border-radius:20px">✅ SELECTED - SCROLL DOWN AND TAP LOGIN!</span></div>';
+  document.getElementById('schoolSearchResults').innerHTML='<div class="badge" style="background:#dcfce7;border:3px solid #16a34a;padding:12px;text-align:center">✅ SELECTED: '+emis+' - '+name+' - V6.5 CLEAN - MANUAL TAP - Ready to LOGIN!<br><span style="background:#16a34a;color:#fff;padding:4px 10px;border-radius:20px">✅ SELECTED - SCROLL DOWN AND TAP LOGIN!</span></div>';
   document.getElementById('schoolSearch').value=name;
-  var useBtn=document.getElementById('useTypedBtn'); if(useBtn) useBtn.classList.add('hidden');
-  document.getElementById('homeSchoolName').innerHTML='✅ Current DBE School: '+emis+' - '+name+' - V6.4 FIX EMPTY - ✅ SELECTED! - TAP LOGIN NOW!';
-  document.getElementById('autoSyncStatus').innerHTML='✅ SELECTED: '+emis+' - '+name+' - V6.4 FIX EMPTY - ✅ SELECTED! TAP LOGIN NOW! - Last: '+new Date().toLocaleTimeString();
+  document.getElementById('homeSchoolName').innerHTML='✅ Current: '+emis+' - '+name+' - V6.5 CLEAN - MANUAL TAP - ✅ SELECTED!';
+  document.getElementById('userInfo').innerHTML='✅ Selected: '+emis+' - '+name+' | ADMIN | V6.5 CLEAN - MANUAL TAP - ✅ SELECTED!';
   renderSchoolButtons(); renderAll();
-  setTimeout(function(){ var loginBtn=document.querySelector('.loginBox button.dark'); if(loginBtn){ loginBtn.scrollIntoView({behavior:'smooth',block:'center'}); loginBtn.style.background='#16a34a'; loginBtn.style.border='4px solid #fff'; loginBtn.style.boxShadow='0 0 20px #16a34a'; loginBtn.innerHTML='🔐 LOGIN - ✅ SELECTED: '+name.substring(0,20)+' - TAP NOW! - V6.4 FIX EMPTY'; } },400);
 }
-function firebaseLogin(){
-  try{
-    var rank=document.getElementById('rankSel').value;
-    var school=document.getElementById('selectedSchool').value;
-    if(!rank){alert('Select Rank! - Select ADMIN');return;}
-    if(!school&&rank!=='ADMIN'){alert('Select DBE School! - V6.4 FIX EMPTY SCHOOLS - YOUR SCREENSHOT SHOWS NO BUTTONS BECAUSE SCHOOLS LOCAL = 0! - You cleared cache OR new device! - FIX: 1. TAP WORDSWORTH button that is ALWAYS visible in green box above! 2. OR TAP 🔄 RESTORE SCHOOLS FROM CLOUD button in header - Restores 25K schools from makhanani_dbe_schools cloud where you synced! 3. OR TAP 🏫 RESTORE WORDSWORTH DEFAULT button! - Then TAP WORDSWORTH button! - Then shows ✅ SELECTED!');return;}
-    if(school){ curSchool=school; curSchoolName=getSchoolNameByEmis(school); } else if(!school && rank==='ADMIN'){ curSchool=schools[0] ? schools[0].emis : '700310854'; curSchoolName=schools[0] ? schools[0].name : 'WORDSWORTH HIGH SCHOOL'; }
-    curRank=rank;
-    var email=document.getElementById('fbEmail').value.trim();
-    var pass=document.getElementById('fbPass').value.trim();
-    if(email==='admin@makhanani.com'&&pass==='admin123'){
-      curRank='ADMIN';curUserEmail=email;
-      document.getElementById('loginCard').classList.add('hidden');
-      document.getElementById('welcomeText').innerHTML='WELCOME ADMIN! | V6.4 FIX EMPTY SCHOOLS - ✅ SELECTED: '+(curSchoolName||curSchool)+' - TAP 📦 LTSM BUTTON NOW! - FIXED YOUR SCREENSHOT!';
-      applyPermissions();renderAll();
-      setTimeout(function(){ showTab('ltsmTab',document.getElementById('ltsmMainBtn')); showLTSMTab('ltsmScanTab',document.querySelector('.tabs.ltsm button')); },800);
-      return;
-    }
-    curRank='ADMIN';curUserEmail=email||'admin@makhanani.com';if(!curSchool){ curSchool='700310854'; curSchoolName='WORDSWORTH HIGH SCHOOL'; }
-    document.getElementById('loginCard').classList.add('hidden');
-    document.getElementById('welcomeText').innerHTML='WELCOME ADMIN! | V6.4 FIX EMPTY SCHOOLS - ✅ SELECTED!';
-    applyPermissions();renderAll();setTimeout(function(){ showTab('ltsmTab',document.getElementById('ltsmMainBtn')); },800);
-  }catch(err){ alert("❌ JS ERROR: "+err.message); }
+
+function restoreDefaultSchools(){
+  schools=[{"emis":"700310854","name":"WORDSWORTH HIGH SCHOOL","town":"BENONI","province":"GAUTENG","pkg":"DEMO","status":"ACTIVE"},{"emis":"700310855","name":"EXAMPLE PRIMARY SCHOOL","town":"JOHANNESBURG","province":"GAUTENG","pkg":"DEMO","status":"ACTIVE"},{"emis":"700310856","name":"TEST HIGH SCHOOL","town":"PRETORIA","province":"GAUTENG","pkg":"DEMO","status":"ACTIVE"}];
+  save(); renderSchoolButtons(); renderSchools(); renderAll();
+  document.getElementById('restoreStatus').innerHTML='✅ RESTORED DEFAULT 3 SCHOOLS - WORDSWORTH 700310854 - V6.5 CLEAN - MANUAL TAP - TAP WORDSWORTH BUTTON NOW!';
+  alert("✅ RESTORED DEFAULT 3 SCHOOLS! TAP WORDSWORTH BUTTON NOW! - V6.5 CLEAN - NO AUTO SELECT");
   return false;
 }
-function firebaseLogout(){ location.reload(); return false;}
-function startScanner(){document.getElementById('scanLog').innerHTML='📷 Starting... V6.4';html5QrcodeScanner=new Html5Qrcode("reader");html5QrcodeScanner.start({facingMode:"environment"},{fps:10,qrbox:{width:250,height:150}},function(decoded){document.getElementById('scanResult').value=decoded;document.getElementById('scanLog').innerHTML='✅ Scanned: '+decoded;},function(err){});}
-function stopScanner(){if(html5QrcodeScanner){html5QrcodeScanner.stop().then(function(){document.getElementById('scanLog').innerHTML='Scanner stopped';});}}
+
+function restoreSchoolsFromCloud(){
+  if(!db){ alert("❌ No db yet - TAP RESTORE WORDSWORTH DEFAULT first! - V6.5 CLEAN"); restoreDefaultSchools(); return false; }
+  document.getElementById('restoreStatus').innerHTML='🔄 RESTORING 25K SCHOOLS FROM CLOUD makhanani_dbe_schools - Fetching first 500 - MANUAL TAP ONLY - V6.5 CLEAN - Please wait...';
+  db.collection('makhanani_dbe_schools').limit(500).get().then(function(snapshot){
+    var added=0;
+    snapshot.forEach(function(doc){
+      var data=doc.data();
+      var exists=false;
+      for(var i=0;i<schools.length;i++){ if(schools[i].emis===data.emis){ exists=true; break; } }
+      if(!exists){ schools.push({emis:data.emis, name:data.name, town:data.town||'', province:data.province||'', pkg:'DEMO', status:'ACTIVE'}); added++; }
+    });
+    if(schools.length===0){ restoreDefaultSchools(); return; }
+    save(); renderSchoolButtons(); renderSchools(); renderAll();
+    document.getElementById('restoreStatus').innerHTML='✅ RESTORED FROM CLOUD - Added: '+added+' - Total: '+schools.length+' - TAP WORDSWORTH BUTTON NOW! - V6.5 CLEAN - MANUAL TAP ONLY';
+    alert("✅ RESTORED FROM CLOUD! Added: "+added+" Total: "+schools.length+" - TAP WORDSWORTH BUTTON NOW! - V6.5 CLEAN - NO AUTO SELECT");
+  }).catch(function(e){
+    document.getElementById('restoreStatus').innerHTML='❌ RESTORE FAILED: '+e.message+' - Will restore default WORDSWORTH - V6.5 CLEAN';
+    restoreDefaultSchools();
+  });
+  return false;
+}
+
+function firebaseLogin(){
+  var rank=document.getElementById('rankSel').value;
+  var school=document.getElementById('selectedSchool').value;
+  if(!rank){alert('Select Rank!');return;}
+  if(!school&&rank!=='ADMIN'){alert('Select DBE School! - V6.5 CLEAN - MANUAL TAP ONLY - TAP A GREEN BUTTON 🏫 WORDSWORTH HIGH SCHOOL above OR TAP dropdown -- TAP TO SELECT SCHOOL FROM LIST -- and select school inside OR type WORDSWORTH and TAP result badge that appears below - NO AUTO SELECT - You must TAP!');return;}
+  if(school){ curSchool=school; curSchoolName=getSchoolNameByEmis(school); } else { curSchool='700310854'; curSchoolName='WORDSWORTH HIGH SCHOOL'; }
+  curRank=rank; curUserEmail=document.getElementById('fbEmail').value.trim()||'admin@makhanani.com';
+  document.getElementById('loginCard').classList.add('hidden');
+  document.getElementById('homeSchoolName').innerHTML='✅ Current: '+curSchool+' - '+curSchoolName+' - V6.5 CLEAN - ✅ SELECTED!';
+  document.getElementById('userInfo').innerHTML='✅ ADMIN | DBE: '+curSchool+' ('+curSchoolName+') | V6.5 CLEAN - MANUAL TAP - ✅ SELECTED!';
+  renderAll();
+  return false;
+}
+
+function createCloudDatabase(){
+  if(!db){ alert("❌ db NULL - V6.5 CLEAN"); return false; }
+  var learnersLocal=JSON.parse(localStorage.getItem('mk_learners')||'[]');
+  var booksLocal=JSON.parse(localStorage.getItem('mk_books')||'[]');
+  var issuesLocal=JSON.parse(localStorage.getItem('mk_issues')||'[]');
+  var schoolsCount=schools.length;
+  db.collection('makhanani').doc('main').set({
+    schoolsCount: schoolsCount,
+    schoolsNote: "V6.5 CLEAN - NO AUTO SELECT - Schools in makhanani_dbe_schools - FIX 1MB",
+    learners: learnersLocal, books: booksLocal, issues: issuesLocal,
+    bookCounter: bookCounter, learnerCounter: learnerCounter,
+    staff: [], updated: new Date().toISOString(),
+    appVersion: "V6.5 CLEAN - NO AUTO SELECT - "+new Date().toISOString(),
+    project: "makhanani-digital"
+  }).then(function(){
+    cloudOK=true;
+    setCloudStatus("☁️ ✅ CONNECTED - V6.5 CLEAN - SMALL DOC CREATED - ✅ CONNECTED! - MANUAL TAP ONLY - FIXED 1MB - "+new Date().toLocaleTimeString());
+    alert("✅ CREATE SUCCESS V6.5 CLEAN - SMALL DOC - SchoolsCount: "+schoolsCount+" - NO AUTO SELECT - MANUAL TAP ONLY - FIXED 1MB!");
+  }).catch(function(e){ setCloudStatus("☁️ ❌ CREATE FAILED: "+e.code+" - "+e.message); alert("❌ CREATE FAILED: "+e.message); });
+  return false;
+}
+
+function syncDBEChunked(){
+  var totalSchools = schools.length;
+  if(totalSchools===0){ alert("No schools local! TAP RESTORE WORDSWORTH DEFAULT first! - V6.5 CLEAN"); return false; }
+  if(!db){ alert("❌ No db - Click CREATE CLOUD DB first! - V6.5 CLEAN"); return false; }
+  if(!confirm("Upload "+totalSchools+" schools to makhanani_dbe_schools in batches of 400? Batches: "+Math.ceil(totalSchools/400)+" - V6.5 CLEAN - NO AUTO SELECT")){ return false; }
+  setCloudStatus("🏫 SYNCING DBE 25K CHUNKED - Total: "+totalSchools+" - Please wait... - V6.5 CLEAN - MANUAL TAP ONLY");
+  var batchSize=400; var totalBatches=Math.ceil(totalSchools/batchSize); var uploaded=0;
+  function uploadBatch(batchIndex){
+    if(batchIndex>=totalBatches){
+      setCloudStatus("☁️ ✅ CONNECTED + DBE SYNCED CHUNKED - Total: "+totalSchools+" - Uploaded: "+uploaded+" - V6.5 CLEAN - NO AUTO SELECT - "+new Date().toLocaleTimeString());
+      alert("✅ SYNC DBE CHUNKED COMPLETE! Total: "+totalSchools+" Uploaded: "+uploaded+" - V6.5 CLEAN - NO AUTO SELECT - MANUAL TAP ONLY");
+      return;
+    }
+    var batch=db.batch(); var start=batchIndex*batchSize; var end=Math.min(start+batchSize, totalSchools); var batchCount=0;
+    for(var i=start;i<end;i++){ var sch=schools[i]; if(!sch || !sch.emis) continue; var docRef=db.collection('makhanani_dbe_schools').doc(sch.emis); batch.set(docRef, {emis: sch.emis, name: sch.name, town: sch.town||'', province: sch.province||'', pkg: sch.pkg||'DEMO', status: sch.status||'ACTIVE', updated: new Date().toISOString()}); batchCount++; }
+    setCloudStatus("🏫 SYNCING - Batch "+(batchIndex+1)+"/"+totalBatches+" - Schools "+(start+1)+" to "+end+" of "+totalSchools+" - V6.5 CLEAN");
+    batch.commit().then(function(){ uploaded+=batchCount; setTimeout(function(){ uploadBatch(batchIndex+1); }, 300); }).catch(function(e){ setTimeout(function(){ uploadBatch(batchIndex+1); }, 500); });
+  }
+  uploadBatch(0);
+  return false;
+}
+
 function save(){localStorage.setItem('mk_schools',JSON.stringify(schools));localStorage.setItem('mk_learners',JSON.stringify(learners));localStorage.setItem('mk_books',JSON.stringify(books));localStorage.setItem('mk_issues',JSON.stringify(issues));localStorage.setItem('mk_bookCounter',bookCounter.toString());localStorage.setItem('mk_learnerCounter',learnerCounter.toString());}
-function showTab(id,btn){ var t=['homeTab','ltsmTab','adminTab']; for(var i=0;i<t.length;i++){ var el=document.getElementById(t[i]); if(el) el.classList.add('hidden'); } var target=document.getElementById(id); if(target){ target.classList.remove('hidden'); } if(btn){ btn.classList.add('active'); } if(id==='ltsmTab'){ showLTSMTab('ltsmScanTab', document.querySelector('.tabs.ltsm button')); } return false; }
-function showLTSMTab(id,btn){ var tabs=['ltsmScanTab','ltsmBooksTab','ltsmLearnersTab','ltsmIssueTab','ltsmReturnTab']; for(var i=0;i<tabs.length;i++){ var el=document.getElementById(tabs[i]); if(el) el.classList.add('hidden'); } var target=document.getElementById(id); if(target){ target.classList.remove('hidden'); } var bs=document.querySelectorAll('.tabs.ltsm button'); for(var j=0;j<bs.length;j++)bs[j].classList.remove('active'); if(btn){ btn.classList.add('active'); } renderAll(); return false; }
-function canAddRemoveBooks(){return true;} function canAddLearners(){return true;} function canRemoveLearners(){return true;} function canRemoveBooks(){return true;}
-function applyPermissions(){}
-function removeBook(code){for(var i=0;i<books.length;i++){if(books[i].code===code){books.splice(i,1);save();renderAll();break;}}}
-function removeLearner(id){for(var i=0;i<learners.length;i++){if(learners[i].id===id){learners.splice(i,1);save();renderAll();break;}}}
-function renderSchools(){var q=(document.getElementById('searchSchool')?document.getElementById('searchSchool').value:'').toLowerCase();var h='';for(var i=0;i<schools.length&&h.split('badge').length<22;i++){if(q&&schools[i].name.toLowerCase().indexOf(q)===-1&&schools[i].emis.indexOf(q)===-1)continue;h+='<div class="badge" style="cursor:pointer" onclick="selectDBESchool(\''+schools[i].emis+'\',\''+schools[i].name.replace(/\'/g,"\\'")+'\');return false;"><b>🏫 TAP TO SELECT: '+schools[i].emis+' - '+schools[i].name+'</b></div>';}var sl=document.getElementById('schoolList'); if(sl) sl.innerHTML=h||'No DBE - TAP RESTORE BUTTON! - V6.4 FIX EMPTY'; var ad=document.getElementById('adminStats'); if(ad) ad.innerHTML='DBE: '+schools.length+' | Books: '+books.length+' | Learners: '+learners.length+' | V6.4 FIX EMPTY'; var hs=document.getElementById('homeStats'); if(hs) hs.innerHTML='DBE: '+schools.length+' | Books: '+books.length+' | Learners: '+learners.length+' | V6.4 FIX EMPTY - TAP WORDSWORTH BUTTON!'; var cnt=document.getElementById('dbeCurrentCount'); if(cnt) cnt.innerHTML=schools.length;}
-function addBookWithDBECode(){var title=document.getElementById('bTitle').value.trim();var subject=document.getElementById('bSubject').value;var grade=document.getElementById('bGrade').value;var teacher=document.getElementById('bTeacher').value.trim();var qty=parseInt(document.getElementById('bQty').value||'1');var manual=document.getElementById('bCodeManual').value.trim().toUpperCase();if(!title||!subject||!grade){alert('Title + Subject + Grade required!');return;}if(!curSchool){alert('Select DBE School first! - TAP WORDSWORTH BUTTON!');return;}if(qty<1)qty=1;var addedCodes=[];if(manual){books.push({title:title,subject:subject,grade:grade,code:manual,school:curSchool,emis:curSchool,status:'AVAILABLE',teacher:teacher});addedCodes.push(manual);}else{for(var i=0;i<qty;i++){var num=String(bookCounter).padStart(3,'0');var unique=subject+'-'+grade+'-'+num;books.push({title:title,subject:subject,grade:grade,code:unique,school:curSchool,emis:curSchool,status:'AVAILABLE',teacher:teacher});addedCodes.push(unique);bookCounter++;}}save();renderAll();alert('✅ BOOKS ADDED! Qty: '+addedCodes.length+' First: '+addedCodes[0]+' - V6.4 AUTO SYNC ON');document.getElementById('bTitle').value='';document.getElementById('bQty').value='1';document.getElementById('bCodeManual').value='';}
-function autoGenerateLearnerId(){var nextId='L-'+String(learnerCounter).padStart(4,'0');document.getElementById('lId').value=nextId;document.getElementById('nextLearnerIdPreview').innerHTML='🔢 Generated: <b>'+nextId+'</b> | Next: L-'+String(learnerCounter+1).padStart(4,'0');}
-function addLearner(){var n=document.getElementById('lName').value.trim();var g=document.getElementById('lGrade').value.trim().toUpperCase();var cls=document.getElementById('lClass').value.trim().toUpperCase();var id=document.getElementById('lId').value.trim().toUpperCase();if(!n){alert('Name required!');return;}if(!curSchool){alert('Select DBE School first! - TAP WORDSWORTH BUTTON!');return;}if(!id){id='L-'+String(learnerCounter).padStart(4,'0');}learners.push({name:n,grade:g,class:cls||g,id:id,school:curSchool,schoolName:curSchoolName});learnerCounter++;save();renderAll();alert('✅ Learner Added! ID: '+id+' Name: '+n+' - V6.4');document.getElementById('lName').value='';document.getElementById('lGrade').value='';document.getElementById('lClass').value='';document.getElementById('lId').value='';}
-function onLearnerTyping(){}
-function onBookTyping(){}
-function onReturnBookTyping(){}
-function issueBook(){var l=document.getElementById('iLearner').value.trim();var b=document.getElementById('iBook').value.trim().toUpperCase();if(!l||!b){alert('TYPE Learner ID + Book Number!');return;}issues.push({learner:l,book:b,status:'BORROWED',date:new Date().toLocaleDateString(),school:curSchool,issuedBy:curRank+' - '+curUserEmail});save();renderAll();alert('✅ Issued! - V6.4');document.getElementById('iLearner').value='';document.getElementById('iBook').value='';}
-function returnBook(){var b=document.getElementById('rBook').value.trim().toUpperCase();if(!b){alert('TYPE Book Number!');return;}var found=false;for(var i=0;i<issues.length;i++){if(issues[i].book===b&&issues[i].status==='BORROWED'){issues[i].status='RETURNED';found=true;}}if(!found){alert('Book not found as borrowed!');return;}save();renderAll();alert('✅ Returned '+b+' - V6.4');document.getElementById('rBook').value='';}
+function showTab(id,btn){ var t=['homeTab','ltsmTab','adminTab']; for(var i=0;i<t.length;i++){ var el=document.getElementById(t[i]); if(el) el.classList.add('hidden'); } var target=document.getElementById(id); if(target) target.classList.remove('hidden'); return false; }
+function showLTSMTab(id,btn){ var tabs=['ltsmScanTab','ltsmBooksTab','ltsmLearnersTab','ltsmIssueTab','ltsmReturnTab']; for(var i=0;i<tabs.length;i++){ var el=document.getElementById(tabs[i]); if(el) el.classList.add('hidden'); } var target=document.getElementById(id); if(target) target.classList.remove('hidden'); renderAll(); return false; }
+function startScanner(){document.getElementById('scanLog').innerHTML='📷 Starting...';html5QrcodeScanner=new Html5Qrcode("reader");html5QrcodeScanner.start({facingMode:"environment"},{fps:10,qrbox:{width:250,height:150}},function(decoded){document.getElementById('scanResult').value=decoded;document.getElementById('scanLog').innerHTML='✅ Scanned: '+decoded;},function(err){});}
+function stopScanner(){if(html5QrcodeScanner){html5QrcodeScanner.stop();}}
+function renderSchools(){var q=(document.getElementById('searchSchool')?document.getElementById('searchSchool').value:'').toLowerCase();var h='';for(var i=0;i<schools.length&&h.split('badge').length<22;i++){if(q&&schools[i].name.toLowerCase().indexOf(q)===-1&&schools[i].emis.indexOf(q)===-1)continue;h+='<div class="badge" style="cursor:pointer" onclick="selectDBESchool(\''+schools[i].emis+'\',\''+schools[i].name.replace(/\'/g,"\\'")+'\');return false;"><b>🏫 TAP TO SELECT: '+schools[i].emis+' - '+schools[i].name+'</b></div>';}var sl=document.getElementById('schoolList'); if(sl) sl.innerHTML=h||'No DBE - TAP RESTORE BUTTON! - V6.5 CLEAN - NO AUTO SELECT'; var ad=document.getElementById('adminStats'); if(ad) ad.innerHTML='DBE: '+schools.length+' | Books: '+books.length+' | Learners: '+learners.length+' | V6.5 CLEAN - NO AUTO SELECT'; var hs=document.getElementById('homeStats'); if(hs) hs.innerHTML='DBE: '+schools.length+' | Books: '+books.length+' | Learners: '+learners.length+' | V6.5 CLEAN - NO AUTO SELECT - MANUAL TAP ONLY'; var cnt=document.getElementById('dbeCurrentCount'); if(cnt) cnt.innerHTML=schools.length;}
+function addBookWithDBECode(){var title=document.getElementById('bTitle').value.trim();var subject=document.getElementById('bSubject').value;var grade=document.getElementById('bGrade').value;var qty=parseInt(document.getElementById('bQty').value||'1');var manual=document.getElementById('bCodeManual').value.trim().toUpperCase();if(!title||!subject||!grade){alert('Title + Subject + Grade required!');return;}if(!curSchool){alert('Select DBE School first! - TAP SCHOOL BUTTON! - V6.5 CLEAN - NO AUTO SELECT');return;}if(qty<1)qty=1;if(manual){books.push({title:title,subject:subject,grade:grade,code:manual,school:curSchool,emis:curSchool,status:'AVAILABLE'});}else{for(var i=0;i<qty;i++){var num=String(bookCounter).padStart(3,'0');var unique=subject+'-'+grade+'-'+num;books.push({title:title,subject:subject,grade:grade,code:unique,school:curSchool,emis:curSchool,status:'AVAILABLE'});bookCounter++;}}save();renderAll();alert('✅ BOOKS ADDED! - V6.5 CLEAN - NO AUTO SELECT');document.getElementById('bTitle').value='';}
+function autoGenerateLearnerId(){var nextId='L-'+String(learnerCounter).padStart(4,'0');document.getElementById('lId').value=nextId;document.getElementById('nextLearnerIdPreview').innerHTML='🔢 Generated: <b>'+nextId+'</b>';}
+function addLearner(){var n=document.getElementById('lName').value.trim();var g=document.getElementById('lGrade').value.trim().toUpperCase();var cls=document.getElementById('lClass').value.trim().toUpperCase();var id=document.getElementById('lId').value.trim().toUpperCase();if(!n){alert('Name required!');return;}if(!curSchool){alert('Select DBE School first! - TAP SCHOOL BUTTON! - V6.5 CLEAN - NO AUTO SELECT');return;}if(!id){id='L-'+String(learnerCounter).padStart(4,'0');}learners.push({name:n,grade:g,class:cls||g,id:id,school:curSchool,schoolName:curSchoolName});learnerCounter++;save();renderAll();alert('✅ Learner Added! ID: '+id+' - V6.5 CLEAN - NO AUTO SELECT');document.getElementById('lName').value='';}
+function issueBook(){var l=document.getElementById('iLearner').value.trim();var b=document.getElementById('iBook').value.trim().toUpperCase();if(!l||!b){alert('TYPE Learner ID + Book Number!');return;}issues.push({learner:l,book:b,status:'BORROWED',date:new Date().toLocaleDateString(),school:curSchool});save();renderAll();alert('✅ Issued! - V6.5 CLEAN');}
+function returnBook(){var b=document.getElementById('rBook').value.trim().toUpperCase();if(!b){alert('TYPE Book Number!');return;}var found=false;for(var i=0;i<issues.length;i++){if(issues[i].book===b&&issues[i].status==='BORROWED'){issues[i].status='RETURNED';found=true;}}if(!found){alert('Book not found as borrowed!');return;}save();renderAll();alert('✅ Returned '+b+' - V6.5 CLEAN');}
 function renderAll(){
-var h='';for(var i=0;i<learners.length&&h.split('barcodeCard').length<52;i++){if(curSchool&&learners[i].school!==curSchool)continue;h+='<div class="barcodeCard"><div style="background:#0a1a4d;color:#fff;padding:10px;border-radius:10px"><div style="background:#fff;border-radius:10px;padding:8px;max-width:220px;margin:0 auto 8px"><img src="logo.png?v=64" alt="XINTIMANI" style="width:100%;max-width:180px"></div><div style="font-size:13px;font-weight:900">MAKHANANI DIGITAL LIBRARY</div><div style="font-size:14px;font-weight:900;margin-top:6px">🏫 '+(learners[i].schoolName||getSchoolNameByEmis(learners[i].school))+'</div></div><div style="padding:8px"><div style="font-weight:900;font-size:16px;color:#0a1a4d">'+learners[i].name+'</div><div style="font-size:13px">Grade '+learners[i].grade+' Class '+(learners[i].class||'')+'</div><div style="font-size:13px;margin-top:6px">Learner ID: <b>'+learners[i].id+'</b></div><svg class="barcodeLearner" data-code="'+learners[i].id+'" style="margin-top:10px"></svg></div></div>';}
-document.getElementById('learnerList').innerHTML=h||'No learners in this school! - V6.4';
-setTimeout(function(){document.querySelectorAll('.barcodeLearner').forEach(function(el){try{JsBarcode(el,el.getAttribute('data-code'),{format:"CODE128",width:2,height:65,displayValue:true,fontSize:16});}catch(e){}});},350);
-var b='';for(var k=0;k<books.length&&b.split('barcodeCard').length<52;k++){if(curSchool&&books[k].emis!==curSchool&&books[k].school!==curSchool)continue;b+='<div class="barcodeCard"><div style="background:#0a1a4d;color:#fff;padding:10px;border-radius:10px"><div style="background:#fff;border-radius:10px;padding:8px;max-width:220px;margin:0 auto 8px"><img src="logo.png?v=64" alt="XINTIMANI" style="width:100%;max-width:180px"></div><div style="font-size:13px;font-weight:900">MAKHANANI DIGITAL LIBRARY</div><div style="font-size:14px;font-weight:900;margin-top:6px">🏫 '+getSchoolNameByEmis(books[k].emis||books[k].school)+'</div></div><div style="padding:8px"><div style="font-weight:900;font-size:15px;color:#0a1a4d">'+books[k].title+'</div><div style="font-size:13px">CAPS: '+books[k].subject+' '+books[k].grade+'</div><div style="font-size:15px;margin-top:6px"><b>'+books[k].code+'</b></div><svg class="barcodeBook" data-code="'+books[k].code+'" style="margin-top:10px"></svg></div></div>';}
-document.getElementById('bookList').innerHTML=b||'No books in this school! - V6.4';
-setTimeout(function(){document.querySelectorAll('.barcodeBook').forEach(function(el){try{JsBarcode(el,el.getAttribute('data-code'),{format:"CODE128",width:1.8,height:55,displayValue:true,fontSize:14});}catch(e){}});},350);
+var h='';for(var i=0;i<learners.length&&h.split('barcodeCard').length<52;i++){if(curSchool&&learners[i].school!==curSchool)continue;h+='<div class="barcodeCard"><div style="font-weight:900">'+learners[i].name+'</div><div>Grade '+learners[i].grade+' Class '+(learners[i].class||'')+'</div><div>Learner ID: <b>'+learners[i].id+'</b></div><svg class="barcodeLearner" data-code="'+learners[i].id+'"></svg></div>';}
+document.getElementById('learnerList').innerHTML=h||'No learners - V6.5 CLEAN - NO AUTO SELECT';
+setTimeout(function(){document.querySelectorAll('.barcodeLearner').forEach(function(el){try{JsBarcode(el,el.getAttribute('data-code'),{format:"CODE128",width:2,height:60,displayValue:true});}catch(e){}});},300);
+var b='';for(var k=0;k<books.length&&b.split('barcodeCard').length<52;k++){if(curSchool&&books[k].emis!==curSchool&&books[k].school!==curSchool)continue;b+='<div class="barcodeCard"><div style="font-weight:900">'+books[k].title+'</div><div>CAPS: '+books[k].subject+' '+books[k].grade+'</div><div><b>'+books[k].code+'</b></div><svg class="barcodeBook" data-code="'+books[k].code+'"></svg></div>';}
+document.getElementById('bookList').innerHTML=b||'No books - V6.5 CLEAN - NO AUTO SELECT';
+setTimeout(function(){document.querySelectorAll('.barcodeBook').forEach(function(el){try{JsBarcode(el,el.getAttribute('data-code'),{format:"CODE128",width:1.8,height:55,displayValue:true});}catch(e){}});},300);
 var r='';for(var l=0;l<Math.min(issues.length,50);l++)r+='<div class="badge">'+issues[l].book+' → '+issues[l].learner+' - '+issues[l].status+'</div>';
-var il=document.getElementById('issueList'); if(il) il.innerHTML=r; var rl=document.getElementById('returnList'); if(rl) rl.innerHTML=r||'No issued! - V6.4';
+var il=document.getElementById('issueList'); if(il) il.innerHTML=r; var rl=document.getElementById('returnList'); if(rl) rl.innerHTML=r||'No issued! - V6.5 CLEAN';
 renderSchools();
-var nextIdPreview=document.getElementById('nextLearnerIdPreview');if(nextIdPreview){var nextId='L-'+String(learnerCounter).padStart(4,'0');var countInSchool=curSchool?learners.filter(function(l){return l.school===curSchool}).length:learners.length;nextIdPreview.innerHTML='🔢 Next Auto ID: <b>'+nextId+'</b> | Total in this school: '+countInSchool+' | Total all: '+learners.length+' - V6.4';}
+var nextIdPreview=document.getElementById('nextLearnerIdPreview');if(nextIdPreview){var nextId='L-'+String(learnerCounter).padStart(4,'0');nextIdPreview.innerHTML='🔢 Next Auto ID: <b>'+nextId+'</b> - V6.5 CLEAN - NO AUTO SELECT';}
 }
 function initSubjects(){var sel=document.getElementById('bSubject');if(!sel) return; var subjects=["ACC","MATH","ENHL","AFAL","LIFE","PHSC","LFSC","GEOG","HIST","ECON","BUSN","CAT","IT","AGRI","MATHL","ENFAL"]; sel.innerHTML='<option value="">Subject</option>'; for(var i=0;i<subjects.length;i++){var o=document.createElement('option');o.value=subjects[i];o.textContent=subjects[i]; sel.appendChild(o);} }
 initSubjects(); renderSchoolButtons(); renderSchools(); renderAll();
-</script></body></html>
+</script>
+</body>
+</html>
