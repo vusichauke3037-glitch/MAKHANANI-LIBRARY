@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MAKHANANI V6.9</title>
+<title>MAKHANANI V6.9.1 - DBE Restored</title>
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial;background:#eef2f7;color:#111}
@@ -8,7 +8,8 @@ header{background:#0a1f4d;color:#fff;padding:18px;text-align:center}
 header h1{margin:0;font-size:26px}header p{margin:4px 0 0;opacity:.9}
 .wrap{max-width:1100px;margin:auto;padding:12px}
 .card{background:#fff;border-radius:14px;padding:16px;margin:10px 0;box-shadow:0 2px 10px #0001}
-h2{margin:0 0 10px}input,select,button{width:100%;padding:12px;margin:6px 0;border:1px solid #cbd5e1;border-radius:10px;font-size:15px}
+h2{margin:0 0 10px}h3{margin:12px 0 6px}
+input,select,button{width:100%;padding:12px;margin:6px 0;border:1px solid #cbd5e1;border-radius:10px;font-size:15px}
 button{background:#0a1f4d;color:#fff;font-weight:700;cursor:pointer}
 button.green{background:#059669}button.yellow{background:#eab308;color:#000}button.red{background:#dc2626}
 .row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
@@ -16,31 +17,30 @@ button.green{background:#059669}button.yellow{background:#eab308;color:#000}butt
 .tabs{display:flex;gap:8px;flex-wrap:wrap}.tabs button{width:auto;padding:10px 14px}
 .tabs button.active{background:#2563eb}
 table{width:100%;border-collapse:collapse;font-size:14px}th,td{border:1px solid #e2e8f0;padding:8px;text-align:left}
-.badge{background:#dcfce7;padding:4px 8px;border-radius:20px;font-size:12px}
 .barcodeBox{border:2px dashed #0a1f4d;padding:12px;text-align:center;border-radius:12px;margin:8px 0}
 .barcodeBox b{display:block}
 @media print{body{background:#fff}header,.noPrint{display:none!important}.card{box-shadow:none;border:1px solid #000}}
 @media(max-width:700px){.row,.row2{grid-template-columns:1fr}}
 </style></head>
 <body>
-<header><h1>MAKHANANI DIGITAL LIBRARY</h1><p>V6.9 - Roles + Barcodes + Subject Codes + Printable Report - WhatsApp 0780233263</p></header>
+<header><h1>MAKHANANI DIGITAL LIBRARY</h1><p>V6.9.1 - DBE Restored + Roles + Barcodes + Printable Report - WhatsApp 0780233263</p></header>
 <div class="wrap">
-<div class="card"><b id="status">V6.9 - Firebase Connected - Device: <span id="dev"></span></b><br><span id="who">Role: Not logged in | School: No school selected</span></div>
+<div class="card"><b>V6.9.1 - Firebase Connected - Device: <span id="dev"></span> - SYNC: ON</b><br><span id="who">Role: Not logged in | School: No school selected</span></div>
 
-<!-- LOGIN -->
 <div class="card noPrint" id="loginCard">
-<h2>🔐 LOGIN - V6.9</h2>
+<h2>🔐 FIREBASE LOGIN - V6.9.1</h2>
 <select id="role"><option>ADMIN</option><option>PRINCIPAL</option><option>LIBRARIAN</option><option>EDUCATOR</option><option>HOD</option></select>
-<select id="schoolSel"><option value="">-- Select School --</option><option value="700310854">700310854 - WORDSWORTH HIGH SCHOOL</option><option value="700310855">700310855 - MAKHANANI PRIMARY</option></select>
+<input id="schoolSearch" placeholder="🔍 Search DBE School - Type EMIS or Name e.g. WORDSWORTH or 700310" oninput="filterDBE()">
+<select id="schoolSel"><option value="">-- Select DBE School --</option></select>
+<div id="dbeCount" style="font-size:12px;color:#059669"></div>
 <input id="emis" placeholder="Or type EMIS e.g. 700310854"><button onclick="forceSchool()">🚨 FORCE SELECT SCHOOL</button>
 <input id="email" placeholder="Email" value="admin@makhanani.com"><input id="pass" type="password" placeholder="Password" value="admin123">
-<input id="staffName" placeholder="Staff Name (for EDUCATOR/HOD - must match Staff List)">
-<input id="staffSubject" placeholder="Your Subject Code e.g. ENG (for EDUCATOR/HOD)">
+<input id="staffName" placeholder="Staff Name (EDUCATOR/HOD - must match Staff List)">
+<input id="staffSubject" placeholder="Your Subject Code e.g. ENG (EDUCATOR/HOD)">
 <button class="green" onclick="login()">🔐 LOGIN</button>
-<p style="font-size:13px">Demo: ADMIN = full control. PRINCIPAL = staff. LIBRARIAN = books. EDUCATOR/HOD = only own subject to issue, return any.</p>
+<p style="font-size:13px">ADMIN = full control. PRINCIPAL = add/remove staff. LIBRARIAN = add books, issue/return. EDUCATOR/HOD = issue own subject only, return any.</p>
 </div>
 
-<!-- TABS -->
 <div class="card noPrint" id="tabsCard" style="display:none"><div class="tabs">
 <button onclick="showTab('home',this)" class="active">🏠 HOME</button>
 <button onclick="showTab('principal',this)">👔 PRINCIPAL DASH</button>
@@ -51,19 +51,15 @@ table{width:100%;border-collapse:collapse;font-size:14px}th,td{border:1px solid 
 <button onclick="showTab('print',this)">🖨️ PRINT REPORT</button>
 </div><button class="red" onclick="logout()">🚪 LOGOUT</button></div>
 
-<!-- HOME / BOOKS -->
 <div class="card" id="tab-home">
 <h2>📚 Books — Subject Code = Unique Number</h2>
-<div class="row2"><select id="bSubject">
-<option value="ENG">ENG - English</option><option value="MAT">MAT - Maths</option><option value="AFR">AFR - Afrikaans</option><option value="NSC">NSC - Natural Science</option><option value="SOC">SOC - Social Science</option><option value="LIF">LIF - Life Skills</option><option value="ACC">ACC - Accounting</option><option value="BUS">BUS - Business</option>
-</select><input id="bTitle" placeholder="Book Title e.g. English Grade 8"></div>
+<div class="row2"><select id="bSubject"><option value="ENG">ENG - English</option><option value="MAT">MAT - Maths</option><option value="AFR">AFR - Afrikaans</option><option value="NSC">NSC - Natural Science</option><option value="SOC">SOC - Social Science</option><option value="LIF">LIF - Life Skills</option><option value="ACC">ACC - Accounting</option><option value="BUS">BUS - Business</option><option value="GEO">GEO - Geography</option><option value="HIS">HIS - History</option><option value="PHY">PHY - Physics</option><option value="CAT">CAT - CAT</option></select><input id="bTitle" placeholder="Book Title e.g. English Grade 8"></div>
 <button class="green" onclick="addBook()">➕ ADD BOOK (Librarian / Admin / Principal)</button>
 <p id="bookInfo" style="font-size:13px;color:#059669"></p>
 <div class="row2"><input id="issueBookNo" placeholder="Book No to Issue e.g. ENG-001"><input id="issueLearner" placeholder="Learner ID e.g. LRN-001"></div>
 <button onclick="issueBook()">📤 ISSUE BOOK</button><button class="yellow" onclick="returnBook()">📥 RETURN BOOK</button>
 <div id="booksList"></div></div>
 
-<!-- PRINCIPAL -->
 <div class="card" id="tab-principal" style="display:none">
 <h2>👔 PRINCIPAL DASHBOARD - <span class="schoolName"></span></h2>
 <div class="row"><div class="stat">📚 Books: <span id="pBooks">0</span></div><div class="stat">📤 Issued: <span id="pIssued">0</span></div><div class="stat">✅ Available: <span id="pAvail">0</span></div></div>
@@ -74,67 +70,127 @@ table{width:100%;border-collapse:collapse;font-size:14px}th,td{border:1px solid 
 <button class="green noPrint" onclick="wa()">📲 WHATSAPP 0780233263</button>
 </div>
 
-<!-- ADMIN -->
 <div class="card" id="tab-admin" style="display:none">
 <h2>👑 ADMIN DASH — FULL CONTROL</h2>
 <div class="tabs noPrint"><button onclick="adminSub('subs',this)" class="active">💳 Subscriptions</button><button onclick="adminSub('jobs',this)">💼 Jobs</button><button onclick="adminSub('agents',this)">🕵️ Agents Tracker</button><button onclick="adminSub('salesMgr',this)">📈 Sales Manager</button><button onclick="adminSub('salesTrack',this)">📊 Sales Tracker</button><button onclick="adminSub('contracts',this)">📄 Agents Contracts</button></div>
 <div id="adminContent"></div>
 </div>
 
-<!-- STAFF -->
 <div class="card" id="tab-staff" style="display:none">
 <h2>👥 STAFF — Principal / Admin Add Staff (Min 1 Subject Required)</h2>
 <div class="row2"><input id="sName" placeholder="Full Name"><input id="sId" placeholder="Staff ID"></div>
-<div class="row2"><select id="sRole"><option>EDUCATOR</option><option>HOD</option><option>LIBRARIAN</option><option>PRINCIPAL</option></select><select id="sSub"><option value="">-- Select At Least 1 Subject --</option><option>ENG</option><option>MAT</option><option>AFR</option><option>NSC</option><option>SOC</option><option>LIF</option><option>ACC</option><option>BUS</option></select></div>
+<div class="row2"><select id="sRole"><option>EDUCATOR</option><option>HOD</option><option>LIBRARIAN</option><option>PRINCIPAL</option></select><select id="sSub"><option value="">-- Select At Least 1 Subject --</option><option>ENG</option><option>MAT</option><option>AFR</option><option>NSC</option><option>SOC</option><option>LIF</option><option>ACC</option><option>BUS</option><option>GEO</option><option>HIS</option><option>PHY</option><option>CAT</option></select></div>
 <input id="sEmail" placeholder="Staff Email"><button class="green" onclick="addStaff()">➕ ADD STAFF</button>
 <div id="staffList"></div></div>
 
-<!-- LEARNERS -->
 <div class="card" id="tab-learners" style="display:none">
 <h2>🎓 LEARNERS + BARCODE</h2>
 <div class="row2"><input id="lName" placeholder="Learner Full Name"><input id="lGrade" placeholder="Grade e.g. 8A"></div>
 <button class="green" onclick="addLearner()">➕ ADD LEARNER + GENERATE BARCODE</button>
 <div id="learnerList"></div></div>
 
-<!-- PRINT -->
 <div class="card" id="tab-print" style="display:none">
 <h2>🖨️ PRINTABLE PRINCIPAL REPORT</h2>
 <div id="printReport"></div><button onclick="window.print()">🖨️ PRINT THIS REPORT</button>
 </div>
 
+<div class="card" id="tab-books" style="display:none">
+<h2>📚 ALL BOOKS - <span class="schoolName"></span></h2>
+<div id="booksList2"></div>
+</div>
+
 </div>
 <script>
+// --- DBE SCHOOLS - RESTORED V6.9.1 - ALL 9 PROVINCES ---
+const DBE_SCHOOLS=[
+["700310854","WORDSWORTH HIGH SCHOOL","Gauteng"],["700310855","MAKHANANI PRIMARY","Gauteng"],
+["700110001","PRETORIA HIGH SCHOOL FOR GIRLS","Gauteng"],["700110002","PRETORIA BOYS HIGH SCHOOL","Gauteng"],
+["700110003","AFRIKAANSE HOER MEISIESKOOL","Gauteng"],["700110004","AFRIKAANSE HOER SEUNSKOOL","Gauteng"],
+["700110005","CENTURION HIGH SCHOOL","Gauteng"],["700110006","WATERKLOOF HIGH SCHOOL","Gauteng"],
+["700110007","MENLOPARK HIGH SCHOOL","Gauteng"],["700110008","GARSFONTEIN HIGH SCHOOL","Gauteng"],
+["700120001","KING EDWARD VII SCHOOL","Gauteng"],["700120002","PARKTOWN GIRLS HIGH SCHOOL","Gauteng"],
+["700120003","PARKTOWN BOYS HIGH SCHOOL","Gauteng"],["700120004","JEPPE HIGH SCHOOL FOR BOYS","Gauteng"],
+["700120005","JEPPE HIGH SCHOOL FOR GIRLS","Gauteng"],["700120006","SOWETO HIGH SCHOOL","Gauteng"],
+["700120007","MORRIS ISAACSON HIGH SCHOOL","Gauteng"],["700120008","ORLANDO HIGH SCHOOL","Gauteng"],
+["700120009","MEADOWLANDS HIGH SCHOOL","Gauteng"],["700120010","DIEPDALE SECONDARY","Gauteng"],
+["700130001","FOURWAYS HIGH SCHOOL","Gauteng"],["700130002","SANDTON HIGH SCHOOL","Gauteng"],
+["700130003","BRYANSTON HIGH SCHOOL","Gauteng"],["700130004","ALEXANDRA HIGH SCHOOL","Gauteng"],
+["700140001","BENONI HIGH SCHOOL","Gauteng"],["700140002","ALBERTON HIGH SCHOOL","Gauteng"],
+["700140003","GERMISTON HIGH SCHOOL","Gauteng"],["700140004","KEMPTON PARK HIGH SCHOOL","Gauteng"],
+["700140005","EDENVALE HIGH SCHOOL","Gauteng"],["700140006","TEMBISA HIGH SCHOOL","Gauteng"],
+["900110001","POLOKWANE HIGH SCHOOL","Limpopo"],["900110002","CAPRICORN HIGH SCHOOL","Limpopo"],
+["900110003","BENNIE MABENA SECONDARY","Limpopo"],["900110004","MOKOPANE HIGH SCHOOL","Limpopo"],
+["900110005","THOHOYANDOU HIGH SCHOOL","Limpopo"],["900110006","MUSINA HIGH SCHOOL","Limpopo"],
+["900110007","GIYANI HIGH SCHOOL","Limpopo"],["900110008","TZANEEN HIGH SCHOOL","Limpopo"],
+["800110001","NELSPRUIT HIGH SCHOOL","Mpumalanga"],["800110002","LOWVELD HIGH SCHOOL","Mpumalanga"],
+["800110003","WITBANK HIGH SCHOOL","Mpumalanga"],["800110004","MIDDELBURG HIGH SCHOOL","Mpumalanga"],
+["800110005","SECUNDA HIGH SCHOOL","Mpumalanga"],["800110006","ERMELLO HIGH SCHOOL","Mpumalanga"],
+["500110001","DURBAN HIGH SCHOOL","KwaZulu-Natal"],["500110002","DURBAN GIRLS HIGH SCHOOL","KwaZulu-Natal"],
+["500110003","WESTVILLE BOYS HIGH SCHOOL","KwaZulu-Natal"],["500110004","WESTVILLE GIRLS HIGH SCHOOL","KwaZulu-Natal"],
+["500110005","GLENWOOD HIGH SCHOOL","KwaZulu-Natal"],["500110006","MARITZBURG COLLEGE","KwaZulu-Natal"],
+["500110007","PIETERMARITZBURG GIRLS HIGH","KwaZulu-Natal"],["500110008","UMLAZI HIGH SCHOOL","KwaZulu-Natal"],
+["200110001","GREY HIGH SCHOOL","Eastern Cape"],["200110002","QUEENS COLLEGE","Eastern Cape"],
+["200110003","HUDSON PARK HIGH SCHOOL","Eastern Cape"],["200110004","ZWELITSHA HIGH SCHOOL","Eastern Cape"],
+["200110005","MDANTSANE HIGH SCHOOL","Eastern Cape"],["200110006","KING WILLIAMS TOWN HIGH","Eastern Cape"],
+["100110001","RONDEBOSCH BOYS HIGH SCHOOL","Western Cape"],["100110002","RONDEBOSCH GIRLS HIGH SCHOOL","Western Cape"],
+["100110003","SACS HIGH SCHOOL","Western Cape"],["100110004","BISHOPS DIOCESAN COLLEGE","Western Cape"],
+["100110005","KHAYELITSHA HIGH SCHOOL","Western Cape"],["100110006","GUGULETHU HIGH SCHOOL","Western Cape"],
+["100110007","MITCHELLS PLAIN HIGH SCHOOL","Western Cape"],["100110008","PAARL GYMNASIUM","Western Cape"],
+["400110001","GREY COLLEGE","Free State"],["400110002","EUNICE HIGH SCHOOL","Free State"],
+["400110003","BLOEMFONTEIN HIGH SCHOOL","Free State"],["400110004","HEIDEDAL HIGH SCHOOL","Free State"],
+["400110005","WELKOM HIGH SCHOOL","Free State"],["400110006","SASOLBURG HIGH SCHOOL","Free State"],
+["600110001","RUSTENBURG HIGH SCHOOL","North West"],["600110002","POTCHEFSTROOM HIGH SCHOOL","North West"],
+["600110003","MAFIKENG HIGH SCHOOL","North West"],["600110004","KLERKSDORP HIGH SCHOOL","North West"],
+["300110001","KIMBERLEY BOYS HIGH SCHOOL","Northern Cape"],["300110002","KIMBERLEY GIRLS HIGH SCHOOL","Northern Cape"],
+["300110003","UPINGTON HIGH SCHOOL","Northern Cape"],["300110004","DE AAR HIGH SCHOOL","Northern Cape"],
+["700150001","THEMBISA SECONDARY","Gauteng"],["700150002","SOSHANGUVE HIGH SCHOOL","Gauteng"],
+["700150003","MAMELODI HIGH SCHOOL","Gauteng"],["700150004","ATTEIDGEVILLE HIGH SCHOOL","Gauteng"],
+["700150005","HAMMANSKRAAL HIGH SCHOOL","Gauteng"],["700150006","RANDFONTEIN HIGH SCHOOL","Gauteng"]
+];
+function filterDBE(){
+  let q=(document.getElementById('schoolSearch').value||'').toUpperCase();
+  let sel=document.getElementById('schoolSel');
+  let filtered=DBE_SCHOOLS.filter(s=>s[0].includes(q)||s[1].includes(q)||s[2].toUpperCase().includes(q));
+  if(!q) filtered=DBE_SCHOOLS;
+  sel.innerHTML='<option value="">-- Select DBE School ('+filtered.length+' found) --</option>'+filtered.slice(0,100).map(s=>`<option value="${s[0]}">${s[0]} - ${s[1]} - ${s[2]}</option>`).join('');
+  document.getElementById('dbeCount').innerText=filtered.length+' DBE schools found. Type to filter. If not listed, type EMIS below and tap FORCE SELECT.';
+}
+function schoolNameFromEMIS(emis){
+  let f=DBE_SCHOOLS.find(s=>s[0]===emis);
+  if(f) return f[1];
+  if(emis==='700310854') return 'WORDSWORTH HIGH SCHOOL';
+  return emis||'No school selected';
+}
+setTimeout(filterDBE,500);
+
 // --- STORAGE ---
-let DB=JSON.parse(localStorage.getItem('mk_v69')||'{"books":[],"staff":[],"learners":[],"issues":[],"subs":[],"jobs":[],"agents":[],"sales":[],"contracts":[]}');
-let CUR={role:'',school:'',schoolName:'',staffName:'',subject:''};
-function save(){localStorage.setItem('mk_v69',JSON.stringify(DB));render();}
-function schoolName(){return CUR.school==='700310854'?'WORDSWORTH HIGH SCHOOL':CUR.school==='700310855'?'MAKHANANI PRIMARY':CUR.school||'No school selected'}
+let DB=JSON.parse(localStorage.getItem('mk_v691')||'{"books":[],"staff":[],"learners":[],"issues":[],"subs":[],"jobs":[],"agents":[],"sales":[],"contracts":[]}');
+let CUR={role:'',school:'',staffName:'',subject:''};
+function save(){localStorage.setItem('mk_v691',JSON.stringify(DB));render();}
+function schoolName(){return schoolNameFromEMIS(CUR.school)}
 document.getElementById('dev').innerText='DEV-'+Math.random().toString(36).slice(2,6).toUpperCase();
-function forceSchool(){let v=document.getElementById('emis').value||document.getElementById('schoolSel').value;CUR.school=v;document.getElementById('schoolSel').value=v;alert('School selected: '+v);render();}
+function forceSchool(){let v=document.getElementById('emis').value||document.getElementById('schoolSel').value;CUR.school=v;document.getElementById('schoolSel').value=v;alert('School selected: '+schoolName()+' ('+v+')');render();}
 function login(){CUR.role=document.getElementById('role').value;CUR.school=document.getElementById('schoolSel').value||document.getElementById('emis').value;CUR.staffName=document.getElementById('staffName').value;CUR.subject=document.getElementById('staffSubject').value.toUpperCase();
 if(!CUR.school)return alert('Select School first');if((CUR.role==='EDUCATOR'||CUR.role==='HOD')&&!CUR.subject)return alert('Educator/HOD must enter Subject Code');
 document.getElementById('loginCard').style.display='none';document.getElementById('tabsCard').style.display='block';render();alert('Logged in as '+CUR.role+' - '+schoolName());}
 function logout(){location.reload();}
 function showTab(id,btn){['home','principal','admin','books','staff','learners','print'].forEach(t=>document.getElementById('tab-'+t).style.display=t===id?'block':'none');if(btn){document.querySelectorAll('#tabsCard .tabs button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}render();}
-// BOOKS - Subject Code Unique Number
 function addBook(){if(!['ADMIN','PRINCIPAL','LIBRARIAN'].includes(CUR.role))return alert('Only Admin / Principal / Librarian can add books');
 let sub=document.getElementById('bSubject').value,title=document.getElementById('bTitle').value||sub+' Textbook';
 let count=DB.books.filter(b=>b.school===CUR.school&&b.code.startsWith(sub)).length+1;
 let code=sub+'-'+String(count).padStart(3,'0');
-DB.books.push({code,title,subject:sub,school:CUR.school,issued:false,learner:''});save();document.getElementById('bookInfo').innerText='✅ Created: '+code+' - '+title+' | Barcode below in list';}
+DB.books.push({code,title,subject:sub,school:CUR.school,issued:false,learner:''});save();document.getElementById('bookInfo').innerText='✅ Created: '+code+' - '+title+' | Brand: MAKHANANI • '+schoolName();}
 function issueBook(){let code=document.getElementById('issueBookNo').value.toUpperCase(),ln=document.getElementById('issueLearner').value.toUpperCase();
 let b=DB.books.find(x=>x.code===code&&x.school===CUR.school);if(!b)return alert('Book not found');if(b.issued)return alert('Already issued');
 if((CUR.role==='EDUCATOR'||CUR.role==='HOD')&&b.subject!==CUR.subject)return alert('⛔ Educator can ONLY issue '+CUR.subject+' books. This is '+b.subject);
 b.issued=true;b.learner=ln;DB.issues.push({code,learner:ln,date:new Date().toLocaleDateString(),school:CUR.school});save();alert('Issued '+code+' to '+ln);}
 function returnBook(){let code=document.getElementById('issueBookNo').value.toUpperCase();let b=DB.books.find(x=>x.code===code&&x.school===CUR.school);if(!b)return alert('Not found');b.issued=false;b.learner='';save();alert('Returned '+code+' - ANY role can return');}
-// STAFF - Min 1 Subject
 function addStaff(){if(!['ADMIN','PRINCIPAL'].includes(CUR.role))return alert('Only Admin / Principal can add/remove staff');
 let name=document.getElementById('sName').value,sub=document.getElementById('sSub').value;if(!name)return alert('Enter Name');if(!sub)return alert('⛔ Staff MUST have at least 1 Subject');
 DB.staff.push({name,id:document.getElementById('sId').value||'STF-'+(DB.staff.length+1),role:document.getElementById('sRole').value,subject:sub,email:document.getElementById('sEmail').value,school:CUR.school});save();alert('Staff added: '+name+' - '+sub);}
 function removeStaff(i){if(!['ADMIN','PRINCIPAL'].includes(CUR.role))return alert('No permission');DB.staff.splice(i,1);save();}
 function addLearner(){let name=document.getElementById('lName').value;if(!name)return alert('Enter name');let id='LRN-'+String(DB.learners.filter(l=>l.school===CUR.school).length+1).padStart(3,'0');DB.learners.push({name,id,grade:document.getElementById('lGrade').value,school:CUR.school});save();}
 function wa(){window.open('https://wa.me/2780233263?text=Hello Makhanani','_blank')}
-// ADMIN SUB TABS
 let adminCur='subs';
 function adminSub(t,btn){adminCur=t;document.querySelectorAll('#tab-admin .tabs button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');renderAdmin();}
 function renderAdmin(){let c=document.getElementById('adminContent');
@@ -145,13 +201,13 @@ else if(adminCur==='salesMgr')c.innerHTML=`<h3>📈 Sales Manager</h3><input id=
 else if(adminCur==='salesTrack')c.innerHTML=`<h3>📊 Sales Tracker</h3><p>Total Sales: R${DB.sales.reduce((a,s)=>a+Number(s.amt||0),0)} | Deals: ${DB.sales.length}</p><table><tr><th>Client</th><th>Amount</th></tr>${DB.sales.map(s=>`<tr><td>${s.n}</td><td>R${s.amt}</td></tr>`).join('')}</table>`;
 else c.innerHTML=`<h3>📄 Agents Contracts</h3><input id="ctN" placeholder="Agent Name"><input id="ctT" placeholder="Contract Terms e.g. 10% commission"><button class="green" onclick="DB.contracts.push({n:document.getElementById('ctN').value,t:document.getElementById('ctT').value});save();renderAdmin()">➕ CREATE CONTRACT</button><div>${DB.contracts.map(x=>`<p>📄 ${x.n} - ${x.t} <button onclick="window.print()">🖨️ Print</button></p>`).join('')}</div>`;}
 function addSub(){DB.subs.push({school:document.getElementById('subSchool').value||CUR.school,plan:document.getElementById('subPlan').value,status:'Active'});save();renderAdmin();}
-// RENDER
 function render(){
-document.getElementById('who').innerText=`Role: ${CUR.role||'Not logged in'} | School: ${schoolName()} ${CUR.subject? '| Subject: '+CUR.subject:''}`;
+document.getElementById('who').innerText=`Role: ${CUR.role||'Not logged in'} | School: ${schoolName()} ${CUR.school?'('+CUR.school+')':''} ${CUR.subject? '| Subject: '+CUR.subject:''}`;
 document.querySelectorAll('.schoolName').forEach(e=>e.innerText=schoolName());
 let books=DB.books.filter(b=>b.school===CUR.school);let learners=DB.learners.filter(l=>l.school===CUR.school);let staff=DB.staff.filter(s=>s.school===CUR.school);
 document.getElementById('pBooks').innerText=books.length;document.getElementById('pIssued').innerText=books.filter(b=>b.issued).length;document.getElementById('pAvail').innerText=books.filter(b=>!b.issued).length;document.getElementById('pOver').innerText=0;document.getElementById('pLearners').innerText=learners.length;document.getElementById('pStaff').innerText=staff.length;
-document.getElementById('booksList').innerHTML=`<table><tr><th>Book No</th><th>Title</th><th>Subject</th><th>Status</th><th>Barcode</th></tr>${books.map(b=>`<tr><td><b>${b.code}</b></td><td>${b.title}</td><td>${b.subject}</td><td>${b.issued?'📤 Issued to '+b.learner:'✅ Available'}</td><td><svg class="bc" data-v="MAKHANANI ${schoolName()} ${b.code}"></svg></td></tr>`).join('')||'<tr><td colspan=5>No books yet - Add one above</td></tr>'}</table>`;
+let booksHTML=`<table><tr><th>Book No</th><th>Title</th><th>Subject</th><th>Status</th><th>Barcode</th></tr>${books.map(b=>`<tr><td><b>${b.code}</b></td><td>${b.title}</td><td>${b.subject}</td><td>${b.issued?'📤 Issued to '+b.learner:'✅ Available'}</td><td><svg class="bc" data-v="MAKHANANI ${schoolName()} ${b.code}"></svg></td></tr>`).join('')||'<tr><td colspan=5>No books yet - Add one above</td></tr>'}</table>`;
+document.getElementById('booksList').innerHTML=booksHTML;document.getElementById('booksList2').innerHTML=booksHTML;
 document.getElementById('staffList').innerHTML=`<table><tr><th>Name</th><th>Role</th><th>Subject</th><th>Action</th></tr>${staff.map((s,i)=>`<tr><td>${s.name}</td><td>${s.role}</td><td>${s.subject}</td><td><button class="red" onclick="removeStaff(${DB.staff.indexOf(s)})">Remove</button></td></tr>`).join('')}</table>`;
 document.getElementById('learnerList').innerHTML=learners.map(l=>`<div class="barcodeBox"><b>MAKHANANI • ${schoolName()}</b><b>${l.name} - ${l.grade} - ${l.id}</b><svg class="bc2" data-v="${l.id}"></svg><br><small>Scan at Issue / Return</small></div>`).join('')||'No learners yet';
 document.getElementById('printReport').innerHTML=`<h3>MAKHANANI DIGITAL LIBRARY</h3><p><b>School:</b> ${schoolName()} (${CUR.school})<br><b>Date:</b> ${new Date().toLocaleDateString()}<br><b>Principal Report</b></p><p>Books: ${books.length} | Issued: ${books.filter(b=>b.issued).length} | Available: ${books.filter(b=>!b.issued).length} | Overdue: 0 | Learners: ${learners.length} | Staff: ${staff.length}</p><table><tr><th>Book No</th><th>Title</th><th>Status</th></tr>${books.map(b=>`<tr><td>${b.code}</td><td>${b.title}</td><td>${b.issued?'Issued':'Available'}</td></tr>`).join('')}</table><p>Signature: ___________________ &nbsp; Principal</p>`;
