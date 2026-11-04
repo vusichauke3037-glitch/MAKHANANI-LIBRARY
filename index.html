@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MAKHANANI V6.9.1 - DBE Restored</title>
+<title>MAKHANANI V6.9.2 - Manuals Tab</title>
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial;background:#eef2f7;color:#111}
@@ -19,16 +19,18 @@ button.green{background:#059669}button.yellow{background:#eab308;color:#000}butt
 table{width:100%;border-collapse:collapse;font-size:14px}th,td{border:1px solid #e2e8f0;padding:8px;text-align:left}
 .barcodeBox{border:2px dashed #0a1f4d;padding:12px;text-align:center;border-radius:12px;margin:8px 0}
 .barcodeBox b{display:block}
-@media print{body{background:#fff}header,.noPrint{display:none!important}.card{box-shadow:none;border:1px solid #000}}
+.manual{border:1px solid #cbd5e1;border-radius:12px;padding:14px;margin:10px 0}
+.manual h3{color:#0a1f4d}
+@media print{body{background:#fff}header,.noPrint{display:none!important}.card{box-shadow:none;border:1px solid #000}.manual{break-inside:avoid}}
 @media(max-width:700px){.row,.row2{grid-template-columns:1fr}}
 </style></head>
 <body>
-<header><h1>MAKHANANI DIGITAL LIBRARY</h1><p>V6.9.1 - DBE Restored + Roles + Barcodes + Printable Report - WhatsApp 0780233263</p></header>
+<header><h1>MAKHANANI DIGITAL LIBRARY</h1><p>V6.9.2 - DBE + Roles + Barcodes + Manuals - WhatsApp 0780233263</p></header>
 <div class="wrap">
-<div class="card"><b>V6.9.1 - Firebase Connected - Device: <span id="dev"></span> - SYNC: ON</b><br><span id="who">Role: Not logged in | School: No school selected</span></div>
+<div class="card"><b>V6.9.2 - Firebase Connected - Device: <span id="dev"></span> - SYNC: ON</b><br><span id="who">Role: Not logged in | School: No school selected</span></div>
 
 <div class="card noPrint" id="loginCard">
-<h2>🔐 FIREBASE LOGIN - V6.9.1</h2>
+<h2>🔐 FIREBASE LOGIN - V6.9.2</h2>
 <select id="role"><option>ADMIN</option><option>PRINCIPAL</option><option>LIBRARIAN</option><option>EDUCATOR</option><option>HOD</option></select>
 <input id="schoolSearch" placeholder="🔍 Search DBE School - Type EMIS or Name e.g. WORDSWORTH or 700310" oninput="filterDBE()">
 <select id="schoolSel"><option value="">-- Select DBE School --</option></select>
@@ -49,6 +51,7 @@ table{width:100%;border-collapse:collapse;font-size:14px}th,td{border:1px solid 
 <button onclick="showTab('staff',this)">👥 STAFF</button>
 <button onclick="showTab('learners',this)">🎓 LEARNERS + BARCODE</button>
 <button onclick="showTab('print',this)">🖨️ PRINT REPORT</button>
+<button onclick="showTab('manuals',this)">📖 MANUALS</button>
 </div><button class="red" onclick="logout()">🚪 LOGOUT</button></div>
 
 <div class="card" id="tab-home">
@@ -99,9 +102,58 @@ table{width:100%;border-collapse:collapse;font-size:14px}th,td{border:1px solid 
 <div id="booksList2"></div>
 </div>
 
+<!-- MANUALS TAB -->
+<div class="card" id="tab-manuals" style="display:none">
+<h2>📖 MANUALS - MAKHANANI V6.9.2</h2>
+<p>Give the correct manual to each person. Tap PRINT to print all manuals.</p>
+<button class="green noPrint" onclick="window.print()">🖨️ PRINT ALL MANUALS</button>
+<button class="green noPrint" onclick="wa()">📲 SEND MANUALS ON WHATSAPP</button>
+
+<div class="manual"><h3>📖 MANUAL 1 — ADMINISTRATOR (Full Control)</h3>
+<p><b>Login:</b> Role = ADMIN → Select ANY DBE School → Login</p>
+<p><b>Can:</b> See ALL schools, ALL books, ALL staff. Create Subs, Jobs, Agents, Sales, Contracts. Add/Remove ANY staff/book. Override any issue/return.</p>
+<p><b>Daily:</b> 1. Admin Dash → Subscriptions → Create sub. 2. Agents Tracker → Add agent + area. 3. Sales Manager → Add sale → Check Sales Tracker. 4. Agents Contracts → Create → Print → Sign.</p>
+<p><b>Rule:</b> Only ADMIN sees Sales + Contracts. Principals cannot.</p></div>
+
+<div class="manual"><h3>📖 MANUAL 2 — PRINCIPAL</h3>
+<p><b>Login:</b> Role = PRINCIPAL → Search school e.g. WORDSWORTH → Select → Login</p>
+<p><b>Can:</b> Add/Remove STAFF for YOUR school only. View Principal Dash. Print Report.</p>
+<p><b>Cannot:</b> See other schools. See Sales/Contracts/Agents. Add books (Librarian job).</p>
+<p><b>Add Staff:</b> STAFF tab → Name → Role EDUCATOR → Subject MAT → Add. Must pick at least 1 Subject or system blocks.</p>
+<p><b>Check Dash:</b> PRINCIPAL DASH → Books / Issued / Available / Overdue / Learners / Staff. If Overdue &gt;0 call parent.</p>
+<p><b>Print:</b> PRINT REPORT → PRINT → Sign → File.</p></div>
+
+<div class="manual"><h3>📖 MANUAL 3 — LIBRARIAN</h3>
+<p><b>Login:</b> Role = LIBRARIAN → Select School → Login</p>
+<p><b>Can:</b> Add/Remove BOOKS. Issue ANY book. Return ANY book.</p>
+<p><b>Add Book:</b> HOME → Subject ENG → Title English Grade 8 → ADD BOOK → System creates ENG-001 + Barcode MAKHANANI • WORDSWORTH • ENG-001. Stick barcode on cover.</p>
+<p><b>Issue:</b> Scan Learner LRN-001 + Scan Book ENG-001 → ISSUE BOOK.</p>
+<p><b>Return:</b> Type ENG-001 → RETURN BOOK.</p></div>
+
+<div class="manual"><h3>📖 MANUAL 4 — EDUCATOR / HOD</h3>
+<p><b>Login:</b> Role = EDUCATOR/HOD → Select School → Enter Name + Subject Code e.g. MAT → Login</p>
+<p><b>Rule:</b> You can ISSUE only YOUR subject. You can RETURN any book.</p>
+<p><b>Example:</b> You are MAT → CAN issue MAT-001, MAT-002. CANNOT issue ENG-001 — system blocks.</p>
+<p><b>Daily:</b> Type MAT-001 + LRN-005 → Issue. After lesson → Type MAT-001 → Return.</p></div>
+
+<div class="manual"><h3>📖 MANUAL 5 — LEARNERS + BARCODE</h3>
+<p><b>For Librarian/Principal:</b> LEARNERS tab → Name Lerato Dube → Grade 8A → Add → System creates LRN-001 + Barcode MAKHANANI • WORDSWORTH • LRN-001. Print card → Laminate → Give to learner.</p>
+<p><b>For Learner:</b> Keep card safe. No card = No book. Return on time or you show as OVERDUE on Principal Dash.</p>
+<p><b>Textbooks:</b> Barcode = MAKHANANI • School Name • Book No e.g. ENG-001. Subject Codes: ENG English, MAT Maths, AFR Afrikaans, NSC Natural Science, SOC Social Science, LIF Life Skills, ACC Accounting, BUS Business, GEO Geography, HIS History, PHY Physics, CAT CAT.</p></div>
+
+<div class="manual"><h3>📖 MANUAL 6 — SALES / AGENT (Admin Only)</h3>
+<p><b>Agents Tracker:</b> Add Agent Name + Area e.g. Soweto.</p>
+<p><b>Contracts:</b> Create Contract 10% commission → Print → Agent signs.</p>
+<p><b>Sales Manager:</b> Add Sale School + Amount R → Sales Tracker shows Total.</p>
+<p><b>Support:</b> WhatsApp 0780233263 — Makhanani.</p></div>
+
+<div class="manual"><h3>📖 QUICK START — NEW SCHOOL IN 5 MINUTES</h3>
+<p>1. Admin creates Subscription. 2. Principal adds Staff (with Subjects). 3. Librarian adds Books (Subject Codes auto-create numbers). 4. Librarian adds Learners (Barcodes auto-create). 5. Start Issuing. 6. Principal prints Report weekly.</p></div>
+</div>
+
 </div>
 <script>
-// --- DBE SCHOOLS - RESTORED V6.9.1 - ALL 9 PROVINCES ---
+// --- DBE SCHOOLS ---
 const DBE_SCHOOLS=[
 ["700310854","WORDSWORTH HIGH SCHOOL","Gauteng"],["700310855","MAKHANANI PRIMARY","Gauteng"],
 ["700110001","PRETORIA HIGH SCHOOL FOR GIRLS","Gauteng"],["700110002","PRETORIA BOYS HIGH SCHOOL","Gauteng"],
@@ -155,18 +207,11 @@ function filterDBE(){
   sel.innerHTML='<option value="">-- Select DBE School ('+filtered.length+' found) --</option>'+filtered.slice(0,100).map(s=>`<option value="${s[0]}">${s[0]} - ${s[1]} - ${s[2]}</option>`).join('');
   document.getElementById('dbeCount').innerText=filtered.length+' DBE schools found. Type to filter. If not listed, type EMIS below and tap FORCE SELECT.';
 }
-function schoolNameFromEMIS(emis){
-  let f=DBE_SCHOOLS.find(s=>s[0]===emis);
-  if(f) return f[1];
-  if(emis==='700310854') return 'WORDSWORTH HIGH SCHOOL';
-  return emis||'No school selected';
-}
+function schoolNameFromEMIS(emis){let f=DBE_SCHOOLS.find(s=>s[0]===emis);if(f) return f[1];if(emis==='700310854') return 'WORDSWORTH HIGH SCHOOL';return emis||'No school selected';}
 setTimeout(filterDBE,500);
-
-// --- STORAGE ---
-let DB=JSON.parse(localStorage.getItem('mk_v691')||'{"books":[],"staff":[],"learners":[],"issues":[],"subs":[],"jobs":[],"agents":[],"sales":[],"contracts":[]}');
+let DB=JSON.parse(localStorage.getItem('mk_v692')||'{"books":[],"staff":[],"learners":[],"issues":[],"subs":[],"jobs":[],"agents":[],"sales":[],"contracts":[]}');
 let CUR={role:'',school:'',staffName:'',subject:''};
-function save(){localStorage.setItem('mk_v691',JSON.stringify(DB));render();}
+function save(){localStorage.setItem('mk_v692',JSON.stringify(DB));render();}
 function schoolName(){return schoolNameFromEMIS(CUR.school)}
 document.getElementById('dev').innerText='DEV-'+Math.random().toString(36).slice(2,6).toUpperCase();
 function forceSchool(){let v=document.getElementById('emis').value||document.getElementById('schoolSel').value;CUR.school=v;document.getElementById('schoolSel').value=v;alert('School selected: '+schoolName()+' ('+v+')');render();}
@@ -174,7 +219,7 @@ function login(){CUR.role=document.getElementById('role').value;CUR.school=docum
 if(!CUR.school)return alert('Select School first');if((CUR.role==='EDUCATOR'||CUR.role==='HOD')&&!CUR.subject)return alert('Educator/HOD must enter Subject Code');
 document.getElementById('loginCard').style.display='none';document.getElementById('tabsCard').style.display='block';render();alert('Logged in as '+CUR.role+' - '+schoolName());}
 function logout(){location.reload();}
-function showTab(id,btn){['home','principal','admin','books','staff','learners','print'].forEach(t=>document.getElementById('tab-'+t).style.display=t===id?'block':'none');if(btn){document.querySelectorAll('#tabsCard .tabs button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}render();}
+function showTab(id,btn){['home','principal','admin','books','staff','learners','print','manuals'].forEach(t=>document.getElementById('tab-'+t).style.display=t===id?'block':'none');if(btn){document.querySelectorAll('#tabsCard .tabs button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}render();}
 function addBook(){if(!['ADMIN','PRINCIPAL','LIBRARIAN'].includes(CUR.role))return alert('Only Admin / Principal / Librarian can add books');
 let sub=document.getElementById('bSubject').value,title=document.getElementById('bTitle').value||sub+' Textbook';
 let count=DB.books.filter(b=>b.school===CUR.school&&b.code.startsWith(sub)).length+1;
@@ -190,7 +235,7 @@ let name=document.getElementById('sName').value,sub=document.getElementById('sSu
 DB.staff.push({name,id:document.getElementById('sId').value||'STF-'+(DB.staff.length+1),role:document.getElementById('sRole').value,subject:sub,email:document.getElementById('sEmail').value,school:CUR.school});save();alert('Staff added: '+name+' - '+sub);}
 function removeStaff(i){if(!['ADMIN','PRINCIPAL'].includes(CUR.role))return alert('No permission');DB.staff.splice(i,1);save();}
 function addLearner(){let name=document.getElementById('lName').value;if(!name)return alert('Enter name');let id='LRN-'+String(DB.learners.filter(l=>l.school===CUR.school).length+1).padStart(3,'0');DB.learners.push({name,id,grade:document.getElementById('lGrade').value,school:CUR.school});save();}
-function wa(){window.open('https://wa.me/2780233263?text=Hello Makhanani','_blank')}
+function wa(){window.open('https://wa.me/2780233263?text=Hello Makhanani - Send Manuals','_blank')}
 let adminCur='subs';
 function adminSub(t,btn){adminCur=t;document.querySelectorAll('#tab-admin .tabs button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');renderAdmin();}
 function renderAdmin(){let c=document.getElementById('adminContent');
