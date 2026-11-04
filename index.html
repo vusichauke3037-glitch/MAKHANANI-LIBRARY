@@ -167,5 +167,6 @@ initSubjects();renderStaffSubjectsBox();renderSchoolButtons();renderSchools();re
 if(el('subStartDate')&&!el('subStartDate').value){el('subStartDate').value=new Date().toISOString().slice(0,10);}
 if(curSchool){try{selectDBESchool(curSchool,curSchoolName||getSchoolNameByEmis(curSchool));}catch(e){}}
 </script>
+<script src="cloud-sync.js"></script>
 </body>
 </html>
