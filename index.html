@@ -1,94 +1,161 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MAKHANANI V6.8 - Principal + Admin Dashboards - Cloud Sync</title>
-<style>*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#eef4ff}header{background:#0a1a4d;color:#fff;padding:0 0 12px;text-align:center}header .logoCard{background:#fff;width:80%;max-width:320px;margin:0 auto;border-radius:0 0 18px 18px;padding:10px}header .logoCard img{width:100%;max-width:220px}.wrap{max-width:980px;margin:auto;padding:8px}.card{background:#fff;border-radius:14px;padding:12px;margin:8px 0;box-shadow:0 2px 8px rgba(0,0,0,.08)}input,select,textarea{width:100%;padding:12px;margin:4px 0;border:2px solid #bfdbfe;border-radius:10px;font-size:14px}button{width:100%;padding:12px;margin:4px 0;border:0;border-radius:12px;background:#1a56db;color:#fff;font-weight:900;font-size:12px;cursor:pointer}.green{background:#16a34a}.red{background:#dc2626}.yellow{background:#facc15;color:#000}.dark{background:#0a1a4d}.hidden{display:none}.badge{background:#f0f9ff;border:2px solid #bfdbfe;border-radius:10px;padding:8px;margin:4px 0;font-size:11px}.tabs{display:flex;gap:4px;flex-wrap:wrap}.tabs button{flex:1;padding:10px 2px;font-size:9px;background:#e2e8f0;color:#111;border-radius:10px;border:2px solid #cbd5e1}.tabs button.active{background:#1a56db;color:#fff}.cloud{border:2px solid #16a34a;border-radius:12px;padding:10px;background:#f0fdf4;text-align:center;font-weight:900;font-size:12px}.statGrid{display:flex;gap:6px;flex-wrap:wrap}.statGrid .badge{flex:1 1 30%;text-align:center;font-size:13px;font-weight:900}.overdue{background:#fee2e2!important;border-color:#dc2626!important}</style>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<title>MAKHANANI V6.9</title>
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
-</head><body>
-<header><div class="logoCard"><img src="logo.png" alt="XINTIMANI"></div><h1>MAKHANANI DIGITAL LIBRARY</h1><p>V6.8 - Principal + Admin Dashboards - Cloud Sync - WhatsApp 0780233263</p></header>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#eef2f7;color:#111}
+header{background:#0a1f4d;color:#fff;padding:18px;text-align:center}
+header h1{margin:0;font-size:26px}header p{margin:4px 0 0;opacity:.9}
+.wrap{max-width:1100px;margin:auto;padding:12px}
+.card{background:#fff;border-radius:14px;padding:16px;margin:10px 0;box-shadow:0 2px 10px #0001}
+h2{margin:0 0 10px}input,select,button{width:100%;padding:12px;margin:6px 0;border:1px solid #cbd5e1;border-radius:10px;font-size:15px}
+button{background:#0a1f4d;color:#fff;font-weight:700;cursor:pointer}
+button.green{background:#059669}button.yellow{background:#eab308;color:#000}button.red{background:#dc2626}
+.row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:#f1f5f9;border-radius:12px;padding:14px;text-align:center;font-weight:700}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}.tabs button{width:auto;padding:10px 14px}
+.tabs button.active{background:#2563eb}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{border:1px solid #e2e8f0;padding:8px;text-align:left}
+.badge{background:#dcfce7;padding:4px 8px;border-radius:20px;font-size:12px}
+.barcodeBox{border:2px dashed #0a1f4d;padding:12px;text-align:center;border-radius:12px;margin:8px 0}
+.barcodeBox b{display:block}
+@media print{body{background:#fff}header,.noPrint{display:none!important}.card{box-shadow:none;border:1px solid #000}}
+@media(max-width:700px){.row,.row2{grid-template-columns:1fr}}
+</style></head>
+<body>
+<header><h1>MAKHANANI DIGITAL LIBRARY</h1><p>V6.9 - Roles + Barcodes + Subject Codes + Printable Report - WhatsApp 0780233263</p></header>
 <div class="wrap">
-<div class="card"><div class="cloud" id="cloudStatus">☁️ V6.8 - Connecting Firebase...</div><div class="badge" id="syncStatus">🔄 SYNC: ON</div><div class="badge" id="roleInfo">Role: Not logged in</div><div class="badge" id="subStatusBanner">💳 Subscription: No school selected</div></div>
+<div class="card"><b id="status">V6.9 - Firebase Connected - Device: <span id="dev"></span></b><br><span id="who">Role: Not logged in | School: No school selected</span></div>
 
 <!-- LOGIN -->
-<div class="card" id="loginCard"><h2>🔐 FIREBASE LOGIN - V6.8</h2>
-<select id="rankSel"><option value="">-- Select Rank --</option><option selected>ADMIN</option><option>PRINCIPAL</option><option>HOD</option><option>LIBRARIAN</option><option>EDUCATOR</option><option>SALES AGENT</option><option>SALES MANAGER</option></select>
-<select id="schoolDropdown"><option value="">-- Select School --</option><option value="700310854|WORDSWORTH HIGH SCHOOL">700310854 - WORDSWORTH HIGH SCHOOL</option><option value="700310855|DEMO PRIMARY SCHOOL">700310855 - DEMO PRIMARY SCHOOL</option></select>
-<input id="manualEmisInput" placeholder="Or Type EMIS e.g. 700310854">
-<button type="button" style="background:#dc2626" onclick="forceSelectSchool();return false;">🚨 FORCE SELECT SCHOOL</button>
-<div class="badge" id="selectedSchoolDisplay">❌ No school selected</div>
-<input id="fbEmail" type="email" placeholder="Firebase Email" value="admin@makhanani.com">
-<input id="fbPass" type="password" placeholder="Firebase Password" value="admin123">
-<button type="button" class="green" onclick="firebaseLogin();return false;">🔐 FIREBASE LOGIN</button>
-<button type="button" class="dark" onclick="firebaseSignupAdmin();return false;">🆕 CREATE ADMIN ACCOUNT - FIRST TIME ONLY</button>
-<button type="button" class="red" onclick="firebaseLogout();return false;">🔓 LOGOUT</button>
-<div class="badge" id="firebaseLoginError" style="display:none;background:#fee2e2"></div>
+<div class="card noPrint" id="loginCard">
+<h2>🔐 LOGIN - V6.9</h2>
+<select id="role"><option>ADMIN</option><option>PRINCIPAL</option><option>LIBRARIAN</option><option>EDUCATOR</option><option>HOD</option></select>
+<select id="schoolSel"><option value="">-- Select School --</option><option value="700310854">700310854 - WORDSWORTH HIGH SCHOOL</option><option value="700310855">700310855 - MAKHANANI PRIMARY</option></select>
+<input id="emis" placeholder="Or type EMIS e.g. 700310854"><button onclick="forceSchool()">🚨 FORCE SELECT SCHOOL</button>
+<input id="email" placeholder="Email" value="admin@makhanani.com"><input id="pass" type="password" placeholder="Password" value="admin123">
+<input id="staffName" placeholder="Staff Name (for EDUCATOR/HOD - must match Staff List)">
+<input id="staffSubject" placeholder="Your Subject Code e.g. ENG (for EDUCATOR/HOD)">
+<button class="green" onclick="login()">🔐 LOGIN</button>
+<p style="font-size:13px">Demo: ADMIN = full control. PRINCIPAL = staff. LIBRARIAN = books. EDUCATOR/HOD = only own subject to issue, return any.</p>
 </div>
 
-<div class="tabs"><button type="button" onclick="showTab('homeTab',this);return false;" class="active">🏠 HOME</button><button type="button" onclick="showTab('principalTab',this);return false;">👔 PRINCIPAL DASH</button><button type="button" onclick="showTab('adminTab',this);return false;">👑 ADMIN DASH</button><button type="button" onclick="showTab('ltsmTab',this);return false;">📦 LTSM</button><button type="button" onclick="showTab('subsTab',this);return false;">💳 SUBS</button></div>
+<!-- TABS -->
+<div class="card noPrint" id="tabsCard" style="display:none"><div class="tabs">
+<button onclick="showTab('home',this)" class="active">🏠 HOME</button>
+<button onclick="showTab('principal',this)">👔 PRINCIPAL DASH</button>
+<button onclick="showTab('admin',this)">👑 ADMIN DASH</button>
+<button onclick="showTab('books',this)">📚 BOOKS</button>
+<button onclick="showTab('staff',this)">👥 STAFF</button>
+<button onclick="showTab('learners',this)">🎓 LEARNERS + BARCODE</button>
+<button onclick="showTab('print',this)">🖨️ PRINT REPORT</button>
+</div><button class="red" onclick="logout()">🚪 LOGOUT</button></div>
 
-<!-- HOME -->
-<div class="card" id="homeTab"><h2>🏠 HOME</h2><div class="badge" id="homeStats">Loading...</div><div class="badge" id="homeSchoolName">No school selected</div><div class="badge" id="userInfo">Not logged in</div><div class="badge" id="liveUpdates">🔴 LIVE: Waiting...</div></div>
+<!-- HOME / BOOKS -->
+<div class="card" id="tab-home">
+<h2>📚 Books — Subject Code = Unique Number</h2>
+<div class="row2"><select id="bSubject">
+<option value="ENG">ENG - English</option><option value="MAT">MAT - Maths</option><option value="AFR">AFR - Afrikaans</option><option value="NSC">NSC - Natural Science</option><option value="SOC">SOC - Social Science</option><option value="LIF">LIF - Life Skills</option><option value="ACC">ACC - Accounting</option><option value="BUS">BUS - Business</option>
+</select><input id="bTitle" placeholder="Book Title e.g. English Grade 8"></div>
+<button class="green" onclick="addBook()">➕ ADD BOOK (Librarian / Admin / Principal)</button>
+<p id="bookInfo" style="font-size:13px;color:#059669"></p>
+<div class="row2"><input id="issueBookNo" placeholder="Book No to Issue e.g. ENG-001"><input id="issueLearner" placeholder="Learner ID e.g. LRN-001"></div>
+<button onclick="issueBook()">📤 ISSUE BOOK</button><button class="yellow" onclick="returnBook()">📥 RETURN BOOK</button>
+<div id="booksList"></div></div>
 
-<!-- PRINCIPAL DASHBOARD -->
-<div class="card hidden" id="principalTab"><h2>👔 PRINCIPAL DASHBOARD - <span id="pdSchool">-</span></h2><div class="badge" id="pdSubBanner" style="background:#dcfce7">Loading sub...</div>
-<div class="statGrid"><div class="badge" id="pdBooks">📚 Books: 0</div><div class="badge" id="pdIssued">📤 Issued: 0</div><div class="badge" id="pdAvailable">✅ Available: 0</div><div class="badge" id="pdOverdue">🔴 Overdue: 0</div><div class="badge" id="pdLearners">👥 Learners: 0</div><div class="badge" id="pdStaff">👥 Staff: 0</div></div>
-<div class="badge" id="pdOverdueList">No overdue</div>
-<div style="display:flex;gap:4px"><button type="button" class="green" style="flex:1" onclick="showTab('ltsmTab',null)">📤 ISSUE</button><button type="button" class="yellow" style="flex:1" onclick="showTab('ltsmTab',null)">📥 RETURN</button><button type="button" style="flex:1;background:#25D366" onclick="sendWhatsAppRenew()">📲 WHATSAPP 0780233263</button></div>
+<!-- PRINCIPAL -->
+<div class="card" id="tab-principal" style="display:none">
+<h2>👔 PRINCIPAL DASHBOARD - <span class="schoolName"></span></h2>
+<div class="row"><div class="stat">📚 Books: <span id="pBooks">0</span></div><div class="stat">📤 Issued: <span id="pIssued">0</span></div><div class="stat">✅ Available: <span id="pAvail">0</span></div></div>
+<div class="row"><div class="stat">🔴 Overdue: <span id="pOver">0</span></div><div class="stat">🎓 Learners: <span id="pLearners">0</span></div><div class="stat">👥 Staff: <span id="pStaff">0</span></div></div>
+<div id="pOverList"></div>
+<button class="green noPrint" onclick="showTab('staff',null)">👥 Manage Staff</button>
+<button class="noPrint" onclick="window.print()">🖨️ PRINT PRINCIPAL REPORT</button>
+<button class="green noPrint" onclick="wa()">📲 WHATSAPP 0780233263</button>
 </div>
 
-<!-- ADMIN DASHBOARD -->
-<div class="card hidden" id="adminTab"><h2>👑 ADMIN DASHBOARD - ALL SCHOOLS</h2><div class="statGrid"><div class="badge" id="adSchools">🏫 Schools: 0</div><div class="badge" id="adActive">✅ Active: 0</div><div class="badge" id="adTrial">🟡 Trial: 0</div><div class="badge" id="adExpired">❌ Expired: 0</div><div class="badge" id="adRevenue">💰 Monthly: R0</div><div class="badge" id="adBooks">📚 Total Books: 0</div></div><div class="badge" id="adAlerts">No alerts</div>
-<div style="display:flex;gap:4px"><button type="button" style="flex:1;background:#f59e0b;color:#000" onclick="showTab('subsTab',null)">💳 CREATE SUB</button><button type="button" style="flex:1" onclick="showTab('ltsmTab',null)">📦 LTSM</button></div><div id="adminSchoolsList"></div></div>
-
-<!-- LTSM -->
-<div class="card hidden" id="ltsmTab"><h2>📦 LTSM - BOOKS / LEARNERS / ISSUE / RETURN</h2><div class="badge" id="ltsmPerm">Login to use LTSM</div>
-<h3>📚 ADD BOOK</h3><input id="bTitle" placeholder="Book Title"><div style="display:flex;gap:4px"><input id="bSubject" placeholder="Subject e.g. MATH" style="flex:1"><select id="bGrade" style="flex:1"><option>G4</option><option>G5</option><option>G6</option><option>G7</option><option>G8</option><option>G9</option><option selected>G10</option><option>G11</option><option>G12</option></select><input id="bQty" type="number" value="1" style="flex:1"></div><input id="bCodeManual" placeholder="Book Code e.g. MATH-G10-001"><button type="button" class="green" onclick="addBook();return false;">➕ ADD BOOK</button><div id="bookList"></div>
-<h3>👥 ADD LEARNER</h3><input id="lName" placeholder="Learner Full Name"><div style="display:flex;gap:4px"><input id="lGrade" placeholder="Grade e.g. G10" style="flex:1"><input id="lClass" placeholder="Class e.g. 10A" style="flex:1"><input id="lId" placeholder="Learner ID Auto" style="flex:1"></div><button type="button" class="green" onclick="addLearner();return false;">➕ ADD LEARNER</button><div id="learnerList"></div>
-<h3>📤 ISSUE</h3><input id="iLearner" placeholder="Learner ID e.g. L-0001"><input id="iBook" placeholder="Book Code"><button type="button" class="green" onclick="issueBook();return false;">📤 ISSUE BOOK</button><div class="badge" id="issueStatus">Ready</div><div id="issueList"></div>
-<h3>📥 RETURN</h3><input id="rBook" placeholder="Book Code"><button type="button" class="yellow" onclick="returnBook();return false;">📥 RETURN BOOK</button><div class="badge" id="returnStatus">Ready</div>
+<!-- ADMIN -->
+<div class="card" id="tab-admin" style="display:none">
+<h2>👑 ADMIN DASH — FULL CONTROL</h2>
+<div class="tabs noPrint"><button onclick="adminSub('subs',this)" class="active">💳 Subscriptions</button><button onclick="adminSub('jobs',this)">💼 Jobs</button><button onclick="adminSub('agents',this)">🕵️ Agents Tracker</button><button onclick="adminSub('salesMgr',this)">📈 Sales Manager</button><button onclick="adminSub('salesTrack',this)">📊 Sales Tracker</button><button onclick="adminSub('contracts',this)">📄 Agents Contracts</button></div>
+<div id="adminContent"></div>
 </div>
 
-<!-- SUBS -->
-<div class="card hidden" id="subsTab"><h2>💳 SUBSCRIPTIONS</h2><p>Demo 7 Days Free | Starter R3 000 + R350/mo OR R4 500/yr | Standard R4 000 + R450/mo OR R5 500/yr | Premium R5 000 + R550/mo OR R8 500/yr</p>
-<select id="subSchoolSelect"><option value="">-- Select School --</option></select><select id="subPlan"><option>DEMO</option><option>STARTER</option><option selected>STANDARD</option><option>PREMIUM</option></select><select id="subBilling"><option>MONTHLY</option><option>YEARLY</option></select><input id="subStartDate" type="date"><input id="subContact" placeholder="Contact e.g. Principal - 0780233263"><button type="button" class="green" onclick="createSubscription();return false;">➕ CREATE SUBSCRIPTION</button><div id="subsList"></div></div>
+<!-- STAFF -->
+<div class="card" id="tab-staff" style="display:none">
+<h2>👥 STAFF — Principal / Admin Add Staff (Min 1 Subject Required)</h2>
+<div class="row2"><input id="sName" placeholder="Full Name"><input id="sId" placeholder="Staff ID"></div>
+<div class="row2"><select id="sRole"><option>EDUCATOR</option><option>HOD</option><option>LIBRARIAN</option><option>PRINCIPAL</option></select><select id="sSub"><option value="">-- Select At Least 1 Subject --</option><option>ENG</option><option>MAT</option><option>AFR</option><option>NSC</option><option>SOC</option><option>LIF</option><option>ACC</option><option>BUS</option></select></div>
+<input id="sEmail" placeholder="Staff Email"><button class="green" onclick="addStaff()">➕ ADD STAFF</button>
+<div id="staffList"></div></div>
+
+<!-- LEARNERS -->
+<div class="card" id="tab-learners" style="display:none">
+<h2>🎓 LEARNERS + BARCODE</h2>
+<div class="row2"><input id="lName" placeholder="Learner Full Name"><input id="lGrade" placeholder="Grade e.g. 8A"></div>
+<button class="green" onclick="addLearner()">➕ ADD LEARNER + GENERATE BARCODE</button>
+<div id="learnerList"></div></div>
+
+<!-- PRINT -->
+<div class="card" id="tab-print" style="display:none">
+<h2>🖨️ PRINTABLE PRINCIPAL REPORT</h2>
+<div id="printReport"></div><button onclick="window.print()">🖨️ PRINT THIS REPORT</button>
+</div>
 
 </div>
 <script>
-var firebaseConfig={apiKey:"AIzaSyDMdnrjBRGElJWAqXST67zjZZ4bvEpTWXc",authDomain:"makhanani-digital.firebaseapp.com",projectId:"makhanani-digital",storageBucket:"makhanani-digital.firebasestorage.app",messagingSenderId:"1018865654685",appId:"1:1018865654685:web:b4974747ac8d56d975ad74",measurementId:"G-BZZ51G1Y3G"};
-var db=null,auth=null,curRank='',curUserEmail='',curSchool='',curSchoolName='',firebaseUserUid='',deviceId=localStorage.getItem('mk_deviceId')||('DEV-'+Math.random().toString(36).substring(2,8).toUpperCase());localStorage.setItem('mk_deviceId',deviceId);
-function el(id){return document.getElementById(id);}
-function showTab(id,btn){['homeTab','principalTab','adminTab','ltsmTab','subsTab'].forEach(function(x){var e=el(x);if(e)e.classList.add('hidden');});var t=el(id);if(t)t.classList.remove('hidden');document.querySelectorAll('.tabs button').forEach(function(b){b.classList.remove('active');});if(btn)btn.classList.add('active');renderDashboards();return false;}
-function getBooks(){try{return JSON.parse(localStorage.getItem('mk_books')||'[]');}catch(e){return[];}} function setBooks(v){localStorage.setItem('mk_books',JSON.stringify(v));}
-function getLearners(){try{return JSON.parse(localStorage.getItem('mk_learners')||'[]');}catch(e){return[];}} function setLearners(v){localStorage.setItem('mk_learners',JSON.stringify(v));}
-function getIssues(){try{return JSON.parse(localStorage.getItem('mk_issues')||'[]');}catch(e){return[];}} function setIssues(v){localStorage.setItem('mk_issues',JSON.stringify(v));}
-function getSubs(){try{return JSON.parse(localStorage.getItem('mk_subs')||'[]');}catch(e){return[];}} function setSubs(v){localStorage.setItem('mk_subs',JSON.stringify(v));}
-function saveAll(){ saveToCloud(); renderAll(); }
-function getDaysLeft(s){if(!s||!s.endDate)return 0;var t=new Date();t.setHours(0,0,0,0);var e=new Date(s.endDate);e.setHours(0,0,0,0);return Math.ceil((e-t)/86400000);}
-function getSubStatus(s){if(!s)return 'NO SUB';if(s.status==='Suspended')return 'Suspended';if(getDaysLeft(s)<0)return 'Expired';return s.status||'Active';}
-function getSubForSchool(emis){var s=getSubs();for(var i=0;i<s.length;i++){if(s[i].school===emis)return s[i];}return null;}
-function selectSchool(emis,name){curSchool=emis;curSchoolName=name;localStorage.setItem('mk_school',emis);localStorage.setItem('mk_schoolName',name);el('selectedSchoolDisplay').innerHTML='✅ Selected: '+name+' ('+emis+')';el('homeSchoolName').innerHTML='School: '+name;populateSubSchool();renderDashboards();saveToCloud();return false;}
-function forceSelectSchool(){var v=el('manualEmisInput').value.trim();var dd=el('schoolDropdown').value;if(dd){var p=dd.split('|');selectSchool(p[0],p[1]);return false;}if(!v){alert('Type EMIS or select school');return false;}var name=v==='700310854'?'WORDSWORTH HIGH SCHOOL':'SCHOOL '+v;selectSchool(v,name);return false;}
-function firebaseLogin(){var email=el('fbEmail').value.trim();var pass=el('fbPass').value;var rank=el('rankSel').value;if(!curSchool){alert('❌ Select School First - TAP FORCE SELECT');return false;}if(!rank){alert('Select Rank');return false;}curRank=rank;curUserEmail=email;auth.signInWithEmailAndPassword(email,pass).then(function(cred){firebaseUserUid=cred.user.uid;el('roleInfo').innerHTML='Role: '+curRank+' | Firebase: '+email+' | School: '+curSchoolName;el('userInfo').innerHTML='Logged in: '+email;el('liveUpdates').innerHTML='🟢 LIVE: Logged in as '+curRank;startCloudListener();renderAll();alert('✅ LOGGED IN as '+curRank+' - '+curSchoolName);}).catch(function(e){var err=el('firebaseLoginError');err.style.display='block';err.innerHTML='❌ '+e.message;});return false;}
-function firebaseSignupAdmin(){var email=el('fbEmail').value.trim();var pass=el('fbPass').value;auth.createUserWithEmailAndPassword(email,pass).then(function(){alert('✅ Account created! Now TAP LOGIN');}).catch(function(e){alert(e.message);});return false;}
-function firebaseLogout(){auth.signOut();curRank='';curUserEmail='';firebaseUserUid='';el('roleInfo').innerHTML='Role: Not logged in';alert('Logged out');return false;}
-function sendWhatsAppRenew(){var msg='📲 RENEWAL REQUEST - '+curSchoolName+' ('+curSchool+') - Principal '+curUserEmail;window.open('https://wa.me/27780233263?text='+encodeURIComponent(msg),'_blank');return false;}
-function sendSubWhatsAppRequest(t){return sendWhatsAppRenew();}
-function addBook(){var t=el('bTitle').value.trim();if(!t){alert('Enter title');return false;}var books=getBooks();var qty=parseInt(el('bQty').value||'1');for(var i=0;i<qty;i++){var code=el('bCodeManual').value.trim()||('BK-'+(books.length+1)+'-'+Date.now().toString().slice(-4));books.push({code:code,title:t.toUpperCase(),subject:el('bSubject').value.toUpperCase()||'GENERAL',grade:el('bGrade').value,school:curSchool,created:new Date().toISOString()});}setBooks(books);el('bTitle').value='';el('bCodeManual').value='';saveAll();alert('✅ Book Added');return false;}
-function addLearner(){var n=el('lName').value.trim();if(!n){alert('Enter name');return false;}var ls=getLearners();var id=el('lId').value.trim()||('L-'+String(ls.length+1).padStart(4,'0'));ls.push({id:id,name:n.toUpperCase(),grade:el('lGrade').value,class:el('lClass').value,school:curSchool});setLearners(ls);el('lName').value='';saveAll();alert('✅ Learner Added: '+id);return false;}
-function issueBook(){var li=el('iLearner').value.trim();var bk=el('iBook').value.trim();if(!li||!bk){alert('Enter Learner ID + Book Code');return false;}var issues=getIssues();issues.push({learner:li,book:bk,school:curSchool,issued:new Date().toISOString(),dueDate:new Date(Date.now()+14*86400000).toISOString().slice(0,10),returned:false,by:curUserEmail});setIssues(issues);el('issueStatus').innerHTML='✅ Issued '+bk+' to '+li;saveAll();return false;}
-function returnBook(){var bk=el('rBook').value.trim();var issues=getIssues();var found=false;for(var i=0;i<issues.length;i++){if(issues[i].book===bk&&!issues[i].returned){issues[i].returned=true;issues[i].returnDate=new Date().toISOString();found=true;}}if(!found){el('returnStatus').innerHTML='❌ Not found issued';return false;}setIssues(issues);el('returnStatus').innerHTML='✅ Returned '+bk;saveAll();return false;}
-function populateSubSchool(){var s=el('subSchoolSelect');if(!s)return;var h='<option value="">-- Select School --</option>';h+='<option value="'+curSchool+'|'+curSchoolName+'">'+curSchool+' - '+curSchoolName+'</option>';s.innerHTML=h;if(curSchool)s.value=curSchool+'|'+curSchoolName;}
-function createSubscription(){if(!curSchool){alert('Select school first');return false;}var sv=el('subSchoolSelect').value||(curSchool+'|'+curSchoolName);var parts=sv.split('|');var plan=el('subPlan').value;var billing=el('subBilling').value;var sd=el('subStartDate').value||new Date().toISOString().slice(0,10);var start=new Date(sd);var end=new Date(start);if(plan==='DEMO')end.setDate(end.getDate()+7);else if(billing==='YEARLY')end.setMonth(end.getMonth()+12);else end.setMonth(end.getMonth()+1);var prices={DEMO:0,STARTER:350,STANDARD:450,PREMIUM:550};var subs=getSubs();var ex=null;for(var i=0;i<subs.length;i++){if(subs[i].school===parts[0])ex=subs[i];}var obj={id:'SUB-'+Date.now().toString().slice(-6),school:parts[0],schoolName:parts[1]||curSchoolName,plan:plan,billing:billing,price:prices[plan]||0,startDate:sd,endDate:end.toISOString().slice(0,10),status:plan==='DEMO'?'Trial':'Active',contact:el('subContact').value,createdBy:curRank+' '+curUserEmail};if(ex){Object.assign(ex,obj);}else subs.push(obj);setSubs(subs);saveAll();alert('✅ SUB CREATED: '+obj.schoolName+' - '+plan+' - Ends '+obj.endDate);return false;}
-function renderAll(){var books=getBooks();var learners=getLearners();var issues=getIssues();var subs=getSubs();el('homeStats').innerHTML='Books: '+books.length+' | Learners: '+learners.length+' | Issues: '+issues.length+' | Subs: '+subs.length;var bh='';books.slice(-10).reverse().forEach(function(b){bh+='<div class="badge">'+b.code+' - '+b.title+' ('+b.subject+' '+b.grade+')</div>';});el('bookList').innerHTML=bh||'No books';var lh='';learners.slice(-10).reverse().forEach(function(l){lh+='<div class="badge">'+l.id+' - '+l.name+' '+l.grade+' '+l.class+'</div>';});el('learnerList').innerHTML=lh||'No learners';var ih='';issues.slice(-10).reverse().forEach(function(x){ih+='<div class="badge">'+x.book+' → '+x.learner+' | Due '+x.dueDate+' | '+(x.returned?'✅ Returned':'📤 Out')+'</div>';});el('issueList').innerHTML=ih||'No issues';var sh='';subs.forEach(function(s){sh+='<div class="badge">'+s.schoolName+' ('+s.school+') - '+s.plan+' - '+getSubStatus(s)+' - Ends '+s.endDate+'</div>';});el('subsList').innerHTML=sh||'No subs';var sb=el('subStatusBanner');var my=getSubForSchool(curSchool);if(my)sb.innerHTML='💳 '+my.plan+' - '+getSubStatus(my)+' - Ends '+my.endDate+' - Days Left '+getDaysLeft(my);renderDashboards();}
-function renderDashboards(){var books=getBooks();var learners=getLearners();var issues=getIssues();var subs=getSubs();var activeIssues=issues.filter(function(x){return !x.returned;});var overdue=issues.filter(function(x){return !x.returned&&x.dueDate&&new Date(x.dueDate)<new Date();});function set(id,t){var e=el(id);if(e)e.innerHTML=t;}set('pdSchool',curSchoolName||curSchool||'-');var my=getSubForSchool(curSchool);set('pdSubBanner',my?('✅ '+my.plan+' - '+getSubStatus(my)+' - Ends '+my.endDate+' - Days Left '+getDaysLeft(my)):'🟡 No Sub - WhatsApp 0780233263');set('pdBooks','📚 Books: '+books.length);set('pdIssued','📤 Issued: '+activeIssues.length);set('pdAvailable','✅ Available: '+(books.length-activeIssues.length));set('pdOverdue','🔴 Overdue: '+overdue.length);set('pdLearners','👥 Learners: '+learners.length);set('pdStaff','👥 Staff: See Staff');set('pdOverdueList',overdue.length?('🔴 Overdue Books: '+overdue.map(function(x){return x.book+' ('+x.learner+')';}).join(', ')):'✅ No overdue books');var active=0,trial=0,expired=0,rev=0;subs.forEach(function(s){var st=getSubStatus(s);if(st==='Active')active++;if(st==='Trial')trial++;if(st==='Expired')expired++;if(st==='Active'||st==='Trial')rev+=(s.billing==='YEARLY'?Math.round((s.price||0)/12):(s.price||0));});set('adSchools','🏫 Schools: '+subs.length);set('adActive','✅ Active: '+active);set('adTrial','🟡 Trial: '+trial);set('adExpired','❌ Expired: '+expired);set('adRevenue','💰 Monthly: R'+rev);set('adBooks','📚 Total Books: '+books.length);set('adAlerts',expired>0?('🚨 '+expired+' Schools EXPIRED'):'✅ No expired schools');var ah='';subs.forEach(function(s){ah+='<div class="badge">'+s.schoolName+' - '+s.plan+' - '+getSubStatus(s)+' - R'+(s.price||0)+'/mo</div>';});el('adminSchoolsList').innerHTML=ah;}
-// CLOUD SYNC
-async function saveToCloud(){try{if(!db||!curSchool)return;var payload={school:curSchool,schoolName:curSchoolName,updatedAt:new Date().toISOString(),deviceId:deviceId,updatedBy:curUserEmail,mk_books:getBooks(),mk_learners:getLearners(),mk_issues:getIssues(),mk_subs:getSubs()};await db.collection('schools').doc(String(curSchool)).set(payload,{merge:true});el('syncStatus').innerHTML='☁️ SYNCED '+new Date().toLocaleTimeString();}catch(e){console.log(e);}}
-function startCloudListener(){if(!db||!curSchool)return;db.collection('schools').doc(String(curSchool)).onSnapshot(function(snap){if(!snap.exists)return;var d=snap.data();if(!d)return;if(d.deviceId===deviceId)return;if(d.mk_books)localStorage.setItem('mk_books',JSON.stringify(d.mk_books));if(d.mk_learners)localStorage.setItem('mk_learners',JSON.stringify(d.mk_learners));if(d.mk_issues)localStorage.setItem('mk_issues',JSON.stringify(d.mk_issues));if(d.mk_subs)localStorage.setItem('mk_subs',JSON.stringify(d.mk_subs));el('liveUpdates').innerHTML='🔴 UPDATED FROM OTHER DEVICE!';renderAll();});}
-try{firebase.initializeApp(firebaseConfig);db=firebase.firestore();auth=firebase.auth();auth.onAuthStateChanged(function(u){if(u){firebaseUserUid=u.uid;el('cloudStatus').innerHTML='☁️ V6.8 - Firebase Connected - Device: '+deviceId;}else{el('cloudStatus').innerHTML='☁️ V6.8 - Firebase Ready - Please Login';}});}catch(e){el('cloudStatus').innerHTML='Firebase Error: '+e.message;}
-if(localStorage.getItem('mk_school')){curSchool=localStorage.getItem('mk_school');curSchoolName=localStorage.getItem('mk_schoolName')||curSchool;el('selectedSchoolDisplay').innerHTML='✅ Selected: '+curSchoolName+' ('+curSchool+')';el('homeSchoolName').innerHTML='School: '+curSchoolName;}
-populateSubSchool();renderAll();
-</script>
-<script src="cloud-sync.js"></script>
-</body></html>
+// --- STORAGE ---
+let DB=JSON.parse(localStorage.getItem('mk_v69')||'{"books":[],"staff":[],"learners":[],"issues":[],"subs":[],"jobs":[],"agents":[],"sales":[],"contracts":[]}');
+let CUR={role:'',school:'',schoolName:'',staffName:'',subject:''};
+function save(){localStorage.setItem('mk_v69',JSON.stringify(DB));render();}
+function schoolName(){return CUR.school==='700310854'?'WORDSWORTH HIGH SCHOOL':CUR.school==='700310855'?'MAKHANANI PRIMARY':CUR.school||'No school selected'}
+document.getElementById('dev').innerText='DEV-'+Math.random().toString(36).slice(2,6).toUpperCase();
+function forceSchool(){let v=document.getElementById('emis').value||document.getElementById('schoolSel').value;CUR.school=v;document.getElementById('schoolSel').value=v;alert('School selected: '+v);render();}
+function login(){CUR.role=document.getElementById('role').value;CUR.school=document.getElementById('schoolSel').value||document.getElementById('emis').value;CUR.staffName=document.getElementById('staffName').value;CUR.subject=document.getElementById('staffSubject').value.toUpperCase();
+if(!CUR.school)return alert('Select School first');if((CUR.role==='EDUCATOR'||CUR.role==='HOD')&&!CUR.subject)return alert('Educator/HOD must enter Subject Code');
+document.getElementById('loginCard').style.display='none';document.getElementById('tabsCard').style.display='block';render();alert('Logged in as '+CUR.role+' - '+schoolName());}
+function logout(){location.reload();}
+function showTab(id,btn){['home','principal','admin','books','staff','learners','print'].forEach(t=>document.getElementById('tab-'+t).style.display=t===id?'block':'none');if(btn){document.querySelectorAll('#tabsCard .tabs button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}render();}
+// BOOKS - Subject Code Unique Number
+function addBook(){if(!['ADMIN','PRINCIPAL','LIBRARIAN'].includes(CUR.role))return alert('Only Admin / Principal / Librarian can add books');
+let sub=document.getElementById('bSubject').value,title=document.getElementById('bTitle').value||sub+' Textbook';
+let count=DB.books.filter(b=>b.school===CUR.school&&b.code.startsWith(sub)).length+1;
+let code=sub+'-'+String(count).padStart(3,'0');
+DB.books.push({code,title,subject:sub,school:CUR.school,issued:false,learner:''});save();document.getElementById('bookInfo').innerText='✅ Created: '+code+' - '+title+' | Barcode below in list';}
+function issueBook(){let code=document.getElementById('issueBookNo').value.toUpperCase(),ln=document.getElementById('issueLearner').value.toUpperCase();
+let b=DB.books.find(x=>x.code===code&&x.school===CUR.school);if(!b)return alert('Book not found');if(b.issued)return alert('Already issued');
+if((CUR.role==='EDUCATOR'||CUR.role==='HOD')&&b.subject!==CUR.subject)return alert('⛔ Educator can ONLY issue '+CUR.subject+' books. This is '+b.subject);
+b.issued=true;b.learner=ln;DB.issues.push({code,learner:ln,date:new Date().toLocaleDateString(),school:CUR.school});save();alert('Issued '+code+' to '+ln);}
+function returnBook(){let code=document.getElementById('issueBookNo').value.toUpperCase();let b=DB.books.find(x=>x.code===code&&x.school===CUR.school);if(!b)return alert('Not found');b.issued=false;b.learner='';save();alert('Returned '+code+' - ANY role can return');}
+// STAFF - Min 1 Subject
+function addStaff(){if(!['ADMIN','PRINCIPAL'].includes(CUR.role))return alert('Only Admin / Principal can add/remove staff');
+let name=document.getElementById('sName').value,sub=document.getElementById('sSub').value;if(!name)return alert('Enter Name');if(!sub)return alert('⛔ Staff MUST have at least 1 Subject');
+DB.staff.push({name,id:document.getElementById('sId').value||'STF-'+(DB.staff.length+1),role:document.getElementById('sRole').value,subject:sub,email:document.getElementById('sEmail').value,school:CUR.school});save();alert('Staff added: '+name+' - '+sub);}
+function removeStaff(i){if(!['ADMIN','PRINCIPAL'].includes(CUR.role))return alert('No permission');DB.staff.splice(i,1);save();}
+function addLearner(){let name=document.getElementById('lName').value;if(!name)return alert('Enter name');let id='LRN-'+String(DB.learners.filter(l=>l.school===CUR.school).length+1).padStart(3,'0');DB.learners.push({name,id,grade:document.getElementById('lGrade').value,school:CUR.school});save();}
+function wa(){window.open('https://wa.me/2780233263?text=Hello Makhanani','_blank')}
+// ADMIN SUB TABS
+let adminCur='subs';
+function adminSub(t,btn){adminCur=t;document.querySelectorAll('#tab-admin .tabs button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');renderAdmin();}
+function renderAdmin(){let c=document.getElementById('adminContent');
+if(adminCur==='subs')c.innerHTML=`<h3>💳 Subscriptions</h3><input id="subSchool" placeholder="EMIS"><select id="subPlan"><option>STANDARD</option><option>PREMIUM</option><option>DEMO</option></select><button class="green" onclick="addSub()">➕ CREATE SUBSCRIPTION</button><div>${DB.subs.map(s=>`<p>${s.school} - ${s.plan} - ${s.status}</p>`).join('')}</div>`;
+else if(adminCur==='jobs')c.innerHTML=`<h3>💼 Jobs</h3><input id="jobT" placeholder="Job Title e.g. Agent - Soweto"><button class="green" onclick="DB.jobs.push({t:document.getElementById('jobT').value,school:CUR.school});save();renderAdmin()">➕ ADD JOB</button><div>${DB.jobs.map(j=>`<p>${j.t}</p>`).join('')}</div>`;
+else if(adminCur==='agents')c.innerHTML=`<h3>🕵️ Agents Tracker</h3><input id="agN" placeholder="Agent Name"><input id="agArea" placeholder="Area"><button class="green" onclick="DB.agents.push({n:document.getElementById('agN').value,area:document.getElementById('agArea').value});save();renderAdmin()">➕ ADD AGENT</button><div>${DB.agents.map(a=>`<p>${a.n} - ${a.area}</p>`).join('')}</div>`;
+else if(adminCur==='salesMgr')c.innerHTML=`<h3>📈 Sales Manager</h3><input id="smN" placeholder="School / Client"><input id="smAmt" type="number" placeholder="Amount R"><button class="green" onclick="DB.sales.push({n:document.getElementById('smN').value,amt:document.getElementById('smAmt').value});save();renderAdmin()">➕ ADD SALE</button><div>${DB.sales.map(s=>`<p>${s.n} - R${s.amt}</p>`).join('')} <b>Total: R${DB.sales.reduce((a,s)=>a+Number(s.amt||0),0)}</b></div>`;
+else if(adminCur==='salesTrack')c.innerHTML=`<h3>📊 Sales Tracker</h3><p>Total Sales: R${DB.sales.reduce((a,s)=>a+Number(s.amt||0),0)} | Deals: ${DB.sales.length}</p><table><tr><th>Client</th><th>Amount</th></tr>${DB.sales.map(s=>`<tr><td>${s.n}</td><td>R${s.amt}</td></tr>`).join('')}</table>`;
+else c.innerHTML=`<h3>📄 Agents Contracts</h3><input id="ctN" placeholder="Agent Name"><input id="ctT" placeholder="Contract Terms e.g. 10% commission"><button class="green" onclick="DB.contracts.push({n:document.getElementById('ctN').value,t:document.getElementById('ctT').value});save();renderAdmin()">➕ CREATE CONTRACT</button><div>${DB.contracts.map(x=>`<p>📄 ${x.n} - ${x.t} <button onclick="window.print()">🖨️ Print</button></p>`).join('')}</div>`;}
+function addSub(){DB.subs.push({school:document.getElementById('subSchool').value||CUR.school,plan:document.getElementById('subPlan').value,status:'Active'});save();renderAdmin();}
+// RENDER
+function render(){
+document.getElementById('who').innerText=`Role: ${CUR.role||'Not logged in'} | School: ${schoolName()} ${CUR.subject? '| Subject: '+CUR.subject:''}`;
+document.querySelectorAll('.schoolName').forEach(e=>e.innerText=schoolName());
+let books=DB.books.filter(b=>b.school===CUR.school);let learners=DB.learners.filter(l=>l.school===CUR.school);let staff=DB.staff.filter(s=>s.school===CUR.school);
+document.getElementById('pBooks').innerText=books.length;document.getElementById('pIssued').innerText=books.filter(b=>b.issued).length;document.getElementById('pAvail').innerText=books.filter(b=>!b.issued).length;document.getElementById('pOver').innerText=0;document.getElementById('pLearners').innerText=learners.length;document.getElementById('pStaff').innerText=staff.length;
+document.getElementById('booksList').innerHTML=`<table><tr><th>Book No</th><th>Title</th><th>Subject</th><th>Status</th><th>Barcode</th></tr>${books.map(b=>`<tr><td><b>${b.code}</b></td><td>${b.title}</td><td>${b.subject}</td><td>${b.issued?'📤 Issued to '+b.learner:'✅ Available'}</td><td><svg class="bc" data-v="MAKHANANI ${schoolName()} ${b.code}"></svg></td></tr>`).join('')||'<tr><td colspan=5>No books yet - Add one above</td></tr>'}</table>`;
+document.getElementById('staffList').innerHTML=`<table><tr><th>Name</th><th>Role</th><th>Subject</th><th>Action</th></tr>${staff.map((s,i)=>`<tr><td>${s.name}</td><td>${s.role}</td><td>${s.subject}</td><td><button class="red" onclick="removeStaff(${DB.staff.indexOf(s)})">Remove</button></td></tr>`).join('')}</table>`;
+document.getElementById('learnerList').innerHTML=learners.map(l=>`<div class="barcodeBox"><b>MAKHANANI • ${schoolName()}</b><b>${l.name} - ${l.grade} - ${l.id}</b><svg class="bc2" data-v="${l.id}"></svg><br><small>Scan at Issue / Return</small></div>`).join('')||'No learners yet';
+document.getElementById('printReport').innerHTML=`<h3>MAKHANANI DIGITAL LIBRARY</h3><p><b>School:</b> ${schoolName()} (${CUR.school})<br><b>Date:</b> ${new Date().toLocaleDateString()}<br><b>Principal Report</b></p><p>Books: ${books.length} | Issued: ${books.filter(b=>b.issued).length} | Available: ${books.filter(b=>!b.issued).length} | Overdue: 0 | Learners: ${learners.length} | Staff: ${staff.length}</p><table><tr><th>Book No</th><th>Title</th><th>Status</th></tr>${books.map(b=>`<tr><td>${b.code}</td><td>${b.title}</td><td>${b.issued?'Issued':'Available'}</td></tr>`).join('')}</table><p>Signature: ___________________ &nbsp; Principal</p>`;
+try{ document.querySelectorAll('.bc').forEach(s=>JsBarcode(s,s.dataset.v,{format:'CODE128',width:1.2,height:40,displayValue:true})); document.querySelectorAll('.bc2').forEach(s=>JsBarcode(s,s.dataset.v,{format:'CODE128',width:1.5,height:50,displayValue:true})); }catch(e){}
+renderAdmin();}
+render();
+</script></body></html>
