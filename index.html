@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MAKHANANI V7.2 - Upload DBE Schools By Admin</title>
+<title>MAKHANANI V7.3 - Login Fix</title>
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial;background:#eef2f7;color:#111}
@@ -15,8 +15,7 @@ button{background:#0a1f4d;color:#fff;font-weight:700;cursor:pointer}
 button.green{background:#059669}button.yellow{background:#eab308;color:#000}button.red{background:#dc2626}button.purple{background:#7c3aed}button.orange{background:#ea580c}
 .row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
 .stat{background:#f1f5f9;border-radius:12px;padding:14px;text-align:center;font-weight:700}
-.tabs{display:flex;gap:8px;flex-wrap:wrap}.tabs button{width:auto;padding:10px 14px}
-.tabs button.active{background:#2563eb}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}.tabs button{width:auto;padding:10px 14px}.tabs button.active{background:#2563eb}
 table{width:100%;border-collapse:collapse;font-size:14px}th,td{border:1px solid #e2e8f0;padding:8px;text-align:left}
 .barcodeBox{border:2px dashed #0a1f4d;padding:12px;text-align:center;border-radius:12px;margin:8px 0}.barcodeBox b{display:block}
 .manual{border:1px solid #cbd5e1;border-radius:12px;padding:14px;margin:10px 0}.manual h3{color:#0a1f4d}
@@ -25,8 +24,7 @@ table{width:100%;border-collapse:collapse;font-size:14px}th,td{border:1px solid 
 .scanBox{background:#eff6ff;border:1px solid #2563eb;border-radius:12px;padding:12px;margin:10px 0}
 .subjectGrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;max-height:220px;overflow-y:auto;border:1px solid #cbd5e1;border-radius:10px;padding:10px;background:#f8fafc}
 .subjectGrid label{display:flex;align-items:center;gap:6px;font-size:13px;background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:6px;cursor:pointer}
-.subjectGrid input{width:auto;margin:0}
-.subjectGrid label.checked{background:#dcfce7;border-color:#059669;font-weight:700}
+.subjectGrid input{width:auto;margin:0}.subjectGrid label.checked{background:#dcfce7;border-color:#059669;font-weight:700}
 .warn{background:#fef2f2;border:1px solid #fca5a5;border-radius:10px;padding:10px;color:#991b1b;font-weight:700}
 .ok{background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:10px;color:#166534;font-weight:700}
 .uploadBox{background:#f0f9ff;border:2px dashed #2563eb;border-radius:12px;padding:14px;margin:10px 0}
@@ -37,20 +35,24 @@ video{width:100%;border-radius:10px;background:#000}
 @media(max-width:700px){.row,.row2,.row3,.printSheet,.subjectGrid{grid-template-columns:1fr 1fr}}
 </style></head>
 <body>
-<header><h1>MAKHANANI DIGITAL LIBRARY</h1><p>V7.2 — Upload DBE Schools By Administrator — WhatsApp 0780233263</p></header>
+<header><h1>MAKHANANI DIGITAL LIBRARY</h1><p>V7.3 — Login Fix — WhatsApp 0780233263</p></header>
 <div class="wrap">
-<div class="card"><b>V7.2 — Device: <span id="dev"></span> — SYNC: ON — DBE Schools: <span id="dbeTotalTop">0</span> — Uploaded By Admin: <span id="uploadedCountTop">0</span></b><br><span id="who">Not logged in</span></div>
+<div class="card"><b>V7.3 — Device: <span id="dev">...</span> — DBE Schools: <span id="dbeTotalTop">...</span> — Uploaded: <span id="uploadedCountTop">...</span></b><br><span id="who">Not logged in</span><div id="debugBox" style="font-size:12px;margin-top:6px"></div></div>
 
 <div class="card noPrint" id="loginCard">
-<h2>🔐 LOGIN</h2>
+<h2>🔐 LOGIN — V7.3 FIXED</h2>
+<div id="dbeAlert"></div>
 <select id="role"><option>ADMIN</option><option>PRINCIPAL</option><option>LIBRARIAN</option><option>EDUCATOR</option><option>HOD</option></select>
-<input id="schoolSearch" placeholder="🔍 Search DBE School — EMIS / Name / Province — Includes Uploaded Schools" oninput="filterDBE()">
+<input id="schoolSearch" placeholder="🔍 Search DBE School — Type Wor, 700310, Limpopo" oninput="filterDBE()">
 <select id="schoolSel"><option value="">-- Select DBE School --</option></select>
 <div id="dbeCount" style="font-size:12px;color:#059669"></div>
-<input id="emis" placeholder="Or type EMIS e.g. 700310854"><button onclick="forceSchool()">🚨 FORCE SELECT SCHOOL</button>
-<input id="email" placeholder="Email" value="admin@makhanani.com"><input id="pass" type="password" placeholder="Password" value="admin123">
-<input id="staffName" placeholder="Staff Name (EDUCATOR / HOD)"><input id="staffSubject" placeholder="Your Teaching Subject(s) e.g. MAT, PHYSC">
+<input id="emis" placeholder="Or type EMIS e.g. 700310854 — This alone is enough to login">
+<div class="row2"><button onclick="forceSchool()">🚨 FORCE SELECT SCHOOL</button><button class="orange" onclick="restoreDBE()">🔄 RESTORE DBE SCHOOLS</button></div>
+<input id="email" placeholder="Email — Any email works" value="admin@makhanani.com"><input id="pass" type="password" placeholder="Password — Any password works" value="admin123">
+<input id="staffName" placeholder="Staff Name (EDUCATOR / HOD only)"><input id="staffSubject" placeholder="Teaching Subject(s) e.g. MAT, PHYSC (EDUCATOR / HOD only)">
 <button class="green" onclick="login()">🔐 LOGIN</button>
+<button class="red" onclick="emergencyLogin()">🚨 EMERGENCY LOGIN — ADMIN + WORDSWORTH (Use if Login Fails)</button>
+<p style="font-size:13px">If dropdown is empty, just type <b>700310854</b> in EMIS box and tap LOGIN — It will work. Or tap EMERGENCY LOGIN.</p>
 </div>
 
 <div class="card noPrint" id="tabsCard" style="display:none"><div class="tabs">
@@ -66,7 +68,7 @@ video{width:100%;border-radius:10px;background:#000}
 </div><button class="red" onclick="logout()">🚪 LOGOUT</button></div>
 
 <div class="card" id="tab-home">
-<h2>📚 Issue / Return — Scan or Type</h2>
+<h2>📚 Issue / Return</h2>
 <div class="scanBox"><b>📷 SCAN:</b> Phone Camera OR Bluetooth/USB Scanner
 <div class="row2"><button class="purple" onclick="openScan('issueBookNo')">📷 SCAN BOOK</button><button class="purple" onclick="openScan('issueLearner')">📷 SCAN LEARNER</button></div>
 <div class="row2"><button onclick="openScan('returnBookNo')">📷 SCAN FOR RETURN</button><button class="yellow" onclick="document.getElementById('issueBookNo').focus()">⌨️ USE EXTERNAL SCANNER</button></div></div>
@@ -86,23 +88,23 @@ video{width:100%;border-radius:10px;background:#000}
 </div>
 
 <div class="card" id="tab-admin" style="display:none">
-<h2>👑 ADMIN DASH — FULL CONTROL</h2>
-<div class="tabs noPrint"><button onclick="adminSub('subs',this)">💳 Subscriptions</button><button onclick="adminSub('jobs',this)">💼 Jobs</button><button onclick="adminSub('agents',this)">🕵️ Agents Tracker</button><button onclick="adminSub('salesMgr',this)">📈 Sales Manager</button><button onclick="adminSub('salesTrack',this)">📊 Sales Tracker</button><button onclick="adminSub('contracts',this)">📄 Agents Contracts</button><button onclick="adminSub('dbe',this)" class="active">🏫 DBE SCHOOLS UPLOAD</button></div>
+<h2>👑 ADMIN DASH</h2>
+<div class="tabs noPrint"><button onclick="adminSub('dbe',this)" class="active">🏫 DBE SCHOOLS UPLOAD</button><button onclick="adminSub('subs',this)">💳 Subscriptions</button><button onclick="adminSub('jobs',this)">💼 Jobs</button><button onclick="adminSub('agents',this)">🕵️ Agents Tracker</button><button onclick="adminSub('salesMgr',this)">📈 Sales Manager</button><button onclick="adminSub('salesTrack',this)">📊 Sales Tracker</button><button onclick="adminSub('contracts',this)">📄 Agents Contracts</button></div>
 <div id="adminContent"></div></div>
 
 <div class="card" id="tab-staff" style="display:none">
 <h2>👥 STAFF — MUST Have At Least 1 Teaching Subject</h2>
-<div class="warn">⛔ RULE: Staff CANNOT be saved without at least 1 Teaching Subject. Tick at least 1 box.</div>
+<div class="warn">⛔ RULE: Staff CANNOT be saved without at least 1 Teaching Subject.</div>
 <div class="row2"><input id="sName" placeholder="Full Name"><input id="sId" placeholder="Staff ID"></div>
 <div class="row2"><select id="sRole"><option>EDUCATOR</option><option>HOD</option><option>LIBRARIAN</option><option>PRINCIPAL</option></select><input id="sEmail" placeholder="Staff Email"></div>
-<p><b>📘 Tick Teaching Subject(s) — At Least 1 Required:</b> <span id="subjectCount" style="font-weight:700;color:#dc2626">0 selected</span></p>
-<input id="subjectSearch" placeholder="🔍 Search Subject — e.g. MAT, ENGHL, PHYSC" oninput="filterSubjects()"><div id="subjectGrid" class="subjectGrid"></div>
-<button class="green" onclick="addStaff()">➕ ADD STAFF — Must Have Subject</button><div id="staffList"></div></div>
+<p><b>📘 Tick Teaching Subject(s):</b> <span id="subjectCount">0 selected</span></p>
+<input id="subjectSearch" placeholder="🔍 Search Subject" oninput="filterSubjects()"><div id="subjectGrid" class="subjectGrid"></div>
+<button class="green" onclick="addStaff()">➕ ADD STAFF</button><div id="staffList"></div></div>
 
 <div class="card" id="tab-learners" style="display:none">
 <h2>🎓 LEARNERS + BARCODE PRINT</h2>
 <div class="row2"><input id="lName" placeholder="Learner Full Name"><input id="lGrade" placeholder="Class e.g. 8A"></div>
-<button class="green" onclick="addLearner()">➕ ADD LEARNER — Auto LRN-001 + Barcode</button>
+<button class="green" onclick="addLearner()">➕ ADD LEARNER</button>
 <div class="filterBox noPrint"><b>🖨️ PRINT LEARNER BARCODES:</b>
 <div class="row3"><select id="learnerFilterType" onchange="updateLearnerFilterOptions()"><option value="ALL">ALL LEARNERS</option><option value="GRADE">PER GRADE</option><option value="CLASS">PER CLASS</option></select><select id="learnerFilterValue"><option value="">-- All --</option></select><select id="learnerFilterGrade"><option value="">-- Pick Grade --</option><option>Grade 1</option><option>Grade 2</option><option>Grade 3</option><option>Grade 4</option><option>Grade 5</option><option>Grade 6</option><option>Grade 7</option><option>Grade 8</option><option>Grade 9</option><option>Grade 10</option><option>Grade 11</option><option>Grade 12</option></select></div>
 <div id="learnerFilterInfo"></div><button class="purple" onclick="printLearnerBarcodes()">🖨️ PRINT FILTERED LEARNERS</button><button class="orange" onclick="previewLearnerBarcodes()">👁️ PREVIEW</button></div>
@@ -117,248 +119,87 @@ video{width:100%;border-radius:10px;background:#000}
 
 <div class="card" id="tab-print" style="display:none"><h2>🖨️ PRINTABLE PRINCIPAL REPORT</h2><div id="printReport"></div><button onclick="window.print()">🖨️ PRINT THIS REPORT</button></div>
 <div class="card" id="tab-printBarcodes" style="display:none"><h2>🖨️ BARCODE PRINT SHEET — <span class="schoolName"></span></h2><div id="printSheetTitle" style="font-weight:700;margin:8px 0"></div><button class="green noPrint" onclick="window.print()">🖨️ PRINT THIS SHEET</button><button class="noPrint" onclick="showTab('home',null)">⬅️ Back</button><div id="printSheet" class="printSheet"></div></div>
-
-<div class="card" id="tab-manuals" style="display:none">
-<h2>📖 MANUALS — V7.2</h2><button class="green noPrint" onclick="window.print()">🖨️ PRINT ALL MANUALS</button>
-<div class="manual"><h3>ADMIN — UPLOAD DBE SCHOOLS</h3><p><b>Step 1:</b> Login as ADMIN → Admin Dash → <b>🏫 DBE SCHOOLS UPLOAD</b></p><p><b>Step 2:</b> Download Template → Open in Excel / Google Sheets → Fill EMIS, School Name, Province → Save as CSV</p><p><b>Step 3:</b> Tap CHOOSE FILE → Select your CSV → Tap UPLOAD → Schools appear instantly in Login dropdown.</p><p><b>OR Paste:</b> Paste lines like <code>700310854,WORDSWORTH HIGH SCHOOL,Gauteng</code> → Tap IMPORT PASTED LIST.</p><p><b>OR Add One:</b> Type EMIS + Name + Province → ADD SCHOOL.</p><p><b>Rule:</b> Only ADMIN can upload/delete schools. Principals / Librarians / Educators CANNOT.</p></div>
-<div class="manual"><h3>STAFF RULE</h3><p>Every staff MUST have at least 1 Teaching Subject. Tick at least 1 CAPS box.</p></div>
+<div class="card" id="tab-manuals" style="display:none"><h2>📖 MANUALS — V7.3</h2><button class="green noPrint" onclick="window.print()">🖨️ PRINT ALL MANUALS</button>
+<div class="manual"><h3>LOGIN FIX</h3><p>If dropdown empty: Type <b>700310854</b> in EMIS box → Tap LOGIN. Or tap <b>🚨 EMERGENCY LOGIN</b>. Or tap <b>🔄 RESTORE DBE SCHOOLS</b>.</p></div>
+<div class="manual"><h3>ADMIN — UPLOAD DBE SCHOOLS</h3><p>Admin → DBE Upload → Download Template → Fill CSV → Upload. Or Paste → Import. Or Add One.</p></div>
+<div class="manual"><h3>STAFF RULE</h3><p>Every staff MUST have at least 1 Teaching Subject.</p></div>
 </div>
 <div class="card" id="tab-caps" style="display:none"><h2>📘 ALL CAPS SUBJECTS</h2><div id="capsList"></div><button class="green noPrint" onclick="window.print()">🖨️ PRINT CAPS LIST</button></div>
 </div>
 <div id="scanModal"><div class="box"><h3>📷 SCAN BARCODE</h3><video id="scanVideo" playsinline></video><p id="scanStatus">Starting...</p><button onclick="closeScan()">❌ CLOSE</button><button class="yellow" onclick="manualScan()">⌨️ TYPE MANUALLY</button></div></div>
-
 <script>
-const CAPS=[
-["ENGHL","English Home Language"],["ENGFAL","English First Additional Language"],["ENGSAL","English Second Additional Language"],
-["AFRHL","Afrikaans Home Language"],["AFRFAL","Afrikaans First Additional Language"],
-["ZULHL","isiZulu Home Language"],["ZULFAL","isiZulu First Additional Language"],
-["XHOHL","isiXhosa Home Language"],["XHOFAL","isiXhosa First Additional Language"],
-["SEPEDIHL","Sepedi Home Language"],["SEPEDIFAL","Sepedi First Additional Language"],
-["SETSWANAHL","Setswana Home Language"],["SETSWANAFAL","Setswana First Additional Language"],
-["SESOTHOHL","Sesotho Home Language"],["SESOTHOFAL","Sesotho First Additional Language"],
-["XITSONGAHL","Xitsonga Home Language"],["XITSONGAFAL","Xitsonga First Additional Language"],
-["TSHIVENDAHL","Tshivenda Home Language"],["TSHIVENDAFAL","Tshivenda First Additional Language"],
-["SISWATIHL","siSwati Home Language"],["SISWATIFAL","siSwati First Additional Language"],
-["ISINDEBELEHL","isiNdebele Home Language"],["ISINDEBELEFAL","isiNdebele First Additional Language"],
-["MAT","Mathematics"],["MLIT","Mathematical Literacy"],["TMAT","Technical Mathematics"],
-["NSC","Natural Sciences"],["NST","Natural Sciences & Technology"],["TECH","Technology"],
-["SOC","Social Sciences"],["GEO","Geography"],["HIS","History"],
-["LIFSK","Life Skills"],["LO","Life Orientation"],
-["PHYSC","Physical Sciences"],["LIFSC","Life Sciences"],["AGRSC","Agricultural Sciences"],["AGRMAN","Agricultural Management Practices"],["AGRTEC","Agricultural Technology"],
-["ACC","Accounting"],["BUS","Business Studies"],["ECO","Economics"],
-["CAT","Computer Applications Technology"],["IT","Information Technology"],
-["CON","Consumer Studies"],["HOS","Hospitality Studies"],["TOU","Tourism"],
-["EGD","Engineering Graphics & Design"],["CIVTEC","Civil Technology"],["ELETEC","Electrical Technology"],["MECTEC","Mechanical Technology"],
-["CRA","Creative Arts"],["MUS","Music"],["DRA","Dramatic Arts"],["VAR","Visual Arts"],
-["REL","Religion Studies"],["EMS","Economic & Management Sciences"]
-];
-const DBE_DEFAULT=[
-["700310854","WORDSWORTH HIGH SCHOOL","Gauteng"],["700310855","MAKHANANI PRIMARY","Gauteng"],
-["700110001","PRETORIA HIGH SCHOOL FOR GIRLS","Gauteng"],["700110002","PRETORIA BOYS HIGH SCHOOL","Gauteng"],
-["700110003","AFRIKAANSE HOER MEISIESKOOL","Gauteng"],["700110004","AFRIKAANSE HOER SEUNSKOOL","Gauteng"],
-["700110005","CENTURION HIGH SCHOOL","Gauteng"],["700110006","WATERKLOOF HIGH SCHOOL","Gauteng"],
-["700110007","MENLOPARK HIGH SCHOOL","Gauteng"],["700110008","GARSFONTEIN HIGH SCHOOL","Gauteng"],
-["700120001","KING EDWARD VII SCHOOL","Gauteng"],["700120002","PARKTOWN GIRLS HIGH SCHOOL","Gauteng"],
-["700120003","PARKTOWN BOYS HIGH SCHOOL","Gauteng"],["700120004","JEPPE HIGH SCHOOL FOR BOYS","Gauteng"],
-["700120005","JEPPE HIGH SCHOOL FOR GIRLS","Gauteng"],["700120006","SOWETO HIGH SCHOOL","Gauteng"],
-["700120007","MORRIS ISAACSON HIGH SCHOOL","Gauteng"],["700120008","ORLANDO HIGH SCHOOL","Gauteng"],
-["700120009","MEADOWLANDS HIGH SCHOOL","Gauteng"],["700120010","DIEPDALE SECONDARY","Gauteng"],
-["700130001","FOURWAYS HIGH SCHOOL","Gauteng"],["700130002","SANDTON HIGH SCHOOL","Gauteng"],
-["700130003","BRYANSTON HIGH SCHOOL","Gauteng"],["700130004","ALEXANDRA HIGH SCHOOL","Gauteng"],
-["700140001","BENONI HIGH SCHOOL","Gauteng"],["700140002","ALBERTON HIGH SCHOOL","Gauteng"],
-["700140003","GERMISTON HIGH SCHOOL","Gauteng"],["700140004","KEMPTON PARK HIGH SCHOOL","Gauteng"],
-["700140005","EDENVALE HIGH SCHOOL","Gauteng"],["700140006","TEMBISA HIGH SCHOOL","Gauteng"],
-["900110001","POLOKWANE HIGH SCHOOL","Limpopo"],["900110002","CAPRICORN HIGH SCHOOL","Limpopo"],
-["900110003","BENNIE MABENA SECONDARY","Limpopo"],["900110004","MOKOPANE HIGH SCHOOL","Limpopo"],
-["900110005","THOHOYANDOU HIGH SCHOOL","Limpopo"],["900110006","MUSINA HIGH SCHOOL","Limpopo"],
-["900110007","GIYANI HIGH SCHOOL","Limpopo"],["900110008","TZANEEN HIGH SCHOOL","Limpopo"],
-["800110001","NELSPRUIT HIGH SCHOOL","Mpumalanga"],["800110002","LOWVELD HIGH SCHOOL","Mpumalanga"],
-["800110003","WITBANK HIGH SCHOOL","Mpumalanga"],["800110004","MIDDELBURG HIGH SCHOOL","Mpumalanga"],
-["800110005","SECUNDA HIGH SCHOOL","Mpumalanga"],["800110006","ERMELLO HIGH SCHOOL","Mpumalanga"],
-["500110001","DURBAN HIGH SCHOOL","KwaZulu-Natal"],["500110002","DURBAN GIRLS HIGH SCHOOL","KwaZulu-Natal"],
-["500110003","WESTVILLE BOYS HIGH SCHOOL","KwaZulu-Natal"],["500110004","WESTVILLE GIRLS HIGH SCHOOL","KwaZulu-Natal"],
-["500110005","GLENWOOD HIGH SCHOOL","KwaZulu-Natal"],["500110006","MARITZBURG COLLEGE","KwaZulu-Natal"],
-["500110007","PIETERMARITZBURG GIRLS HIGH","KwaZulu-Natal"],["500110008","UMLAZI HIGH SCHOOL","KwaZulu-Natal"],
-["200110001","GREY HIGH SCHOOL","Eastern Cape"],["200110002","QUEENS COLLEGE","Eastern Cape"],
-["200110003","HUDSON PARK HIGH SCHOOL","Eastern Cape"],["200110004","ZWELITSHA HIGH SCHOOL","Eastern Cape"],
-["200110005","MDANTSANE HIGH SCHOOL","Eastern Cape"],["200110006","KING WILLIAMS TOWN HIGH","Eastern Cape"],
-["100110001","RONDEBOSCH BOYS HIGH SCHOOL","Western Cape"],["100110002","RONDEBOSCH GIRLS HIGH SCHOOL","Western Cape"],
-["100110003","SACS HIGH SCHOOL","Western Cape"],["100110004","BISHOPS DIOCESAN COLLEGE","Western Cape"],
-["100110005","KHAYELITSHA HIGH SCHOOL","Western Cape"],["100110006","GUGULETHU HIGH SCHOOL","Western Cape"],
-["100110007","MITCHELLS PLAIN HIGH SCHOOL","Western Cape"],["100110008","PAARL GYMNASIUM","Western Cape"],
-["400110001","GREY COLLEGE","Free State"],["400110002","EUNICE HIGH SCHOOL","Free State"],
-["400110003","BLOEMFONTEIN HIGH SCHOOL","Free State"],["400110004","HEIDEDAL HIGH SCHOOL","Free State"],
-["400110005","WELKOM HIGH SCHOOL","Free State"],["400110006","SASOLBURG HIGH SCHOOL","Free State"],
-["600110001","RUSTENBURG HIGH SCHOOL","North West"],["600110002","POTCHEFSTROOM HIGH SCHOOL","North West"],
-["600110003","MAFIKENG HIGH SCHOOL","North West"],["600110004","KLERKSDORP HIGH SCHOOL","North West"],
-["300110001","KIMBERLEY BOYS HIGH SCHOOL","Northern Cape"],["300110002","KIMBERLEY GIRLS HIGH SCHOOL","Northern Cape"],
-["300110003","UPINGTON HIGH SCHOOL","Northern Cape"],["300110004","DE AAR HIGH SCHOOL","Northern Cape"],
-["700150001","THEMBISA SECONDARY","Gauteng"],["700150002","SOSHANGUVE HIGH SCHOOL","Gauteng"],
-["700150003","MAMELODI HIGH SCHOOL","Gauteng"],["700150004","ATTEIDGEVILLE HIGH SCHOOL","Gauteng"]
-];
-// === DBE = DEFAULT + ADMIN UPLOADED (localStorage) ===
-let DBE_UPLOADED=JSON.parse(localStorage.getItem('mk_dbe_uploaded')||'[]');
-function getAllDBE(){let map=new Map();DBE_DEFAULT.forEach(s=>map.set(s[0],s));DBE_UPLOADED.forEach(s=>map.set(s[0],s));return [...map.values()];}
-function saveDBEUploaded(){localStorage.setItem('mk_dbe_uploaded',JSON.stringify(DBE_UPLOADED));filterDBE();render();renderAdmin();}
-let DB=JSON.parse(localStorage.getItem('mk_v72')||'{"books":[],"staff":[],"learners":[],"issues":[],"subs":[],"jobs":[],"agents":[],"sales":[],"contracts":[]}');
-DB.staff.forEach(s=>{if(!s.subjects)s.subjects=s.subject?[s.subject]:[];});
+const CAPS=[["ENGHL","English Home Language"],["ENGFAL","English First Additional Language"],["ENGSAL","English Second Additional Language"],["AFRHL","Afrikaans Home Language"],["AFRFAL","Afrikaans First Additional Language"],["ZULHL","isiZulu Home Language"],["ZULFAL","isiZulu First Additional Language"],["XHOHL","isiXhosa Home Language"],["XHOFAL","isiXhosa First Additional Language"],["SEPEDIHL","Sepedi Home Language"],["SEPEDIFAL","Sepedi First Additional Language"],["SETSWANAHL","Setswana Home Language"],["SETSWANAFAL","Setswana First Additional Language"],["SESOTHOHL","Sesotho Home Language"],["SESOTHOFAL","Sesotho First Additional Language"],["XITSONGAHL","Xitsonga Home Language"],["XITSONGAFAL","Xitsonga First Additional Language"],["TSHIVENDAHL","Tshivenda Home Language"],["TSHIVENDAFAL","Tshivenda First Additional Language"],["SISWATIHL","siSwati Home Language"],["SISWATIFAL","siSwati First Additional Language"],["ISINDEBELEHL","isiNdebele Home Language"],["ISINDEBELEFAL","isiNdebele First Additional Language"],["MAT","Mathematics"],["MLIT","Mathematical Literacy"],["TMAT","Technical Mathematics"],["NSC","Natural Sciences"],["NST","Natural Sciences & Technology"],["TECH","Technology"],["SOC","Social Sciences"],["GEO","Geography"],["HIS","History"],["LIFSK","Life Skills"],["LO","Life Orientation"],["PHYSC","Physical Sciences"],["LIFSC","Life Sciences"],["AGRSC","Agricultural Sciences"],["AGRMAN","Agricultural Management Practices"],["AGRTEC","Agricultural Technology"],["ACC","Accounting"],["BUS","Business Studies"],["ECO","Economics"],["CAT","Computer Applications Technology"],["IT","Information Technology"],["CON","Consumer Studies"],["HOS","Hospitality Studies"],["TOU","Tourism"],["EGD","Engineering Graphics & Design"],["CIVTEC","Civil Technology"],["ELETEC","Electrical Technology"],["MECTEC","Mechanical Technology"],["CRA","Creative Arts"],["MUS","Music"],["DRA","Dramatic Arts"],["VAR","Visual Arts"],["REL","Religion Studies"],["EMS","Economic & Management Sciences"]];
+const DBE_DEFAULT=[["700310854","WORDSWORTH HIGH SCHOOL","Gauteng"],["700310855","MAKHANANI PRIMARY","Gauteng"],["700110001","PRETORIA HIGH SCHOOL FOR GIRLS","Gauteng"],["700110002","PRETORIA BOYS HIGH SCHOOL","Gauteng"],["700110003","AFRIKAANSE HOER MEISIESKOOL","Gauteng"],["700110004","AFRIKAANSE HOER SEUNSKOOL","Gauteng"],["700110005","CENTURION HIGH SCHOOL","Gauteng"],["700110006","WATERKLOOF HIGH SCHOOL","Gauteng"],["700110007","MENLOPARK HIGH SCHOOL","Gauteng"],["700110008","GARSFONTEIN HIGH SCHOOL","Gauteng"],["700120001","KING EDWARD VII SCHOOL","Gauteng"],["700120002","PARKTOWN GIRLS HIGH SCHOOL","Gauteng"],["700120003","PARKTOWN BOYS HIGH SCHOOL","Gauteng"],["700120004","JEPPE HIGH SCHOOL FOR BOYS","Gauteng"],["700120005","JEPPE HIGH SCHOOL FOR GIRLS","Gauteng"],["700120006","SOWETO HIGH SCHOOL","Gauteng"],["700120007","MORRIS ISAACSON HIGH SCHOOL","Gauteng"],["700120008","ORLANDO HIGH SCHOOL","Gauteng"],["700120009","MEADOWLANDS HIGH SCHOOL","Gauteng"],["700120010","DIEPDALE SECONDARY","Gauteng"],["700130001","FOURWAYS HIGH SCHOOL","Gauteng"],["700130002","SANDTON HIGH SCHOOL","Gauteng"],["700130003","BRYANSTON HIGH SCHOOL","Gauteng"],["700130004","ALEXANDRA HIGH SCHOOL","Gauteng"],["700140001","BENONI HIGH SCHOOL","Gauteng"],["700140002","ALBERTON HIGH SCHOOL","Gauteng"],["700140003","GERMISTON HIGH SCHOOL","Gauteng"],["700140004","KEMPTON PARK HIGH SCHOOL","Gauteng"],["700140005","EDENVALE HIGH SCHOOL","Gauteng"],["700140006","TEMBISA HIGH SCHOOL","Gauteng"],["900110001","POLOKWANE HIGH SCHOOL","Limpopo"],["900110002","CAPRICORN HIGH SCHOOL","Limpopo"],["900110003","BENNIE MABENA SECONDARY","Limpopo"],["900110004","MOKOPANE HIGH SCHOOL","Limpopo"],["900110005","THOHOYANDOU HIGH SCHOOL","Limpopo"],["900110006","MUSINA HIGH SCHOOL","Limpopo"],["900110007","GIYANI HIGH SCHOOL","Limpopo"],["900110008","TZANEEN HIGH SCHOOL","Limpopo"],["800110001","NELSPRUIT HIGH SCHOOL","Mpumalanga"],["800110002","LOWVELD HIGH SCHOOL","Mpumalanga"],["800110003","WITBANK HIGH SCHOOL","Mpumalanga"],["800110004","MIDDELBURG HIGH SCHOOL","Mpumalanga"],["800110005","SECUNDA HIGH SCHOOL","Mpumalanga"],["800110006","ERMELLO HIGH SCHOOL","Mpumalanga"],["500110001","DURBAN HIGH SCHOOL","KwaZulu-Natal"],["500110002","DURBAN GIRLS HIGH SCHOOL","KwaZulu-Natal"],["500110003","WESTVILLE BOYS HIGH SCHOOL","KwaZulu-Natal"],["500110004","WESTVILLE GIRLS HIGH SCHOOL","KwaZulu-Natal"],["500110005","GLENWOOD HIGH SCHOOL","KwaZulu-Natal"],["500110006","MARITZBURG COLLEGE","KwaZulu-Natal"],["500110007","PIETERMARITZBURG GIRLS HIGH","KwaZulu-Natal"],["500110008","UMLAZI HIGH SCHOOL","KwaZulu-Natal"],["200110001","GREY HIGH SCHOOL","Eastern Cape"],["200110002","QUEENS COLLEGE","Eastern Cape"],["200110003","HUDSON PARK HIGH SCHOOL","Eastern Cape"],["200110004","ZWELITSHA HIGH SCHOOL","Eastern Cape"],["200110005","MDANTSANE HIGH SCHOOL","Eastern Cape"],["200110006","KING WILLIAMS TOWN HIGH","Eastern Cape"],["100110001","RONDEBOSCH BOYS HIGH SCHOOL","Western Cape"],["100110002","RONDEBOSCH GIRLS HIGH SCHOOL","Western Cape"],["100110003","SACS HIGH SCHOOL","Western Cape"],["100110004","BISHOPS DIOCESAN COLLEGE","Western Cape"],["100110005","KHAYELITSHA HIGH SCHOOL","Western Cape"],["100110006","GUGULETHU HIGH SCHOOL","Western Cape"],["100110007","MITCHELLS PLAIN HIGH SCHOOL","Western Cape"],["100110008","PAARL GYMNASIUM","Western Cape"],["400110001","GREY COLLEGE","Free State"],["400110002","EUNICE HIGH SCHOOL","Free State"],["400110003","BLOEMFONTEIN HIGH SCHOOL","Free State"],["400110004","HEIDEDAL HIGH SCHOOL","Free State"],["400110005","WELKOM HIGH SCHOOL","Free State"],["400110006","SASOLBURG HIGH SCHOOL","Free State"],["600110001","RUSTENBURG HIGH SCHOOL","North West"],["600110002","POTCHEFSTROOM HIGH SCHOOL","North West"],["600110003","MAFIKENG HIGH SCHOOL","North West"],["600110004","KLERKSDORP HIGH SCHOOL","North West"],["300110001","KIMBERLEY BOYS HIGH SCHOOL","Northern Cape"],["300110002","KIMBERLEY GIRLS HIGH SCHOOL","Northern Cape"],["300110003","UPINGTON HIGH SCHOOL","Northern Cape"],["300110004","DE AAR HIGH SCHOOL","Northern Cape"],["700150001","THEMBISA SECONDARY","Gauteng"],["700150002","SOSHANGUVE HIGH SCHOOL","Gauteng"],["700150003","MAMELODI HIGH SCHOOL","Gauteng"],["700150004","ATTEIDGEVILLE HIGH SCHOOL","Gauteng"]];
+let DBE_UPLOADED=[]; try{DBE_UPLOADED=JSON.parse(localStorage.getItem('mk_dbe_uploaded')||'[]'); if(!Array.isArray(DBE_UPLOADED)) DBE_UPLOADED=[];}catch(e){DBE_UPLOADED=[]; localStorage.removeItem('mk_dbe_uploaded');}
+function getAllDBE(){let m=new Map(); (DBE_DEFAULT||[]).forEach(s=>m.set(s[0],s)); (DBE_UPLOADED||[]).forEach(s=>{if(s&&s[0]) m.set(s[0],s);}); return [...m.values()];}
+function saveDBEUploaded(){try{localStorage.setItem('mk_dbe_uploaded',JSON.stringify(DBE_UPLOADED));}catch(e){} filterDBE(); render(); renderAdmin();}
+function restoreDBE(){DBE_UPLOADED=[]; try{localStorage.removeItem('mk_dbe_uploaded');}catch(e){} filterDBE(); render(); alert('✅ DBE Schools Restored: '+getAllDBE().length+' schools. Now type Wor in search — WORDSWORTH will appear.');}
+let DB; try{DB=JSON.parse(localStorage.getItem('mk_v73')||'{"books":[],"staff":[],"learners":[],"issues":[],"subs":[],"jobs":[],"agents":[],"sales":[],"contracts":[]}');}catch(e){DB={"books":[],"staff":[],"learners":[],"issues":[],"subs":[],"jobs":[],"agents":[],"sales":[],"contracts":[]};}
+if(!DB.books) DB.books=[]; if(!DB.staff) DB.staff=[]; if(!DB.learners) DB.learners=[];
+DB.staff.forEach(s=>{if(!s.subjects) s.subjects=s.subject?[s.subject]:[];});
 let CUR={role:'',school:'',staffName:'',subject:'',subjects:[]};
-let printMode='learners',adminCur='dbe';
-function save(){localStorage.setItem('mk_v72',JSON.stringify(DB));render();}
-function schoolName(){let f=getAllDBE().find(s=>s[0]===CUR.school);return f?f[1]:CUR.school||'No school selected';}
-function capsName(c){let f=CAPS.find(x=>x[0]===c);return f?f[1]:c;}
-function staffSubjects(s){if(s.subjects&&s.subjects.length)return s.subjects;if(s.subject)return [s.subject];return [];}
-document.getElementById('dev').innerText='DEV-'+Math.random().toString(36).slice(2,6).toUpperCase();
-function initCaps(){let opts=CAPS.map(c=>`<option value="${c[0]}">${c[0]} - ${c[1]}</option>`).join('');document.getElementById('bSubject').innerHTML=opts;document.getElementById('bookFilterSubject').innerHTML='<option value="">-- Pick CAPS Subject --</option>'+opts;document.getElementById('capsList').innerHTML=`<table><tr><th>CODE</th><th>CAPS SUBJECT</th><th>Example</th></tr>${CAPS.map(c=>`<tr><td><b>${c[0]}</b></td><td>${c[1]}</td><td>${c[0]}-001</td></tr>`).join('')}</table>`;renderSubjectGrid('');}
-function renderSubjectGrid(filter){let q=(filter||'').toUpperCase();let list=CAPS.filter(c=>c[0].includes(q)||c[1].toUpperCase().includes(q));document.getElementById('subjectGrid').innerHTML=list.map(c=>`<label><input type="checkbox" value="${c[0]}" onchange="updateSubjectCount()"> ${c[0]} - ${c[1]}</label>`).join('');updateSubjectCount();}
+let printMode='learners', adminCur='dbe';
+function save(){try{localStorage.setItem('mk_v73',JSON.stringify(DB));}catch(e){} render();}
+function schoolName(){let f=getAllDBE().find(s=>s[0]===CUR.school); if(f) return f[1]; if(CUR.school==='700310854') return 'WORDSWORTH HIGH SCHOOL'; return CUR.school||'No school selected';}
+function capsName(c){let f=CAPS.find(x=>x[0]===c); return f?f[1]:c;}
+function staffSubjects(s){if(s.subjects&&s.subjects.length) return s.subjects; if(s.subject) return [s.subject]; return [];}
+function initCaps(){let opts=CAPS.map(c=>`<option value="${c[0]}">${c[0]} - ${c[1]}</option>`).join(''); let b=document.getElementById('bSubject'); if(b) b.innerHTML=opts; let bf=document.getElementById('bookFilterSubject'); if(bf) bf.innerHTML='<option value="">-- Pick CAPS Subject --</option>'+opts; let cl=document.getElementById('capsList'); if(cl) cl.innerHTML=`<table><tr><th>CODE</th><th>CAPS SUBJECT</th></tr>${CAPS.map(c=>`<tr><td><b>${c[0]}</b></td><td>${c[1]}</td></tr>`).join('')}</table>`; renderSubjectGrid('');}
+function renderSubjectGrid(filter){let q=(filter||'').toUpperCase(); let list=CAPS.filter(c=>c[0].includes(q)||c[1].toUpperCase().includes(q)); let g=document.getElementById('subjectGrid'); if(!g) return; g.innerHTML=list.map(c=>`<label><input type="checkbox" value="${c[0]}" onchange="updateSubjectCount()"> ${c[0]} - ${c[1]}</label>`).join(''); updateSubjectCount();}
 function filterSubjects(){renderSubjectGrid(document.getElementById('subjectSearch').value);}
 function getCheckedSubjects(){return [...document.querySelectorAll('#subjectGrid input:checked')].map(i=>i.value);}
-function updateSubjectCount(){let n=getCheckedSubjects().length;let el=document.getElementById('subjectCount');el.innerText=n+' selected — '+(n>=1?'✅ Can Save':'❌ Cannot Save — Tick At Least 1');el.style.color=n>=1?'#059669':'#dc2626';document.querySelectorAll('#subjectGrid label').forEach(l=>{l.classList.toggle('checked',l.querySelector('input').checked);});}
-function filterDBE(){let q=(document.getElementById('schoolSearch').value||'').toUpperCase();let sel=document.getElementById('schoolSel');let all=getAllDBE();let f=all.filter(s=>s[0].includes(q)||s[1].includes(q)||s[2].toUpperCase().includes(q));if(!q)f=all;sel.innerHTML='<option value="">-- Select DBE School ('+f.length+' found) --</option>'+f.slice(0,300).map(s=>`<option value="${s[0]}">${s[0]} - ${s[1]} - ${s[2]}</option>`).join('');document.getElementById('dbeCount').innerText=f.length+' DBE schools found — Built-in: '+DBE_DEFAULT.length+' + Uploaded by Admin: '+DBE_UPLOADED.length;}
-function forceSchool(){let v=document.getElementById('emis').value||document.getElementById('schoolSel').value;CUR.school=v;alert('School: '+schoolName()+' ('+v+')');render();}
-function login(){CUR.role=document.getElementById('role').value;CUR.school=document.getElementById('schoolSel').value||document.getElementById('emis').value;CUR.staffName=document.getElementById('staffName').value;let raw=document.getElementById('staffSubject').value.toUpperCase().trim();CUR.subjects=raw?raw.split(',').map(s=>s.trim()).filter(Boolean):[];CUR.subject=CUR.subjects[0]||'';if(!CUR.school)return alert('Select School first');if((CUR.role==='EDUCATOR'||CUR.role==='HOD')&&CUR.subjects.length===0)return alert('⛔ Educator / HOD MUST have at least 1 Teaching Subject');if(CUR.staffName){let rec=DB.staff.find(s=>s.name.toLowerCase()===CUR.staffName.toLowerCase()&&s.school===CUR.school);if(rec){let rs=staffSubjects(rec);if(rs.length===0)return alert('⛔ Staff record has NO Teaching Subject. Principal must fix.');if(CUR.subjects.length===0)CUR.subjects=rs;CUR.subject=CUR.subjects[0];}}document.getElementById('loginCard').style.display='none';document.getElementById('tabsCard').style.display='block';render();alert('Logged in '+CUR.role+' — '+schoolName()+(CUR.subjects.length?' — Teaching: '+CUR.subjects.join(', '):''));}
+function updateSubjectCount(){let n=getCheckedSubjects().length; let el=document.getElementById('subjectCount'); if(!el) return; el.innerText=n+' selected — '+(n>=1?'✅ Can Save':'❌ Cannot Save'); el.style.color=n>=1?'#059669':'#dc2626'; document.querySelectorAll('#subjectGrid label').forEach(l=>{l.classList.toggle('checked',l.querySelector('input').checked);});}
+function filterDBE(){let all=getAllDBE(); let q=(document.getElementById('schoolSearch')?.value||'').toUpperCase(); let sel=document.getElementById('schoolSel'); if(!sel) return; let f=all.filter(s=>s[0].includes(q)||s[1].toUpperCase().includes(q)||s[2].toUpperCase().includes(q)); if(!q) f=all; sel.innerHTML='<option value="">-- Select DBE School ('+f.length+' found) --</option>'+f.slice(0,300).map(s=>`<option value="${s[0]}">${s[0]} - ${s[1]} - ${s[2]}</option>`).join(''); let dc=document.getElementById('dbeCount'); if(dc) dc.innerText=f.length+' DBE schools found — Built-in: '+DBE_DEFAULT.length+' + Uploaded: '+DBE_UPLOADED.length; let alertBox=document.getElementById('dbeAlert'); if(alertBox){ if(all.length===0) alertBox.innerHTML='<div class="warn">⚠️ DBE list is 0 — Tap 🔄 RESTORE DBE SCHOOLS or 🚨 EMERGENCY LOGIN below</div>'; else alertBox.innerHTML='<div class="ok">✅ DBE Loaded: '+all.length+' schools — Type Wor to find WORDSWORTH</div>';}}
+function forceSchool(){let v=(document.getElementById('emis')?.value||'').trim()||document.getElementById('schoolSel')?.value||'700310854'; CUR.school=v; alert('School: '+schoolName()+' ('+v+')'); render();}
+function doLogin(){document.getElementById('loginCard').style.display='none'; document.getElementById('tabsCard').style.display='block'; render(); alert('✅ Logged in as '+CUR.role+' — '+schoolName()+(CUR.subjects.length?' — Teaching: '+CUR.subjects.join(', '):''));}
+function login(){CUR.role=document.getElementById('role').value; CUR.school=(document.getElementById('schoolSel').value||'').trim()||(document.getElementById('emis').value||'').trim(); CUR.staffName=document.getElementById('staffName').value||''; let raw=(document.getElementById('staffSubject').value||'').toUpperCase().trim(); CUR.subjects=raw?raw.split(',').map(s=>s.trim()).filter(Boolean):[]; CUR.subject=CUR.subjects[0]||''; if(!CUR.school){CUR.school='700310854'; alert('No school selected — Auto-selected WORDSWORTH HIGH SCHOOL (700310854). You can change it later.');} if((CUR.role==='EDUCATOR'||CUR.role==='HOD')&&CUR.subjects.length===0){alert('⛔ Educator / HOD MUST have at least 1 Teaching Subject. Enter e.g. MAT or MAT, PHYSC. Or login as LIBRARIAN / ADMIN to test.'); return;} if(CUR.staffName){let rec=DB.staff.find(s=>s.name.toLowerCase()===CUR.staffName.toLowerCase()&&s.school===CUR.school); if(rec){let rs=staffSubjects(rec); if(rs.length===0){alert('⛔ Staff record has NO Teaching Subject. Principal must fix.'); return;} if(CUR.subjects.length===0) CUR.subjects=rs; CUR.subject=CUR.subjects[0];}} doLogin();}
+function emergencyLogin(){CUR={role:'ADMIN',school:'700310854',staffName:'Admin',subject:'',subjects:[]}; doLogin();}
 function logout(){location.reload();}
-function showTab(id,btn){['home','principal','admin','books','staff','learners','print','manuals','printBarcodes','caps'].forEach(t=>{let el=document.getElementById('tab-'+t);if(el)el.style.display=t===id?'block':'none';});if(btn){document.querySelectorAll('#tabsCard .tabs button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}render();}
+function showTab(id,btn){['home','principal','admin','books','staff','learners','print','manuals','printBarcodes','caps'].forEach(t=>{let el=document.getElementById('tab-'+t); if(el) el.style.display=t===id?'block':'none';}); if(btn){document.querySelectorAll('#tabsCard .tabs button').forEach(b=>b.classList.remove('active')); btn.classList.add('active');} render();}
 let scanTarget='issueBookNo',scanStream=null,scanLoop=null;
-function openScan(t){scanTarget=t;document.getElementById('scanModal').style.display='block';startCamera();}
-async function startCamera(){try{scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});let v=document.getElementById('scanVideo');v.srcObject=scanStream;await v.play();document.getElementById('scanStatus').innerText='📷 Point at barcode...';if('BarcodeDetector' in window){let det=new BarcodeDetector({formats:['code_128','ean_13','qr_code','code_39','upc_a']});scanLoop=setInterval(async()=>{try{let c=await det.detect(v);if(c.length)handleScanned(c[0].rawValue);}catch(e){}},500);}}catch(e){document.getElementById('scanStatus').innerText='Camera blocked. Use Bluetooth scanner.';}}
-function handleScanned(txt){let code=txt.trim().toUpperCase().split(/\s+/).pop();if(scanTarget==='issueLearner'||code.startsWith('LRN'))document.getElementById('issueLearner').value=code;else{document.getElementById('issueBookNo').value=code;document.getElementById('returnBookNo').value=code;}setTimeout(closeScan,800);}
-function closeScan(){document.getElementById('scanModal').style.display='none';if(scanStream)scanStream.getTracks().forEach(t=>t.stop());if(scanLoop)clearInterval(scanLoop);}
-function manualScan(){closeScan();document.getElementById(scanTarget).focus();}
-// === DBE UPLOAD — ADMIN ONLY ===
-function parseDBELines(text){
-  let lines=text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean);
-  let added=0,skipped=0,errors=[];
-  lines.forEach((line,idx)=>{
-    if(idx===0&&line.toLowerCase().includes('emis'))return; // header
-    // Support comma or semicolon or tab
-    let parts=line.split(/[,;\t]/).map(p=>p.trim().replace(/^"|"$/g,''));
-    if(parts.length<2){errors.push(line);return;}
-    let emis=parts[0],name=parts[1],prov=parts[2]||'Gauteng';
-    if(!emis||!name){errors.push(line);return;}
-    emis=emis.replace(/\D/g,''); if(emis.length<6){errors.push(line);return;}
-    name=name.toUpperCase(); prov=prov||'Gauteng';
-    let exists=getAllDBE().find(s=>s[0]===emis);
-    if(exists&&DBE_UPLOADED.find(s=>s[0]===emis)){skipped++;return;}
-    if(exists&&!DBE_UPLOADED.find(s=>s[0]===emis)){ // update built-in? keep built-in, count as skipped
-      skipped++;return;
-    }
-    DBE_UPLOADED.push([emis,name,prov]);added++;
-  });
-  return {added,skipped,errors};
-}
-function handleDBEFile(input){
-  if(CUR.role!=='ADMIN')return alert('⛔ Only ADMIN can upload DBE Schools');
-  let file=input.files[0];if(!file)return;
-  let reader=new FileReader();
-  reader.onload=e=>{
-    let res=parseDBELines(e.target.result);
-    saveDBEUploaded();
-    alert('✅ Upload Done\nAdded: '+res.added+' new schools\nSkipped (already exists): '+res.skipped+'\nErrors: '+res.errors.length+(res.errors.length?'\n'+res.errors.slice(0,3).join('\n'):''));
-  };
-  reader.readAsText(file);
-}
-function importPastedDBE(){
-  if(CUR.role!=='ADMIN')return alert('⛔ Only ADMIN can upload DBE Schools');
-  let txt=document.getElementById('dbePaste').value;if(!txt.trim())return alert('Paste schools first');
-  let res=parseDBELines(txt);saveDBEUploaded();
-  alert('✅ Imported\nAdded: '+res.added+'\nSkipped: '+res.skipped+'\nErrors: '+res.errors.length);
-  document.getElementById('dbePaste').value='';
-}
-function addOneDBE(){
-  if(CUR.role!=='ADMIN')return alert('⛔ Only ADMIN can add schools');
-  let emis=document.getElementById('dbeEmis').value.trim().replace(/\D/g,''),name=document.getElementById('dbeName').value.trim().toUpperCase(),prov=document.getElementById('dbeProv').value;
-  if(!emis||!name)return alert('Enter EMIS + School Name');
-  if(getAllDBE().find(s=>s[0]===emis))return alert('School already exists: '+emis);
-  DBE_UPLOADED.push([emis,name,prov]);saveDBEUploaded();
-  document.getElementById('dbeEmis').value='';document.getElementById('dbeName').value='';
-  alert('✅ Added: '+emis+' — '+name+' — '+prov);
-}
-function deleteUploadedDBE(emis){
-  if(CUR.role!=='ADMIN')return alert('⛔ Only ADMIN');
-  if(!confirm('Delete uploaded school '+emis+'?'))return;
-  DBE_UPLOADED=DBE_UPLOADED.filter(s=>s[0]!==emis);saveDBEUploaded();
-}
-function clearUploadedDBE(){
-  if(CUR.role!=='ADMIN')return alert('⛔ Only ADMIN');
-  if(!confirm('Delete ALL uploaded schools? Built-in schools will stay.'))return;
-  DBE_UPLOADED=[];saveDBEUploaded();
-}
-function downloadDBETemplate(){
-  let csv='EMIS,School Name,Province\n700310854,WORDSWORTH HIGH SCHOOL,Gauteng\n900110001,POLOKWANE HIGH SCHOOL,Limpopo\n500110001,DURBAN HIGH SCHOOL,KwaZulu-Natal\n';
-  let blob=new Blob([csv],{type:'text/csv'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='MAKHANANI_DBE_Schools_Template.csv';a.click();
-}
-function downloadAllDBE(){
-  let csv='EMIS,School Name,Province\n'+getAllDBE().map(s=>s.join(',')).join('\n');
-  let blob=new Blob([csv],{type:'text/csv'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='MAKHANANI_All_DBE_Schools.csv';a.click();
-}
-function getGradeFromClass(cls){cls=(cls||'').toUpperCase();let m=cls.match(/GRADE\s*(\d+)/);if(m)return 'Grade '+m[1];let m2=cls.match(/^(\d{1,2})[A-Z]/);if(m2)return 'Grade '+parseInt(m2[1]);let m3=cls.match(/(\d{1,2})/);if(m3)return 'Grade '+parseInt(m3[1]);return cls;}
-function getClassCode(cls){cls=(cls||'').toUpperCase().trim();let m=cls.match(/(\d{1,2}[A-Z])\b/);if(m)return m[1];return cls;}
-function getFilteredLearners(){let all=DB.learners.filter(l=>l.school===CUR.school);let type=document.getElementById('learnerFilterType').value;let val=document.getElementById('learnerFilterValue').value;let g=document.getElementById('learnerFilterGrade').value;if(type==='GRADE'){let gg=g||val;if(gg)return all.filter(l=>getGradeFromClass(l.grade)===gg);}if(type==='CLASS'){if(val)return all.filter(l=>getClassCode(l.grade)===val);}return all;}
-function getFilteredBooks(){let all=DB.books.filter(b=>b.school===CUR.school);let type=document.getElementById('bookFilterType').value;let val=document.getElementById('bookFilterValue').value;let subj=document.getElementById('bookFilterSubject').value;if(type==='SUBJECT'){let s=subj||val;if(s)return all.filter(b=>b.subject===s);}if(type==='EDUCATOR'){if(val){let st=DB.staff.find(s=>s.name===val);if(st)return all.filter(b=>staffSubjects(st).includes(b.subject));}}return all;}
-function updateLearnerFilterOptions(){let type=document.getElementById('learnerFilterType').value;let sel=document.getElementById('learnerFilterValue');let all=DB.learners.filter(l=>l.school===CUR.school);if(type==='GRADE'){let gs=[...new Set(all.map(l=>getGradeFromClass(l.grade)))];sel.innerHTML='<option value="">-- Pick Grade --</option>'+gs.map(g=>`<option>${g}</option>`).join('');}else if(type==='CLASS'){let cs=[...new Set(all.map(l=>getClassCode(l.grade)))];sel.innerHTML='<option value="">-- Pick Class --</option>'+cs.map(c=>`<option>${c}</option>`).join('');}else sel.innerHTML='<option value="">-- All --</option>';}
-function updateBookFilterOptions(){let type=document.getElementById('bookFilterType').value;let sel=document.getElementById('bookFilterValue');let all=DB.books.filter(b=>b.school===CUR.school);let staff=DB.staff.filter(s=>s.school===CUR.school);if(type==='SUBJECT'){let subs=[...new Set(all.map(b=>b.subject))];sel.innerHTML='<option value="">-- Pick Subject --</option>'+subs.map(s=>`<option>${s}</option>`).join('');}else if(type==='EDUCATOR'){sel.innerHTML='<option value="">-- Pick Educator --</option>'+staff.map(s=>`<option value="${s.name}">${s.name} — ${staffSubjects(s).join(', ')}</option>`).join('');}else sel.innerHTML='<option value="">-- All --</option>';}
-function previewLearnerBarcodes(){printMode='learners';buildPrintSheet();showTab('printBarcodes',null);}
-function printLearnerBarcodes(){printMode='learners';buildPrintSheet();showTab('printBarcodes',null);setTimeout(()=>window.print(),700);}
-function previewBookBarcodes(){printMode='books';buildPrintSheet();showTab('printBarcodes',null);}
-function printBookBarcodes(){printMode='books';buildPrintSheet();showTab('printBarcodes',null);setTimeout(()=>window.print(),700);}
-function buildPrintSheet(){
-  if(printMode==='learners'){let f=getFilteredLearners();let type=document.getElementById('learnerFilterType').value;let label=type==='ALL'?'ALL LEARNERS':type==='GRADE'?'GRADE: '+(document.getElementById('learnerFilterGrade').value||document.getElementById('learnerFilterValue').value):'CLASS: '+document.getElementById('learnerFilterValue').value;document.getElementById('printSheetTitle').innerText='🎓 LEARNER CARDS — '+schoolName()+' — '+label+' — '+f.length+' Cards';document.getElementById('printSheet').innerHTML=f.map(l=>`<div class="printCard"><b>MAKHANANI • ${schoolName()}</b><br><b>${l.name} — ${l.grade}</b><br><b>${l.id}</b><br><svg class="pbc" data-v="${l.id}"></svg></div>`).join('')||'<p>No learners</p>';}
-  else{let f=getFilteredBooks();let type=document.getElementById('bookFilterType').value;let label=type==='ALL'?'ALL BOOKS':type==='SUBJECT'?'SUBJECT: '+(document.getElementById('bookFilterSubject').value||document.getElementById('bookFilterValue').value):'EDUCATOR: '+document.getElementById('bookFilterValue').value;document.getElementById('printSheetTitle').innerText='📚 TEXTBOOKS — '+schoolName()+' — '+label+' — '+f.length+' Books';document.getElementById('printSheet').innerHTML=f.map(b=>`<div class="printCard"><b>MAKHANANI • ${schoolName()}</b><br><b>${b.title}</b><br><b>${b.code} — ${capsName(b.subject)}</b><br><svg class="pbc" data-v="MAKHANANI ${schoolName()} ${b.code}"></svg></div>`).join('')||'<p>No books</p>';}
-  setTimeout(()=>{try{document.querySelectorAll('.pbc').forEach(s=>JsBarcode(s,s.dataset.v,{format:'CODE128',width:1.4,height:55,displayValue:true}));}catch(e){}},200);
-}
+function openScan(t){scanTarget=t; document.getElementById('scanModal').style.display='block'; startCamera();}
+async function startCamera(){try{scanStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}}); let v=document.getElementById('scanVideo'); v.srcObject=scanStream; await v.play(); document.getElementById('scanStatus').innerText='📷 Point at barcode...'; if('BarcodeDetector' in window){let det=new BarcodeDetector({formats:['code_128','ean_13','qr_code','code_39','upc_a']}); scanLoop=setInterval(async()=>{try{let c=await det.detect(v); if(c.length) handleScanned(c[0].rawValue);}catch(e){}},500);}}catch(e){document.getElementById('scanStatus').innerText='Camera blocked. Use Bluetooth scanner.';}}
+function handleScanned(txt){let code=txt.trim().toUpperCase().split(/\s+/).pop(); if(scanTarget==='issueLearner'||code.startsWith('LRN')) document.getElementById('issueLearner').value=code; else{document.getElementById('issueBookNo').value=code; document.getElementById('returnBookNo').value=code;} setTimeout(closeScan,800);}
+function closeScan(){document.getElementById('scanModal').style.display='none'; if(scanStream) scanStream.getTracks().forEach(t=>t.stop()); if(scanLoop) clearInterval(scanLoop);}
+function manualScan(){closeScan(); document.getElementById(scanTarget).focus();}
+function parseDBELines(text){let lines=text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean); let added=0,skipped=0,errors=[]; lines.forEach((line,idx)=>{if(idx===0&&line.toLowerCase().includes('emis')) return; let parts=line.split(/[,;\t]/).map(p=>p.trim().replace(/^"|"$/g,'')); if(parts.length<2){errors.push(line); return;} let emis=parts[0].replace(/\D/g,''),name=parts[1],prov=parts[2]||'Gauteng'; if(!emis||!name){errors.push(line); return;} if(getAllDBE().find(s=>s[0]===emis)){skipped++; return;} DBE_UPLOADED.push([emis,name.toUpperCase(),prov]); added++;}); return {added,skipped,errors};}
+function handleDBEFile(input){if(CUR.role!=='ADMIN') return alert('⛔ Only ADMIN'); let file=input.files[0]; if(!file) return; let r=new FileReader(); r.onload=e=>{let res=parseDBELines(e.target.result); saveDBEUploaded(); alert('✅ Upload Done — Added: '+res.added+' Skipped: '+res.skipped);}; r.readAsText(file);}
+function importPastedDBE(){if(CUR.role!=='ADMIN') return alert('⛔ Only ADMIN'); let txt=document.getElementById('dbePaste').value; if(!txt.trim()) return alert('Paste first'); let res=parseDBELines(txt); saveDBEUploaded(); alert('✅ Imported — Added: '+res.added+' Skipped: '+res.skipped); document.getElementById('dbePaste').value='';}
+function addOneDBE(){if(CUR.role!=='ADMIN') return alert('⛔ Only ADMIN'); let emis=document.getElementById('dbeEmis').value.trim().replace(/\D/g,''),name=document.getElementById('dbeName').value.trim().toUpperCase(),prov=document.getElementById('dbeProv').value; if(!emis||!name) return alert('Enter EMIS + Name'); if(getAllDBE().find(s=>s[0]===emis)) return alert('Already exists'); DBE_UPLOADED.push([emis,name,prov]); saveDBEUploaded(); alert('✅ Added: '+emis+' — '+name);}
+function deleteUploadedDBE(emis){if(CUR.role!=='ADMIN') return alert('⛔ Only ADMIN'); if(!confirm('Delete '+emis+'?')) return; DBE_UPLOADED=DBE_UPLOADED.filter(s=>s[0]!==emis); saveDBEUploaded();}
+function clearUploadedDBE(){if(CUR.role!=='ADMIN') return alert('⛔ Only ADMIN'); if(!confirm('Delete ALL uploaded?')) return; DBE_UPLOADED=[]; saveDBEUploaded();}
+function downloadDBETemplate(){let csv='EMIS,School Name,Province\n700310854,WORDSWORTH HIGH SCHOOL,Gauteng\n900110001,POLOKWANE HIGH SCHOOL,Limpopo\n'; let b=new Blob([csv],{type:'text/csv'}); let a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='MAKHANANI_DBE_Template.csv'; a.click();}
+function downloadAllDBE(){let csv='EMIS,School Name,Province\n'+getAllDBE().map(s=>s.join(',')).join('\n'); let b=new Blob([csv],{type:'text/csv'}); let a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='MAKHANANI_All_DBE.csv'; a.click();}
+function getGradeFromClass(cls){cls=(cls||'').toUpperCase(); let m=cls.match(/GRADE\s*(\d+)/); if(m) return 'Grade '+m[1]; let m2=cls.match(/^(\d{1,2})[A-Z]/); if(m2) return 'Grade '+parseInt(m2[1]); let m3=cls.match(/(\d{1,2})/); if(m3) return 'Grade '+parseInt(m3[1]); return cls;}
+function getClassCode(cls){cls=(cls||'').toUpperCase().trim(); let m=cls.match(/(\d{1,2}[A-Z])\b/); if(m) return m[1]; return cls;}
+function getFilteredLearners(){let all=DB.learners.filter(l=>l.school===CUR.school); let type=document.getElementById('learnerFilterType').value; let val=document.getElementById('learnerFilterValue').value; let g=document.getElementById('learnerFilterGrade').value; if(type==='GRADE'){let gg=g||val; if(gg) return all.filter(l=>getGradeFromClass(l.grade)===gg);} if(type==='CLASS'){if(val) return all.filter(l=>getClassCode(l.grade)===val);} return all;}
+function getFilteredBooks(){let all=DB.books.filter(b=>b.school===CUR.school); let type=document.getElementById('bookFilterType').value; let val=document.getElementById('bookFilterValue').value; let subj=document.getElementById('bookFilterSubject').value; if(type==='SUBJECT'){let s=subj||val; if(s) return all.filter(b=>b.subject===s);} if(type==='EDUCATOR'){if(val){let st=DB.staff.find(s=>s.name===val); if(st) return all.filter(b=>staffSubjects(st).includes(b.subject));}} return all;}
+function updateLearnerFilterOptions(){let type=document.getElementById('learnerFilterType').value; let sel=document.getElementById('learnerFilterValue'); let all=DB.learners.filter(l=>l.school===CUR.school); if(type==='GRADE'){let gs=[...new Set(all.map(l=>getGradeFromClass(l.grade)))]; sel.innerHTML='<option value="">-- Pick Grade --</option>'+gs.map(g=>`<option>${g}</option>`).join('');} else if(type==='CLASS'){let cs=[...new Set(all.map(l=>getClassCode(l.grade)))]; sel.innerHTML='<option value="">-- Pick Class --</option>'+cs.map(c=>`<option>${c}</option>`).join('');} else sel.innerHTML='<option value="">-- All --</option>';}
+function updateBookFilterOptions(){let type=document.getElementById('bookFilterType').value; let sel=document.getElementById('bookFilterValue'); let all=DB.books.filter(b=>b.school===CUR.school); let staff=DB.staff.filter(s=>s.school===CUR.school); if(type==='SUBJECT'){let subs=[...new Set(all.map(b=>b.subject))]; sel.innerHTML='<option value="">-- Pick Subject --</option>'+subs.map(s=>`<option>${s}</option>`).join('');} else if(type==='EDUCATOR'){sel.innerHTML='<option value="">-- Pick Educator --</option>'+staff.map(s=>`<option value="${s.name}">${s.name} — ${staffSubjects(s).join(', ')}</option>`).join('');} else sel.innerHTML='<option value="">-- All --</option>';}
+function previewLearnerBarcodes(){printMode='learners'; buildPrintSheet(); showTab('printBarcodes',null);}
+function printLearnerBarcodes(){printMode='learners'; buildPrintSheet(); showTab('printBarcodes',null); setTimeout(()=>window.print(),700);}
+function previewBookBarcodes(){printMode='books'; buildPrintSheet(); showTab('printBarcodes',null);}
+function printBookBarcodes(){printMode='books'; buildPrintSheet(); showTab('printBarcodes',null); setTimeout(()=>window.print(),700);}
+function buildPrintSheet(){if(printMode==='learners'){let f=getFilteredLearners(); let type=document.getElementById('learnerFilterType').value; let label=type==='ALL'?'ALL LEARNERS':type==='GRADE'?'GRADE: '+(document.getElementById('learnerFilterGrade').value||document.getElementById('learnerFilterValue').value):'CLASS: '+document.getElementById('learnerFilterValue').value; document.getElementById('printSheetTitle').innerText='🎓 LEARNER CARDS — '+schoolName()+' — '+label+' — '+f.length+' Cards'; document.getElementById('printSheet').innerHTML=f.map(l=>`<div class="printCard"><b>MAKHANANI • ${schoolName()}</b><br><b>${l.name} — ${l.grade}</b><br><b>${l.id}</b><br><svg class="pbc" data-v="${l.id}"></svg></div>`).join('')||'<p>No learners</p>';} else{let f=getFilteredBooks(); let type=document.getElementById('bookFilterType').value; let label=type==='ALL'?'ALL BOOKS':type==='SUBJECT'?'SUBJECT: '+(document.getElementById('bookFilterSubject').value||document.getElementById('bookFilterValue').value):'EDUCATOR: '+document.getElementById('bookFilterValue').value; document.getElementById('printSheetTitle').innerText='📚 TEXTBOOKS — '+schoolName()+' — '+label+' — '+f.length+' Books'; document.getElementById('printSheet').innerHTML=f.map(b=>`<div class="printCard"><b>MAKHANANI • ${schoolName()}</b><br><b>${b.title}</b><br><b>${b.code} — ${capsName(b.subject)}</b><br><svg class="pbc" data-v="MAKHANANI ${schoolName()} ${b.code}"></svg></div>`).join('')||'<p>No books</p>';} setTimeout(()=>{try{document.querySelectorAll('.pbc').forEach(s=>JsBarcode(s,s.dataset.v,{format:'CODE128',width:1.4,height:55,displayValue:true}));}catch(e){}},200);}
 function cleanCode(v){return (v||'').toUpperCase().trim().split(/\s+/).pop();}
-function addBook(){if(!['ADMIN','PRINCIPAL','LIBRARIAN'].includes(CUR.role))return alert('Only Admin / Principal / Librarian');let sub=document.getElementById('bSubject').value,title=document.getElementById('bTitle').value||capsName(sub);let count=DB.books.filter(b=>b.school===CUR.school&&b.code.startsWith(sub)).length+1;let code=sub+'-'+String(count).padStart(3,'0');DB.books.push({code,title,subject:sub,school:CUR.school,issued:false,learner:''});save();document.getElementById('bookInfo').innerText='✅ Created: '+code+' — '+title;}
-function issueBook(){let code=cleanCode(document.getElementById('issueBookNo').value),ln=cleanCode(document.getElementById('issueLearner').value);if(!code||!ln)return alert('Scan / Type Book + Learner');let b=DB.books.find(x=>x.code===code&&x.school===CUR.school);if(!b)return alert('Book not found: '+code);if(b.issued)return alert('Already issued');if((CUR.role==='EDUCATOR'||CUR.role==='HOD')&&!CUR.subjects.includes(b.subject))return alert('⛔ You teach '+CUR.subjects.join(', ')+' — This is '+b.subject);b.issued=true;b.learner=ln;DB.issues.push({code,learner:ln,date:new Date().toLocaleDateString(),school:CUR.school});save();alert('✅ Issued '+code+' to '+ln);document.getElementById('issueBookNo').value='';document.getElementById('issueLearner').value='';}
-function returnBook(){let code=cleanCode(document.getElementById('issueBookNo').value)||cleanCode(document.getElementById('returnBookNo').value);if(!code)return alert('Scan / Type Book No');let b=DB.books.find(x=>x.code===code&&x.school===CUR.school);if(!b)return alert('Not found: '+code);b.issued=false;b.learner='';save();alert('✅ Returned '+code);}
-function returnBookByScan(){document.getElementById('issueBookNo').value=document.getElementById('returnBookNo').value;returnBook();}
-function addStaff(){if(!['ADMIN','PRINCIPAL'].includes(CUR.role))return alert('Only Admin / Principal');let name=document.getElementById('sName').value.trim();let subjects=getCheckedSubjects();if(!name)return alert('Enter Name');if(subjects.length===0){alert('⛔ Staff MUST have at least 1 Teaching Subject. Tick at least 1 box.');return;}DB.staff.push({name,id:document.getElementById('sId').value||'STF-'+(DB.staff.length+1),role:document.getElementById('sRole').value,subject:subjects[0],subjects:subjects,email:document.getElementById('sEmail').value,school:CUR.school});save();document.querySelectorAll('#subjectGrid input:checked').forEach(i=>i.checked=false);updateSubjectCount();document.getElementById('sName').value='';alert('✅ Staff added: '+name+' — '+subjects.join(', '));}
-function removeStaff(i){if(!['ADMIN','PRINCIPAL'].includes(CUR.role))return alert('No permission');DB.staff.splice(i,1);save();}
-function addLearner(){let name=document.getElementById('lName').value.trim();if(!name)return alert('Enter Learner Name');let id='LRN-'+String(DB.learners.filter(l=>l.school===CUR.school).length+1).padStart(3,'0');DB.learners.push({name,id,grade:document.getElementById('lGrade').value,school:CUR.school});save();}
+function addBook(){if(!['ADMIN','PRINCIPAL','LIBRARIAN'].includes(CUR.role)) return alert('Only Admin / Principal / Librarian'); let sub=document.getElementById('bSubject').value,title=document.getElementById('bTitle').value||capsName(sub); let count=DB.books.filter(b=>b.school===CUR.school&&b.code.startsWith(sub)).length+1; let code=sub+'-'+String(count).padStart(3,'0'); DB.books.push({code,title,subject:sub,school:CUR.school,issued:false,learner:''}); save(); document.getElementById('bookInfo').innerText='✅ Created: '+code+' — '+title;}
+function issueBook(){let code=cleanCode(document.getElementById('issueBookNo').value),ln=cleanCode(document.getElementById('issueLearner').value); if(!code||!ln) return alert('Scan / Type Book + Learner'); let b=DB.books.find(x=>x.code===code&&x.school===CUR.school); if(!b) return alert('Book not found: '+code); if(b.issued) return alert('Already issued'); if((CUR.role==='EDUCATOR'||CUR.role==='HOD')&&!CUR.subjects.includes(b.subject)) return alert('⛔ You teach '+CUR.subjects.join(', ')+' — This is '+b.subject); b.issued=true; b.learner=ln; DB.issues.push({code,learner:ln,date:new Date().toLocaleDateString(),school:CUR.school}); save(); alert('✅ Issued '+code+' to '+ln); document.getElementById('issueBookNo').value=''; document.getElementById('issueLearner').value='';}
+function returnBook(){let code=cleanCode(document.getElementById('issueBookNo').value)||cleanCode(document.getElementById('returnBookNo').value); if(!code) return alert('Scan / Type Book No'); let b=DB.books.find(x=>x.code===code&&x.school===CUR.school); if(!b) return alert('Not found: '+code); b.issued=false; b.learner=''; save(); alert('✅ Returned '+code);}
+function returnBookByScan(){document.getElementById('issueBookNo').value=document.getElementById('returnBookNo').value; returnBook();}
+function addStaff(){if(!['ADMIN','PRINCIPAL'].includes(CUR.role)) return alert('Only Admin / Principal'); let name=document.getElementById('sName').value.trim(); let subjects=getCheckedSubjects(); if(!name) return alert('Enter Name'); if(subjects.length===0){alert('⛔ Staff MUST have at least 1 Teaching Subject'); return;} DB.staff.push({name,id:document.getElementById('sId').value||'STF-'+(DB.staff.length+1),role:document.getElementById('sRole').value,subject:subjects[0],subjects:subjects,email:document.getElementById('sEmail').value,school:CUR.school}); save(); document.querySelectorAll('#subjectGrid input:checked').forEach(i=>i.checked=false); updateSubjectCount(); document.getElementById('sName').value=''; alert('✅ Staff added: '+name+' — '+subjects.join(', '));}
+function removeStaff(i){if(!['ADMIN','PRINCIPAL'].includes(CUR.role)) return alert('No permission'); DB.staff.splice(i,1); save();}
+function addLearner(){let name=document.getElementById('lName').value.trim(); if(!name) return alert('Enter Learner Name'); let id='LRN-'+String(DB.learners.filter(l=>l.school===CUR.school).length+1).padStart(3,'0'); DB.learners.push({name,id,grade:document.getElementById('lGrade').value,school:CUR.school}); save();}
 function wa(){window.open('https://wa.me/2780233263?text=Hello Makhanani','_blank')}
-let adminCur='dbe';
-function adminSub(t,btn){adminCur=t;document.querySelectorAll('#tab-admin .tabs button').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');renderAdmin();}
-function renderAdmin(){
-  let c=document.getElementById('adminContent');
-  if(adminCur==='dbe'){
-    let uploadedRows=DBE_UPLOADED.slice(-50).map(s=>`<tr><td>${s[0]}</td><td>${s[1]}</td><td>${s[2]}</td><td><button class="red" onclick="deleteUploadedDBE('${s[0]}')">Delete</button></td></tr>`).join('');
-    c.innerHTML=`
-    <div class="ok">🏫 DBE SCHOOLS — Total: ${getAllDBE().length} | Built-in: ${DBE_DEFAULT.length} | Uploaded by Admin: ${DBE_UPLOADED.length} | Only ADMIN can upload/delete</div>
-    <div class="uploadBox"><h3>📤 OPTION 1 — UPLOAD CSV FILE</h3><p>1. Download Template → Fill in Excel → Save as CSV → Upload here</p>
-    <button class="blue" onclick="downloadDBETemplate()">⬇️ DOWNLOAD CSV TEMPLATE</button>
-    <input type="file" accept=".csv,.txt" onchange="handleDBEFile(this)">
-    <p style="font-size:12px">Format: EMIS, School Name, Province — One school per line. Example: 700310854,WORDSWORTH HIGH SCHOOL,Gauteng</p></div>
-    <div class="uploadBox"><h3>📋 OPTION 2 — PASTE LIST</h3><textarea id="dbePaste" placeholder="Paste like this:\n700310854,WORDSWORTH HIGH SCHOOL,Gauteng\n700110001,PRETORIA HIGH SCHOOL FOR GIRLS,Gauteng\n900110001,POLOKWANE HIGH SCHOOL,Limpopo"></textarea>
-    <button class="green" onclick="importPastedDBE()">📥 IMPORT PASTED LIST</button></div>
-    <div class="uploadBox"><h3>➕ OPTION 3 — ADD ONE SCHOOL</h3>
-    <div class="row3"><input id="dbeEmis" placeholder="EMIS e.g. 700310854"><input id="dbeName" placeholder="School Name e.g. WORDSWORTH HIGH"><select id="dbeProv"><option>Gauteng</option><option>Limpopo</option><option>Mpumalanga</option><option>KwaZulu-Natal</option><option>Eastern Cape</option><option>Western Cape</option><option>Free State</option><option>North West</option><option>Northern Cape</option></select></div>
-    <button class="green" onclick="addOneDBE()">➕ ADD SCHOOL</button></div>
-    <div style="display:flex;gap:8px"><button onclick="downloadAllDBE()">⬇️ DOWNLOAD ALL SCHOOLS (CSV)</button><button class="red" onclick="clearUploadedDBE()">🗑️ CLEAR ALL UPLOADED</button></div>
-    <h3>📋 Last 50 Uploaded Schools</h3>
-    <input id="dbeSearchUp" placeholder="🔍 Search Uploaded Schools" oninput="renderAdmin()">
-    <table><tr><th>EMIS</th><th>School Name</th><th>Province</th><th>Action</th></tr>${uploadedRows||'<tr><td colspan=4>No uploaded schools yet — Upload CSV above</td></tr>'}</table>
-    `;
-  }
-  else if(adminCur==='subs')c.innerHTML=`<h3>💳 Subscriptions</h3><input id="subSchool" placeholder="EMIS"><select id="subPlan"><option>STANDARD</option><option>PREMIUM</option><option>DEMO</option></select><button class="green" onclick="addSub()">➕ CREATE SUBSCRIPTION</button><div>${DB.subs.map(s=>`<p>${s.school} — ${s.plan} — ${s.status}</p>`).join('')}</div>`;
-  else if(adminCur==='jobs')c.innerHTML=`<h3>💼 Jobs</h3><input id="jobT" placeholder="Job Title"><button class="green" onclick="DB.jobs.push({t:document.getElementById('jobT').value,school:CUR.school});save();renderAdmin()">➕ ADD JOB</button><div>${DB.jobs.map(j=>`<p>${j.t}</p>`).join('')}</div>`;
-  else if(adminCur==='agents')c.innerHTML=`<h3>🕵️ Agents Tracker</h3><input id="agN" placeholder="Agent Name"><input id="agArea" placeholder="Area"><button class="green" onclick="DB.agents.push({n:document.getElementById('agN').value,area:document.getElementById('agArea').value});save();renderAdmin()">➕ ADD AGENT</button><div>${DB.agents.map(a=>`<p>${a.n} — ${a.area}</p>`).join('')}</div>`;
-  else if(adminCur==='salesMgr')c.innerHTML=`<h3>📈 Sales Manager</h3><input id="smN" placeholder="School / Client"><input id="smAmt" type="number" placeholder="Amount R"><button class="green" onclick="DB.sales.push({n:document.getElementById('smN').value,amt:document.getElementById('smAmt').value});save();renderAdmin()">➕ ADD SALE</button><div>${DB.sales.map(s=>`<p>${s.n} — R${s.amt}</p>`).join('')} <b>Total: R${DB.sales.reduce((a,s)=>a+Number(s.amt||0),0)}</b></div>`;
-  else if(adminCur==='salesTrack')c.innerHTML=`<h3>📊 Sales Tracker</h3><p>Total: R${DB.sales.reduce((a,s)=>a+Number(s.amt||0),0)} | Deals: ${DB.sales.length}</p><table><tr><th>Client</th><th>Amount</th></tr>${DB.sales.map(s=>`<tr><td>${s.n}</td><td>R${s.amt}</td></tr>`).join('')}</table>`;
-  else c.innerHTML=`<h3>📄 Agents Contracts</h3><input id="ctN" placeholder="Agent Name"><input id="ctT" placeholder="Terms"><button class="green" onclick="DB.contracts.push({n:document.getElementById('ctN').value,t:document.getElementById('ctT').value});save();renderAdmin()">➕ CREATE CONTRACT</button><div>${DB.contracts.map(x=>`<p>📄 ${x.n} — ${x.t} <button onclick="window.print()">🖨️ Print</button></p>`).join('')}</div>`;
-}
-function addSub(){DB.subs.push({school:document.getElementById('subSchool').value||CUR.school,plan:document.getElementById('subPlan').value,status:'Active'});save();renderAdmin();}
-function render(){
-document.getElementById('dbeTotalTop').innerText=getAllDBE().length;document.getElementById('uploadedCountTop').innerText=DBE_UPLOADED.length;
-document.getElementById('who').innerText=`Role: ${CUR.role||'Not logged in'} | School: ${schoolName()} ${CUR.school?'('+CUR.school+')':''} ${CUR.subjects.length?'| Teaching: '+CUR.subjects.join(', '):''}`;
-document.querySelectorAll('.schoolName').forEach(e=>e.innerText=schoolName());
-let books=DB.books.filter(b=>b.school===CUR.school);let learners=DB.learners.filter(l=>l.school===CUR.school);let staff=DB.staff.filter(s=>s.school===CUR.school);
-document.getElementById('pBooks').innerText=books.length;document.getElementById('pIssued').innerText=books.filter(b=>b.issued).length;document.getElementById('pAvail').innerText=books.filter(b=>!b.issued).length;document.getElementById('pOver').innerText=0;document.getElementById('pLearners').innerText=learners.length;document.getElementById('pStaff').innerText=staff.length;
-let booksHTML=`<table><tr><th>Book No</th><th>Title</th><th>Subject</th><th>Status</th><th>Barcode</th></tr>${books.map(b=>`<tr><td><b>${b.code}</b></td><td>${b.title}</td><td>${b.subject}</td><td>${b.issued?'📤 Issued to '+b.learner:'✅ Available'}</td><td><svg class="bc" data-v="MAKHANANI ${schoolName()} ${b.code}"></svg></td></tr>`).join('')||'<tr><td colspan=5>No books yet</td></tr>'}</table>`;
-document.getElementById('booksList').innerHTML=booksHTML;document.getElementById('booksList2').innerHTML=booksHTML;document.getElementById('principalBooks').innerHTML=booksHTML;
-document.getElementById('staffList').innerHTML=`<table><tr><th>Name</th><th>Role</th><th>Teaching Subject(s)</th><th>Action</th></tr>${staff.map(s=>`<tr><td>${s.name}</td><td>${s.role}</td><td><b>${staffSubjects(s).join(', ')}</b></td><td><button class="red" onclick="removeStaff(${DB.staff.indexOf(s)})">Remove</button></td></tr>`).join('')||'<tr><td colspan=4>No staff yet</td></tr>'}</table>`;
-document.getElementById('learnerList').innerHTML=learners.map(l=>`<div class="barcodeBox"><b>MAKHANANI • ${schoolName()}</b><b>${l.name} — ${l.grade} — ${l.id}</b><svg class="bc2" data-v="${l.id}"></svg></div>`).join('')||'No learners yet';
-document.getElementById('printReport').innerHTML=`<h3>MAKHANANI — PRINCIPAL REPORT</h3><p><b>School:</b> ${schoolName()} (${CUR.school})<br><b>Date:</b> ${new Date().toLocaleDateString()}</p><p>Books: ${books.length} | Issued: ${books.filter(b=>b.issued).length} | Available: ${books.filter(b=>!b.issued).length} | Learners: ${learners.length} | Staff: ${staff.length}</p><table><tr><th>Book No</th><th>Title</th><th>Subject</th><th>Status</th></tr>${books.map(b=>`<tr><td>${b.code}</td><td>${b.title}</td><td>${b.subject}</td><td>${b.issued?'Issued':'Available'}</td></tr>`).join('')}</table><p>Signature: ___________________ Principal</p>`;
-try{document.querySelectorAll('.bc').forEach(s=>JsBarcode(s,s.dataset.v,{format:'CODE128',width:1.2,height:40,displayValue:true}));document.querySelectorAll('.bc2').forEach(s=>JsBarcode(s,s.dataset.v,{format:'CODE128',width:1.5,height:50,displayValue:true}));}catch(e){}
-renderAdmin();}
-initCaps();filterDBE();render();
+function adminSub(t,btn){adminCur=t; document.querySelectorAll('#tab-admin .tabs button').forEach(b=>b.classList.remove('active')); if(btn) btn.classList.add('active'); renderAdmin();}
+function renderAdmin(){let c=document.getElementById('adminContent'); if(!c) return;
+if(adminCur==='dbe'){c.innerHTML=`<div class="ok">🏫 DBE — Total: ${getAllDBE().length} | Built-in: ${DBE_DEFAULT.length} | Uploaded: ${DBE_UPLOADED.length} | Only ADMIN</div><div class="uploadBox"><h3>📤 OPTION 1 — UPLOAD CSV</h3><button class="blue" onclick="downloadDBETemplate()">⬇️ DOWNLOAD TEMPLATE</button><input type="file" accept=".csv,.txt" onchange="handleDBEFile(this)"></div><div class="uploadBox"><h3>📋 OPTION 2 — PASTE</h3><textarea id="dbePaste" placeholder="700310854,WORDSWORTH HIGH SCHOOL,Gauteng"></textarea><button class="green" onclick="importPastedDBE()">📥 IMPORT PASTED</button></div><div class="uploadBox"><h3>➕ OPTION 3 — ADD ONE</h3><div class="row3"><input id="dbeEmis" placeholder="EMIS"><input id="dbeName" placeholder="School Name"><select id="dbeProv"><option>Gauteng</option><option>Limpopo</option><option>Mpumalanga</option><option>KwaZulu-Natal</option><option>Eastern Cape</option><option>Western Cape</option><option>Free State</option><option>North West</option><option>Northern Cape</option></select></div><button class="green" onclick="addOneDBE()">➕ ADD SCHOOL</button></div><div style="display:flex;gap:8px"><button onclick="downloadAllDBE()">⬇️ DOWNLOAD ALL</button><button class="red" onclick="clearUploadedDBE()">🗑️ CLEAR UPLOADED</button></div><h3>Last 50 Uploaded</h3><table><tr><th>EMIS</th><th>Name</th><th>Province</th><th>Action</th></tr>${DBE_UPLOADED.slice(-50).map(s=>`<tr><td>${s[0]}</td><td>${s[1]}</td><td>${s[2]}</td><td><button class="red" onclick="deleteUploadedDBE('${s[0]}')">Delete</button></td></tr>`).join('')||'<tr><td colspan=4>No uploaded yet</td></tr>'}</table>`;}
+else if(adminCur==='subs') c.innerHTML=`<h3>💳 Subscriptions</h3><input id="subSchool" placeholder="EMIS"><select id="subPlan"><option>STANDARD</option><option>PREMIUM</option><option>DEMO</option></select><button class="green" onclick="addSub()">➕ CREATE</button><div>${DB.subs.map(s=>`<p>${s.school} — ${s.plan}</p>`).join('')}</div>`;
+else if(adminCur==='jobs') c.innerHTML=`<h3>💼 Jobs</h3><input id="jobT" placeholder="Job Title"><button class="green" onclick="DB.jobs.push({t:document.getElementById('jobT').value});save();renderAdmin()">➕ ADD JOB</button><div>${DB.jobs.map(j=>`<p>${j.t}</p>`).join('')}</div>`;
+else if(adminCur==='agents') c.innerHTML=`<h3>🕵️ Agents</h3><input id="agN" placeholder="Agent Name"><input id="agArea" placeholder="Area"><button class="green" onclick="DB.agents.push({n:document.getElementById('agN').value,area:document.getElementById('agArea').value});save();renderAdmin()">➕ ADD AGENT</button><div>${DB.agents.map(a=>`<p>${a.n} — ${a.area}</p>`).join('')}</div>`;
+else if(adminCur==='salesMgr') c.innerHTML=`<h3>📈 Sales Manager</h3><input id="smN" placeholder="Client"><input id="smAmt" type="number" placeholder="Amount R"><button class="green" onclick="DB.sales.push({n:document.getElementById('smN').value,amt:document.getElementById('smAmt').value});save();renderAdmin()">➕ ADD SALE</button><div>${DB.sales.map(s=>`<p>${s.n} — R${s.amt}</p>`).join('')} <b>Total: R${DB.sales.reduce((a,s)=>a+Number(s.amt||0),0)}</b></div>`;
+else if(adminCur==='salesTrack') c.innerHTML=`<h3>📊 Sales Tracker</h3><p>Total: R${DB.sales.reduce((a,s)=>a+Number(s.amt||0),0)}</p><table><tr><th>Client</th><th>Amount</th></tr>${DB.sales.map(s=>`<tr><td>${s.n}</td><td>R${s.amt}</td></tr>`).join('')}</table>`;
+else c.innerHTML=`<h3>📄 Contracts</h3><input id="ctN" placeholder="Agent Name"><input id="ctT" placeholder="Terms"><button class="green" onclick="DB.contracts.push({n:document.getElementById('ctN').value,t:document.getElementById('ctT').value});save();renderAdmin()">➕ CREATE</button><div>${DB.contracts.map(x=>`<p>📄 ${x.n} — ${x.t}</p>`).join('')}</div>`;}
+function addSub(){DB.subs.push({school:document.getElementById('subSchool').value||CUR.school,plan:document.getElementById('subPlan').value,status:'Active'}); save(); renderAdmin();}
+function render(){let dt=document.getElementById('dbeTotalTop'); if(dt) dt.innerText=getAllDBE().length; let uc=document.getElementById('uploadedCountTop'); if(uc) uc.innerText=DBE_UPLOADED.length; let dbg=document.getElementById('debugBox'); if(dbg) dbg.innerText='DBE: '+getAllDBE().length+' | If 0, tap RESTORE or EMERGENCY LOGIN'; let who=document.getElementById('who'); if(who) who.innerText=`Role: ${CUR.role||'Not logged in'} | School: ${schoolName()} ${CUR.school?'('+CUR.school+')':''} ${CUR.subjects.length?'| Teaching: '+CUR.subjects.join(', '):''}`; document.querySelectorAll('.schoolName').forEach(e=>e.innerText=schoolName()); let books=DB.books.filter(b=>b.school===CUR.school); let learners=DB.learners.filter(l=>l.school===CUR.school); let staff=DB.staff.filter(s=>s.school===CUR.school); let el=(id)=>document.getElementById(id); if(el('pBooks')) el('pBooks').innerText=books.length; if(el('pIssued')) el('pIssued').innerText=books.filter(b=>b.issued).length; if(el('pAvail')) el('pAvail').innerText=books.filter(b=>!b.issued).length; if(el('pLearners')) el('pLearners').innerText=learners.length; if(el('pStaff')) el('pStaff').innerText=staff.length; let booksHTML=`<table><tr><th>Book No</th><th>Title</th><th>Subject</th><th>Status</th><th>Barcode</th></tr>${books.map(b=>`<tr><td><b>${b.code}</b></td><td>${b.title}</td><td>${b.subject}</td><td>${b.issued?'📤 Issued to '+b.learner:'✅ Available'}</td><td><svg class="bc" data-v="MAKHANANI ${schoolName()} ${b.code}"></svg></td></tr>`).join('')||'<tr><td colspan=5>No books yet</td></tr>'}</table>`; if(el('booksList')) el('booksList').innerHTML=booksHTML; if(el('booksList2')) el('booksList2').innerHTML=booksHTML; if(el('principalBooks')) el('principalBooks').innerHTML=booksHTML; if(el('staffList')) el('staffList').innerHTML=`<table><tr><th>Name</th><th>Role</th><th>Teaching</th><th>Action</th></tr>${staff.map(s=>`<tr><td>${s.name}</td><td>${s.role}</td><td><b>${staffSubjects(s).join(', ')}</b></td><td><button class="red" onclick="removeStaff(${DB.staff.indexOf(s)})">Remove</button></td></tr>`).join('')||'<tr><td colspan=4>No staff yet</td></tr>'}</table>`; if(el('learnerList')) el('learnerList').innerHTML=learners.map(l=>`<div class="barcodeBox"><b>MAKHANANI • ${schoolName()}</b><b>${l.name} — ${l.grade} — ${l.id}</b><svg class="bc2" data-v="${l.id}"></svg></div>`).join('')||'No learners yet'; if(el('printReport')) el('printReport').innerHTML=`<h3>MAKHANANI — PRINCIPAL REPORT</h3><p><b>School:</b> ${schoolName()} (${CUR.school})<br><b>Date:</b> ${new Date().toLocaleDateString()}</p><p>Books: ${books.length} | Issued: ${books.filter(b=>b.issued).length} | Learners: ${learners.length} | Staff: ${staff.length}</p><table><tr><th>Book No</th><th>Title</th><th>Status</th></tr>${books.map(b=>`<tr><td>${b.code}</td><td>${b.title}</td><td>${b.issued?'Issued':'Available'}</td></tr>`).join('')}</table><p>Signature: ___________________ Principal</p>`; try{document.querySelectorAll('.bc').forEach(s=>JsBarcode(s,s.dataset.v,{format:'CODE128',width:1.2,height:40,displayValue:true})); document.querySelectorAll('.bc2').forEach(s=>JsBarcode(s,s.dataset.v,{format:'CODE128',width:1.5,height:50,displayValue:true}));}catch(e){} renderAdmin();}
+try{document.getElementById('dev').innerText='DEV-'+Math.random().toString(36).slice(2,6).toUpperCase();}catch(e){}
+initCaps(); filterDBE(); render();
 </script></body></html>
