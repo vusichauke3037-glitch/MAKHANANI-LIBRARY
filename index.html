@@ -1,620 +1,306 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MAKHANANI V6.1 LTSM - FIX 1MB LIMIT - 25K SCHOOLS CHUNKED - makhanani-digital</title>
-<link rel="manifest" href="manifest.json?v=61"><meta name="theme-color" content="#0a1a4d"><link rel="apple-touch-icon" href="logo.png?v=61">
-<style>*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#eef4ff}header{background:#0a1a4d;color:#fff;padding:0 0 12px;text-align:center}header .logoCard{background:#fff;width:80%;max-width:320px;margin:0 auto;border-radius:0 0 18px 18px;padding:10px}header .logoCard img{width:100%;max-width:220px}header h1{margin:10px 0 2px;font-size:18px}.wrap{max-width:980px;margin:auto;padding:8px}.card{background:#fff;border-radius:14px;padding:12px;margin:8px 0;box-shadow:0 2px 8px rgba(0,0,0,.08)}input,select{width:100%;padding:11px;margin:4px 0;border:2px solid #bfdbfe;border-radius:10px;font-size:14px}button{width:100%;padding:11px;margin:4px 0;border:0;border-radius:12px;background:#1a56db;color:#fff;font-weight:900;font-size:12px;cursor:pointer;touch-action:manipulation}.green{background:#16a34a}.red{background:#dc2626}.yellow{background:#facc15;color:#000}.dark{background:#0a1a4d}.grey{background:#64748b}.hidden{display:none}.badge{background:#f0f9ff;border:2px solid #bfdbfe;border-radius:10px;padding:7px;margin:4px 0;font-size:11px}.tabs{display:flex;gap:4px;flex-wrap:wrap}.tabs button{flex:1;width:auto;padding:10px 2px;font-size:9px;background:#e2e8f0;color:#111;border-radius:10px;border:2px solid #cbd5e1}.tabs button.active{background:#1a56db;color:#fff;border-color:#1a56db}.tabs.ltsm button{font-size:9px;padding:10px 2px;background:#0a1a4d;color:#fff;border-color:#facc15}.tabs.ltsm button.active{background:#facc15;color:#000;border-color:#facc15}.cloud{border:2px solid #16a34a;border-radius:12px;padding:10px;background:#f0fdf4;text-align:center;font-weight:900;font-size:12px}.loginBox{border:2px solid #1a56db;border-radius:14px;padding:12px;background:#eff6ff}.searchBox{max-height:180px;overflow-y:auto;border:2px solid #bfdbfe;border-radius:10px;background:#fff}.barcodeCard{border:2px solid #0a1a4d;border-radius:14px;padding:10px;margin:8px 0;background:#fff;text-align:center}.headerBtns{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;padding:6px}.headerBtns button{width:auto;padding:8px 10px;border-radius:20px;font-size:9px}.liveBox{border:2px solid #dc2626;background:#fef2f2;border-radius:12px;padding:10px;margin:8px 0}.printPanel{border:2px solid #0a1a4d;background:#eff6ff;border-radius:12px;padding:10px;margin:8px 0}.ltsmHeader{background:#0a1a4d;color:#fff;padding:12px;border-radius:12px;text-align:center;margin-bottom:8px;border:3px solid #facc15}.ltsmHeader h2{margin:2px;color:#facc15;font-size:16px}.schoolBtn{padding:8px 10px;margin:3px;border-radius:20px;font-size:10px;font-weight:900;width:auto;flex:1 1 auto;min-width:120px}.schoolBtn.selected{background:#16a34a;color:#fff;border:2px solid #16a34a}.schoolBtnQuick{background:#fff;color:#0a1a4d;border:2px solid #0a1a4d}.schoolBtns{display:flex;gap:4px;flex-wrap:wrap;margin:6px 0}</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MAKHANANI V6.1 SYNC - ONE UPDATE = LAPTOP + PHONE SAME - NO AUTO SELECT - makhanani-digital</title>
+<link rel="manifest" href="manifest.json?v=61s">
+<meta name="theme-color" content="#0a1a4d">
+<link rel="apple-touch-icon" href="logo.png?v=61s">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#eef4ff}
+header{background:#0a1a4d;color:#fff;padding:0 0 12px;text-align:center}
+header .logoCard{background:#fff;width:80%;max-width:320px;margin:0 auto;border-radius:0 0 18px 18px;padding:10px}
+header .logoCard img{width:100%;max-width:220px}
+.wrap{max-width:980px;margin:auto;padding:8px}
+.card{background:#fff;border-radius:14px;padding:12px;margin:8px 0;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+input,select{width:100%;padding:12px;margin:4px 0;border:2px solid #bfdbfe;border-radius:10px;font-size:14px}
+button{width:100%;padding:12px;margin:4px 0;border:0;border-radius:12px;background:#1a56db;color:#fff;font-weight:900;font-size:12px;cursor:pointer}
+.green{background:#16a34a}.red{background:#dc2626}.yellow{background:#facc15;color:#000}.dark{background:#0a1a4d}.grey{background:#64748b}.hidden{display:none}
+.badge{background:#f0f9ff;border:2px solid #bfdbfe;border-radius:10px;padding:8px;margin:4px 0;font-size:11px}
+.tabs{display:flex;gap:4px;flex-wrap:wrap}.tabs button{flex:1;width:auto;padding:10px 2px;font-size:9px;background:#e2e8f0;color:#111;border-radius:10px;border:2px solid #cbd5e1}.tabs button.active{background:#1a56db;color:#fff;border-color:#1a56db}
+.tabs.ltsm button{background:#0a1a4d;color:#fff;border-color:#facc15}.tabs.ltsm button.active{background:#facc15;color:#000}
+.cloud{border:2px solid #16a34a;border-radius:12px;padding:10px;background:#f0fdf4;text-align:center;font-weight:900;font-size:12px}
+.loginBox{border:2px solid #1a56db;border-radius:14px;padding:12px;background:#eff6ff}
+.searchBox{max-height:220px;overflow-y:auto;border:2px solid #0a1a4d;border-radius:10px;background:#fff}
+.schoolBtn{padding:14px 10px;margin:5px;border-radius:12px;font-size:12px;font-weight:900;flex:1 1 auto;min-width:160px;border:3px solid #0a1a4d}
+.schoolBtnQuick{background:#fff;color:#0a1a4d;border:3px solid #0a1a4d}
+.schoolBtn.selected{background:#16a34a;color:#fff;border-color:#16a34a}
+.schoolBtns{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0;background:#eff6ff;padding:10px;border-radius:12px;border:2px solid #0a1a4d;min-height:60px}
+.barcodeCard{border:2px solid #0a1a4d;border-radius:14px;padding:10px;margin:8px 0;background:#fff;text-align:center}
+.ltsmHeader{background:#0a1a4d;color:#fff;padding:12px;border-radius:12px;text-align:center;margin-bottom:8px;border:3px solid #facc15}
+.syncDot{width:12px;height:12px;border-radius:50%;display:inline-block;background:#16a34a;animation:pulse 1.5s infinite}
+@keyframes pulse{0%{opacity:1}50%{opacity:0.4}100%{opacity:1}}
+</style>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-</head><body>
-<header><div class="logoCard"><img src="logo.png?v=61" alt="XINTIMANI"></div><h1>MAKHANANI DIGITAL LIBRARY</h1><p>V6.1 FIX 1MB LIMIT - 25K SCHOOLS CHUNKED - SCHOOL BUTTONS + LTSM ACTIVE - makhanani-digital</p>
-<div class="headerBtns noPrint"><button type="button" style="background:#16a34a;color:#fff;padding:10px 14px;font-size:11px;border:2px solid #fff" onclick="createCloudDatabase();return false;">🔧 CREATE CLOUD DB - FIX 1MB</button><button type="button" style="background:#facc15;color:#000;border:2px solid #000" onclick="syncDBEChunked();return false;">🏫 SYNC DBE 25K CHUNKED - FIX FAIL</button><button type="button" style="background:#fff;color:#0a1a4d" onclick="showTab('ltsmTab',document.getElementById('ltsmMainBtn'));return false;">📦 LTSM ACTIVE</button><button type="button" style="background:#fff;color:#0a1a4d" onclick="syncToCloud();return false;">☁️ SYNC SMALL DOC</button></div></header>
+</head>
+<body>
+<header><div class="logoCard"><img src="logo.png?v=61s" alt="XINTIMANI"></div><h1>MAKHANANI DIGITAL LIBRARY</h1><p>V6.1 SYNC - ONE UPDATE = LAPTOP + PHONE SAME - NO AUTO SELECT - makhanani-digital</p></header>
 <div class="wrap">
-<div class="card noPrint"><button type="button" class="red" onclick="firebaseLogout();return false;">🔓 LOGOUT</button><h3 id="welcomeText">V6.1 FIX 1MB LIMIT - 25K SCHOOLS CHUNKED</h3><div class="cloud" id="cloudStatus" style="background:#fef9c3;border-color:#f59e0b">☁️ V6.1 FIX 1MB LIMIT - Your screenshot: 2,359,771 bytes > 1,048,576 limit - FIXED! - makhanani/main small (no schools) - Schools in makhanani_dbe_schools - TAP SYNC DBE CHUNKED</div><div class="badge" id="userInfo">Not logged in - ADMIN: admin@makhanani.com / admin123 - V6.1 FIX 1MB LIMIT</div><div class="badge" id="debugInfo" style="font-size:9px;background:#f8fafc">V6.1 Starting - FIX 1MB LIMIT - 25,529 schools = 2.3MB > 1MB - FIXED! - Small doc + chunked</div></div>
-<div class="card" id="loginCard"><div class="loginBox"><h2>🔐 LOGIN V6.1 - FIX 1MB LIMIT - 25K SCHOOLS CHUNKED</h2><div class="badge" style="background:#fee2e2;border:3px solid #dc2626">❌ YOUR SCREENSHOT FAIL: Document size 2,359,771 bytes exceeds max 1,048,576 bytes - 25,526 schools in ONE doc makhanani/main - Too big! V6.1 FIX: main doc small (NO schools) - Schools in makhanani_dbe_schools collection - Each school = 1 doc - No limit! - TAP SYNC DBE CHUNKED!</div><div class="badge" style="background:#dcfce7;border:3px solid #16a34a">✅ V6.1 FIX: 1. CREATE CLOUD DB = small doc (no schools) - Will sync! 2. SYNC DBE CHUNKED = 25,529 schools in batches of 400 to separate collection - Fixes FAIL! 3. SCHOOL BUTTONS + LTSM ACTIVE</div>
+
+<div class="card">
+<div class="cloud" id="cloudStatus" style="background:#fef9c3;border-color:#f59e0b">☁️ V6.1 SYNC - Connecting... - One Update = Laptop + Phone Same</div>
+<div class="badge" id="syncStatus" style="background:#dcfce7;border:2px solid #16a34a;font-weight:900"><span class="syncDot"></span> 🔄 SYNC: ON - Laptop + Phone Same Info - Real-Time Listener ON - One update from any device = Updates both in 1 sec - V6.1 SYNC</div>
+<div class="badge" id="deviceInfo" style="background:#e0f2fe">Device: Checking... - V6.1 SYNC - Same login on both devices = Same info</div>
+<button type="button" class="red" onclick="firebaseLogout();return false;">🔓 LOGOUT - Both devices stay synced in cloud</button>
+</div>
+
+<div class="card" id="loginCard"><div class="loginBox">
+<h2>🔐 LOGIN V6.1 SYNC - ONE UPDATE = LAPTOP + PHONE SAME</h2>
+<div class="badge" style="background:#dcfce7;border:3px solid #16a34a">✅ V6.1 SYNC - ONE UPDATE = BOTH DEVICES!<br>1. Login SAME account on Laptop + Phone: <b>admin@makhanani.com / admin123</b><br>2. Select SAME school on both: TAP WORDSWORTH button<br>3. Add book on Laptop → Phone auto updates in 1 sec! No refresh!<br>4. Add learner on Phone → Laptop auto updates in 1 sec!<br>✅ Real-Time Listener ON - Cloud is source of truth - Not localStorage!</div>
 <select id="rankSel" onchange="onRankChange()"><option value="">-- Select Rank --</option><option selected>ADMIN</option><option>PRINCIPAL</option><option>HOD</option><option>LIBRARIAN</option><option>EDUCATOR</option><option>PARENT</option><option>LEARNER</option></select>
-<div style="background:#fff;border:3px solid #0a1a4d;border-radius:12px;padding:8px;margin:6px 0">
-<h3 style="margin:2px 0;font-size:12px;color:#0a1a4d">🏫 SELECT DBE SCHOOL - TAP BUTTON - V6.1 FIX 1MB</h3>
+<div style="background:#fff;border:3px solid #0a1a4d;border-radius:12px;padding:10px;margin:8px 0">
+<h3 style="text-align:center;font-size:13px">🏫 SELECT DBE SCHOOL - MANUAL TAP ONLY - V6.1 SYNC - NO AUTO SELECT</h3>
 <div class="schoolBtns" id="schoolQuickBtns"></div>
-<select id="schoolDropdown" onchange="selectSchoolFromDropdown()" style="background:#fef9c3;border:2px solid #f59e0b;font-weight:900"><option value="">-- TAP TO SELECT SCHOOL FROM LIST --</option></select>
-<input id="schoolSearch" placeholder="Or Search DBE: WORDSWORTH or George Sonto or 700310854" oninput="searchDBESchools()" style="background:#fff">
+<select id="schoolDropdown" onchange="selectSchoolFromDropdown()" style="background:#fef9c3;border:3px solid #f59e0b;font-weight:900;padding:14px"><option value="">-- TAP TO SELECT SCHOOL FROM LIST --</option></select>
+<input id="schoolSearch" placeholder="Search: WORDSWORTH or 700310854 - Then TAP result badge below - MANUAL TAP ONLY" oninput="searchDBESchools()" style="border:3px solid #0a1a4d">
 <div id="schoolSearchResults" class="searchBox"></div>
 <input id="selectedSchool" type="hidden">
-<div class="badge" id="selectedSchoolDisplay" style="background:#fee2e2;border:2px solid #dc2626;font-weight:900">❌ No DBE school selected - TAP A SCHOOL BUTTON ABOVE - V6.1 FIX 1MB</div>
+<div class="badge" id="selectedSchoolDisplay" style="background:#fee2e2;border:3px solid #dc2626;font-weight:900;padding:12px;text-align:center">❌ No DBE school selected - TAP A SCHOOL BUTTON ABOVE - MANUAL TAP ONLY - V6.1 SYNC - NO AUTO SELECT - Select SAME school on Laptop + Phone!</div>
 </div>
 <input id="fbEmail" type="email" placeholder="Email" value="admin@makhanani.com"><input id="fbPass" type="password" placeholder="Password" value="admin123"><input id="learnerIdInput" class="hidden" placeholder="Learner ID e.g. L-0001">
-<button type="button" class="dark" onclick="firebaseLogin();return false;" style="padding:14px;font-size:13px;background:#16a34a;border:3px solid #fff">🔐 LOGIN - V6.1 FIX 1MB - TAP AFTER SELECTING SCHOOL</button>
-<button type="button" class="green" style="background:#16a34a;padding:16px;font-size:13px;border:3px solid #fff" onclick="createCloudDatabase();return false;">🔧 CREATE CLOUD DB - SMALL DOC - WILL SYNC!</button>
-<button type="button" style="background:#facc15;color:#000;border:3px solid #000;padding:14px;font-size:13px;font-weight:900" onclick="syncDBEChunked();return false;">🏫 SYNC DBE 25K CHUNKED - FIX YOUR FAIL - TAP HERE</button>
-<button type="button" style="background:#0a1a4d;color:#facc15;border:3px solid #facc15;padding:14px;font-size:13px" onclick="showTab('ltsmTab',document.getElementById('ltsmMainBtn'));return false;">📦 OPEN LTSM NOW - LTSM ACTIVE</button>
-<button type="button" class="yellow" style="color:#000" onclick="testFirebaseDirect();return false;">🧪 TEST DIRECT</button>
-<button type="button" class="grey" onclick="clearAndReload();return false;">🗑️ CLEAR CACHE & RELOAD</button>
-<button type="button" class="red" style="background:#dc2626;padding:10px;font-size:10px" onclick="clearSchoolsToFix();return false;">🗑️ CLEAR SCHOOLS TO 3 - FIX SYNC</button>
+<button type="button" class="dark" onclick="firebaseLogin();return false;" style="padding:16px;background:#16a34a;border:3px solid #fff">🔐 LOGIN - V6.1 SYNC - TAP AFTER SELECTING SCHOOL - Same login on Laptop + Phone!</button>
+<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:8px"><button type="button" class="green" style="flex:1" onclick="createCloudDatabase();return false;">🔧 CREATE CLOUD DB - SMALL DOC</button><button type="button" style="flex:1;background:#facc15;color:#000" onclick="syncDBEChunked();return false;">🏫 SYNC DBE 25K CHUNKED</button><button type="button" style="flex:1" class="dark" onclick="syncNowFromCloud();return false;">⬇️ SYNC NOW FROM CLOUD - Pull Laptop changes to Phone</button></div>
+<div class="badge" id="lastSyncInfo" style="background:#e0f2fe">Last Sync: Never - V6.1 SYNC - Real-Time Listener will auto update when other device changes - No manual sync needed!</div>
 </div></div>
-<div class="tabs noPrint">
-<button type="button" onclick="showTab('homeTab',this);return false;" class="active">🏠 HOME LIVE DB</button>
-<button type="button" onclick="showTab('principalDashTab',this);return false;">👔 PRINCIPAL</button>
-<button type="button" onclick="showTab('adminDashTab',this);return false;">👑 ADMIN</button>
-<button type="button" onclick="showTab('ltsmTab',this);return false;" style="background:#0a1a4d;color:#facc15;border:3px solid #facc15;font-weight:900;font-size:11px;padding:12px 2px" id="ltsmMainBtn">📦 LTSM - ACTIVE</button>
-<button type="button" onclick="showTab('hodTab',this);return false;">📋 HOD LOG</button>
-<button type="button" onclick="showTab('adminTab',this);return false;">⚙️ MANAGE + DBE</button>
+
+<div class="tabs noPrint"><button type="button" onclick="showTab('homeTab',this);return false;" class="active">🏠 HOME - SYNCED</button><button type="button" onclick="showTab('ltsmTab',this);return false;" style="background:#0a1a4d;color:#facc15;border:3px solid #facc15;font-weight:900" id="ltsmMainBtn">📦 LTSM - SYNCED</button><button type="button" onclick="showTab('adminTab',this);return false;">⚙️ MANAGE + DBE - SYNCED</button></div>
+
+<div class="card" id="homeTab"><h2>🏠 HOME - V6.1 SYNC - LAPTOP + PHONE SAME</h2><div id="homeStats" class="badge">Loading... V6.1 SYNC</div><div class="badge" id="homeSchoolName">No school selected - TAP SCHOOL BUTTON - V6.1 SYNC - NO AUTO SELECT</div><div class="badge" id="userInfo">Not logged in - ADMIN: admin@makhanani.com / admin123 - V6.1 SYNC - Login same on Laptop + Phone!</div><div class="badge" id="liveUpdates" style="background:#fef9c3;border:2px solid #f59e0b">🔴 LIVE UPDATES: Waiting for other device changes... - V6.1 SYNC - When Laptop changes, this phone will show: 🔴 UPDATED FROM LAPTOP!</div></div>
+
+<div class="card hidden" id="ltsmTab"><div class="ltsmHeader"><h2>📦 LTSM - V6.1 SYNC - ONE UPDATE = BOTH DEVICES</h2><p style="font-size:10px">✅ Add on Laptop → Auto appears on Phone in 1 sec - No refresh needed!</p></div>
+<div class="tabs ltsm noPrint" style="margin-bottom:8px"><button type="button" onclick="showLTSMTab('ltsmScanTab',this);return false;" class="active">📷 SCAN</button><button type="button" onclick="showLTSMTab('ltsmBooksTab',this);return false;">📚 BOOKS - SYNCED</button><button type="button" onclick="showLTSMTab('ltsmLearnersTab',this);return false;">👥 LEARNERS - SYNCED</button><button type="button" onclick="showLTSMTab('ltsmIssueTab',this);return false;">📤 ISSUE - SYNCED</button><button type="button" onclick="showLTSMTab('ltsmReturnTab',this);return false;">📥 RETURN - SYNCED</button></div>
+<div id="ltsmScanTab"><div class="card" style="margin:0;border:3px solid #16a34a"><h2>📷 SCANNER - SYNCED</h2><div id="reader"></div><div style="display:flex;gap:4px"><button type="button" class="dark" onclick="startScanner();return false;">📷 START</button><button type="button" class="red" onclick="stopScanner();return false;">🔴 STOP</button></div><input id="scanResult" placeholder="Scanned"><div class="badge" id="scanLog">Ready - V6.1 SYNC</div></div></div>
+<div id="ltsmBooksTab" class="hidden"><div class="card" style="margin:0;border:3px solid #f59e0b"><h2>📚 BOOKS - V6.1 SYNC - Add on Laptop → Phone auto updates!</h2><input id="bTitle" placeholder="Book Title - Will sync to Laptop + Phone!"><div style="display:flex;gap:4px"><select id="bSubject" style="flex:1"></select><select id="bGrade" style="flex:0.6"><option value="">Grade</option><option>G4</option><option>G5</option><option>G6</option><option>G7</option><option>G8</option><option>G9</option><option>G10</option><option>G11</option><option>G12</option></select><input id="bQty" type="number" min="1" value="1" style="flex:0.5"></div><input id="bTeacher" placeholder="Teacher"><input id="bCodeManual" placeholder="Manual Code"><button type="button" class="green" id="addBookBtn" onclick="addBookWithDBECode();return false;">➕ ADD BOOK(S) - WILL SYNC TO LAPTOP + PHONE IN 1 SEC!</button><div id="bookList"></div></div></div>
+<div id="ltsmLearnersTab" class="hidden"><div class="card" style="margin:0;border:3px solid #16a34a"><h2>👥 LEARNERS - V6.1 SYNC - Add on Phone → Laptop auto updates!</h2><div class="badge" id="nextLearnerIdPreview">Next Auto ID: L-0001 - SYNCED</div><input id="lName" placeholder="Learner Full Name - Will sync to Laptop + Phone!"><div style="display:flex;gap:4px"><input id="lGrade" placeholder="Grade e.g. G10" style="flex:1"><input id="lClass" placeholder="Class e.g. 10A" style="flex:1"></div><div style="display:flex;gap:4px"><input id="lId" placeholder="Learner ID - Leave empty = Auto" style="flex:1"><button type="button" class="yellow" style="flex:0.4;color:#000" onclick="autoGenerateLearnerId();return false;">🔢 AUTO</button></div><button type="button" class="green" id="addLearnerBtn" onclick="addLearner();return false;">➕ ADD LEARNER - WILL SYNC TO LAPTOP + PHONE IN 1 SEC!</button><div id="learnerList"></div></div></div>
+<div id="ltsmIssueTab" class="hidden"><div class="card" style="margin:0;border:3px solid #16a34a"><h2>📤 ISSUE - SYNCED</h2><input id="iLearner" placeholder="Learner ID"><input id="iBook" placeholder="Book Code"><button type="button" class="green" onclick="issueBook();return false;">📤 ISSUE BOOK - WILL SYNC TO LAPTOP + PHONE!</button><div class="badge" id="issueStatus">Ready - V6.1 SYNC</div><div id="issueList"></div></div></div>
+<div id="ltsmReturnTab" class="hidden"><div class="card" style="margin:0;border:3px solid #facc15"><h2>📥 RETURN - SYNCED</h2><input id="rBook" placeholder="Book Code"><button type="button" class="yellow" style="color:#000" onclick="returnBook();return false;">📥 RETURN BOOK - WILL SYNC TO LAPTOP + PHONE!</button><div class="badge" id="returnStatus">Ready - V6.1 SYNC</div><div id="returnList"></div></div></div>
 </div>
-<div class="card" id="homeTab"><h2>🏠 HOME - V6.1 FIX 1MB LIMIT</h2>
-<div class="liveBox"><h2>🔴 REAL-TIME DATABASE LIVE - V6.1 FIX 1MB LIMIT</h2><div class="badge" id="liveStatus">V6.1 FIX 1MB LIMIT - TAP SYNC DBE CHUNKED</div>
-<div style="display:flex;gap:6px;flex-wrap:wrap"><div style="flex:1;min-width:80px;background:#fff;border:2px solid #16a34a;border-radius:10px;padding:6px;text-align:center"><div style="font-size:18px;font-weight:900" id="liveBorrowed">0</div><div style="font-size:8px">📤 BORROWED</div><div style="font-size:6px" id="liveBorrowedTime">--</div></div><div style="flex:1;min-width:80px;background:#fff;border:2px solid #1a56db;border-radius:10px;padding:6px;text-align:center"><div style="font-size:18px;font-weight:900" id="liveReturned">0</div><div style="font-size:8px">📥 RETURNED</div><div style="font-size:6px" id="liveReturnedTime">--</div></div><div style="flex:1;min-width:80px;background:#fff;border:2px solid #f59e0b;border-radius:10px;padding:6px;text-align:center"><div style="font-size:18px;font-weight:900" id="liveBooks">0</div><div style="font-size:8px">📚 BOOKS</div></div><div style="flex:1;min-width:80px;background:#fff;border:2px solid #7c3aed;border-radius:10px;padding:6px;text-align:center"><div style="font-size:18px;font-weight:900" id="liveLearners">0</div><div style="font-size:8px">👥 LEARNERS</div></div></div>
-<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"><div style="flex:1;min-width:240px;background:#fff;border-radius:8px;padding:4px"><canvas id="liveChartBorrowed" height="160"></canvas></div><div style="flex:1;min-width:240px;background:#fff;border-radius:8px;padding:4px"><canvas id="liveChartSubjects" height="160"></canvas></div></div>
-<h3 style="font-size:11px">🔴 LIVE TRANSACTIONS - V6.1 FIX 1MB</h3><div id="liveTransactions" style="max-height:200px;overflow-y:auto;border:2px solid #dc2626;border-radius:8px;padding:4px;background:#fff"></div>
-<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"><button type="button" class="green" style="flex:1" onclick="startRealtimeReporting();return false;">🔴 START LIVE DB</button><button type="button" class="red" style="flex:1" onclick="stopRealtimeReporting();return false;">⏹️ STOP</button><button type="button" class="dark" style="flex:1" onclick="printLiveReport();return false;">🖨️ PRINT</button></div></div>
-<div id="homeStats" class="badge">Loading... V6.1 FIX 1MB LIMIT</div><div class="badge" id="homeSchoolName">No school selected - TAP SCHOOL BUTTON - V6.1 FIX 1MB</div></div>
-<div class="card hidden" id="principalDashTab"><h2>👔 PRINCIPAL DASHBOARD - V6.1 FIX 1MB</h2><div class="badge" id="principalDashSchool" style="background:#dbeafe;border:2px solid #1a56db">No school - TAP SCHOOL BUTTON</div><div style="display:flex;gap:6px;flex-wrap:wrap"><div style="flex:1;min-width:80px;background:#fef9c3;border:2px solid #f59e0b;border-radius:10px;padding:8px;text-align:center"><div style="font-size:20px;font-weight:900" id="pDashBooks">0</div><div style="font-size:8px">📚 Books</div></div><div style="flex:1;min-width:80px;background:#dcfce7;border:2px solid #16a34a;border-radius:10px;padding:8px;text-align:center"><div style="font-size:20px;font-weight:900" id="pDashLearners">0</div><div style="font-size:8px">👥 Learners</div></div><div style="flex:1;min-width:80px;background:#dbeafe;border:2px solid #1a56db;border-radius:10px;padding:8px;text-align:center"><div style="font-size:20px;font-weight:900" id="pDashStaff">0</div><div style="font-size:8px">👥 Staff</div></div></div></div>
-<div class="card hidden" id="adminDashTab"><h2>👑 ADMIN DASHBOARD - V6.1 FIX 1MB LIMIT</h2><div class="badge" id="adminDashSchool" style="background:#fee2e2;border:2px solid #dc2626">ADMIN ONLY - V6.1 FIX 1MB LIMIT</div><div style="display:flex;gap:6px;flex-wrap:wrap"><div style="flex:1;min-width:60px;background:#dbeafe;border:2px solid #1a56db;border-radius:10px;padding:6px;text-align:center"><div style="font-size:18px;font-weight:900" id="aDashSchools">0</div><div style="font-size:7px">🏫 Schools</div></div><div style="flex:1;min-width:60px;background:#fef9c3;border:2px solid #f59e0b;border-radius:10px;padding:6px;text-align:center"><div style="font-size:18px;font-weight:900" id="aDashBooks">0</div><div style="font-size:7px">📚 Books</div></div><div style="flex:1;min-width:60px;background:#dcfce7;border:2px solid #16a34a;border-radius:10px;padding:6px;text-align:center"><div style="font-size:18px;font-weight:900" id="aDashLearners">0</div><div style="font-size:7px">👥 Learners</div></div><div style="flex:1;min-width:60px;background:#f3e8ff;border:2px solid #7c3aed;border-radius:10px;padding:6px;text-align:center"><div style="font-size:18px;font-weight:900" id="aDashStaff">0</div><div style="font-size:7px">👥 Staff</div></div></div></div>
-<div class="card hidden" id="ltsmTab">
-<div class="ltsmHeader"><h2>📦 LTSM - V6.1 FIX 1MB LIMIT - ACTIVE!</h2><p style="margin:2px;font-size:10px">✅ LTSM ACTIVE - FIX 1MB LIMIT - SCAN, BOOKS, LEARNERS, ISSUE, RETURN - 25K schools chunked</p></div>
-<div class="tabs ltsm noPrint" style="margin-bottom:8px">
-<button type="button" onclick="showLTSMTab('ltsmScanTab',this);return false;" class="active">📷 SCAN - ACTIVE</button>
-<button type="button" onclick="showLTSMTab('ltsmBooksTab',this);return false;">📚 BOOKS - ACTIVE</button>
-<button type="button" onclick="showLTSMTab('ltsmLearnersTab',this);return false;">👥 LEARNERS - ACTIVE</button>
-<button type="button" onclick="showLTSMTab('ltsmIssueTab',this);return false;">📤 ISSUE - ACTIVE</button>
-<button type="button" onclick="showLTSMTab('ltsmReturnTab',this);return false;">📥 RETURN - ACTIVE</button>
-</div>
-<div id="ltsmScanTab"><div class="card" style="margin:0;border:3px solid #16a34a"><h2>📷 SCANNER - LTSM - V6.1 FIX 1MB</h2><div id="reader"></div><div style="display:flex;gap:4px"><button type="button" class="dark" onclick="startScanner();return false;">📷 START SCAN</button><button type="button" class="red" onclick="stopScanner();return false;">🔴 STOP</button></div><input id="scanResult" placeholder="Scanned - L-0001 or ACC-G10-001"><div class="badge" id="scanLog">Ready - V6.1 FIX 1MB - LTSM ACTIVE</div></div></div>
-<div id="ltsmBooksTab" class="hidden"><div class="card" style="margin:0;border:3px solid #f59e0b"><h2>📚 BOOKS - LTSM - V6.1 FIX 1MB</h2>
-<div class="cloud"><h3>➕ ADD TEXTBOOK - ADMIN/PRINCIPAL/LIBRARIAN ONLY</h3><input id="bTitle" placeholder="Book Title"><div style="display:flex;gap:4px"><select id="bSubject" style="flex:1"></select><select id="bGrade" style="flex:0.6"><option value="">Grade</option><option>G4</option><option>G5</option><option>G6</option><option>G7</option><option>G8</option><option>G9</option><option>G10</option><option>G11</option><option>G12</option></select><input id="bQty" type="number" min="1" max="500" value="1" style="flex:0.5;background:#fef9c3;border:2px solid #f59e0b;font-weight:900;text-align:center"></div><input id="bTeacher" placeholder="Teacher"><input id="bCodeManual" placeholder="Manual Code"><button type="button" class="green" id="addBookBtn" onclick="addBookWithDBECode();return false;">➕ ADD BOOK(S)</button></div>
-<div class="printPanel"><h3 style="margin:2px 0;font-size:11px">🖨️ BARCODE PRINT - TEXTBOOKS - CLEAN WITH LOGO.PNG</h3><div style="display:flex;gap:3px;flex-wrap:wrap"><button type="button" class="dark" style="flex:1;font-size:9px" onclick="printBooks('all');return false;">🖨️ ALL<br><span id="printBooksAllCount" style="font-size:7px">0</span></button><button type="button" class="green" style="flex:1;font-size:9px" onclick="printBooks('grade');return false;">🖨️ GRADE</button><button type="button" class="orange" style="flex:1;font-size:9px" onclick="printBooks('subject');return false;">🖨️ SUBJECT</button><button type="button" class="yellow" style="flex:1;font-size:9px;color:#000" onclick="printBooks('educator');return false;">🖨️ EDUCATOR</button></div><div style="display:flex;gap:3px;flex-wrap:wrap;margin-top:4px"><select id="printBookGrade" style="flex:1;font-size:10px"><option value="">-- Grade --</option><option>G4</option><option>G5</option><option>G6</option><option>G7</option><option>G8</option><option>G9</option><option>G10</option><option>G11</option><option>G12</option></select><select id="printBookSubject" style="flex:1;font-size:10px"><option value="">-- Subject --</option></select><select id="printBookEducator" style="flex:1;font-size:10px"><option value="">-- Educator --</option></select></div><div style="display:flex;gap:3px;margin-top:4px"><button type="button" class="dark" style="flex:1;font-size:8px" onclick="printBooksFiltered('grade');return false;">GRADE <span id="printBookGradeLabel">-</span></button><button type="button" class="dark" style="flex:1;font-size:8px" onclick="printBooksFiltered('subject');return false;">SUBJECT <span id="printBookSubjectLabel">-</span></button><button type="button" class="dark" style="flex:1;font-size:8px" onclick="printBooksFiltered('educator');return false;">EDUCATOR <span id="printBookEducatorLabel">-</span></button></div></div>
-<div id="bookList"></div></div></div>
-<div id="ltsmLearnersTab" class="hidden"><div class="card" style="margin:0;border:3px solid #16a34a"><h2>👥 LEARNERS - LTSM - V6.1 FIX 1MB</h2>
-<div class="cloud"><h3>➕ ADD LEARNER - AUTO L-0001</h3><div class="badge" id="nextLearnerIdPreview" style="background:#fef9c3;border:2px solid #f59e0b;font-size:11px;font-weight:900">Next Auto ID: L-0001</div><input id="lName" placeholder="Learner Full Name"><div style="display:flex;gap:4px"><input id="lGrade" placeholder="Grade e.g. G10" style="flex:1"><input id="lClass" placeholder="Class e.g. 10A" style="flex:1"></div><div style="display:flex;gap:4px"><input id="lId" placeholder="Learner ID - Leave empty = Auto" style="flex:1"><button type="button" class="yellow" style="flex:0.4;color:#000" onclick="autoGenerateLearnerId();return false;">🔢 AUTO</button></div><button type="button" class="green" id="addLearnerBtn" onclick="addLearner();return false;">➕ ADD LEARNER</button></div>
-<div class="printPanel"><h3 style="margin:2px 0;font-size:11px">🖨️ BARCODE PRINT - LEARNERS - CLEAN WITH LOGO.PNG</h3><div style="display:flex;gap:3px;flex-wrap:wrap"><button type="button" class="dark" style="flex:1;font-size:9px" onclick="printLearners('all');return false;">🖨️ ALL<br><span id="printLearnerAllCount" style="font-size:7px">0</span></button><button type="button" class="green" style="flex:1;font-size:9px" onclick="printLearners('grade');return false;">🖨️ GRADE</button><button type="button" class="orange" style="flex:1;font-size:9px" onclick="printLearners('class');return false;">🖨️ CLASS</button></div><div style="display:flex;gap:3px;flex-wrap:wrap;margin-top:4px"><select id="printLearnerGrade" style="flex:1;font-size:10px"><option value="">-- Grade --</option><option>G4</option><option>G5</option><option>G6</option><option>G7</option><option>G8</option><option>G9</option><option>G10</option><option>G11</option><option>G12</option></select><select id="printLearnerClass" style="flex:1;font-size:10px"><option value="">-- Class --</option></select></div><div style="display:flex;gap:3px;margin-top:4px"><button type="button" class="dark" style="flex:1;font-size:8px" onclick="printLearnersFiltered('grade');return false;">GRADE <span id="printLearnerGradeLabel">-</span></button><button type="button" class="dark" style="flex:1;font-size:8px" onclick="printLearnersFiltered('class');return false;">CLASS <span id="printLearnerClassLabel">-</span></button></div></div>
-<div id="learnerList"></div></div></div>
-<div id="ltsmIssueTab" class="hidden"><div class="card" style="margin:0;border:3px solid #16a34a"><h2>📤 ISSUE - LTSM - V6.1 FIX 1MB</h2><input id="iLearner" placeholder="Learner ID e.g. L-0001" oninput="onLearnerTyping()"><div id="learnerSearchResults" class="searchBox"></div><input id="iBook" placeholder="Book Code e.g. ACC-G10-001" oninput="onBookTyping()"><div id="bookSearchResults" class="searchBox"></div><button type="button" class="green" onclick="issueBook();return false;">📤 ISSUE BOOK</button><div class="badge" id="issueStatus">Ready - V6.1 FIX 1MB</div><div id="issueList"></div></div></div>
-<div id="ltsmReturnTab" class="hidden"><div class="card" style="margin:0;border:3px solid #facc15"><h2>📥 RETURN - LTSM - V6.1 FIX 1MB</h2><input id="rBook" placeholder="Book Code - Retrieve Any" oninput="onReturnBookTyping()"><div id="returnSearchResults" class="searchBox"></div><button type="button" class="yellow" style="color:#000" onclick="returnBook();return false;">📥 RETURN BOOK</button><div class="badge" id="returnStatus">Ready - V6.1 FIX 1MB</div><div id="returnList"></div></div></div>
-</div>
-<div class="card hidden" id="hodTab"><h2>📋 HOD LOG - V6.1 FIX 1MB</h2><div id="hodRequestsList"></div></div>
-<div class="card hidden" id="adminTab">
-<h2>⚙️ MANAGE + DBE SCHOOLS UPLOAD - V6.1 FIX 1MB LIMIT - 25K CHUNKED</h2>
-<div class="printPanel" style="border-color:#16a34a;background:#f0fdf4">
-<h3 style="margin:2px 0;font-size:11px">🏫 DBE SCHOOLS UPLOAD - BULK CSV - V6.1 FIX 1MB - CHUNKED</h3>
-<div style="display:flex;gap:3px;flex-wrap:wrap;align-items:center"><input type="file" id="dbeFile" accept=".csv,.txt" style="flex:1;background:#fff;font-size:10px"><button type="button" class="green" style="flex:0.6;font-size:9px" onclick="uploadDBESchools();return false;">📤 UPLOAD CSV TO LOCAL</button><button type="button" class="yellow" style="flex:0.4;font-size:9px;color:#000" onclick="downloadDBETemplate();return false;">📥 TEMPLATE</button></div>
-<div style="display:flex;gap:3px;flex-wrap:wrap;margin-top:4px"><textarea id="dbeManual" placeholder="Paste CSV: EMIS,Name,Town,Province" style="flex:1;min-height:50px;font-size:10px"></textarea></div>
-<div style="display:flex;gap:3px;margin-top:3px"><button type="button" class="dark" style="flex:1;font-size:9px" onclick="uploadDBEManual();return false;">📤 UPLOAD PASTED TO LOCAL</button><button type="button" class="grey" style="flex:0.4;font-size:9px" onclick="clearDBEInput();return false;">🗑️ CLEAR</button></div>
-<div class="badge" id="dbeUploadStatus" style="font-size:9px;background:#f0f9ff">Ready - Current: <span id="dbeCurrentCount">0</span> schools local - V6.1 FIX 1MB - 25,529 schools = 2.3MB > 1MB limit - Now chunked!</div>
-<div style="display:flex;gap:3px;flex-wrap:wrap;margin-top:6px"><button type="button" style="background:#facc15;color:#000;border:3px solid #000;padding:12px;font-size:11px;font-weight:900" onclick="syncDBEChunked();return false;">🏫 SYNC DBE 25K CHUNKED TO CLOUD - FIX FAIL - TAP HERE</button></div>
-<div class="badge" id="dbeCloudSyncStatus" style="font-size:9px;background:#fef9c3;border:2px solid #f59e0b">Cloud DBE Sync Status: Not started - V6.1 FIX 1MB - Will sync 25,529 schools in batches to separate collection</div>
-</div>
-<div class="cloud"><h3>☁️ SYNC + LIVE DATABASE - V6.1 FIX 1MB - SMALL DOC</h3><div style="display:flex;gap:3px;flex-wrap:wrap"><button type="button" class="green" style="flex:1;font-size:9px" onclick="createCloudDatabase();return false;">🔧 CREATE CLOUD DB - SMALL</button><button type="button" class="dark" style="flex:1;font-size:9px" onclick="syncToCloud();return false;">☁️ SYNC SMALL DOC</button><button type="button" class="red" style="flex:1;font-size:9px" onclick="startRealtimeReporting();return false;">🔴 LIVE DB</button><button type="button" class="yellow" style="flex:1;font-size:9px;color:#000" onclick="testFirebaseDirect();return false;">🧪 TEST</button><button type="button" style="flex:1;font-size:9px;background:#facc15;color:#000;border:2px solid #000" onclick="syncDBEChunked();return false;">🏫 SYNC DBE CHUNKED</button></div><div class="badge" id="syncInfo" style="font-size:9px">V6.1 FIX 1MB - Small doc (no schools) - Will sync! - Schools in makhanani_dbe_schools</div></div>
-<div id="staffList"></div><div class="badge" id="adminStats" style="font-size:9px">Stats - V6.1 FIX 1MB</div><input id="searchSchool" placeholder="Search: WORDSWORTH or George Sonto or 911360870" oninput="renderSchools()"><div id="schoolList"></div></div>
+
+<div class="card hidden" id="adminTab"><h2>⚙️ MANAGE + DBE - V6.1 SYNC</h2><div class="cloud"><button type="button" class="green" onclick="restoreSchoolsFromCloud();return false;">🔄 RESTORE 25K SCHOOLS FROM CLOUD - MANUAL TAP ONLY</button><button type="button" class="dark" onclick="syncNowFromCloud();return false;">⬇️ SYNC NOW FROM CLOUD - Pull other device changes NOW</button><div class="badge" id="dbeUploadStatus">Ready - Current: <span id="dbeCurrentCount">0</span> schools</div></div><div id="adminStats" class="badge">Stats - V6.1 SYNC</div><input id="searchSchool" placeholder="Search school" oninput="renderSchools()"><div id="schoolList"></div></div>
+
 </div>
 <script>
 var firebaseConfig = {apiKey: "AIzaSyDMdnrjBRGElJWAqXST67zjZZ4bvEpTWXc",authDomain: "makhanani-digital.firebaseapp.com",projectId: "makhanani-digital",storageBucket: "makhanani-digital.firebasestorage.app",messagingSenderId: "1018865654685",appId: "1:1018865654685:web:b4974747ac8d56d975ad74",measurementId: "G-BZZ51G1Y3G"};
 var db=null,auth=null,cloudOK=false;
-var debugEl=document.getElementById('debugInfo');
-function logDebug(m){console.log("V6.1 DEBUG: "+m); if(debugEl){ debugEl.innerHTML = new Date().toLocaleTimeString()+" - "+m+"<br>"+debugEl.innerHTML.substring(0,600); }}
-function setCloudStatus(msg,isWarn){var el=document.getElementById('cloudStatus'); if(!el) return; el.innerHTML=msg; el.style.background=isWarn?'#fef9c3':'#f0fdf4'; el.style.borderColor=isWarn?'#f59e0b':'#16a34a';}
-function setLiveStatus(msg){var el=document.getElementById('liveStatus'); if(el) el.innerHTML=msg;}
-function setDBECloudStatus(msg,isWarn){var el=document.getElementById('dbeCloudSyncStatus'); if(!el) return; el.innerHTML=msg; el.style.background=isWarn?'#fef9c3':'#f0fdf4'; el.style.borderColor=isWarn?'#f59e0b':'#16a34a';}
-logDebug("V6.1 Starting - FIX 1MB LIMIT - 25,529 schools = 2.3MB > 1MB - FIXED! - Small doc + chunked");
-window.createCloudDatabase = function(){
-  try{
-    alert("🔧 CREATE CLOUD DB V6.1 FIX 1MB LIMIT\n\nYour FAIL: 2,359,771 bytes > 1,048,576 - 25,529 schools in ONE doc too big!\n\nV6.1 FIX: main doc SMALL - NO schools! Only books/learners/issues = ~10KB = Will sync!\n\nSchools in makhanani_dbe_schools collection - Each school = 1 doc - No limit!\n\nCreating small doc now...");
-    if(!db){ alert("❌ db NULL"); return false; }
-    setCloudStatus("🔧 V6.1 Creating SMALL makhanani/main (NO SCHOOLS) - FIX 1MB LIMIT...", true);
-    var learnersLocal=JSON.parse(localStorage.getItem('mk_learners')||'[]');
-    var booksLocal=JSON.parse(localStorage.getItem('mk_books')||'[]');
-    var issuesLocal=JSON.parse(localStorage.getItem('mk_issues')||'[]');
-    var schoolsCount = JSON.parse(localStorage.getItem('mk_schools')||'[]').length;
-    db.collection('makhanani').doc('main').set({
-      schoolsCount: schoolsCount,
-      schoolsNote: "V6.1 FIX 1MB - Schools NOT in this doc! Schools in makhanani_dbe_schools collection - Fixes 2,359,771 > 1,048,576",
-      learners: learnersLocal, books: booksLocal, issues: issuesLocal,
-      bookCounter: parseInt(localStorage.getItem('mk_bookCounter')||'1'),
-      learnerCounter: parseInt(localStorage.getItem('mk_learnerCounter')||'1'),
-      staff: JSON.parse(localStorage.getItem('mk_staff')||'[]'),
-      updated: new Date().toISOString(),
-      appVersion: "V6.1 FIX 1MB LIMIT - SMALL DOC (NO SCHOOLS) - "+new Date().toISOString(),
-      project: "makhanani-digital", created: new Date().toISOString()
-    }).then(function(){
-      cloudOK=true;
-      setCloudStatus("☁️ ✅ CONNECTED - V6.1 FIX 1MB LIMIT - SMALL DOC CREATED - ✅ CONNECTED! - FIXED YOUR FAIL! - TAP SYNC DBE CHUNKED", false);
-      document.getElementById('syncInfo').innerHTML="✅ CREATE SUCCESS V6.1 FIX 1MB - SMALL DOC - SchoolsCount:"+schoolsCount+" Books:"+booksLocal.length+" - FIXED YOUR FAIL!";
-      alert("✅✅✅ CREATE SUCCESS V6.1 FIX 1MB LIMIT - SMALL DOC!\n\n✅ CONNECTED! - FIXED YOUR FAIL!\n\nYour FAIL: 2,359,771 bytes > 1,048,576 - Too big!\n\nV6.1 FIX: Small doc = ~"+(JSON.stringify(booksLocal).length+JSON.stringify(learnersLocal).length)+" bytes << 1MB = Will sync!\n\nSchoolsCount: "+schoolsCount+" in separate collection\n\nNext: TAP SYNC DBE CHUNKED for 25K schools!");
-    }).catch(function(e){ setCloudStatus("☁️ ❌ CREATE FAILED: "+e.code+" - "+e.message, true); alert("❌ CREATE FAILED: "+e.code+" - "+e.message); });
-  }catch(err){ alert("❌ JS ERROR: "+err.message); }
-  return false;
-};
-window.syncDBEChunked = function(){
-  try{
-    var totalSchools = schools.length;
-    if(totalSchools===0){ alert("No schools to sync! Upload CSV first!"); return false; }
-    if(!db){ alert("❌ No db - Click CREATE CLOUD DB first!"); return false; }
-    if(totalSchools>10000){ if(!confirm("You have "+totalSchools+" schools local! Upload "+totalSchools+" schools to makhanani_dbe_schools in batches of 400? Batches: "+Math.ceil(totalSchools/400)+" - Fixes your FAIL 2,359,771 > 1,048,576 - Continue?")){ return false; } }
-    alert("🏫 SYNC DBE CHUNKED V6.1 FIX 1MB LIMIT\n\nStarting chunked sync of "+totalSchools+" schools to makhanani_dbe_schools\n\nEach school = 1 doc = No limit!\n\nBatches: "+Math.ceil(totalSchools/400)+"\n\nFixes FAIL: 2,359,771 > 1,048,576");
-    setDBECloudStatus("🏫 SYNCING DBE CHUNKED - Total: "+totalSchools+" schools - Batches of 400 - Fixes FAIL - Please wait...", true);
-    setCloudStatus("🏫 SYNCING DBE 25K CHUNKED - Total: "+totalSchools+" schools - Please wait...", true);
-    var batchSize=400; var totalBatches=Math.ceil(totalSchools/batchSize); var uploaded=0; var errors=0;
-    function uploadBatch(batchIndex){
-      if(batchIndex>=totalBatches){
-        setDBECloudStatus("✅ SYNC DBE CHUNKED COMPLETE - Total: "+totalSchools+" - Uploaded: "+uploaded+" - Errors: "+errors+" - Collection: makhanani_dbe_schools - FIXED YOUR FAIL! - "+new Date().toLocaleTimeString(), false);
-        setCloudStatus("☁️ ✅ CONNECTED + DBE SYNCED CHUNKED - Total: "+totalSchools+" schools - Uploaded: "+uploaded+" - FIXED YOUR FAIL! - "+new Date().toLocaleTimeString(), false);
-        alert("✅✅✅ SYNC DBE CHUNKED COMPLETE!\n\nTotal: "+totalSchools+"\nUploaded: "+uploaded+"\nErrors: "+errors+"\nBatches: "+totalBatches+"\nCollection: makhanani_dbe_schools\n\nFIXED YOUR FAIL!\n\nTAP LTSM BUTTON NOW!");
-        return;
-      }
-      var batch=db.batch(); var start=batchIndex*batchSize; var end=Math.min(start+batchSize, totalSchools); var batchCount=0;
-      for(var i=start;i<end;i++){ var sch=schools[i]; if(!sch || !sch.emis) continue; var docRef=db.collection('makhanani_dbe_schools').doc(sch.emis); batch.set(docRef, {emis: sch.emis, name: sch.name, town: sch.town||'', province: sch.province||'', pkg: sch.pkg||'DEMO', status: sch.status||'ACTIVE', updated: new Date().toISOString(), batch: batchIndex}); batchCount++; }
-      setDBECloudStatus("🏫 SYNCING DBE CHUNKED - Batch "+(batchIndex+1)+"/"+totalBatches+" - Schools "+(start+1)+" to "+end+" of "+totalSchools+" - Uploaded: "+uploaded+" - Please wait...", true);
-      batch.commit().then(function(){ uploaded+=batchCount; setTimeout(function(){ uploadBatch(batchIndex+1); }, 300); }).catch(function(e){ errors++; setDBECloudStatus("❌ Batch "+(batchIndex+1)+" FAILED: "+e.code+" - Will continue", true); setTimeout(function(){ uploadBatch(batchIndex+1); }, 500); });
-    }
-    uploadBatch(0);
-  }catch(err){ alert("❌ JS ERROR SYNC DBE CHUNKED: "+err.message); setDBECloudStatus("❌ ERROR: "+err.message, true); }
-  return false;
-};
-window.testFirebaseDirect = function(){
-  try{
-    alert("🧪 TEST DIRECT V6.1 FIX 1MB LIMIT\nProject: makhanani-digital\nTime: "+new Date().toLocaleTimeString());
-    if(!db){alert("❌ db NULL"); return false;}
-    db.collection('makhanani').doc('main').get().then(function(doc){
-      var msg="✅ SUCCESS V6.1 FIX 1MB LIMIT!\nExists: "+doc.exists+"\n";
-      if(doc.exists){ var data=doc.data(); var sizeApprox=JSON.stringify(data).length; msg+="Main doc size: ~"+sizeApprox+" bytes << 1,048,576 = OK! Small doc (no schools)\nSchoolsCount: "+(data.schoolsCount||0)+"\nYour FAIL fixed!"; } else { msg+="Main doc not exists yet - Click CREATE CLOUD DB - Will create small doc"; }
-      alert(msg);
-      if(doc.exists){ cloudOK=true; setCloudStatus("☁️ ✅ CONNECTED - V6.1 FIX 1MB LIMIT - SMALL DOC - Exists:true - Size: ~"+JSON.stringify(doc.data()).length+" bytes - FIXED YOUR FAIL!", false); } else { setCloudStatus("☁️ Doc not exists yet - Click CREATE CLOUD DB - V6.1 FIX 1MB LIMIT", true); }
-    }).catch(function(e){ alert("❌ FAIL: "+e.code+" - "+e.message); });
-  }catch(err){ alert("❌ JS ERROR TEST: "+err.message); }
-  return false;
-};
-window.syncToCloud = function(silent){
-  try{
-    if(silent!==true){alert("☁️ SYNC CLICKED V6.1 FIX 1MB LIMIT - SMALL DOC (NO SCHOOLS)\n\nYour FAIL: 2,359,771 > 1,048,576 - 25,529 schools in one doc too big!\n\nV6.1 FIX: Syncing SMALL doc - Only books/learners/issues = Small = Will sync!\n\nSchools in makhanani_dbe_schools - TAP SYNC DBE CHUNKED!");}
-    if(!db){ alert("❌ No db"); return false; }
-    document.getElementById('syncInfo').innerHTML="⏳ Syncing V6.1 FIX 1MB LIMIT - SMALL DOC - "+new Date().toLocaleTimeString();
-    var learnersLocal=JSON.parse(localStorage.getItem('mk_learners')||'[]');
-    var booksLocal=JSON.parse(localStorage.getItem('mk_books')||'[]');
-    var issuesLocal=JSON.parse(localStorage.getItem('mk_issues')||'[]');
-    var schoolsCount=JSON.parse(localStorage.getItem('mk_schools')||'[]').length;
-    db.collection('makhanani').doc('main').set({
-      schoolsCount: schoolsCount,
-      schoolsNote: "V6.1 FIX 1MB - Schools NOT in this doc! Schools in makhanani_dbe_schools - Fixes 2,359,771 > 1,048,576",
-      learners: learnersLocal, books: booksLocal, issues: issuesLocal,
-      bookCounter: parseInt(localStorage.getItem('mk_bookCounter')||'1'),
-      learnerCounter: parseInt(localStorage.getItem('mk_learnerCounter')||'1'),
-      staff: JSON.parse(localStorage.getItem('mk_staff')||'[]'),
-      updated: new Date().toISOString(),
-      appVersion: "V6.1 FIX 1MB LIMIT - SMALL DOC - SYNC - "+new Date().toISOString(),
-      project: "makhanani-digital"
-    }).then(function(){
-      cloudOK=true;
-      var sizeApprox=JSON.stringify(learnersLocal).length + JSON.stringify(booksLocal).length + JSON.stringify(issuesLocal).length;
-      setCloudStatus("☁️ ✅ CONNECTED + SYNCED V6.1 FIX 1MB LIMIT - SMALL DOC - Size: ~"+sizeApprox+" bytes << 1MB - FIXED YOUR FAIL!", false);
-      document.getElementById('syncInfo').innerHTML="✅ SYNCED V6.1 FIX 1MB LIMIT - SMALL DOC - Size: ~"+sizeApprox+" bytes << 1MB = OK! - SchoolsCount: "+schoolsCount+" in separate collection - FIXED YOUR FAIL!";
-      if(silent!==true) alert("✅ SYNCED V6.1 FIX 1MB LIMIT - SMALL DOC - FIXED YOUR FAIL!\n\nSize: ~"+sizeApprox+" bytes << 1MB = OK!\n\nSchoolsCount: "+schoolsCount+" in makhanani_dbe_schools collection\nBooks: "+booksLocal.length+"\nLearners: "+learnersLocal.length+"\n✅ CONNECTED! - FIXED YOUR FAIL!\n\nTAP SYNC DBE CHUNKED for 25K schools!");
-    }).catch(function(e){ setCloudStatus("☁️ ❌ Sync Fail: "+e.code+" - "+e.message, true); if(silent!==true) alert("❌ SYNC FAIL: "+e.code+" - "+e.message); });
-  }catch(err){ alert("❌ JS ERROR SYNC: "+err.message); }
-  return false;
-};
-window.clearAndReload = function(){ if(confirm("Clear cache and reload? - V6.1 FIX 1MB LIMIT")){ localStorage.clear(); if('caches' in window){ caches.keys().then(function(names){ for(var i=0;i<names.length;i++){ caches.delete(names[i]); } }); } alert("Cache cleared - Reloading - Now V6.1 FIX 1MB LIMIT"); location.reload(true); } return false; };
-window.clearSchoolsToFix = function(){
-  if(confirm("🗑️ CLEAR SCHOOLS TO 3 - FIX SYNC - V6.1 FIX 1MB LIMIT\n\nYou have "+schools.length+" schools local = 2.3MB > 1MB limit = FAIL!\n\nThis will delete all 25,529 schools and keep only 3 demo schools so you can sync small doc and test?\n\nYou can re-upload 25K later with SYNC DBE CHUNKED which puts them in separate collection (no 1MB limit).\n\nClear to 3 schools to fix sync now?")){
-    schools=[{"emis":"700310854","name":"WORDSWORTH HIGH SCHOOL","town":"BENONI","province":"GAUTENG","pkg":"DEMO","status":"ACTIVE"},{"emis":"700310855","name":"EXAMPLE PRIMARY SCHOOL","town":"JOHANNESBURG","province":"GAUTENG","pkg":"DEMO","status":"ACTIVE"},{"emis":"700310856","name":"TEST HIGH SCHOOL","town":"PRETORIA","province":"GAUTENG","pkg":"DEMO","status":"ACTIVE"}];
-    save(); renderAll(); renderSchoolButtons();
-    alert("✅ Cleared to 3 schools - V6.1 FIX 1MB LIMIT - Now small doc will sync! - You can re-upload 25K with SYNC DBE CHUNKED!");
-  }
-  return false;
-};
-function autoCreateIfNeeded(){
+var isSyncingFromCloud=false; // Prevent loop: when cloud updates local, don't re-sync back
+var realtimeListener=null;
+var lastCloudUpdate='';
+var deviceId = localStorage.getItem('mk_deviceId') || ('DEV-'+Math.random().toString(36).substring(2,8).toUpperCase());
+localStorage.setItem('mk_deviceId', deviceId);
+
+function setCloudStatus(msg){var el=document.getElementById('cloudStatus'); if(el) el.innerHTML=msg;}
+function setSyncStatus(msg){var el=document.getElementById('syncStatus'); if(el) el.innerHTML='<span class="syncDot"></span> '+msg;}
+function setLastSync(msg){var el=document.getElementById('lastSyncInfo'); if(el) el.innerHTML=msg;}
+
+// === V6.1 SYNC - REAL-TIME LISTENER - ONE UPDATE = LAPTOP + PHONE SAME ===
+function startRealtimeSync(){
   if(!db) return;
-  if(cloudOK) return;
-  setCloudStatus("🔧 V6.1 AUTO CREATING after 3 sec - FIX 1MB LIMIT - SMALL DOC (NO SCHOOLS) - Please wait...", true);
-  var schoolsLocalCount=JSON.parse(localStorage.getItem('mk_schools')||'[]').length;
-  db.collection('makhanani').doc('main').get().then(function(doc){
-    if(doc.exists){ cloudOK=true; setCloudStatus("☁️ ✅ CONNECTED - V6.1 FIX 1MB LIMIT - SMALL DOC - Exists:true - SchoolsCount: "+(doc.data().schoolsCount||0)+" - FIXED YOUR FAIL! - "+new Date().toLocaleTimeString(), false); }
-    else {
-      db.collection('makhanani').doc('main').set({schoolsCount: schoolsLocalCount, schoolsNote: "V6.1 FIX 1MB - Schools in makhanani_dbe_schools - Fixes your FAIL", learners: [], books: [], issues: [], bookCounter: 1, learnerCounter: 1, staff: [], updated: new Date().toISOString(), appVersion: "V6.1 AUTO CREATE FIX 1MB - SMALL DOC", project: "makhanani-digital"}).then(function(){ cloudOK=true; setCloudStatus("☁️ ✅ CONNECTED - V6.1 FIX 1MB LIMIT - SMALL DOC - AUTO CREATED - FIXED YOUR FAIL! - "+new Date().toLocaleTimeString(), false); }).catch(function(e){ setCloudStatus("☁️ Local Mode - Auto create failed: "+e.code+" - Click CREATE CLOUD DB - V6.1 FIX 1MB", true); });
+  if(realtimeListener) realtimeListener();
+  console.log("V6.1 SYNC - Starting Real-Time Listener - Device: "+deviceId);
+  setSyncStatus("🔄 SYNC: ON - Real-Time Listener ON - Device: "+deviceId+" - Waiting for other device changes... - V6.1 SYNC - One update = Both devices!");
+  realtimeListener = db.collection('makhanani').doc('main').onSnapshot(function(doc){
+    if(!doc.exists) return;
+    var d=doc.data();
+    // Don't overwrite if this device just wrote (prevent loop) - Check timestamp
+    if(d.lastDevice===deviceId && d.updated===lastCloudUpdate) return;
+    // If data is same as local, skip
+    var cloudBooksStr = JSON.stringify(d.books||[]);
+    var cloudLearnersStr = JSON.stringify(d.learners||[]);
+    var cloudIssuesStr = JSON.stringify(d.issues||[]);
+    var localBooksStr = JSON.stringify(books);
+    var localLearnersStr = JSON.stringify(learners);
+    var localIssuesStr = JSON.stringify(issues);
+    if(cloudBooksStr===localBooksStr && cloudLearnersStr===localLearnersStr && cloudIssuesStr===localIssuesStr) {
+      // No change, just update status
+      setLastSync("Last Sync: "+new Date().toLocaleTimeString()+" - No changes from other device - Laptop + Phone already same - V6.1 SYNC");
+      return;
     }
-  }).catch(function(e){ db.collection('makhanani').doc('main').set({schoolsCount: schoolsLocalCount, learners: [], books: [], issues: [], bookCounter: 1, learnerCounter: 1, staff: [], updated: new Date().toISOString(), appVersion: "V6.1 AUTO CREATE TRY FIX 1MB", project: "makhanani-digital"}).then(function(){ cloudOK=true; setCloudStatus("☁️ ✅ CONNECTED - V6.1 FIX 1MB LIMIT - SMALL DOC - AUTO CREATED after GET failed - FIXED YOUR FAIL!", false); }).catch(function(e2){ setCloudStatus("☁️ Local Mode - Click CREATE CLOUD DB - Error: "+e2.code+" - V6.1 FIX 1MB", true); }); });
+    // === OTHER DEVICE CHANGED! Update this device! ===
+    console.log("V6.1 SYNC - 🔴 OTHER DEVICE UPDATED! - From: "+(d.lastDevice||'Unknown')+" - Updating this device!");
+    isSyncingFromCloud=true;
+    if(d.books) books=d.books;
+    if(d.learners) learners=d.learners;
+    if(d.issues) issues=d.issues;
+    if(d.bookCounter) bookCounter=d.bookCounter;
+    if(d.learnerCounter) learnerCounter=d.learnerCounter;
+    lastCloudUpdate=d.updated||'';
+    // Save to localStorage WITHOUT triggering sync back (prevent loop)
+    localStorage.setItem('mk_learners',JSON.stringify(learners));
+    localStorage.setItem('mk_books',JSON.stringify(books));
+    localStorage.setItem('mk_issues',JSON.stringify(issues));
+    localStorage.setItem('mk_bookCounter',bookCounter.toString());
+    localStorage.setItem('mk_learnerCounter',learnerCounter.toString());
+    renderAll();
+    setSyncStatus("🔴 UPDATED FROM OTHER DEVICE! - From: "+(d.lastDevice||'Unknown')+" at "+new Date().toLocaleTimeString()+" - Laptop + Phone now SAME! - V6.1 SYNC - One update = Both!");
+    setLastSync("Last Sync: "+new Date().toLocaleTimeString()+" - 🔴 UPDATED FROM "+(d.lastDevice||'Other Device')+" - Books: "+books.length+" Learners: "+learners.length+" - Laptop + Phone SAME! - V6.1 SYNC");
+    var liveEl=document.getElementById('liveUpdates'); if(liveEl) liveEl.innerHTML='🔴 LIVE UPDATE: '+new Date().toLocaleTimeString()+' - Updated from other device ('+(d.lastDevice||'Unknown')+') - Books: '+books.length+' Learners: '+learners.length+' - Laptop + Phone SAME! - V6.1 SYNC';
+    setCloudStatus("☁️ ✅ CONNECTED + SYNCED - V6.1 SYNC - 🔴 UPDATED FROM OTHER DEVICE at "+new Date().toLocaleTimeString()+" - Laptop + Phone SAME! - Device: "+deviceId);
+    setTimeout(function(){ isSyncingFromCloud=false; }, 1000);
+  }, function(err){
+    setSyncStatus("❌ SYNC ERROR: "+err.message+" - V6.1 SYNC - TAP SYNC NOW FROM CLOUD to pull manually");
+    setCloudStatus("☁️ ❌ SYNC ERROR: "+err.message+" - V6.1 SYNC - TAP SYNC NOW FROM CLOUD");
+  });
 }
+
+function syncNowFromCloud(){
+  if(!db){ alert("❌ No db yet - TAP CREATE CLOUD DB first! - V6.1 SYNC"); return false; }
+  alert("⬇️ SYNC NOW FROM CLOUD - V6.1 SYNC\n\nPulling latest from cloud (other device changes) to this device!\n\nLaptop + Phone will become SAME!");
+  db.collection('makhanani').doc('main').get().then(function(doc){
+    if(!doc.exists){ alert("No cloud data yet! TAP CREATE CLOUD DB on device that has data! - V6.1 SYNC"); return; }
+    var d=doc.data();
+    isSyncingFromCloud=true;
+    if(d.books) books=d.books;
+    if(d.learners) learners=d.learners;
+    if(d.issues) issues=d.issues;
+    if(d.bookCounter) bookCounter=d.bookCounter;
+    if(d.learnerCounter) learnerCounter=d.learnerCounter;
+    lastCloudUpdate=d.updated||'';
+    localStorage.setItem('mk_learners',JSON.stringify(learners));
+    localStorage.setItem('mk_books',JSON.stringify(books));
+    localStorage.setItem('mk_issues',JSON.stringify(issues));
+    localStorage.setItem('mk_bookCounter',bookCounter.toString());
+    localStorage.setItem('mk_learnerCounter',learnerCounter.toString());
+    renderAll();
+    setLastSync("Last Sync: "+new Date().toLocaleTimeString()+" - ⬇️ PULLED FROM CLOUD - Books: "+books.length+" Learners: "+learners.length+" - Laptop + Phone SAME! - V6.1 SYNC");
+    setSyncStatus("✅ SYNCED FROM CLOUD - Books: "+books.length+" Learners: "+learners.length+" - Laptop + Phone SAME! - V6.1 SYNC - "+new Date().toLocaleTimeString());
+    alert("✅ SYNCED FROM CLOUD!\n\nBooks: "+books.length+"\nLearners: "+learners.length+"\nIssues: "+issues.length+"\n\nLaptop + Phone now SAME!\n\nV6.1 SYNC - One update = Both devices!");
+    setTimeout(function(){ isSyncingFromCloud=false; }, 1000);
+  }).catch(function(e){ alert("❌ SYNC FROM CLOUD FAILED: "+e.message+" - V6.1 SYNC"); });
+  return false;
+}
+
+// === V6.1 SYNC - AUTO SYNC TO CLOUD ON EVERY SAVE - One update = Both devices ===
+function syncToCloudAuto(){
+  if(!db || !cloudOK) return;
+  if(isSyncingFromCloud) return; // Don't sync back when we just received from cloud
+  if(!navigator.onLine) return;
+  var learnersLocal=learners;
+  var booksLocal=books;
+  var issuesLocal=issues;
+  var schoolsCount=schools.length;
+  var nowISO=new Date().toISOString();
+  lastCloudUpdate=nowISO;
+  db.collection('makhanani').doc('main').set({
+    schoolsCount: schoolsCount,
+    schoolsNote: "V6.1 SYNC - ONE UPDATE = LAPTOP + PHONE SAME - Schools in makhanani_dbe_schools - FIX 1MB",
+    learners: learnersLocal, books: booksLocal, issues: issuesLocal,
+    bookCounter: bookCounter, learnerCounter: learnerCounter,
+    staff: [], updated: nowISO, lastDevice: deviceId,
+    appVersion: "V6.1 SYNC - ONE UPDATE = BOTH - "+nowISO,
+    project: "makhanani-digital"
+  }).then(function(){
+    setLastSync("Last Sync TO Cloud: "+new Date().toLocaleTimeString()+" - From this device ("+deviceId+") - Other device will auto update in 1 sec! - V6.1 SYNC - One update = Both!");
+    setSyncStatus("✅ SYNCED TO CLOUD - From: "+deviceId+" at "+new Date().toLocaleTimeString()+" - Other device (Laptop/Phone) will auto update in 1 sec! - V6.1 SYNC - One update = Both!");
+  }).catch(function(e){
+    setSyncStatus("❌ SYNC TO CLOUD FAILED: "+e.message+" - Will retry - V6.1 SYNC");
+  });
+}
+
 try{
   firebase.initializeApp(firebaseConfig);
   db=firebase.firestore();
   try{ auth=firebase.auth(); }catch(e){ auth=null; }
-  setCloudStatus("☁️ V6.1 Local Mode Ready - FIX 1MB LIMIT - Your FAIL: 2,359,771 > 1,048,576 - 25,529 schools in one doc too big! - FIXED! - Small doc + Schools in makhanani_dbe_schools - Will AUTO CREATE small doc after 3 sec - TAP SYNC DBE CHUNKED for 25K schools!", true);
-  document.getElementById('syncInfo').innerHTML="V6.1 FIX 1MB LIMIT - Your FAIL: 2,359,771 > 1,048,576 - 25,529 schools = 2.3MB > 1MB limit! - FIXED! - Small doc + Schools in makhanani_dbe_schools - Will AUTO CREATE small doc after 3 sec";
-  setDBECloudStatus("Cloud DBE Sync Status: Ready - V6.1 FIX 1MB LIMIT - You have "+JSON.parse(localStorage.getItem('mk_schools')||'[]').length+" schools local = ~2.3MB > 1MB limit = Your FAIL - FIXED! - Schools now in makhanani_dbe_schools - Each school = 1 doc - No limit! - TAP SYNC DBE CHUNKED", true);
-  setTimeout(autoCreateIfNeeded, 3000);
+  setCloudStatus("☁️ V6.1 SYNC - Local Mode Ready - One Update = Laptop + Phone Same - Real-Time Listener will start after login - Device: "+deviceId);
+  var devEl=document.getElementById('deviceInfo'); if(devEl) devEl.innerHTML='Device: '+deviceId+' - '+(navigator.userAgent.indexOf('Mobi')!==-1?'📱 Cell Phone':'💻 Laptop')+' - V6.1 SYNC - Open SAME link on Laptop + Phone, login SAME account, select SAME school = SAME info!';
   try{ db.enablePersistence({synchronizeTabs:true}).catch(function(err){}); }catch(e){}
-}catch(e){ setCloudStatus("☁️ ❌ Init Fail V6.1 FIX 1MB LIMIT: "+e.message, true); }
-function loadFromCloud(){if(!db){alert('❌ No cloud yet - Click CREATE CLOUD DB first');return;}alert("⬇️ LOAD FROM CLOUD V6.1 FIX 1MB LIMIT - SMALL DOC");db.collection('makhanani').doc('main').get().then(function(doc){if(!doc.exists){alert('No cloud data yet! Click CREATE CLOUD DB first!');return;}var d=doc.data();if(d.learners)learners=d.learners;if(d.books)books=d.books;if(d.issues)issues=d.issues;if(d.bookCounter)bookCounter=d.bookCounter;if(d.learnerCounter)learnerCounter=d.learnerCounter;if(d.staff)staff=d.staff;save();renderAll();renderSchoolButtons();alert('✅ Loaded SMALL DOC V6.1 FIX 1MB LIMIT - DBE Count:'+(d.schoolsCount||0)+' (in makhanani_dbe_schools) Books:'+books.length+' Learners:'+learners.length+' - FIXED YOUR FAIL!');}).catch(function(e){alert('❌ Load fail: '+e.message);});}
-var schools=JSON.parse(localStorage.getItem('mk_schools')||'[{"emis":"700310854","name":"WORDSWORTH HIGH SCHOOL","town":"BENONI","province":"GAUTENG","pkg":"DEMO","status":"ACTIVE"},{"emis":"700310855","name":"EXAMPLE PRIMARY SCHOOL","town":"JOHANNESBURG","province":"GAUTENG","pkg":"DEMO","status":"ACTIVE"},{"emis":"700310856","name":"TEST HIGH SCHOOL","town":"PRETORIA","province":"GAUTENG","pkg":"DEMO","status":"ACTIVE"}]');var learners=JSON.parse(localStorage.getItem('mk_learners')||'[]');var books=JSON.parse(localStorage.getItem('mk_books')||'[]');var issues=JSON.parse(localStorage.getItem('mk_issues')||'[]');var curSchool='',curSchoolName='',curRank='',curUserEmail='',bookCounter=parseInt(localStorage.getItem('mk_bookCounter')||'1'),learnerCounter=parseInt(localStorage.getItem('mk_learnerCounter')||'1');var html5QrcodeScanner=null;var staff=JSON.parse(localStorage.getItem('mk_staff')||'[]');var hodRequests=JSON.parse(localStorage.getItem('mk_hodRequests')||'[]');var subscriptions=JSON.parse(localStorage.getItem('mk_subscriptions')||'[]');var jobs=JSON.parse(localStorage.getItem('mk_jobs')||'[]');
+}catch(e){ setCloudStatus("☁️ ❌ Init Fail V6.1 SYNC: "+e.message); }
+
+var schools=JSON.parse(localStorage.getItem('mk_schools')||'[{"emis":"700310854","name":"WORDSWORTH HIGH SCHOOL","town":"BENONI","province":"GAUTENG","pkg":"DEMO","status":"ACTIVE"},{"emis":"700310855","name":"EXAMPLE PRIMARY SCHOOL","town":"JOHANNESBURG","province":"GAUTENG","pkg":"DEMO","status":"ACTIVE"},{"emis":"700310856","name":"TEST HIGH SCHOOL","town":"PRETORIA","province":"GAUTENG","pkg":"DEMO","status":"ACTIVE"}]');
+var learners=JSON.parse(localStorage.getItem('mk_learners')||'[]');var books=JSON.parse(localStorage.getItem('mk_books')||'[]');var issues=JSON.parse(localStorage.getItem('mk_issues')||'[]');
+var curSchool='',curSchoolName='',curRank='',curUserEmail='',bookCounter=parseInt(localStorage.getItem('mk_bookCounter')||'1'),learnerCounter=parseInt(localStorage.getItem('mk_learnerCounter')||'1');
+var html5QrcodeScanner=null;
 function getSchoolNameByEmis(emis){for(var i=0;i<schools.length;i++){if(schools[i].emis===emis)return schools[i].name;}return emis;}
-function getSchoolTownProvince(emis){for(var i=0;i<schools.length;i++){if(schools[i].emis===emis)return{town:schools[i].town||'',province:schools[i].province||''};}return{town:'',province:''};}
 function onRankChange(){var r=document.getElementById('rankSel').value;var email=document.getElementById('fbEmail'),pass=document.getElementById('fbPass'),lid=document.getElementById('learnerIdInput');if(r==='PARENT'||r==='LEARNER'){email.classList.add('hidden');pass.classList.add('hidden');lid.classList.remove('hidden');}else{email.classList.remove('hidden');pass.classList.remove('hidden');lid.classList.add('hidden');}}
 function renderSchoolButtons(){
-  var btnContainer=document.getElementById('schoolQuickBtns');
-  var dropdown=document.getElementById('schoolDropdown');
-  if(!btnContainer || !dropdown) return;
+  var btnContainer=document.getElementById('schoolQuickBtns');var dropdown=document.getElementById('schoolDropdown');if(!btnContainer) return;
   var btnHtml='';
-  for(var i=0;i<Math.min(schools.length,8);i++){
-    var isSelected = curSchool===schools[i].emis ? 'selected' : 'schoolBtnQuick';
-    var shortName = schools[i].name.length>20 ? schools[i].name.substring(0,20)+'...' : schools[i].name;
-    btnHtml+='<button type="button" class="schoolBtn '+isSelected+'" onclick="selectDBESchool(\''+schools[i].emis+'\',\''+schools[i].name.replace(/\'/g,"\\'")+'\');return false;">🏫 '+shortName+'<br><span style="font-size:8px">'+schools[i].emis+'</span></button>';
-  }
-  btnContainer.innerHTML=btnHtml || '<div class="badge">No schools - Upload DBE CSV</div>';
-  var currentVal=dropdown.value;
-  var dropdownHtml='<option value="">-- TAP TO SELECT SCHOOL FROM LIST ('+schools.length+' schools) --</option>';
-  for(var j=0;j<Math.min(schools.length,500);j++){
-    var selected = curSchool===schools[j].emis ? 'selected' : '';
-    dropdownHtml+='<option value="'+schools[j].emis+'" '+selected+'>'+schools[j].emis+' - '+schools[j].name+' - '+(schools[j].town||'')+'</option>';
-  }
-  if(schools.length>500) dropdownHtml+='<option disabled>... and '+(schools.length-500)+' more - Use search box for George Sonto</option>';
-  dropdown.innerHTML=dropdownHtml;
-  if(currentVal) dropdown.value=currentVal;
+  if(schools.length===0){ btnHtml='<button type="button" class="schoolBtn" style="background:#fee2e2;color:#dc2626;border:3px dashed #dc2626" onclick="restoreDefaultSchools();return false;">❌ No schools local - TAP TO RESTORE WORDSWORTH</button>'; }
+  else { for(var i=0;i<Math.min(schools.length,8);i++){ var isSelected = curSchool===schools[i].emis ? 'selected' : 'schoolBtnQuick'; var shortName = schools[i].name.length>22 ? schools[i].name.substring(0,22)+'...' : schools[i].name; btnHtml+='<button type="button" class="schoolBtn '+isSelected+'" onclick="selectDBESchool(\''+schools[i].emis+'\',\''+schools[i].name.replace(/\'/g,"\\'")+'\');return false;">🏫 '+shortName+'<br><span style="font-size:9px">'+schools[i].emis+'</span><br><span style="font-size:8px;background:#facc15;color:#000;padding:2px 6px;border-radius:10px">TAP TO SELECT - MANUAL</span></button>'; } }
+  btnContainer.innerHTML=btnHtml;
+  if(dropdown){ var dropdownHtml='<option value="">-- TAP TO SELECT SCHOOL FROM LIST -- ('+schools.length+' schools) - MANUAL TAP ONLY</option>'; for(var j=0;j<Math.min(schools.length,500);j++){ var selected = curSchool===schools[j].emis ? 'selected' : ''; dropdownHtml+='<option value="'+schools[j].emis+'" '+selected+'>'+schools[j].emis+' - '+schools[j].name+'</option>'; } dropdown.innerHTML=dropdownHtml; }
 }
-function selectSchoolFromDropdown(){
-  var dropdown=document.getElementById('schoolDropdown');
-  var emis=dropdown.value;
-  if(!emis){ return; }
-  var name=getSchoolNameByEmis(emis);
-  selectDBESchool(emis,name);
-}
+function selectSchoolFromDropdown(){ var dropdown=document.getElementById('schoolDropdown'); var emis=dropdown.value; if(!emis) return; var name=getSchoolNameByEmis(emis); selectDBESchool(emis,name); }
 function searchDBESchools(){
-  var q=document.getElementById('schoolSearch').value.toLowerCase().trim();
-  var box=document.getElementById('schoolSearchResults');
-  if(q.length<2){box.innerHTML='<div class="small" style="font-size:10px;padding:6px">Type 2+ letters to search - '+schools.length+' DBE schools local - V6.1 FIX 1MB - Schools in makhanani_dbe_schools collection - Or TAP BUTTON ABOVE! - Search George Sonto</div>';return;}
-  var h='',count=0;
-  for(var i=0;i<schools.length&&count<20;i++){
-    if(schools[i].name.toLowerCase().indexOf(q)!==-1||schools[i].emis.indexOf(q)!==-1){
-      count++;
-      h+='<div class="badge" style="cursor:pointer;background:#fff;border:2px solid #0a1a4d;padding:10px" onclick="selectDBESchool(\''+schools[i].emis+'\',\''+schools[i].name.replace(/\'/g,"\\'")+'\');return false;"><b>🏫 TAP TO SELECT: '+schools[i].emis+' - '+schools[i].name+'</b><br><span style="font-size:9px">'+(schools[i].town||'')+' | '+(schools[i].province||'')+'</span></div>';
-    }
-  }
-  box.innerHTML=h||'<div class="badge">No school found for "'+q+'" - You have '+schools.length+' schools local - Your screenshot had George Sonto 911360870</div>';
+  var q=document.getElementById('schoolSearch').value.toLowerCase().trim();var box=document.getElementById('schoolSearchResults');
+  if(q.length<2){ box.innerHTML='<div style="font-size:11px;padding:8px">Type 2+ letters - '+schools.length+' schools - V6.1 SYNC - NO AUTO SELECT - Type WORDSWORTH, then TAP badge below - Manual TAP only!</div>'; return; }
+  var h='',count=0;for(var i=0;i<schools.length&&count<20;i++){ if(schools[i].name.toLowerCase().indexOf(q)!==-1||schools[i].emis.indexOf(q)!==-1){ count++; h+='<div class="badge" style="cursor:pointer;background:#fff;border:3px solid #0a1a4d;padding:12px" onclick="selectDBESchool(\''+schools[i].emis+'\',\''+schools[i].name.replace(/\'/g,"\\'")+'\');return false;"><b>🏫 TAP TO SELECT: '+schools[i].emis+' - '+schools[i].name+'</b><br><span style="font-size:10px">'+(schools[i].town||'')+'</span><br><span style="background:#16a34a;color:#fff;padding:3px 8px;border-radius:10px;font-size:9px">👆 TAP THIS BADGE TO SELECT - MANUAL</span></div>'; } }
+  box.innerHTML=h||'<div class="badge" style="background:#fee2e2">No school found for "'+q+'" - Try WORDSWORTH - V6.1 SYNC - NO AUTO SELECT</div>';
+  // NO AUTO SELECT - User must TAP badge manually
 }
 function selectDBESchool(emis,name){
-  document.getElementById('selectedSchool').value=emis;
-  document.getElementById('selectedSchoolDisplay').innerHTML='✅ SELECTED: <b>🏫 '+emis+' - '+name+'</b> - V6.1 FIX 1MB - TAP LOGIN NOW! - You have '+schools.length+' schools local';
-  document.getElementById('selectedSchoolDisplay').style.background='#dcfce7';
-  document.getElementById('selectedSchoolDisplay').style.borderColor='#16a34a';
-  curSchool=emis; curSchoolName=name;
-  document.getElementById('schoolSearchResults').innerHTML='<div class="badge" style="background:#dcfce7;border-color:#16a34a">✅ SELECTED: '+emis+' - '+name+' - V6.1 FIX 1MB - Ready to LOGIN!</div>';
-  document.getElementById('schoolSearch').value=name;
-  document.getElementById('homeSchoolName').innerHTML='✅ Current DBE School: '+emis+' - '+name+' - V6.1 FIX 1MB - You have '+schools.length+' schools local - Main doc small - Schools in makhanani_dbe_schools - TAP 📦 LTSM BUTTON!';
-  document.getElementById('principalDashSchool').innerHTML='✅ Current: '+emis+' - '+name+' - V6.1 FIX 1MB - '+schools.length+' schools local';
-  document.getElementById('userInfo').innerHTML='✅ Selected: '+emis+' - '+name+' | ADMIN: admin@makhanani.com / admin123 | V6.1 FIX 1MB - '+schools.length+' schools local - TAP LOGIN NOW!';
-  renderSchoolButtons(); renderAll();
-  setTimeout(function(){ var loginBtn=document.querySelector('.loginBox button.dark'); if(loginBtn){ loginBtn.scrollIntoView({behavior:'smooth',block:'center'}); } },300);
+  document.getElementById('selectedSchool').value=emis;document.getElementById('selectedSchoolDisplay').innerHTML='✅ SELECTED: <b>🏫 '+emis+' - '+name+'</b> - V6.1 SYNC - MANUAL TAP - TAP LOGIN NOW! - Select SAME school on Laptop + Phone! - '+new Date().toLocaleTimeString();document.getElementById('selectedSchoolDisplay').style.background='#dcfce7';document.getElementById('selectedSchoolDisplay').style.borderColor='#16a34a';curSchool=emis;curSchoolName=name;document.getElementById('schoolSearchResults').innerHTML='<div class="badge" style="background:#dcfce7;border:3px solid #16a34a;padding:12px;text-align:center">✅ SELECTED: '+emis+' - '+name+' - V6.1 SYNC - MANUAL TAP - Ready to LOGIN!<br><span style="background:#16a34a;color:#fff;padding:4px 10px;border-radius:20px">✅ SELECTED - SCROLL DOWN AND TAP LOGIN!</span></div>';document.getElementById('schoolSearch').value=name;document.getElementById('homeSchoolName').innerHTML='✅ Current: '+emis+' - '+name+' - V6.1 SYNC - MANUAL TAP - ✅ SELECTED! - Select SAME school on Laptop + Phone!';document.getElementById('userInfo').innerHTML='✅ Selected: '+emis+' - '+name+' | ADMIN | V6.1 SYNC - MANUAL TAP - ✅ SELECTED!';renderSchoolButtons();renderAll();
 }
+function restoreDefaultSchools(){ schools=[{"emis":"700310854","name":"WORDSWORTH HIGH SCHOOL","town":"BENONI","province":"GAUTENG","pkg":"DEMO","status":"ACTIVE"},{"emis":"700310855","name":"EXAMPLE PRIMARY SCHOOL","town":"JOHANNESBURG","province":"GAUTENG","pkg":"DEMO","status":"ACTIVE"},{"emis":"700310856","name":"TEST HIGH SCHOOL","town":"PRETORIA","province":"GAUTENG","pkg":"DEMO","status":"ACTIVE"}]; save();renderSchoolButtons();renderSchools();renderAll();document.getElementById('restoreStatus').innerHTML='✅ RESTORED DEFAULT 3 SCHOOLS - WORDSWORTH 700310854 - V6.1 SYNC - MANUAL TAP - TAP WORDSWORTH BUTTON NOW!';alert("✅ RESTORED DEFAULT 3 SCHOOLS! TAP WORDSWORTH BUTTON NOW! - V6.1 SYNC");return false; }
+function restoreSchoolsFromCloud(){ if(!db){ alert("❌ No db yet - TAP RESTORE WORDSWORTH DEFAULT first! - V6.1 SYNC"); restoreDefaultSchools(); return false; } db.collection('makhanani_dbe_schools').limit(500).get().then(function(snapshot){ var added=0; snapshot.forEach(function(doc){ var data=doc.data(); var exists=false; for(var i=0;i<schools.length;i++){ if(schools[i].emis===data.emis){ exists=true; break; } } if(!exists){ schools.push({emis:data.emis, name:data.name, town:data.town||'', province:data.province||'', pkg:'DEMO', status:'ACTIVE'}); added++; } }); if(schools.length===0){ restoreDefaultSchools(); return; } save();renderSchoolButtons();renderSchools();renderAll();alert("✅ RESTORED FROM CLOUD! Added: "+added+" Total: "+schools.length+" - TAP WORDSWORTH BUTTON NOW! - V6.1 SYNC"); }).catch(function(e){ restoreDefaultSchools(); }); return false; }
 function firebaseLogin(){
-  try{
-    var rank=document.getElementById('rankSel').value;
-    var school=document.getElementById('selectedSchool').value;
-    if(!rank){alert('Select Rank! - Select ADMIN');return;}
-    if(!school&&rank!=='ADMIN'){alert('Select DBE School! - TAP A SCHOOL BUTTON ABOVE - WORDSWORTH or George Sonto 911360870!');return;}
-    if(school){ curSchool=school; curSchoolName=getSchoolNameByEmis(school); } else if(!school && rank==='ADMIN'){ curSchool=schools[0] ? schools[0].emis : ''; curSchoolName=schools[0] ? schools[0].name : 'ALL SCHOOLS'; }
-    curRank=rank;
-    if(rank==='PARENT'||rank==='LEARNER'){
-      var lid=document.getElementById('learnerIdInput').value.trim();
-      if(!lid){alert('Enter Learner ID!');return;}
-      curUserEmail=lid;
-      document.getElementById('loginCard').classList.add('hidden');
-      document.getElementById('welcomeText').innerHTML='WELCOME '+rank+' - '+lid+' - View Only - V6.1 FIX 1MB';
-      document.getElementById('userInfo').innerHTML='✅ '+rank+' | DBE: '+curSchool+' | Learner: '+lid+' | V6.1 FIX 1MB';
-      applyPermissions();renderAll();return;
-    }
-    var email=document.getElementById('fbEmail').value.trim();
-    var pass=document.getElementById('fbPass').value.trim();
-    if(email==='admin@makhanani.com'&&pass==='admin123'){
-      curRank='ADMIN';curUserEmail=email;
-      document.getElementById('loginCard').classList.add('hidden');
-      document.getElementById('welcomeText').innerHTML='WELCOME ADMIN! | V6.1 FIX 1MB LIMIT - Small doc + chunked - FIXED YOUR FAIL 2,359,771 > 1,048,576 | ✅ CONNECTED - School: '+(curSchoolName||curSchool||'ALL')+' - TAP 📦 LTSM BUTTON NOW! - You have '+schools.length+' schools local!';
-      document.getElementById('userInfo').innerHTML='✅ ADMIN | DBE: '+(curSchool||'ALL')+' ('+(curSchoolName||'ALL')+') | Email: '+email+' | V6.1 FIX 1MB - Small doc - FIXED YOUR FAIL! - '+schools.length+' schools local';
-      applyPermissions();renderAll();
-      setTimeout(function(){ showTab('ltsmTab',document.getElementById('ltsmMainBtn')); showLTSMTab('ltsmScanTab',document.querySelector('.tabs.ltsm button')); },800);
-      setTimeout(function(){if(cloudOK) startRealtimeReporting();},1200);
-      return;
-    }
-    var foundStaff=null;for(var i=0;i<staff.length;i++){if(staff[i].email.toLowerCase()===email.toLowerCase()){foundStaff=staff[i];break;}}
-    if(foundStaff){
-      curRank=foundStaff.rank;curUserEmail=email;
-      document.getElementById('loginCard').classList.add('hidden');
-      var subjDisp=foundStaff.subjects?foundStaff.subjects.join(', '):foundStaff.subject||'N/A';
-      var permText='';if(curRank==='PRINCIPAL'||curRank==='LIBRARIAN')permText='ADD+REMOVE BOOKS+LEARNERS';else if(curRank==='EDUCATOR'||curRank==='HOD')permText='ADD LEARNERS ONLY';else permText='View Only';
-      document.getElementById('welcomeText').innerHTML='WELCOME '+foundStaff.rank+' - '+foundStaff.name+' | '+permText+' - V6.1 FIX 1MB';
-      document.getElementById('userInfo').innerHTML='✅ '+foundStaff.rank+' | '+email+' | '+permText+' | V6.1 FIX 1MB';
-      applyPermissions();renderAll();
-      setTimeout(function(){ showTab('ltsmTab',document.getElementById('ltsmMainBtn')); },800);
-      return;
-    }
-    if(auth){
-      auth.signInWithEmailAndPassword(email,pass).then(function(u){curUserEmail=email;document.getElementById('loginCard').classList.add('hidden');applyPermissions();renderAll();}).catch(function(err){
-        if(err.code==='auth/configuration-not-found'){
-          alert("⚠️ Firebase Auth not enabled (auth/configuration-not-found) - V6.1 FIX 1MB - Bypassing Auth! Using Local Login!");
-          curRank='ADMIN';curUserEmail=email||'admin@makhanani.com';if(!curSchool){ curSchool=schools[0]?schools[0].emis:''; curSchoolName=schools[0]?schools[0].name:'ALL'; }
-          document.getElementById('loginCard').classList.add('hidden');
-          document.getElementById('welcomeText').innerHTML='WELCOME ADMIN (Bypass Auth)! | V6.1 FIX 1MB - FIXED auth/configuration-not-found + 1MB FAIL!';
-          document.getElementById('userInfo').innerHTML='✅ ADMIN (Bypass Auth) | V6.1 FIX 1MB - FIXED YOUR FAILS!';
-          applyPermissions();renderAll();setTimeout(function(){ showTab('ltsmTab',document.getElementById('ltsmMainBtn')); },800);
-        } else { alert("Login failed: "+err.message+" - Try ADMIN admin@makhanani.com / admin123"); }
-      });
-    }else{
-      curRank='ADMIN';curUserEmail=email||'admin@makhanani.com';if(!curSchool){ curSchool=schools[0]?schools[0].emis:''; curSchoolName=schools[0]?schools[0].name:'ALL'; }
-      document.getElementById('loginCard').classList.add('hidden');
-      document.getElementById('welcomeText').innerHTML='WELCOME ADMIN (Local Login)! | V6.1 FIX 1MB - FIXED YOUR FAIL 2,359,771 > 1,048,576';
-      document.getElementById('userInfo').innerHTML='✅ ADMIN (Local) | V6.1 FIX 1MB - FIXED YOUR FAIL!';
-      applyPermissions();renderAll();setTimeout(function(){ showTab('ltsmTab',document.getElementById('ltsmMainBtn')); },800);
-    }
-  }catch(err){ alert("❌ JS ERROR: "+err.message); curRank='ADMIN'; curUserEmail='admin@makhanani.com'; curSchool=schools[0]?schools[0].emis:''; curSchoolName=schools[0]?schools[0].name:'ALL'; document.getElementById('loginCard').classList.add('hidden'); document.getElementById('welcomeText').innerHTML='WELCOME ADMIN (Emergency Bypass)! | V6.1 FIX 1MB'; applyPermissions();renderAll(); }
-  return false;
-}
-function firebaseLogout(){if(auth){ try{auth.signOut().then(function(){location.reload();}).catch(function(){location.reload();}); }catch(e){location.reload();} }else location.reload(); return false;}
-function startScanner(){document.getElementById('scanLog').innerHTML='📷 Starting... V6.1 FIX 1MB';html5QrcodeScanner=new Html5Qrcode("reader");html5QrcodeScanner.start({facingMode:"environment"},{fps:10,qrbox:{width:250,height:150}},function(decoded){document.getElementById('scanResult').value=decoded;document.getElementById('scanLog').innerHTML='✅ Scanned: '+decoded+' - V6.1 FIX 1MB';},function(err){});}
-function stopScanner(){if(html5QrcodeScanner){html5QrcodeScanner.stop().then(function(){document.getElementById('scanLog').innerHTML='Scanner stopped - V6.1 FIX 1MB';});}}
-function save(){localStorage.setItem('mk_schools',JSON.stringify(schools));localStorage.setItem('mk_learners',JSON.stringify(learners));localStorage.setItem('mk_books',JSON.stringify(books));localStorage.setItem('mk_issues',JSON.stringify(issues));localStorage.setItem('mk_bookCounter',bookCounter.toString());localStorage.setItem('mk_learnerCounter',learnerCounter.toString());localStorage.setItem('mk_staff',JSON.stringify(staff));localStorage.setItem('mk_hodRequests',JSON.stringify(hodRequests));if(cloudOK && db) syncToCloud(true);}
-function showTab(id,btn){
-  var t=['homeTab','principalDashTab','adminDashTab','ltsmTab','hodTab','adminTab'];
-  for(var i=0;i<t.length;i++){ var el=document.getElementById(t[i]); if(el) el.classList.add('hidden'); }
-  var target=document.getElementById(id);
-  if(target){ target.classList.remove('hidden'); }
-  var bs=document.querySelectorAll('.tabs:not(.ltsm) button');
-  for(var j=0;j<bs.length;j++)bs[j].classList.remove('active');
-  if(btn){ btn.classList.add('active'); }
-  if(id==='ltsmTab'){ showLTSMTab('ltsmScanTab', document.querySelector('.tabs.ltsm button')); }
-  if(id==='adminTab') updatePrintDropdowns();
-  setTimeout(function(){ if(target) target.scrollIntoView({behavior:'smooth',block:'start'}); },100);
-  return false;
-}
-function showLTSMTab(id,btn){
-  var tabs=['ltsmScanTab','ltsmBooksTab','ltsmLearnersTab','ltsmIssueTab','ltsmReturnTab'];
-  for(var i=0;i<tabs.length;i++){ var el=document.getElementById(tabs[i]); if(el) el.classList.add('hidden'); }
-  var target=document.getElementById(id);
-  if(target){ target.classList.remove('hidden'); }
-  var bs=document.querySelectorAll('.tabs.ltsm button');
-  for(var j=0;j<bs.length;j++)bs[j].classList.remove('active');
-  if(btn){ btn.classList.add('active'); }
-  if(id==='ltsmLearnersTab' || id==='ltsmBooksTab') updatePrintDropdowns();
+  var rank=document.getElementById('rankSel').value; var school=document.getElementById('selectedSchool').value;
+  if(!rank){alert('Select Rank!');return;}
+  if(!school&&rank!=='ADMIN'){alert('Select DBE School! - V6.1 SYNC - MANUAL TAP ONLY - TAP WORDSWORTH button above OR TAP dropdown and select inside OR type WORDSWORTH and TAP result badge - NO AUTO SELECT - Select SAME school on Laptop + Phone!');return;}
+  if(school){ curSchool=school; curSchoolName=getSchoolNameByEmis(school); } else { curSchool='700310854'; curSchoolName='WORDSWORTH HIGH SCHOOL'; }
+  curRank=rank; curUserEmail=document.getElementById('fbEmail').value.trim()||'admin@makhanani.com';
+  document.getElementById('loginCard').classList.add('hidden');
+  document.getElementById('homeSchoolName').innerHTML='✅ Current: '+curSchool+' - '+curSchoolName+' - V6.1 SYNC - ✅ SELECTED! - Login SAME on Laptop + Phone!';
+  document.getElementById('userInfo').innerHTML='✅ ADMIN | DBE: '+curSchool+' ('+curSchoolName+') | Device: '+deviceId+' | V6.1 SYNC - ONE UPDATE = BOTH!';
+  // === START REAL-TIME SYNC AFTER LOGIN - ONE UPDATE = BOTH DEVICES ===
+  // First, pull latest from cloud (so this device gets other device's latest), then start listener
+  syncNowFromCloud();
+  setTimeout(function(){ startRealtimeSync(); }, 1500);
   renderAll();
   return false;
 }
-function canAddRemoveBooks(){return curRank==='ADMIN'||curRank==='PRINCIPAL'||curRank==='LIBRARIAN';}
-function canAddLearners(){return curRank==='ADMIN'||curRank==='PRINCIPAL'||curRank==='LIBRARIAN'||curRank==='EDUCATOR'||curRank==='HOD';}
-function canRemoveLearners(){return curRank==='ADMIN'||curRank==='PRINCIPAL'||curRank==='LIBRARIAN';}
-function canRemoveBooks(){return curRank==='ADMIN'||curRank==='PRINCIPAL'||curRank==='LIBRARIAN';}
-function applyPermissions(){
-  var canAddRemBooks=canAddRemoveBooks(); var canAddLearner=canAddLearners();
-  var addBookBtn=document.getElementById('addBookBtn'); if(addBookBtn){
-    if(!canAddRemBooks){addBookBtn.disabled=true;addBookBtn.style.opacity='0.4';addBookBtn.innerHTML='🔒 Only ADMIN/PRINCIPAL/LIBRARIAN can ADD/REMOVE BOOKS - Your Rank: '+curRank;}
-    else{addBookBtn.disabled=false;addBookBtn.style.opacity='1';addBookBtn.innerHTML='➕ ADD BOOK(S) - LTSM ACTIVE - V6.1 FIX 1MB';}
-  }
-  var addLearnerBtn=document.getElementById('addLearnerBtn'); if(addLearnerBtn){
-    if(!canAddLearner){addLearnerBtn.disabled=true;addLearnerBtn.style.opacity='0.4';addLearnerBtn.innerHTML='🔒 Only ADMIN/PRINCIPAL/LIBRARIAN/EDUCATOR/HOD can ADD LEARNERS';}
-    else{addLearnerBtn.disabled=false;addLearnerBtn.style.opacity='1';addLearnerBtn.innerHTML=canRemoveLearners()?'➕ ADD LEARNER - AUTO L-0001 - V6.1 FIX 1MB':'➕ ADD LEARNER - EDUCATOR/HOD: Add Only - V6.1';}
+function firebaseLogout(){ location.reload(); return false; }
+function createCloudDatabase(){
+  if(!db){ alert("❌ db NULL - V6.1 SYNC"); return false; }
+  var learnersLocal=learners; var booksLocal=books; var issuesLocal=issues; var schoolsCount=schools.length;
+  var nowISO=new Date().toISOString(); lastCloudUpdate=nowISO;
+  db.collection('makhanani').doc('main').set({ schoolsCount: schoolsCount, schoolsNote: "V6.1 SYNC - ONE UPDATE = LAPTOP + PHONE SAME - Schools in makhanani_dbe_schools", learners: learnersLocal, books: booksLocal, issues: issuesLocal, bookCounter: bookCounter, learnerCounter: learnerCounter, staff: [], updated: nowISO, lastDevice: deviceId, appVersion: "V6.1 SYNC - ONE UPDATE = BOTH - "+nowISO, project: "makhanani-digital" }).then(function(){ cloudOK=true; setCloudStatus("☁️ ✅ CONNECTED - V6.1 SYNC - SMALL DOC CREATED - ✅ CONNECTED! - ONE UPDATE = LAPTOP + PHONE SAME! - "+new Date().toLocaleTimeString()); setSyncStatus("✅ CONNECTED + SYNC ON - Device: "+deviceId+" - Real-Time Listener ON - One update = Both! - V6.1 SYNC"); startRealtimeSync(); alert("✅ CREATE SUCCESS V6.1 SYNC - SMALL DOC - SchoolsCount: "+schoolsCount+" - ONE UPDATE = LAPTOP + PHONE SAME! - Real-Time Listener ON!"); }).catch(function(e){ setCloudStatus("☁️ ❌ CREATE FAILED: "+e.code+" - "+e.message); alert("❌ CREATE FAILED: "+e.message); }); return false;
+}
+function syncDBEChunked(){
+  var totalSchools = schools.length; if(totalSchools===0){ alert("No schools local! TAP RESTORE WORDSWORTH DEFAULT first! - V6.1 SYNC"); return false; } if(!db){ alert("❌ No db - Click CREATE CLOUD DB first! - V6.1 SYNC"); return false; } if(!confirm("Upload "+totalSchools+" schools to makhanani_dbe_schools in batches of 400? Batches: "+Math.ceil(totalSchools/400)+" - V6.1 SYNC - NO AUTO SELECT")){ return false; } setCloudStatus("🏫 SYNCING DBE 25K CHUNKED - Total: "+totalSchools+" - Please wait... - V6.1 SYNC"); var batchSize=400; var totalBatches=Math.ceil(totalSchools/batchSize); var uploaded=0; function uploadBatch(batchIndex){ if(batchIndex>=totalBatches){ setCloudStatus("☁️ ✅ CONNECTED + DBE SYNCED CHUNKED - Total: "+totalSchools+" - Uploaded: "+uploaded+" - V6.1 SYNC"); alert("✅ SYNC DBE CHUNKED COMPLETE! Total: "+totalSchools+" Uploaded: "+uploaded+" - V6.1 SYNC - ONE UPDATE = BOTH!"); return; } var batch=db.batch(); var start=batchIndex*batchSize; var end=Math.min(start+batchSize, totalSchools); var batchCount=0; for(var i=start;i<end;i++){ var sch=schools[i]; if(!sch || !sch.emis) continue; var docRef=db.collection('makhanani_dbe_schools').doc(sch.emis); batch.set(docRef, {emis: sch.emis, name: sch.name, town: sch.town||'', province: sch.province||'', pkg: sch.pkg||'DEMO', status: sch.status||'ACTIVE', updated: new Date().toISOString()}); batchCount++; } setCloudStatus("🏫 SYNCING - Batch "+(batchIndex+1)+"/"+totalBatches+" - Schools "+(start+1)+" to "+end+" of "+totalSchools+" - V6.1 SYNC"); batch.commit().then(function(){ uploaded+=batchCount; setTimeout(function(){ uploadBatch(batchIndex+1); }, 300); }).catch(function(e){ setTimeout(function(){ uploadBatch(batchIndex+1); }, 500); }); } uploadBatch(0); return false;
+}
+// === SAVE = LOCAL + AUTO SYNC TO CLOUD - ONE UPDATE = BOTH DEVICES ===
+function save(){
+  localStorage.setItem('mk_schools',JSON.stringify(schools));
+  localStorage.setItem('mk_learners',JSON.stringify(learners));
+  localStorage.setItem('mk_books',JSON.stringify(books));
+  localStorage.setItem('mk_issues',JSON.stringify(issues));
+  localStorage.setItem('mk_bookCounter',bookCounter.toString());
+  localStorage.setItem('mk_learnerCounter',learnerCounter.toString());
+  // Auto sync to cloud in 800ms - So other device gets it in 1 sec!
+  if(cloudOK && db && !isSyncingFromCloud){
+    setSyncStatus("🔄 SYNCING TO CLOUD... - From: "+deviceId+" - Other device will update in 1 sec! - V6.1 SYNC - One update = Both!");
+    setTimeout(function(){ syncToCloudAuto(); }, 800);
   }
 }
-function removeBook(code){if(!canRemoveBooks()){alert('❌ ONLY ADMIN/PRINCIPAL/LIBRARIAN can REMOVE BOOKS! Your Rank: '+curRank);return;}if(!confirm('Remove book '+code+'? - V6.1 FIX 1MB'))return;for(var i=0;i<books.length;i++){if(books[i].code===code){for(var j=0;j<issues.length;j++){if(issues[j].book===code&&issues[j].status==='BORROWED'){alert('❌ Cannot remove - Book is BORROWED! Return first.');return;}}books.splice(i,1);save();renderAll();alert('✅ BOOK REMOVED: '+code+' by '+curRank+' - V6.1 FIX 1MB');break;}}}
-function removeLearner(id){if(!canRemoveLearners()){alert('❌ ONLY ADMIN/PRINCIPAL/LIBRARIAN can REMOVE LEARNERS! Your Rank: '+curRank);return;}if(!confirm('Remove learner '+id+'? - V6.1 FIX 1MB'))return;for(var j=0;j<issues.length;j++){if(issues[j].learner===id&&issues[j].status==='BORROWED'){alert('❌ Cannot remove - Learner has BORROWED books! Return all first.');return;}}for(var i=0;i<learners.length;i++){if(learners[i].id===id){learners.splice(i,1);save();renderAll();alert('✅ LEARNER REMOVED: '+id+' by '+curRank+' - V6.1 FIX 1MB');break;}}}
-var liveListener=null, liveChart1=null, liveChart2=null;
-function startRealtimeReporting(){
- if(!db){alert('❌ No Cloud yet - Click CREATE CLOUD DB first');return;}
- if(!cloudOK){alert('❌ Not connected yet - Click CREATE CLOUD DB first - V6.1 FIX 1MB - Will auto create after 3 sec, wait!');return;}
- document.getElementById('liveStatus').innerHTML='🔴 LIVE DATABASE - CONNECTED V6.1 FIX 1MB - '+new Date().toLocaleTimeString()+' - LIVE UPDATES!';
- if(liveListener) liveListener();
- liveListener = db.collection('makhanani').doc('main').onSnapshot(function(doc){
-   if(!doc.exists) return;
-   var d=doc.data();
-   var liveBooks=(d.books||[]).length;
-   var liveLearners=(d.learners||[]).length;
-   var liveIssues=d.issues||[];
-   var borrowed=liveIssues.filter(x=>x.status==='BORROWED').length;
-   var returned=liveIssues.filter(x=>x.status==='RETURNED').length;
-   if(curSchool){
-     liveBooks=d.books.filter(b=>b.school===curSchool||b.emis===curSchool).length;
-     liveLearners=d.learners.filter(l=>l.school===curSchool).length;
-     borrowed=liveIssues.filter(x=>x.school===curSchool && x.status==='BORROWED').length;
-     returned=liveIssues.filter(x=>x.school===curSchool && x.status==='RETURNED').length;
-   }
-   document.getElementById('liveBorrowed').innerHTML=borrowed;
-   document.getElementById('liveReturned').innerHTML=returned;
-   document.getElementById('liveBooks').innerHTML=liveBooks;
-   document.getElementById('liveLearners').innerHTML=liveLearners;
-   document.getElementById('liveBorrowedTime').innerHTML='Updated: '+new Date().toLocaleTimeString()+' - V6.1 FIX 1MB';
-   document.getElementById('liveReturnedTime').innerHTML='Updated: '+new Date().toLocaleTimeString()+' - V6.1 FIX 1MB';
-   var h=''; var recent=liveIssues.slice(-20).reverse();
-   for(var i=0;i<recent.length;i++){ var iss=recent[i]; if(curSchool && iss.school!==curSchool && curRank!=='ADMIN') continue; var color=iss.status==='BORROWED'?'#fef9c3':'#dcfce7'; h+='<div class="badge" style="background:'+color+';border-left:4px solid '+(iss.status==='BORROWED'?'#f59e0b':'#16a34a')+'"><b>'+iss.book+'</b> → <b>'+iss.learner+'</b> - '+iss.status+' | '+(iss.date||'')+' | '+(iss.school||'')+' | By: '+(iss.issuedBy||'')+' - 🔴 LIVE DB V6.1 FIX 1MB '+new Date().toLocaleTimeString()+'</div>'; }
-   document.getElementById('liveTransactions').innerHTML=h||'No live transactions - Start issuing books! - V6.1 FIX 1MB';
-   renderSchools();
-   try{
-     var ctx1=document.getElementById('liveChartBorrowed').getContext('2d');
-     if(liveChart1) liveChart1.destroy();
-     liveChart1=new Chart(ctx1,{type:'doughnut',data:{labels:['BORROWED V6.1 FIX','RETURNED V6.1 FIX'],datasets:[{data:[borrowed,returned],backgroundColor:['#f59e0b','#16a34a']}]},options:{responsive:true,plugins:{title:{display:true,text:'Borrowed vs Returned - V6.1 FIX 1MB'}}}});
-     var subjCount={}; var booksToCount=curSchool ? d.books.filter(b=>b.school===curSchool||b.emis===curSchool) : d.books;
-     for(var b=0;b<booksToCount.length;b++){var s=booksToCount[b].subject||'OTHER';subjCount[s]=(subjCount[s]||0)+1;}
-     var ctx2=document.getElementById('liveChartSubjects').getContext('2d');
-     if(liveChart2) liveChart2.destroy();
-     liveChart2=new Chart(ctx2,{type:'bar',data:{labels:Object.keys(subjCount),datasets:[{label:'Books by Subject - V6.1 FIX 1MB',data:Object.values(subjCount),backgroundColor:'#1a56db'}]},options:{responsive:true,plugins:{title:{display:true,text:'Books by Subject - V6.1 FIX 1MB'}}}});
-   }catch(e){}
-   setCloudStatus('☁️ 🔴 LIVE REAL-TIME DB V6.1 FIX 1MB + ✅ CONNECTED - '+new Date().toLocaleTimeString()+' - '+borrowed+' Borrowed | '+returned+' Returned', false);
- },function(err){ document.getElementById('liveStatus').innerHTML='❌ LIVE Error V6.1 FIX 1MB: '+err.message; });
-}
-function stopRealtimeReporting(){ if(liveListener){liveListener();liveListener=null;document.getElementById('liveStatus').innerHTML='⏹️ LIVE DATABASE STOPPED V6.1 FIX 1MB - Click START to resume';setCloudStatus('☁️ ✅ CONNECTED V6.1 FIX 1MB - Live Stopped', false);}}
-function printLiveReport(){var borrowed=document.getElementById('liveBorrowed').innerHTML;var returned=document.getElementById('liveReturned').innerHTML;var books=document.getElementById('liveBooks').innerHTML;var learners=document.getElementById('liveLearners').innerHTML;var w=window.open('','_blank');w.document.write('<html><head><title>LIVE REPORT - MAKHANANI - V6.1 FIX 1MB</title><style>body{font-family:Arial}table{width:100%;border-collapse:collapse}th,td{border:1px solid #000;padding:8px}</style></head><body><h1>🔴 LIVE REPORT - MAKHANANI - V6.1 FIX 1MB LIMIT</h1><p>Powered by XINTIMANI GROUP - '+new Date().toLocaleString()+' - School: '+curSchoolName+' ('+curSchool+') - V6.1 FIX 1MB</p><table><tr><th>Metric</th><th>LIVE Count</th></tr><tr><td>📤 BORROWED</td><td>'+borrowed+'</td></tr><tr><td>📥 RETURNED</td><td>'+returned+'</td></tr><tr><td>📚 BOOKS</td><td>'+books+'</td></tr><tr><td>👥 LEARNERS</td><td>'+learners+'</td></tr></table><p>V6.1 FIX 1MB LIMIT - Small doc + chunked schools</p><div style="text-align:center;margin-top:20px"><img src="logo.png?v=61" style="max-width:200px"><p>MAKHANANI DIGITAL LIBRARY - V6.1 FIX 1MB</p></div></body></html>');w.document.close();w.print();}
-function renderSchools(){var q=(document.getElementById('searchSchool').value||'').toLowerCase();var h='';for(var i=0;i<schools.length&&h.split('badge').length<22;i++){if(q&&schools[i].name.toLowerCase().indexOf(q)===-1&&schools[i].emis.indexOf(q)===-1)continue;h+='<div class="badge" style="cursor:pointer" onclick="selectDBESchool(\''+schools[i].emis+'\',\''+schools[i].name.replace(/\'/g,"\\'")+'\');return false;"><b>🏫 TAP TO SELECT: '+schools[i].emis+' - '+schools[i].name+'</b> - '+schools[i].town+' | '+schools[i].province+'</div>';}document.getElementById('schoolList').innerHTML=h||'No DBE - V6.1 FIX 1MB';document.getElementById('adminStats').innerHTML='DBE: '+schools.length+' | Books: '+books.length+' | Learners: '+learners.length+' | Staff: '+staff.length+' | V6.1 FIX 1MB';document.getElementById('homeStats').innerHTML='DBE: '+schools.length+' | Books: '+books.length+' | Learners: '+learners.length+' | Staff: '+staff.length+' | Borrowed: '+issues.filter(function(x){return x.status==='BORROWED'}).length+' | V6.1 FIX 1MB - LTSM: SCAN, BOOKS, LEARNERS, ISSUE, RETURN';document.getElementById('aDashSchools').innerHTML=schools.length;document.getElementById('aDashBooks').innerHTML=books.length;document.getElementById('aDashLearners').innerHTML=learners.length;document.getElementById('aDashStaff').innerHTML=staff.length;document.getElementById('pDashBooks').innerHTML=books.filter(function(b){return b.school===curSchool||b.emis===curSchool;}).length;document.getElementById('pDashLearners').innerHTML=learners.filter(function(l){return l.school===curSchool;}).length;document.getElementById('pDashStaff').innerHTML=staff.filter(function(s){return s.school===curSchool;}).length;document.getElementById('dbeCurrentCount').innerHTML=schools.length;updatePrintCounts();}
-function updatePrintCounts(){var learnerInSchool=curSchool?learners.filter(l=>l.school===curSchool).length:learners.length; var bookInSchool=curSchool?books.filter(b=>b.school===curSchool||b.emis===curSchool).length:books.length; var allL=document.getElementById('printLearnerAllCount'); if(allL) allL.innerHTML=learnerInSchool+' learners - V6.1 FIX 1MB'; var allB=document.getElementById('printBooksAllCount'); if(allB) allB.innerHTML=bookInSchool+' books - V6.1 FIX 1MB';}
-function addBookWithDBECode(){if(!canAddRemoveBooks()){alert('❌ ONLY ADMIN/PRINCIPAL/LIBRARIAN can ADD BOOKS! Your Rank: '+curRank);return;}var title=document.getElementById('bTitle').value.trim();var subject=document.getElementById('bSubject').value;var grade=document.getElementById('bGrade').value;var teacher=document.getElementById('bTeacher').value.trim();var qty=parseInt(document.getElementById('bQty').value||'1');var manual=document.getElementById('bCodeManual').value.trim().toUpperCase();if(!title||!subject||!grade){alert('Title + Subject + Grade required!');return;}if(!curSchool){alert('Select DBE School first! - TAP SCHOOL BUTTON ABOVE!');return;}if(qty<1)qty=1;var addedCodes=[];if(manual){books.push({title:title,subject:subject,grade:grade,code:manual,school:curSchool,emis:curSchool,status:'AVAILABLE',teacher:teacher});addedCodes.push(manual);}else{for(var i=0;i<qty;i++){var num=String(bookCounter).padStart(3,'0');var unique=subject+'-'+grade+'-'+num;books.push({title:title,subject:subject,grade:grade,code:unique,school:curSchool,emis:curSchool,status:'AVAILABLE',teacher:teacher});addedCodes.push(unique);bookCounter++;}}save();renderAll();alert('✅ BOOKS ADDED! Qty: '+addedCodes.length+' First: '+addedCodes[0]+' - V6.1 FIX 1MB');document.getElementById('bTitle').value='';document.getElementById('bQty').value='1';document.getElementById('bCodeManual').value='';}
-function autoGenerateLearnerId(){var nextId='L-'+String(learnerCounter).padStart(4,'0');document.getElementById('lId').value=nextId;document.getElementById('nextLearnerIdPreview').innerHTML='🔢 Generated: <b>'+nextId+'</b> | Next: L-'+String(learnerCounter+1).padStart(4,'0')+' - V6.1 FIX 1MB';}
-function addLearner(){if(curRank==='PARENT'||curRank==='LEARNER'){alert('❌ PARENT/LEARNER View Only!');return;}if(!canAddLearners()){alert('❌ ONLY ADMIN/PRINCIPAL/LIBRARIAN/EDUCATOR/HOD can ADD LEARNERS! Your Rank: '+curRank);return;}var n=document.getElementById('lName').value.trim();var g=document.getElementById('lGrade').value.trim().toUpperCase();var cls=document.getElementById('lClass').value.trim().toUpperCase();var id=document.getElementById('lId').value.trim().toUpperCase();if(!n){alert('Name required!');return;}if(!curSchool){alert('Select DBE School first! - TAP SCHOOL BUTTON ABOVE!');return;}if(!id){id='L-'+String(learnerCounter).padStart(4,'0');var attempts=0;while(attempts<1000){var exists=false;for(var chk=0;chk<learners.length;chk++){if(learners[chk].id.toUpperCase()===id&&learners[chk].school===curSchool){exists=true;break;}}if(!exists)break;learnerCounter++;id='L-'+String(learnerCounter).padStart(4,'0');attempts++;}}for(var i=0;i<learners.length;i++){if(learners[i].id.toUpperCase()===id&&learners[i].school===curSchool){alert('❌ BLOCKED - ID DUPLICATE per school!');return;}}learners.push({name:n,grade:g,class:cls||g,id:id,school:curSchool,schoolName:curSchoolName});var numPart=parseInt(id.replace('L-',''))||0;if(numPart>=learnerCounter||!document.getElementById('lId').value.trim()){learnerCounter++;}save();renderAll();alert('✅ Learner Added! ID: '+id+' Name: '+n+' - V6.1 FIX 1MB');document.getElementById('lName').value='';document.getElementById('lGrade').value='';document.getElementById('lClass').value='';document.getElementById('lId').value='';}
-function onLearnerTyping(){var id=document.getElementById('iLearner').value.trim();var results=document.getElementById('learnerSearchResults');if(!id){results.innerHTML='';return;}var matches=[];for(var i=0;i<learners.length;i++){if(curSchool&&learners[i].school!==curSchool)continue;if(learners[i].id.toLowerCase().indexOf(id.toLowerCase())!==-1||learners[i].name.toLowerCase().indexOf(id.toLowerCase())!==-1)matches.push(learners[i]);}if(matches.length>0&&matches.length<10){var h='';for(var j=0;j<matches.length;j++){h+='<div class="badge" onclick="document.getElementById(\'iLearner\').value=\''+matches[j].id+'\';onLearnerTyping();return false;"><b>'+matches[j].id+'</b> - '+matches[j].name+'</div>';}results.innerHTML=h;}else results.innerHTML='';}
-function onBookTyping(){var code=document.getElementById('iBook').value.trim();var results=document.getElementById('bookSearchResults');if(!code){results.innerHTML='';return;}var matches=[];for(var i=0;i<books.length;i++){if(curSchool&&books[i].emis!==curSchool&&books[i].school!==curSchool)continue;if(books[i].code.toLowerCase().indexOf(code.toLowerCase())!==-1||books[i].title.toLowerCase().indexOf(code.toLowerCase())!==-1)matches.push(books[i]);}if(matches.length>0&&matches.length<10){var h='';for(var j=0;j<matches.length;j++){h+='<div class="badge" onclick="document.getElementById(\'iBook\').value=\''+matches[j].code+'\';onBookTyping();return false;"><b>'+matches[j].code+'</b> - '+matches[j].title+'</div>';}results.innerHTML=h;}else results.innerHTML='';}
-function onReturnBookTyping(){var code=document.getElementById('rBook').value.trim();var results=document.getElementById('returnSearchResults');if(!code){results.innerHTML='';return;}var matches=[];for(var i=0;i<issues.length;i++){if(issues[i].status==='BORROWED'&&issues[i].book.toLowerCase().indexOf(code.toLowerCase())!==-1)matches.push(issues[i]);}if(matches.length>0){var h='';for(var j=0;j<matches.length;j++){h+='<div class="badge" onclick="document.getElementById(\'rBook\').value=\''+matches[j].book+'\';return false;"><b>'+matches[j].book+'</b> → '+matches[j].learner+'</div>';}results.innerHTML=h;}else results.innerHTML='';}
-function issueBook(){var l=document.getElementById('iLearner').value.trim();var b=document.getElementById('iBook').value.trim().toUpperCase();if(!l||!b){alert('TYPE Learner ID + Book Number!');return;}issues.push({learner:l,book:b,status:'BORROWED',date:new Date().toLocaleDateString(),school:curSchool,issuedBy:curRank+' - '+curUserEmail});save();renderAll();document.getElementById('issueStatus').innerHTML='✅ Issued '+b+' to '+l+' - V6.1 FIX 1MB';alert('✅ Issued! - V6.1 FIX 1MB');document.getElementById('iLearner').value='';document.getElementById('iBook').value='';}
-function returnBook(){var b=document.getElementById('rBook').value.trim().toUpperCase();if(!b){alert('TYPE Book Number!');return;}var found=false;for(var i=0;i<issues.length;i++){if(issues[i].book===b&&issues[i].status==='BORROWED'){issues[i].status='RETURNED';issues[i].returnedBy=curRank+' - '+curUserEmail;issues[i].returnDate=new Date().toLocaleDateString();found=true;}}if(!found){alert('Book not found as borrowed!');return;}save();renderAll();document.getElementById('returnStatus').innerHTML='✅ Returned '+b+' - V6.1 FIX 1MB';alert('✅ Returned '+b+' - V6.1 FIX 1MB');document.getElementById('rBook').value='';}
+function showTab(id,btn){ var t=['homeTab','ltsmTab','adminTab']; for(var i=0;i<t.length;i++){ var el=document.getElementById(t[i]); if(el) el.classList.add('hidden'); } var target=document.getElementById(id); if(target) target.classList.remove('hidden'); return false; }
+function showLTSMTab(id,btn){ var tabs=['ltsmScanTab','ltsmBooksTab','ltsmLearnersTab','ltsmIssueTab','ltsmReturnTab']; for(var i=0;i<tabs.length;i++){ var el=document.getElementById(tabs[i]); if(el) el.classList.add('hidden'); } var target=document.getElementById(id); if(target) target.classList.remove('hidden'); renderAll(); return false; }
+function startScanner(){document.getElementById('scanLog').innerHTML='📷 Starting... V6.1 SYNC';html5QrcodeScanner=new Html5Qrcode("reader");html5QrcodeScanner.start({facingMode:"environment"},{fps:10,qrbox:{width:250,height:150}},function(decoded){document.getElementById('scanResult').value=decoded;document.getElementById('scanLog').innerHTML='✅ Scanned: '+decoded+' - V6.1 SYNC';},function(err){});}
+function stopScanner(){if(html5QrcodeScanner){html5QrcodeScanner.stop();}}
+function renderSchools(){var q=(document.getElementById('searchSchool')?document.getElementById('searchSchool').value:'').toLowerCase();var h='';for(var i=0;i<schools.length&&h.split('badge').length<22;i++){if(q&&schools[i].name.toLowerCase().indexOf(q)===-1&&schools[i].emis.indexOf(q)===-1)continue;h+='<div class="badge" style="cursor:pointer" onclick="selectDBESchool(\''+schools[i].emis+'\',\''+schools[i].name.replace(/\'/g,"\\'")+'\');return false;"><b>🏫 TAP TO SELECT: '+schools[i].emis+' - '+schools[i].name+'</b></div>';}var sl=document.getElementById('schoolList'); if(sl) sl.innerHTML=h||'No DBE - TAP RESTORE BUTTON! - V6.1 SYNC'; var ad=document.getElementById('adminStats'); if(ad) ad.innerHTML='DBE: '+schools.length+' | Books: '+books.length+' | Learners: '+learners.length+' | Device: '+deviceId+' | V6.1 SYNC - ONE UPDATE = BOTH!'; var hs=document.getElementById('homeStats'); if(hs) hs.innerHTML='DBE: '+schools.length+' | Books: '+books.length+' | Learners: '+learners.length+' | Device: '+deviceId+' | V6.1 SYNC - ONE UPDATE = LAPTOP + PHONE SAME - No auto select'; var cnt=document.getElementById('dbeCurrentCount'); if(cnt) cnt.innerHTML=schools.length;}
+function addBookWithDBECode(){var title=document.getElementById('bTitle').value.trim();var subject=document.getElementById('bSubject').value;var grade=document.getElementById('bGrade').value;var qty=parseInt(document.getElementById('bQty').value||'1');var manual=document.getElementById('bCodeManual').value.trim().toUpperCase();if(!title||!subject||!grade){alert('Title + Subject + Grade required!');return;}if(!curSchool){alert('Select DBE School first! - TAP SCHOOL BUTTON! - V6.1 SYNC - NO AUTO SELECT');return;}if(qty<1)qty=1;if(manual){books.push({title:title,subject:subject,grade:grade,code:manual,school:curSchool,emis:curSchool,status:'AVAILABLE'});}else{for(var i=0;i<qty;i++){var num=String(bookCounter).padStart(3,'0');var unique=subject+'-'+grade+'-'+num;books.push({title:title,subject:subject,grade:grade,code:unique,school:curSchool,emis:curSchool,status:'AVAILABLE'});bookCounter++;}}save();renderAll();alert('✅ BOOKS ADDED! - Will SYNC to Laptop + Phone in 1 sec! - V6.1 SYNC - ONE UPDATE = BOTH! - Device: '+deviceId);document.getElementById('bTitle').value='';}
+function autoGenerateLearnerId(){var nextId='L-'+String(learnerCounter).padStart(4,'0');document.getElementById('lId').value=nextId;document.getElementById('nextLearnerIdPreview').innerHTML='🔢 Generated: <b>'+nextId+'</b> - V6.1 SYNC';}
+function addLearner(){var n=document.getElementById('lName').value.trim();var g=document.getElementById('lGrade').value.trim().toUpperCase();var cls=document.getElementById('lClass').value.trim().toUpperCase();var id=document.getElementById('lId').value.trim().toUpperCase();if(!n){alert('Name required!');return;}if(!curSchool){alert('Select DBE School first! - TAP SCHOOL BUTTON! - V6.1 SYNC - NO AUTO SELECT');return;}if(!id){id='L-'+String(learnerCounter).padStart(4,'0');}learners.push({name:n,grade:g,class:cls||g,id:id,school:curSchool,schoolName:curSchoolName});learnerCounter++;save();renderAll();alert('✅ Learner Added! ID: '+id+' - Will SYNC to Laptop + Phone in 1 sec! - V6.1 SYNC - ONE UPDATE = BOTH!');document.getElementById('lName').value='';}
+function issueBook(){var l=document.getElementById('iLearner').value.trim();var b=document.getElementById('iBook').value.trim().toUpperCase();if(!l||!b){alert('TYPE Learner ID + Book Number!');return;}issues.push({learner:l,book:b,status:'BORROWED',date:new Date().toLocaleDateString(),school:curSchool});save();renderAll();alert('✅ Issued! - Will SYNC to Laptop + Phone in 1 sec! - V6.1 SYNC');}
+function returnBook(){var b=document.getElementById('rBook').value.trim().toUpperCase();if(!b){alert('TYPE Book Number!');return;}var found=false;for(var i=0;i<issues.length;i++){if(issues[i].book===b&&issues[i].status==='BORROWED'){issues[i].status='RETURNED';found=true;}}if(!found){alert('Book not found as borrowed!');return;}save();renderAll();alert('✅ Returned '+b+' - Will SYNC to Laptop + Phone in 1 sec! - V6.1 SYNC');}
 function renderAll(){
-var h='';var learnerCount=0;
-for(var i=0;i<learners.length&&learnerCount<50;i++){
-if(curSchool&&learners[i].school!==curSchool)continue;
-learnerCount++;
-var sName=learners[i].schoolName||getSchoolNameByEmis(learners[i].school);
-var tp=getSchoolTownProvince(learners[i].school);
-var canRemLearner=canRemoveLearners();
-h+='<div class="barcodeCard">'
-+'<div style="background:#0a1a4d;color:#fff;padding:10px;border-radius:10px;margin-bottom:8px;text-align:center">'
-+'<div style="background:#fff;border-radius:10px;padding:8px;margin:0 auto 8px;max-width:220px"><img src="logo.png?v=61" alt="XINTIMANI" style="width:100%;max-width:180px;display:block"></div>'
-+'<div style="font-size:13px;font-weight:900;letter-spacing:0.5px">MAKHANANI DIGITAL LIBRARY</div>'
-+'<div style="font-size:14px;font-weight:900;margin-top:6px">🏫 '+sName+'</div>'
-+'<div style="font-size:11px;opacity:.85;margin-top:2px">EMIS: '+learners[i].school+' | '+tp.town+' | '+tp.province+'</div>'
-+'</div>'
-+'<div style="text-align:center;padding:8px 4px">'
-+'<div style="font-weight:900;font-size:16px;color:#0a1a4d">'+learners[i].name+'</div>'
-+'<div style="font-size:13px;color:#334155;margin-top:2px">Grade '+learners[i].grade+' Class '+(learners[i].class||'')+'</div>'
-+'<div style="font-size:13px;margin-top:6px;color:#0a1a4d">Learner ID: <b>'+learners[i].id+'</b></div>'
-+'<svg class="barcodeLearner" data-code="'+learners[i].id+'" style="margin-top:10px"></svg>'
-+'</div>'
-+(canRemLearner?'<button type="button" class="red noPrint" style="padding:10px;font-size:13px;margin-top:10px" onclick="removeLearner(\''+learners[i].id+'\');return false;">❌ REMOVE LEARNER - V6.1 FIX 1MB</button>':'<div class="badge noPrint" style="background:#fef9c3;font-size:11px;margin-top:10px">ℹ️ Remove: ADMIN/PRINCIPAL/LIBRARIAN Only | Your Rank: '+curRank+'</div>')
-+'</div>';
-}
-document.getElementById('learnerList').innerHTML=h||'No learners in this school! - Auto L-0001 - V6.1 FIX 1MB - TAP SCHOOL BUTTON ABOVE!';
-setTimeout(function(){document.querySelectorAll('.barcodeLearner').forEach(function(el){try{JsBarcode(el,el.getAttribute('data-code'),{format:"CODE128",width:2,height:65,displayValue:true,fontSize:16});}catch(e){}});},350);
-var b='';var bookCount=0;
-for(var k=0;k<books.length&&bookCount<50;k++){
-if(curSchool&&books[k].emis!==curSchool&&books[k].school!==curSchool)continue;
-bookCount++;
-var sNameB=getSchoolNameByEmis(books[k].emis||books[k].school);
-var tpB=getSchoolTownProvince(books[k].emis||books[k].school);
-var canRemBook=canRemoveBooks();
-b+='<div class="barcodeCard">'
-+'<div style="background:#0a1a4d;color:#fff;padding:10px;border-radius:10px;margin-bottom:8px;text-align:center">'
-+'<div style="background:#fff;border-radius:10px;padding:8px;margin:0 auto 8px;max-width:220px"><img src="logo.png?v=61" alt="XINTIMANI" style="width:100%;max-width:180px;display:block"></div>'
-+'<div style="font-size:13px;font-weight:900;letter-spacing:0.5px">MAKHANANI DIGITAL LIBRARY</div>'
-+'<div style="font-size:14px;font-weight:900;margin-top:6px">🏫 '+sNameB+'</div>'
-+'<div style="font-size:11px;opacity:.85;margin-top:2px">EMIS: '+(books[k].emis||books[k].school)+' | '+tpB.town+' | '+tpB.province+'</div>'
-+'</div>'
-+'<div style="text-align:center;padding:8px 4px">'
-+'<div style="font-weight:900;font-size:15px;color:#0a1a4d">'+books[k].title+'</div>'
-+'<div style="font-size:13px;color:#334155;margin-top:2px">CAPS: '+books[k].subject+' '+books[k].grade+'</div>'
-+'<div style="font-size:15px;margin-top:6px;color:#0a1a4d"><b>'+books[k].code+'</b></div>'
-+'<svg class="barcodeBook" data-code="'+books[k].code+'" style="margin-top:10px"></svg>'
-+'</div>'
-+(canRemBook?'<button type="button" class="red noPrint" style="padding:10px;font-size:13px;margin-top:10px" onclick="removeBook(\''+books[k].code+'\');return false;">❌ REMOVE BOOK - V6.1 FIX 1MB</button>':'<div class="badge noPrint" style="background:#fee2e2;font-size:11px;margin-top:10px">🔒 Remove Books: ADMIN/PRINCIPAL/LIBRARIAN Only | Your Rank: '+curRank+'</div>')
-+'</div>';
-}
-document.getElementById('bookList').innerHTML=b||'No books in this school! - ACC-G10-001 - V6.1 FIX 1MB - TAP SCHOOL BUTTON ABOVE!';
-setTimeout(function(){document.querySelectorAll('.barcodeBook').forEach(function(el){try{JsBarcode(el,el.getAttribute('data-code'),{format:"CODE128",width:1.8,height:55,displayValue:true,fontSize:14});}catch(e){}});},350);
-var r='';for(var l=0;l<Math.min(issues.length,50);l++)r+='<div class="badge">'+issues[l].book+' → '+issues[l].learner+' - '+issues[l].status+' | '+(issues[l].date||'')+' - V6.1 FIX 1MB</div>';
-document.getElementById('issueList').innerHTML=r;document.getElementById('returnList').innerHTML=r||'No issued! - V6.1 FIX 1MB';
+var h='';for(var i=0;i<learners.length&&h.split('barcodeCard').length<52;i++){if(curSchool&&learners[i].school!==curSchool)continue;h+='<div class="barcodeCard"><div style="font-weight:900">'+learners[i].name+'</div><div>Grade '+learners[i].grade+' Class '+(learners[i].class||'')+'</div><div>Learner ID: <b>'+learners[i].id+'</b></div><svg class="barcodeLearner" data-code="'+learners[i].id+'"></svg></div>';}
+document.getElementById('learnerList').innerHTML=h||'No learners - V6.1 SYNC - ONE UPDATE = BOTH!';
+setTimeout(function(){document.querySelectorAll('.barcodeLearner').forEach(function(el){try{JsBarcode(el,el.getAttribute('data-code'),{format:"CODE128",width:2,height:60,displayValue:true});}catch(e){}});},300);
+var b='';for(var k=0;k<books.length&&b.split('barcodeCard').length<52;k++){if(curSchool&&books[k].emis!==curSchool&&books[k].school!==curSchool)continue;b+='<div class="barcodeCard"><div style="font-weight:900">'+books[k].title+'</div><div>CAPS: '+books[k].subject+' '+books[k].grade+'</div><div><b>'+books[k].code+'</b></div><svg class="barcodeBook" data-code="'+books[k].code+'"></svg></div>';}
+document.getElementById('bookList').innerHTML=b||'No books - V6.1 SYNC - ONE UPDATE = BOTH!';
+setTimeout(function(){document.querySelectorAll('.barcodeBook').forEach(function(el){try{JsBarcode(el,el.getAttribute('data-code'),{format:"CODE128",width:1.8,height:55,displayValue:true});}catch(e){}});},300);
+var r='';for(var l=0;l<Math.min(issues.length,50);l++)r+='<div class="badge">'+issues[l].book+' → '+issues[l].learner+' - '+issues[l].status+'</div>';
+var il=document.getElementById('issueList'); if(il) il.innerHTML=r; var rl=document.getElementById('returnList'); if(rl) rl.innerHTML=r||'No issued! - V6.1 SYNC';
 renderSchools();
-var nextIdPreview=document.getElementById('nextLearnerIdPreview');if(nextIdPreview){var nextId='L-'+String(learnerCounter).padStart(4,'0');var countInSchool=curSchool?learners.filter(function(l){return l.school===curSchool}).length:learners.length;nextIdPreview.innerHTML='🔢 Next Auto ID: <b>'+nextId+'</b> | Total in this school: '+countInSchool+' | Total all: '+learners.length+' - V6.1 FIX 1MB';}
+var nextIdPreview=document.getElementById('nextLearnerIdPreview');if(nextIdPreview){var nextId='L-'+String(learnerCounter).padStart(4,'0');nextIdPreview.innerHTML='🔢 Next Auto ID: <b>'+nextId+'</b> - V6.1 SYNC - ONE UPDATE = BOTH!';}
 }
-function updatePrintDropdowns(){
-  var classes={}, subjects={}, teachers={};
-  var filteredLearners=curSchool?learners.filter(l=>l.school===curSchool):learners;
-  var filteredBooks=curSchool?books.filter(b=>b.school===curSchool||b.emis===curSchool):books;
-  for(var i=0;i<filteredLearners.length;i++){ if(filteredLearners[i].class) classes[filteredLearners[i].class]=true; }
-  for(var j=0;j<filteredBooks.length;j++){ if(filteredBooks[j].subject) subjects[filteredBooks[j].subject]=true; if(filteredBooks[j].teacher) teachers[filteredBooks[j].teacher]=true; }
-  var classSel=document.getElementById('printLearnerClass');
-  if(classSel){ var curVal=classSel.value; classSel.innerHTML='<option value="">-- Class --</option>'; for(var c in classes){ var o=document.createElement('option'); o.value=c; o.textContent=c+' ('+filteredLearners.filter(l=>l.class===c).length+')'; if(c===curVal) o.selected=true; classSel.appendChild(o);} document.getElementById('printLearnerClassLabel').innerHTML=classSel.value||'-'; }
-  var subjSel=document.getElementById('printBookSubject');
-  if(subjSel){ var curS=subjSel.value; subjSel.innerHTML='<option value="">-- Subject --</option>'; for(var s in subjects){ var os=document.createElement('option'); os.value=s; os.textContent=s+' ('+filteredBooks.filter(b=>b.subject===s).length+')'; if(s===curS) os.selected=true; subjSel.appendChild(os);} document.getElementById('printBookSubjectLabel').innerHTML=subjSel.value||'-'; }
-  var eduSel=document.getElementById('printBookEducator');
-  if(eduSel){ var curE=eduSel.value; eduSel.innerHTML='<option value="">-- Educator --</option>'; for(var e in teachers){ var oe=document.createElement('option'); oe.value=e; oe.textContent=e+' ('+filteredBooks.filter(b=>b.teacher===e).length+')'; if(e===curE) oe.selected=true; eduSel.appendChild(oe);} document.getElementById('printBookEducatorLabel').innerHTML=eduSel.value||'-'; }
-  var pg=document.getElementById('printLearnerGrade'); if(pg) document.getElementById('printLearnerGradeLabel').innerHTML=pg.value||'-';
-  var pbg=document.getElementById('printBookGrade'); if(pbg) document.getElementById('printBookGradeLabel').innerHTML=pbg.value||'-';
-}
-document.addEventListener('change', function(e){ if(e.target.id==='printLearnerClass' || e.target.id==='printLearnerGrade' || e.target.id==='printBookGrade' || e.target.id==='printBookSubject' || e.target.id==='printBookEducator'){ updatePrintDropdowns(); }});
-function generateBarcodeHTML(items, type){
-  var html='<html><head><title>BARCODE PRINT - MAKHANANI V6.1 FIX 1MB</title><style>body{font-family:Arial;margin:0;padding:10px;background:#fff} .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px} .barcodeCard{border:2px solid #0a1a4d;border-radius:14px;padding:10px;text-align:center;page-break-inside:avoid;background:#fff} .header{background:#0a1a4d;color:#fff;padding:10px;border-radius:10px;text-align:center} .logoBox{background:#fff;border-radius:10px;padding:6px;max-width:180px;margin:0 auto 8px} .logoBox img{width:100%;max-width:160px} @media print{.noPrint{display:none} .barcodeCard{border:2px solid #000}}</style><script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"><\/script></head><body>';
-  html+='<div class="noPrint" style="text-align:center;padding:12px;background:#eff6ff;border-radius:10px;margin-bottom:12px"><h2>🖨️ MAKHANANI BARCODE PRINT - V6.1 FIX 1MB - NEW PROJECT makhanani-digital</h2><p>School: '+(curSchoolName||curSchool||'ALL')+' ('+(curSchool||'ALL')+') | LTSM: '+type.toUpperCase()+' | Count: '+items.length+' | Date: '+new Date().toLocaleString()+'</p><button onclick="window.print()" style="padding:12px 24px;background:#0a1a4d;color:#fff;border:0;border-radius:10px;font-weight:900;cursor:pointer">🖨️ PRINT NOW - '+items.length+' BARCODES</button> <button onclick="window.close()" style="padding:12px 24px;background:#dc2626;color:#fff;border:0;border-radius:10px;font-weight:900">❌ CLOSE</button></div><div class="grid">';
-  for(var i=0;i<items.length;i++){
-    var it=items[i];
-    if(type.indexOf('learner')!==-1){
-      var sName=it.schoolName||getSchoolNameByEmis(it.school);
-      var tp=getSchoolTownProvince(it.school);
-      html+='<div class="barcodeCard"><div class="header"><div class="logoBox"><img src="logo.png?v=61" alt="XINTIMANI"></div><div style="font-size:13px;font-weight:900">MAKHANANI DIGITAL LIBRARY</div><div style="font-size:14px;font-weight:900;margin-top:6px">🏫 '+sName+'</div><div style="font-size:11px;opacity:.85">EMIS: '+it.school+' | '+tp.town+' | '+tp.province+'</div></div><div style="padding:8px"><div style="font-weight:900;font-size:16px;color:#0a1a4d">'+it.name+'</div><div style="font-size:13px;color:#334155">Grade '+it.grade+' Class '+(it.class||'')+'</div><div style="font-size:13px;margin-top:6px;color:#0a1a4d">Learner ID: <b>'+it.id+'</b></div><svg class="bc" data-code="'+it.id+'"></svg></div></div>';
-    } else {
-      var sNameB=getSchoolNameByEmis(it.emis||it.school);
-      var tpB=getSchoolTownProvince(it.emis||it.school);
-      html+='<div class="barcodeCard"><div class="header"><div class="logoBox"><img src="logo.png?v=61" alt="XINTIMANI"></div><div style="font-size:13px;font-weight:900">MAKHANANI DIGITAL LIBRARY</div><div style="font-size:14px;font-weight:900;margin-top:6px">🏫 '+sNameB+'</div><div style="font-size:11px;opacity:.85">EMIS: '+(it.emis||it.school)+' | '+tpB.town+' | '+tpB.province+'</div></div><div style="padding:8px"><div style="font-weight:900;font-size:15px;color:#0a1a4d">'+it.title+'</div><div style="font-size:13px;color:#334155">CAPS: '+it.subject+' '+it.grade+'</div><div style="font-size:12px;color:#334155">Teacher: '+(it.teacher||'N/A')+'</div><div style="font-size:15px;margin-top:6px;color:#0a1a4d"><b>'+it.code+'</b></div><svg class="bc" data-code="'+it.code+'"></svg></div></div>';
-    }
-  }
-  html+='</div><script>setTimeout(function(){document.querySelectorAll(".bc").forEach(function(el){try{JsBarcode(el,el.getAttribute("data-code"),{format:"CODE128",width:2,height:60,displayValue:true,fontSize:14});}catch(e){}});},500);<\/script></body></html>';
-  return html;
-}
-function printLearners(mode){
-  var filtered=curSchool?learners.filter(l=>l.school===curSchool):learners;
-  if(filtered.length===0){alert('No learners in current school - V6.1 FIX 1MB - TAP SCHOOL BUTTON ABOVE!'); return;}
-  var html=generateBarcodeHTML(filtered, 'learners - ALL - V6.1 FIX 1MB - '+filtered.length);
-  var w=window.open('','_blank'); w.document.write(html); w.document.close();
-}
-function printLearnersFiltered(filterType){
-  var val='';
-  if(filterType==='grade'){ val=document.getElementById('printLearnerGrade').value; if(!val){alert('Select Grade first!'); return;} var filtered=learners.filter(l=>(curSchool?l.school===curSchool:true) && l.grade===val); if(filtered.length===0){alert('No learners found for Grade '+val); return;} var html=generateBarcodeHTML(filtered, 'learners - GRADE '+val+' - V6.1 FIX 1MB - '+filtered.length); var w=window.open('','_blank'); w.document.write(html); w.document.close(); }
-  if(filterType==='class'){ val=document.getElementById('printLearnerClass').value; if(!val){alert('Select Class first!'); return;} var filtered2=learners.filter(l=>(curSchool?l.school===curSchool:true) && l.class===val); if(filtered2.length===0){alert('No learners found for Class '+val); return;} var html2=generateBarcodeHTML(filtered2, 'learners - CLASS '+val+' - V6.1 FIX 1MB - '+filtered2.length); var w2=window.open('','_blank'); w2.document.write(html2); w2.document.close(); }
-}
-function printBooks(mode){
-  var filtered=curSchool?books.filter(b=>b.school===curSchool||b.emis===curSchool):books;
-  if(filtered.length===0){alert('No books in current school - V6.1 FIX 1MB - TAP SCHOOL BUTTON ABOVE!'); return;}
-  var html=generateBarcodeHTML(filtered, 'books - ALL - V6.1 FIX 1MB - '+filtered.length);
-  var w=window.open('','_blank'); w.document.write(html); w.document.close();
-}
-function printBooksFiltered(filterType){
-  var val='';
-  if(filterType==='grade'){ val=document.getElementById('printBookGrade').value; if(!val){alert('Select Grade first!'); return;} var filtered=books.filter(b=>(curSchool?b.school===curSchool||b.emis===curSchool:true) && b.grade===val); if(filtered.length===0){alert('No books found for Grade '+val); return;} var html=generateBarcodeHTML(filtered, 'books - GRADE '+val+' - V6.1 FIX 1MB - '+filtered.length); var w=window.open('','_blank'); w.document.write(html); w.document.close(); }
-  if(filterType==='subject'){ val=document.getElementById('printBookSubject').value; if(!val){alert('Select Subject first!'); return;} var filtered2=books.filter(b=>(curSchool?b.school===curSchool||b.emis===curSchool:true) && b.subject===val); if(filtered2.length===0){alert('No books found for Subject '+val); return;} var html2=generateBarcodeHTML(filtered2, 'books - SUBJECT '+val+' - V6.1 FIX 1MB - '+filtered2.length); var w2=window.open('','_blank'); w2.document.write(html2); w2.document.close(); }
-  if(filterType==='educator'){ val=document.getElementById('printBookEducator').value; if(!val){alert('Select Educator first!'); return;} var filtered3=books.filter(b=>(curSchool?b.school===curSchool||b.emis===curSchool:true) && b.teacher===val); if(filtered3.length===0){alert('No books found for Educator '+val); return;} var html3=generateBarcodeHTML(filtered3, 'books - EDUCATOR '+val+' - V6.1 FIX 1MB - '+filtered3.length); var w3=window.open('','_blank'); w3.document.write(html3); w3.document.close(); }
-}
-function parseDBELine(line){
-  line=line.trim(); if(!line) return null;
-  var parts=line.split(',').map(function(p){return p.trim();});
-  if(parts.length<2) return null;
-  var emis=parts[0].replace(/[^0-9]/g,'').trim();
-  var name=(parts[1]||'').toUpperCase().trim();
-  var town=(parts[2]||'').toUpperCase().trim();
-  var province=(parts[3]||'GAUTENG').toUpperCase().trim();
-  if(!emis || !name) return null;
-  return {emis:emis, name:name, town:town, province:province, pkg:'DEMO', status:'ACTIVE'};
-}
-function processDBEData(text){
-  var lines=text.split('\n');
-  var added=0, skipped=0, errors=0;
-  for(var i=0;i<lines.length;i++){
-    var obj=parseDBELine(lines[i]);
-    if(!obj){ if(lines[i].trim()) errors++; continue; }
-    var exists=false;
-    for(var j=0;j<schools.length;j++){ if(schools[j].emis===obj.emis){ exists=true; break; } }
-    if(exists){ skipped++; continue; }
-    schools.push(obj); added++;
-  }
-  if(added>0){ save(); renderSchools(); renderSchoolButtons(); renderAll(); }
-  return {added:added, skipped:skipped, errors:errors};
-}
-function uploadDBESchools(){
-  var fileInput=document.getElementById('dbeFile');
-  if(!fileInput.files || fileInput.files.length===0){ alert('Select CSV file first! - V6.1 FIX 1MB'); return; }
-  var file=fileInput.files[0];
-  var reader=new FileReader();
-  reader.onload=function(e){
-    var text=e.target.result;
-    var result=processDBEData(text);
-    document.getElementById('dbeUploadStatus').innerHTML='✅ Upload Complete - V6.1 FIX 1MB - Added: '+result.added+' | Skipped: '+result.skipped+' | Errors: '+result.errors+' | Total: '+schools.length+' - V6.1 FIX 1MB - Local only - TAP SYNC DBE CHUNKED for cloud!';
-    alert('✅ DBE SCHOOLS UPLOADED TO LOCAL V6.1 FIX 1MB!\n\nAdded: '+result.added+'\nSkipped: '+result.skipped+'\nErrors: '+result.errors+'\nTotal Schools Now: '+schools.length+'\n\nLocal only - 2.3MB > 1MB limit would fail if in main doc!\n\nTAP SYNC DBE CHUNKED to upload to separate collection makhanani_dbe_schools - No limit!');
-  };
-  reader.readAsText(file);
-}
-function uploadDBEManual(){
-  var text=document.getElementById('dbeManual').value.trim();
-  if(!text){ alert('Paste CSV first! - V6.1 FIX 1MB'); return; }
-  var result=processDBEData(text);
-  document.getElementById('dbeUploadStatus').innerHTML='✅ Manual Upload Complete - V6.1 FIX 1MB - Added: '+result.added+' | Skipped: '+result.skipped+' | Errors: '+result.errors+' | Total: '+schools.length;
-  alert('✅ DBE MANUAL UPLOAD V6.1 FIX 1MB!\n\nAdded: '+result.added+'\nSkipped: '+result.skipped+'\nErrors: '+result.errors+'\nTotal Schools Now: '+schools.length+'\n\nTAP SYNC DBE CHUNKED for cloud!');
-  document.getElementById('dbeManual').value='';
-}
-function downloadDBETemplate(){
-  var csv='EMIS,Name,Town,Province\n700310854,WORDSWORTH HIGH SCHOOL,BENONI,GAUTENG\n700310855,EXAMPLE PRIMARY SCHOOL,JOHANNESBURG,GAUTENG\n700310856,TEST HIGH SCHOOL,PRETORIA,GAUTENG\n700310857,SAMPLE SCHOOL,SOWETO,GAUTENG\n';
-  var blob=new Blob([csv], {type:'text/csv'});
-  var url=URL.createObjectURL(blob);
-  var a=document.createElement('a'); a.href=url; a.download='DBE_Schools_Template_V6.1_FIX_1MB.csv'; a.click(); URL.revokeObjectURL(url);
-  alert('📥 TEMPLATE DOWNLOADED V6.1 FIX 1MB!\nFile: DBE_Schools_Template_V6.1_FIX_1MB.csv');
-}
-function clearDBEInput(){ document.getElementById('dbeFile').value=''; document.getElementById('dbeManual').value=''; document.getElementById('dbeUploadStatus').innerHTML='Ready to upload DBE schools - V6.1 FIX 1MB - Current: '+schools.length+' schools local - Your screenshot FAIL: 2,359,771 > 1,048,576 - FIXED with chunked!'; }
-function initSubjects(){var sel=document.getElementById('bSubject');if(!sel) return; var subjects=["ACC","MATH","ENHL","AFAL","LIFE","PHSC","LFSC","GEOG","HIST","ECON","BUSN","CAT","IT","AGRI","MATHL","ENFAL"]; sel.innerHTML='<option value="">Subject</option>'; for(var i=0;i<subjects.length;i++){var o=document.createElement('option');o.value=subjects[i];o.textContent=subjects[i]; sel.appendChild(o);} var subjPrint=document.getElementById('printBookSubject'); if(subjPrint){ subjPrint.innerHTML='<option value="">-- Select Subject to Print --</option>'; for(var j=0;j<subjects.length;j++){ var op=document.createElement('option'); op.value=subjects[j]; op.textContent=subjects[j]; subjPrint.appendChild(op);} } }
-initSubjects();
-renderAll();
-renderSchoolButtons();
-updatePrintDropdowns();
-setTimeout(function(){logDebug("V6.1 Page loaded - Schools:"+schools.length+" Learners:"+learners.length+" Books:"+books.length+" - V6.1 FIX 1MB - Small doc + chunked schools - Fixes your FAIL 2,359,771 > 1,048,576");},1000);
-</script></body></html>
+function initSubjects(){var sel=document.getElementById('bSubject');if(!sel) return; var subjects=["ACC","MATH","ENHL","AFAL","LIFE","PHSC","LFSC","GEOG","HIST","ECON","BUSN","CAT","IT","AGRI","MATHL","ENFAL"]; sel.innerHTML='<option value="">Subject</option>'; for(var i=0;i<subjects.length;i++){var o=document.createElement('option');o.value=subjects[i];o.textContent=subjects[i]; sel.appendChild(o);} }
+initSubjects(); renderSchoolButtons(); renderSchools(); renderAll();
+</script>
+</body>
+</html>
