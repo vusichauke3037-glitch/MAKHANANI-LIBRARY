@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MAKHANANI V5.9.4 - Cloud Sync - No Nested Arrays Fix</title>
+<title>MAKHANANI V5.9.5 - Cloud Sync - Compat Fix</title>
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
-<script type="importmap">{"imports":{"firebase/app":"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js","firebase/firestore":"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js","firebase/analytics":"https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js"}}</script>
+<!-- COMPAT SDK - Works on ALL phones, no importmap, no module -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics-compat.js"></script>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial;background:#eef2f7;color:#111}
 header{background:#0a1f4d;color:#fff;padding:18px;text-align:center}header h1{margin:0;font-size:26px}
@@ -37,7 +40,7 @@ video{width:100%;border-radius:10px;background:#000}
 @media(max-width:700px){.row,.row2,.row3,.printSheet,.subjectGrid{grid-template-columns:1fr 1fr}}
 </style></head>
 <body>
-<header><h1>LTSM ACTIVE</h1><p>MAKHANANI V5.9.4 — CLOUD SYNC — No Nested Arrays Fix — WhatsApp 0780233263</p></header>
+<header><h1>LTSM ACTIVE</h1><p>MAKHANANI V5.9.5 — CLOUD SYNC — Compat Fix — WhatsApp 0780233263</p></header>
 <div class="wrap">
 
 <div class="card uploadBox">
@@ -49,9 +52,9 @@ video{width:100%;border-radius:10px;background:#000}
 </div>
 
 <div class="card cloudBox">
-<h2>☁️ SYNC + LIVE DATABASE - V5.9.4 NEW PROJECT makhanani-digital - SCHOOL BUTTONS + LTSM ACTIVE</h2>
-<div id="cloudConfigBox" class="ok">⏳ Connecting to makhanani-digital...</div>
-<p style="font-size:13px"><b>V5.9.4 FIX:</b> Schools saved as <code>[{e,n,t,p}]</code> — Flat Objects, No Nested Arrays. Staff subjects saved as <code>"MAT,PHYSC"</code> string.</p>
+<h2>☁️ SYNC + LIVE DATABASE - V5.9.5 NEW PROJECT makhanani-digital - SCHOOL BUTTONS + LTSM ACTIVE</h2>
+<div id="cloudConfigBox" class="warn">⏳ Connecting to makhanani-digital... If stuck, tap 🔍 DIAGNOSE below.</div>
+<p style="font-size:13px"><b>V5.9.5 FIX:</b> No importmap, No module — Uses Compat SDK that works on ALL phones. Schools as <code>[{e,n,t,p}]</code> — No nested arrays.</p>
 <div class="row" style="grid-template-columns:1fr 1fr 1fr 1fr">
 <button class="green" onclick="createCloudDB()">🔧 CREATE CLOUD DB</button>
 <button onclick="syncNow()">☁️ SYNC</button>
@@ -59,8 +62,9 @@ video{width:100%;border-radius:10px;background:#000}
 <button class="yellow" onclick="testSync()">🧪 TEST</button>
 </div>
 <div class="row2"><button class="purple" onclick="loadFromCloud()">⬇️ LOAD FROM CLOUD</button><button class="orange" onclick="syncThisSchoolOnly()">☁️ SYNC THIS SCHOOL ONLY</button></div>
+<div class="row2"><button class="grey" onclick="diagnoseCloud()">🔍 DIAGNOSE CONNECTION</button><button class="grey" onclick="retryCloud()">🔄 RETRY CONNECT</button></div>
 <div id="syncStatus"></div>
-<div class="ok" id="statsBar">DBE: 0 | Books: 0 | Learners: 0 | Staff: 0 | V5.9.4 SCHOOL BUTTONS + LTSM ACTIVE</div>
+<div class="ok" id="statsBar">DBE: 0 | Books: 0 | Learners: 0 | Staff: 0 | V5.9.5 SCHOOL BUTTONS + LTSM ACTIVE</div>
 </div>
 
 <div class="card" id="loginCard">
@@ -138,18 +142,17 @@ video{width:100%;border-radius:10px;background:#000}
 
 <div class="card" id="tab-print" style="display:none"><h2>🖨️ PRINTABLE PRINCIPAL REPORT</h2><div id="printReport"></div><button onclick="window.print()">🖨️ PRINT THIS REPORT</button></div>
 <div class="card" id="tab-printBarcodes" style="display:none"><h2>🖨️ BARCODE PRINT SHEET — <span class="schoolName"></span></h2><div id="printSheetTitle" style="font-weight:700;margin:8px 0"></div><button class="green noPrint" onclick="window.print()">🖨️ PRINT THIS SHEET</button><button class="noPrint" onclick="showTab('home',null)">⬅️ Back</button><div id="printSheet" class="printSheet"></div></div>
-<div class="card" id="tab-manuals" style="display:none"><h2>📖 MANUALS — V5.9.4</h2><button class="green noPrint" onclick="window.print()">🖨️ PRINT ALL MANUALS</button>
-<div class="manual"><h3>V5.9.4 — NESTED ARRAYS FIX</h3><p><b>Old V5.9.3:</b> <code>schools: [["700310854",...]]</code> — Array inside Array → Firestore rejects.<br><b>New V5.9.4:</b> <code>schools: [{e:"700310854", n:"WORDSWORTH", t:"BENONI", p:"Gauteng"}]</code> — Array of flat objects → Firestore accepts.<br><b>Staff:</b> Old <code>subjects: ["MAT","PHYSC"]</code> inside staff array → Also nested. New: <code>subjectsStr: "MAT,PHYSC"</code> string → Safe. On load, it converts back to array for app use.</p></div>
-<div class="manual"><h3>CLOUD SYNC</h3><p>Upload CSV → SYNC → Each chunk 500 schools as flat objects → LOAD FROM CLOUD on new phone → Converts back.</p></div>
+<div class="card" id="tab-manuals" style="display:none"><h2>📖 MANUALS — V5.9.5</h2><button class="green noPrint" onclick="window.print()">🖨️ PRINT ALL MANUALS</button>
+<div class="manual"><h3>V5.9.5 — WHY CONNECTING STUCK</h3><p><b>V5.9.4 Bug:</b> Used <code>importmap + type="module"</code> — Blocked on some phones / WhatsApp browser / GitHub Pages. Page stayed on <code>Connecting...</code> forever.<br><b>V5.9.5 Fix:</b> Uses <code>firebase-app-compat.js</code> normal script tags — Loads on ALL browsers. Plus DIAGNOSE button shows real error: Firestore not created / Rules blocked / No internet.</p></div>
+<div class="manual"><h3>CLOUD SYNC</h3><p>Upload CSV → SYNC → Chunks as [{e,n,t,p}] → LOAD FROM CLOUD on new phone.</p></div>
+<div class="manual"><h3>FIRESTORE RULES — MUST BE:</h3><p><code>rules_version = '2'; service cloud.firestore { match /databases/{database}/documents { match /{document=**} { allow read, write: if true; } } }</code> → Publish. If you see PERMISSION-DENIED, this is the cause.</p></div>
 </div>
 <div class="card" id="tab-caps" style="display:none"><h2>📘 ALL CAPS SUBJECTS</h2><div id="capsList"></div><button class="green noPrint" onclick="window.print()">🖨️ PRINT CAPS LIST</button></div>
 </div>
 <div id="scanModal"><div class="box"><h3>📷 SCAN BARCODE</h3><video id="scanVideo" playsinline></video><p id="scanStatus">Starting...</p><button onclick="closeScan()">❌ CLOSE</button><button class="yellow" onclick="manualScan()">⌨️ TYPE MANUALLY</button></div></div>
 
-<script type="module">
-import {initializeApp} from 'firebase/app';
-import {getFirestore, doc, setDoc, getDoc} from 'firebase/firestore';
-import {getAnalytics} from 'firebase/analytics';
+<script>
+// ===== FIREBASE COMPAT — NO MODULE, NO IMPORTMAP =====
 const firebaseConfig = {
   apiKey: "AIzaSyDMdnrjBRGElJWAqXST67zjZZ4bvEpTWXc",
   authDomain: "makhanani-digital.firebaseapp.com",
@@ -159,88 +162,114 @@ const firebaseConfig = {
   appId: "1:1018865654685:web:5a3ddb32fa11124a75ad74",
   measurementId: "G-TPVYKY6VLW"
 };
-let app=null, db=null;
-try{ app=initializeApp(firebaseConfig); db=getFirestore(app); try{getAnalytics(app);}catch(e){} window._db=db; window._fb={doc,setDoc,getDoc}; window._fbReady=true; document.getElementById('cloudConfigBox').innerHTML='<div class="ok">✅ Cloud Connected: makhanani-digital — Ready to SYNC — V5.9.4 No Nested Arrays</div>'; }catch(e){ window._fbReady=false; document.getElementById('cloudConfigBox').innerHTML='<div class="warn">❌ Cloud Connect Failed: '+e.message+'</div>'; }
-// --- CONVERTERS: Local [EMIS,Name,Town,Prov] <-> Cloud {e,n,t,p} ---
-window.schoolToCloud = (s) => ({e:String(s[0]||''), n:String(s[1]||''), t:String(s[2]||''), p:String(s[3]||'')});
-window.schoolFromCloud = (o) => {
-  if(Array.isArray(o)) return o; // already old format, keep
-  return [String(o.e||''), String(o.n||''), String(o.t||''), String(o.p||'')];
-};
-window.staffToCloud = (s) => {
-  let subs = Array.isArray(s.subjects) ? s.subjects : (s.subject ? [s.subject] : []);
-  return {name:String(s.name||''), id:String(s.id||''), role:String(s.role||''), subject:String(s.subject||subs[0]||''), subjectsStr: subs.join(','), email:String(s.email||''), school:String(s.school||'')};
-};
-window.staffFromCloud = (o) => {
-  let subjects = o.subjectsStr ? o.subjectsStr.split(',').map(x=>x.trim()).filter(Boolean) : (Array.isArray(o.subjects) ? o.subjects : (o.subject ? [o.subject] : []));
-  return {name:o.name||'', id:o.id||'', role:o.role||'', subject:o.subject||subjects[0]||'', subjects:subjects, email:o.email||'', school:o.school||''};
-};
-window.createCloudDB=async()=>{
-  if(!window._fbReady) return document.getElementById('syncStatus').innerHTML='<div class="warn">❌ Cloud not connected.</div>';
+let fbApp=null, db=null, fbReady=false, fbError='';
+function initFirebase(){
+  try{
+    if(typeof firebase==='undefined'){ fbError='Firebase SDK did not load — Check internet / Ad-blocker. Tap RETRY.'; showCloudStatus(); return false; }
+    if(!fbApp){
+      // Avoid double-init on reload
+      try{ fbApp=firebase.initializeApp(firebaseConfig); }catch(e){ if(/already exists/i.test(e.message)){ fbApp=firebase.app(); } else throw e; }
+      db=firebase.firestore();
+      try{ firebase.analytics(); }catch(e){}
+    }
+    fbReady=true; fbError='';
+    showCloudStatus();
+    return true;
+  }catch(e){
+    fbReady=false; fbError=e.message||String(e);
+    showCloudStatus();
+    return false;
+  }
+}
+function showCloudStatus(){
+  let el=document.getElementById('cloudConfigBox'); if(!el) return;
+  if(fbReady) el.innerHTML='<div class="ok">✅ Cloud Connected: makhanani-digital — Ready to SYNC — V5.9.5 Compat</div>';
+  else el.innerHTML='<div class="warn">❌ Cloud NOT Connected: '+fbError+'<br>Tap 🔄 RETRY CONNECT or 🔍 DIAGNOSE below. Local mode still works — Upload + Login still work without cloud.</div>';
+}
+function retryCloud(){ document.getElementById('cloudConfigBox').innerHTML='<div class="warn">⏳ Retrying...</div>'; setTimeout(()=>{ initFirebase(); },500); }
+async function diagnoseCloud(){
+  let out='<b>🔍 DIAGNOSE:</b><br>';
+  out+='1. firebase object: '+(typeof firebase!=='undefined'?'✅ Loaded':'❌ NOT Loaded — Internet / Ad-blocker blocking gstatic.com')+'<br>';
+  out+='2. firebase.firestore: '+(typeof firebase!=='undefined'&&firebase.firestore?'✅ Loaded':'❌ NOT Loaded')+'<br>';
+  out+='3. Project: makhanani-digital<br>';
+  if(!initFirebase()){ out+='4. Init: ❌ '+fbError; document.getElementById('syncStatus').innerHTML='<div class="warn">'+out+'</div>'; return; }
+  out+='4. Init: ✅ OK<br>5. Testing read from Firestore...<br>';
+  document.getElementById('syncStatus').innerHTML='<div class="ok">'+out+'</div>';
+  try{
+    let snap=await db.collection('makhanani').doc('schools_meta').get();
+    if(snap.exists) out+='5. Read: ✅ Found schools_meta — Total: '+(snap.data().total||0)+' | Chunks: '+(snap.data().chunks||0)+'<br>✅ CLOUD IS WORKING — Tap SYNC now.';
+    else out+='5. Read: ✅ Connected, but no schools_meta yet — Tap SYNC to upload first time. If PERMISSION-DENIED appears, fix Rules.';
+  }catch(e){
+    out+='5. Read: ❌ FAIL: '+e.message+'<br>';
+    if(/permission-denied/i.test(e.message)) out+='<b>FIX:</b> Firebase → Firestore → Rules → allow read, write: if true; → Publish → DIAGNOSE again.';
+    else if(/not-found|database/i.test(e.message)) out+='<b>FIX:</b> Firebase → Firestore Database → Create Database → Test Mode → europe-west → Enable.';
+    else out+='<b>FIX:</b> Check internet, then RETRY.';
+  }
+  document.getElementById('syncStatus').innerHTML='<div class="ok">'+out+'</div>';
+}
+function schoolToCloud(s){ return {e:String(s[0]||''), n:String(s[1]||''), t:String(s[2]||''), p:String(s[3]||'')}; }
+function schoolFromCloud(o){ if(Array.isArray(o)) return o; return [String(o.e||''), String(o.n||''), String(o.t||''), String(o.p||'')]; }
+function staffToCloud(s){ let subs=Array.isArray(s.subjects)?s.subjects:(s.subject?[s.subject]:[]); return {name:String(s.name||''), id:String(s.id||''), role:String(s.role||''), subject:String(s.subject||subs[0]||''), subjectsStr:subs.join(','), email:String(s.email||''), school:String(s.school||'')}; }
+function staffFromCloud(o){ let subjects=o.subjectsStr?o.subjectsStr.split(',').map(x=>x.trim()).filter(Boolean):(Array.isArray(o.subjects)?o.subjects:(o.subject?[o.subject]:[])); return {name:o.name||'', id:o.id||'', role:o.role||'', subject:o.subject||subjects[0]||'', subjects:subjects, email:o.email||'', school:o.school||''}; }
+async function createCloudDB(){
+  if(!initFirebase()){ document.getElementById('syncStatus').innerHTML='<div class="warn">❌ Cloud not connected. Tap 🔍 DIAGNOSE to see why.</div>'; return; }
   document.getElementById('syncStatus').innerHTML='<div class="ok">✅ CLOUD DB READY — makhanani-digital<br>Uses: makhanani/schools_chunk_* (flat objects) + makhanani/school_* — No nested arrays</div>';
-};
-window.syncNow=async()=>{
+}
+async function syncNow(){
   let meta=getMeta();
   document.getElementById('syncStatus').innerHTML='<div class="ok">⏳ SYNCING — '+meta.total+' schools in '+meta.chunks+' chunks (flat objects)... Please wait 20 sec...</div>';
-  if(!window._fbReady){ document.getElementById('syncStatus').innerHTML='<div class="ok">✅ SYNC COMPLETE (LOCAL) — '+meta.total+' schools in '+meta.chunks+' chunks locally.</div>'; return; }
+  if(!initFirebase()){ document.getElementById('syncStatus').innerHTML='<div class="ok">✅ SYNC COMPLETE (LOCAL) — '+meta.total+' schools in '+meta.chunks+' chunks locally.<br>Cloud not connected — Tap 🔍 DIAGNOSE.</div>'; return; }
   try{
-    const {doc,setDoc}=window._fb;
     for(let i=0;i<meta.chunks;i++){
       let chunk=getChunk(i); if(!chunk) continue;
-      // FIX: Convert [EMIS,Name,Town,Prov] -> {e,n,t,p} — NO nested arrays
-      let flat = chunk.map(s=>window.schoolToCloud(s));
-      await setDoc(doc(db,'makhanani','schools_chunk_'+i),{schools:flat, chunk:i, total:meta.total, updated:new Date().toISOString()});
+      let flat=chunk.map(s=>schoolToCloud(s));
+      await db.collection('makhanani').doc('schools_chunk_'+i).set({schools:flat, chunk:i, total:meta.total, updated:new Date().toISOString()});
     }
-    await setDoc(doc(db,'makhanani','schools_meta'),{total:meta.total, chunks:meta.chunks, updated:new Date().toISOString()});
+    await db.collection('makhanani').doc('schools_meta').set({total:meta.total, chunks:meta.chunks, updated:new Date().toISOString()});
     if(CUR.school){
-      await setDoc(doc(db,'makhanani','school_'+CUR.school),{
+      await db.collection('makhanani').doc('school_'+CUR.school).set({
         emis:String(CUR.school), name:String(schoolName()),
-        // Books / Learners are arrays of flat objects — OK (no array inside array)
         books: DB.books.filter(b=>b.school===CUR.school).map(b=>({code:String(b.code||''), title:String(b.title||''), subject:String(b.subject||''), school:String(b.school||''), issued:!!b.issued, learner:String(b.learner||'')})),
         learners: DB.learners.filter(l=>l.school===CUR.school).map(l=>({name:String(l.name||''), id:String(l.id||''), grade:String(l.grade||''), school:String(l.school||'')})),
-        // Staff: subjects flattened to string — NO nested array
-        staff: DB.staff.filter(s=>s.school===CUR.school).map(s=>window.staffToCloud(s)),
+        staff: DB.staff.filter(s=>s.school===CUR.school).map(s=>staffToCloud(s)),
         issues: DB.issues.filter(x=>x.school===CUR.school).map(x=>({code:String(x.code||''), learner:String(x.learner||''), date:String(x.date||''), school:String(x.school||'')})),
         updated:new Date().toISOString()
       });
     }
-    document.getElementById('syncStatus').innerHTML='<div class="ok">✅ SYNC COMPLETE (CLOUD) - V5.9.4<br>Schools: '+meta.total+' in '+meta.chunks+' chunks → makhanani/schools_chunk_0...'+(meta.chunks-1)+' as [{e,n,t,p}]<br>This School ('+CUR.school+'): → makhanani/school_'+CUR.school+'<br>No Nested Arrays ✅ No 1MB Error ✅</div>';
+    document.getElementById('syncStatus').innerHTML='<div class="ok">✅ SYNC COMPLETE (CLOUD) - V5.9.5<br>Schools: '+meta.total+' in '+meta.chunks+' chunks → makhanani/schools_chunk_0...'+(meta.chunks-1)+' as [{e,n,t,p}]<br>This School ('+CUR.school+'): → makhanani/school_'+CUR.school+'<br>No Nested Arrays ✅ No 1MB Error ✅</div>';
   }catch(e){ document.getElementById('syncStatus').innerHTML='<div class="warn">❌ SYNC FAIL: '+e.message+'<br>If PERMISSION-DENIED → Firestore → Rules → allow read, write: if true; → Publish → SYNC again.</div>'; }
-};
-window.syncThisSchoolOnly=async()=>{
+}
+async function syncThisSchoolOnly(){
   if(!CUR.school) return alert('Login to a school first');
-  if(!window._fbReady) return alert('Cloud not connected');
+  if(!initFirebase()) return alert('Cloud not connected — Tap DIAGNOSE');
   try{
-    const {doc,setDoc}=window._fb;
-    await setDoc(doc(db,'makhanani','school_'+CUR.school),{emis:String(CUR.school), name:String(schoolName()), books:DB.books.filter(b=>b.school===CUR.school).map(b=>({code:String(b.code||''), title:String(b.title||''), subject:String(b.subject||''), school:String(b.school||''), issued:!!b.issued, learner:String(b.learner||''}))), learners:DB.learners.filter(l=>l.school===CUR.school).map(l=>({name:String(l.name||''), id:String(l.id||''), grade:String(l.grade||''), school:String(l.school||'')})), staff:DB.staff.filter(s=>s.school===CUR.school).map(s=>window.staffToCloud(s)), issues:DB.issues.filter(x=>x.school===CUR.school).map(x=>({code:String(x.code||''), learner:String(x.learner||''), date:String(x.date||''), school:String(x.school||'')})), updated:new Date().toISOString()});
+    await db.collection('makhanani').doc('school_'+CUR.school).set({emis:String(CUR.school), name:String(schoolName()), books:DB.books.filter(b=>b.school===CUR.school).map(b=>({code:String(b.code||''), title:String(b.title||''), subject:String(b.subject||''), school:String(b.school||''), issued:!!b.issued, learner:String(b.learner||''}))), learners:DB.learners.filter(l=>l.school===CUR.school).map(l=>({name:String(l.name||''), id:String(l.id||''), grade:String(l.grade||''), school:String(l.school||'')})), staff:DB.staff.filter(s=>s.school===CUR.school).map(s=>staffToCloud(s)), issues:DB.issues.filter(x=>x.school===CUR.school).map(x=>({code:String(x.code||''), learner:String(x.learner||''), date:String(x.date||''), school:String(x.school||'')})), updated:new Date().toISOString()});
     document.getElementById('syncStatus').innerHTML='<div class="ok">✅ THIS SCHOOL SYNCED: '+CUR.school+' — '+schoolName()+' → makhanani/school_'+CUR.school+'</div>';
   }catch(e){ document.getElementById('syncStatus').innerHTML='<div class="warn">❌ FAIL: '+e.message+'</div>'; }
-};
-window.loadFromCloud=async()=>{
-  if(!window._fbReady) return alert('Cloud not connected');
+}
+async function loadFromCloud(){
+  if(!initFirebase()) return alert('Cloud not connected — Tap DIAGNOSE');
   try{
-    const {doc,getDoc}=window._fb;
-    let metaSnap=await getDoc(doc(db,'makhanani','schools_meta'));
-    if(!metaSnap.exists()) return alert('No cloud schools yet. Upload CSV → SYNC first.');
+    let metaSnap=await db.collection('makhanani').doc('schools_meta').get();
+    if(!metaSnap.exists) return alert('No cloud schools yet. Upload CSV → SYNC first.');
     let meta=metaSnap.data(); let all=[];
-    for(let i=0;i<meta.chunks;i++){ let s=await getDoc(doc(db,'makhanani','schools_chunk_'+i)); if(s.exists()){ let arr=s.data().schools||[]; arr.forEach(o=>all.push(window.schoolFromCloud(o))); } }
+    for(let i=0;i<meta.chunks;i++){ let s=await db.collection('makhanani').doc('schools_chunk_'+i).get(); if(s.exists){ let arr=s.data().schools||[]; arr.forEach(o=>all.push(schoolFromCloud(o))); } }
     saveAllSchoolsChunked(all);
     if(CUR.school){
-      let sc=await getDoc(doc(db,'makhanani','school_'+CUR.school));
-      if(sc.exists()){ let d=sc.data(); DB.books=DB.books.filter(b=>b.school!==CUR.school).concat((d.books||[]).map(b=>({code:b.code||'', title:b.title||'', subject:b.subject||'', school:b.school||CUR.school, issued:!!b.issued, learner:b.learner||''}))); DB.learners=DB.learners.filter(l=>l.school!==CUR.school).concat((d.learners||[]).map(l=>({name:l.name||'', id:l.id||'', grade:l.grade||'', school:l.school||CUR.school}))); DB.staff=DB.staff.filter(s=>s.school!==CUR.school).concat((d.staff||[]).map(s=>window.staffFromCloud(s))); save(); }
+      let sc=await db.collection('makhanani').doc('school_'+CUR.school).get();
+      if(sc.exists){ let d=sc.data(); DB.books=DB.books.filter(b=>b.school!==CUR.school).concat((d.books||[]).map(b=>({code:b.code||'', title:b.title||'', subject:b.subject||'', school:b.school||CUR.school, issued:!!b.issued, learner:b.learner||''}))); DB.learners=DB.learners.filter(l=>l.school!==CUR.school).concat((d.learners||[]).map(l=>({name:l.name||'', id:l.id||'', grade:l.grade||'', school:l.school||CUR.school}))); DB.staff=DB.staff.filter(s=>s.school!==CUR.school).concat((d.staff||[]).map(s=>staffFromCloud(s))); save(); }
     }
     document.getElementById('syncStatus').innerHTML='<div class="ok">✅ LOADED FROM CLOUD — Schools: '+all.length+' in '+meta.chunks+' chunks<br>Search WORDSWORTH now.</div>';
     filterDBE(); render();
   }catch(e){ document.getElementById('syncStatus').innerHTML='<div class="warn">❌ LOAD FAIL: '+e.message+'</div>'; }
-};
-window.testLiveDB=async()=>{
+}
+async function testLiveDB(){
   let meta=getMeta(); let chunk0Size=JSON.stringify(getChunk(0)||[]).length;
-  document.getElementById('syncStatus').innerHTML='<div class="ok">✅ LIVE DB TEST — Total: '+meta.total+' | Chunks: '+meta.chunks+' | Chunk 0: '+chunk0Size+' bytes (Limit 1,048,576) — PASS ✅<br>Cloud: '+(window._fbReady?'✅ Connected: makhanani-digital':'❌ Not connected')+'<br>Format: [{e,n,t,p}] — No nested arrays</div>';
-};
-window.testSync=async()=>{ await window.syncNow(); };
-</script>
+  document.getElementById('syncStatus').innerHTML='<div class="ok">✅ LIVE DB TEST — Total: '+meta.total+' | Chunks: '+meta.chunks+' | Chunk 0: '+chunk0Size+' bytes (Limit 1,048,576) — PASS ✅<br>Cloud: '+(fbReady?'✅ Connected: makhanani-digital':'❌ Not connected — Tap DIAGNOSE')+'<br>Format: [{e,n,t,p}] — No nested arrays</div>';
+}
+async function testSync(){ await syncNow(); }
 
-<script>
+// ===== APP CORE =====
 const CAPS=[["ENGHL","English Home Language"],["ENGFAL","English First Additional Language"],["AFRHL","Afrikaans Home Language"],["AFRFAL","Afrikaans First Additional Language"],["ZULHL","isiZulu Home Language"],["XHOHL","isiXhosa Home Language"],["SEPEDIHL","Sepedi Home Language"],["SETSWANAHL","Setswana Home Language"],["SESOTHOHL","Sesotho Home Language"],["XITSONGAHL","Xitsonga Home Language"],["TSHIVENDAHL","Tshivenda Home Language"],["SISWATIHL","siSwati Home Language"],["ISINDEBELEHL","isiNdebele Home Language"],["MAT","Mathematics"],["MLIT","Mathematical Literacy"],["TMAT","Technical Mathematics"],["NSC","Natural Sciences"],["NST","Natural Sciences & Technology"],["TECH","Technology"],["SOC","Social Sciences"],["GEO","Geography"],["HIS","History"],["LIFSK","Life Skills"],["LO","Life Orientation"],["PHYSC","Physical Sciences"],["LIFSC","Life Sciences"],["AGRSC","Agricultural Sciences"],["ACC","Accounting"],["BUS","Business Studies"],["ECO","Economics"],["CAT","Computer Applications Technology"],["IT","Information Technology"],["CON","Consumer Studies"],["HOS","Hospitality Studies"],["TOU","Tourism"],["EGD","Engineering Graphics & Design"],["CIVTEC","Civil Technology"],["ELETEC","Electrical Technology"],["MECTEC","Mechanical Technology"],["CRA","Creative Arts"],["MUS","Music"],["DRA","Dramatic Arts"],["VAR","Visual Arts"],["REL","Religion Studies"],["EMS","Economic & Management Sciences"]];
 const DBE_DEFAULT=[["700310854","WORDSWORTH HIGH SCHOOL","BENONI","Gauteng"],["700310855","EXAMPLE PRIMARY SCHOOL","JOHANNESBURG","Gauteng"],["700310856","TEST HIGH SCHOOL","PRETORIA","Gauteng"]];
 const CHUNK_SIZE=500;
@@ -252,15 +281,15 @@ function loadAllSchools(){let meta=getMeta(); if(meta.isDefault&&!localStorage.g
 function searchSchools(q,limit){q=(q||'').toUpperCase().trim(); if(!q) return []; let meta=getMeta(); if(meta.isDefault&&!localStorage.getItem('mk_dbe_chunk_0')) return DBE_DEFAULT.filter(s=>s[0].includes(q)||s[1].includes(q)||(s[2]||'').includes(q)||(s[3]||'').includes(q)).slice(0,limit); let res=[]; for(let i=0;i<meta.chunks&&res.length<limit;i++){let ch=getChunk(i); if(!ch) continue; for(let s of ch){if(String(s[0]).includes(q)||String(s[1]).toUpperCase().includes(q)||String(s[2]||'').toUpperCase().includes(q)||String(s[3]||'').toUpperCase().includes(q)){res.push(s); if(res.length>=limit) break;}}} return res;}
 function findSchoolByEMIS(emis){emis=String(emis||'').trim(); let meta=getMeta(); if(meta.isDefault&&!localStorage.getItem('mk_dbe_chunk_0')) return DBE_DEFAULT.find(s=>s[0]===emis)||null; for(let i=0;i<meta.chunks;i++){let ch=getChunk(i); if(!ch) continue; let f=ch.find(s=>String(s[0])===emis); if(f) return f;} return null;}
 function parseCSV(text){let lines=text.split(/\r?\n/).map(l=>l.trim()).filter(Boolean); let out=[],seen=new Set(),err=0; lines.forEach((line,idx)=>{if(idx===0&&line.toLowerCase().includes('emis')) return; let p=line.split(/[,;\t]/).map(x=>x.trim().replace(/^"|"$/g,'')); if(p.length<2){err++;return;} let emis=p[0].replace(/\D/g,''); if(!emis||emis.length<5){err++;return;} if(seen.has(emis)) return; seen.add(emis); if(p.length>=4) out.push([emis,p[1].toUpperCase(),p[2].toUpperCase(),p[3].toUpperCase()]); else if(p.length===3) out.push([emis,p[1].toUpperCase(),'',p[2].toUpperCase()]); else out.push([emis,p[1].toUpperCase(),'', 'Gauteng']);}); return {schools:out,errors:err};}
-function uploadCSV(){let f=document.getElementById('csvFile').files[0]; if(!f) return alert('Choose file first'); let r=new FileReader(); r.onload=e=>{let res=parseCSV(e.target.result); saveAllSchoolsChunked(res.schools); document.getElementById('uploadStatus').innerHTML='<div class="ok">✅ Upload Complete - V5.9.4 SCHOOL BUTTONS + LTSM ACTIVE<br>Added: '+res.schools.length+' | Errors: '+res.errors+' | Total: '+res.schools.length+'<br>Chunks: '+getMeta().chunks+' — Now tap ☁️ SYNC</div>'; filterDBE(); render();}; r.readAsText(f);}
-function uploadPasted(){let txt=document.getElementById('pasteCSV').value; if(!txt.trim()) return alert('Paste CSV first'); let res=parseCSV(txt); saveAllSchoolsChunked(res.schools); document.getElementById('uploadStatus').innerHTML='<div class="ok">✅ Upload Complete - V5.9.4<br>Added: '+res.schools.length+' | Errors: '+res.errors+'</div>'; filterDBE(); render();}
+function uploadCSV(){let f=document.getElementById('csvFile').files[0]; if(!f) return alert('Choose file first'); let r=new FileReader(); r.onload=e=>{let res=parseCSV(e.target.result); saveAllSchoolsChunked(res.schools); document.getElementById('uploadStatus').innerHTML='<div class="ok">✅ Upload Complete - V5.9.5 SCHOOL BUTTONS + LTSM ACTIVE<br>Added: '+res.schools.length+' | Errors: '+res.errors+' | Total: '+res.schools.length+'<br>Chunks: '+getMeta().chunks+' — Now tap ☁️ SYNC</div>'; filterDBE(); render();}; r.readAsText(f);}
+function uploadPasted(){let txt=document.getElementById('pasteCSV').value; if(!txt.trim()) return alert('Paste CSV first'); let res=parseCSV(txt); saveAllSchoolsChunked(res.schools); document.getElementById('uploadStatus').innerHTML='<div class="ok">✅ Upload Complete - V5.9.5<br>Added: '+res.schools.length+' | Errors: '+res.errors+'</div>'; filterDBE(); render();}
 function downloadTemplate(){let csv='EMIS,Name,Town,Province\n700310854,WORDSWORTH HIGH SCHOOL,BENONI,Gauteng\n900110001,POLOKWANE HIGH SCHOOL,POLOKWANE,Limpopo\n'; let b=new Blob([csv],{type:'text/csv'}); let a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='MAKHANANI_DBE_Template.csv'; a.click();}
-let DB; try{DB=JSON.parse(localStorage.getItem('mk_v594')||'{"books":[],"staff":[],"learners":[],"issues":[],"subs":[],"jobs":[],"agents":[],"sales":[],"contracts":[]}');}catch(e){DB={"books":[],"staff":[],"learners":[],"issues":[],"subs":[],"jobs":[],"agents":[],"sales":[],"contracts":[]};}
+let DB; try{DB=JSON.parse(localStorage.getItem('mk_v595')||'{"books":[],"staff":[],"learners":[],"issues":[],"subs":[],"jobs":[],"agents":[],"sales":[],"contracts":[]}');}catch(e){DB={"books":[],"staff":[],"learners":[],"issues":[],"subs":[],"jobs":[],"agents":[],"sales":[],"contracts":[]};}
 if(!DB.books) DB.books=[]; if(!DB.staff) DB.staff=[]; if(!DB.learners) DB.learners=[];
 DB.staff.forEach(s=>{if(!s.subjects) s.subjects=s.subject?[s.subject]:[];});
 let CUR={role:'',school:'',schoolLabel:'',staffName:'',subject:'',subjects:[]};
 let printMode='learners',adminCur='dbe',selectedEMIS='';
-function save(){try{localStorage.setItem('mk_v594',JSON.stringify(DB));}catch(e){} render();}
+function save(){try{localStorage.setItem('mk_v595',JSON.stringify(DB));}catch(e){} render();}
 function schoolName(){if(CUR.schoolLabel) return CUR.schoolLabel; let f=findSchoolByEMIS(CUR.school); if(f) return f[1]; if(CUR.school==='700310854') return 'WORDSWORTH HIGH SCHOOL'; return CUR.school||'No school selected';}
 function capsName(c){let f=CAPS.find(x=>x[0]===c); return f?f[1]:c;}
 function staffSubjects(s){if(s.subjects&&s.subjects.length) return s.subjects; if(s.subject) return [s.subject]; return [];}
@@ -312,6 +341,7 @@ else if(adminCur==='salesMgr') c.innerHTML=`<h3>📈 Sales Manager</h3><input id
 else if(adminCur==='salesTrack') c.innerHTML=`<h3>📊 Sales Tracker</h3><p>Total: R${DB.sales.reduce((a,s)=>a+Number(s.amt||0),0)}</p><table><tr><th>Client</th><th>Amount</th></tr>${DB.sales.map(s=>`<tr><td>${s.n}</td><td>R${s.amt}</td></tr>`).join('')}</table>`;
 else c.innerHTML=`<h3>📄 Contracts</h3><input id="ctN" placeholder="Agent Name"><input id="ctT" placeholder="Terms"><button class="green" onclick="DB.contracts.push({n:document.getElementById('ctN').value,t:document.getElementById('ctT').value});save();renderAdmin()">➕ CREATE</button><div>${DB.contracts.map(x=>`<p>📄 ${x.n} — ${x.t}</p>`).join('')}</div>`;}
 function addSub(){DB.subs.push({school:document.getElementById('subSchool').value||CUR.school,plan:document.getElementById('subPlan').value,status:'Active'}); save(); renderAdmin();}
-function render(){let books=DB.books.filter(b=>b.school===CUR.school); let learners=DB.learners.filter(l=>l.school===CUR.school); let staff=DB.staff.filter(s=>s.school===CUR.school); document.getElementById('statsBar').innerText=`DBE: ${getMeta().total} | Books: ${books.length} | Learners: ${learners.length} | Staff: ${staff.length} | V5.9.4 SCHOOL BUTTONS + LTSM ACTIVE`; document.querySelectorAll('.schoolName').forEach(e=>e.innerText=schoolName()); let el=(id)=>document.getElementById(id); if(el('pBooks')) el('pBooks').innerText=books.length; if(el('pIssued')) el('pIssued').innerText=books.filter(b=>b.issued).length; if(el('pAvail')) el('pAvail').innerText=books.filter(b=>!b.issued).length; if(el('pLearners')) el('pLearners').innerText=learners.length; if(el('pStaff')) el('pStaff').innerText=staff.length; let booksHTML=`<table><tr><th>Book No</th><th>Title</th><th>Subject</th><th>Status</th><th>Barcode</th></tr>${books.map(b=>`<tr><td><b>${b.code}</b></td><td>${b.title}</td><td>${b.subject}</td><td>${b.issued?'📤 Issued to '+b.learner:'✅ Available'}</td><td><svg class="bc" data-v="MAKHANANI ${schoolName()} ${b.code}"></svg></td></tr>`).join('')||'<tr><td colspan=5>No books yet</td></tr>'}</table>`; if(el('booksList')) el('booksList').innerHTML=booksHTML; if(el('booksList2')) el('booksList2').innerHTML=booksHTML; if(el('principalBooks')) el('principalBooks').innerHTML=booksHTML; if(el('staffList')) el('staffList').innerHTML=`<table><tr><th>Name</th><th>Role</th><th>Teaching</th><th>Action</th></tr>${staff.map(s=>`<tr><td>${s.name}</td><td>${s.role}</td><td><b>${staffSubjects(s).join(', ')}</b></td><td><button class="red" onclick="removeStaff(${DB.staff.indexOf(s)})">Remove</button></td></tr>`).join('')||'<tr><td colspan=4>No staff yet</td></tr>'}</table>`; if(el('learnerList')) el('learnerList').innerHTML=learners.map(l=>`<div class="barcodeBox"><b>MAKHANANI • ${schoolName()}</b><b>${l.name} — ${l.grade} — ${l.id}</b><svg class="bc2" data-v="${l.id}"></svg></div>`).join('')||'No learners yet'; if(el('printReport')) el('printReport').innerHTML=`<h3>MAKHANANI — PRINCIPAL REPORT</h3><p><b>School:</b> ${schoolName()} (${CUR.school})<br><b>Date:</b> ${new Date().toLocaleDateString()}</p><p>Books: ${books.length} | Issued: ${books.filter(b=>b.issued).length} | Learners: ${learners.length} | Staff: ${staff.length}</p><table><tr><th>Book No</th><th>Title</th><th>Status</th></tr>${books.map(b=>`<tr><td>${b.code}</td><td>${b.title}</td><td>${b.issued?'Issued':'Available'}</td></tr>`).join('')}</table><p>Signature: ___________________ Principal</p>`; try{document.querySelectorAll('.bc').forEach(s=>JsBarcode(s,s.dataset.v,{format:'CODE128',width:1.2,height:40,displayValue:true})); document.querySelectorAll('.bc2').forEach(s=>JsBarcode(s,s.dataset.v,{format:'CODE128',width:1.5,height:50,displayValue:true}));}catch(e){} renderAdmin();}
+function render(){let books=DB.books.filter(b=>b.school===CUR.school); let learners=DB.learners.filter(l=>l.school===CUR.school); let staff=DB.staff.filter(s=>s.school===CUR.school); document.getElementById('statsBar').innerText=`DBE: ${getMeta().total} | Books: ${books.length} | Learners: ${learners.length} | Staff: ${staff.length} | V5.9.5 SCHOOL BUTTONS + LTSM ACTIVE`; document.querySelectorAll('.schoolName').forEach(e=>e.innerText=schoolName()); let el=(id)=>document.getElementById(id); if(el('pBooks')) el('pBooks').innerText=books.length; if(el('pIssued')) el('pIssued').innerText=books.filter(b=>b.issued).length; if(el('pAvail')) el('pAvail').innerText=books.filter(b=>!b.issued).length; if(el('pLearners')) el('pLearners').innerText=learners.length; if(el('pStaff')) el('pStaff').innerText=staff.length; let booksHTML=`<table><tr><th>Book No</th><th>Title</th><th>Subject</th><th>Status</th><th>Barcode</th></tr>${books.map(b=>`<tr><td><b>${b.code}</b></td><td>${b.title}</td><td>${b.subject}</td><td>${b.issued?'📤 Issued to '+b.learner:'✅ Available'}</td><td><svg class="bc" data-v="MAKHANANI ${schoolName()} ${b.code}"></svg></td></tr>`).join('')||'<tr><td colspan=5>No books yet</td></tr>'}</table>`; if(el('booksList')) el('booksList').innerHTML=booksHTML; if(el('booksList2')) el('booksList2').innerHTML=booksHTML; if(el('principalBooks')) el('principalBooks').innerHTML=booksHTML; if(el('staffList')) el('staffList').innerHTML=`<table><tr><th>Name</th><th>Role</th><th>Teaching</th><th>Action</th></tr>${staff.map(s=>`<tr><td>${s.name}</td><td>${s.role}</td><td><b>${staffSubjects(s).join(', ')}</b></td><td><button class="red" onclick="removeStaff(${DB.staff.indexOf(s)})">Remove</button></td></tr>`).join('')||'<tr><td colspan=4>No staff yet</td></tr>'}</table>`; if(el('learnerList')) el('learnerList').innerHTML=learners.map(l=>`<div class="barcodeBox"><b>MAKHANANI • ${schoolName()}</b><b>${l.name} — ${l.grade} — ${l.id}</b><svg class="bc2" data-v="${l.id}"></svg></div>`).join('')||'No learners yet'; if(el('printReport')) el('printReport').innerHTML=`<h3>MAKHANANI — PRINCIPAL REPORT</h3><p><b>School:</b> ${schoolName()} (${CUR.school})<br><b>Date:</b> ${new Date().toLocaleDateString()}</p><p>Books: ${books.length} | Issued: ${books.filter(b=>b.issued).length} | Learners: ${learners.length} | Staff: ${staff.length}</p><table><tr><th>Book No</th><th>Title</th><th>Status</th></tr>${books.map(b=>`<tr><td>${b.code}</td><td>${b.title}</td><td>${b.issued?'Issued':'Available'}</td></tr>`).join('')}</table><p>Signature: ___________________ Principal</p>`; try{document.querySelectorAll('.bc').forEach(s=>JsBarcode(s,s.dataset.v,{format:'CODE128',width:1.2,height:40,displayValue:true})); document.querySelectorAll('.bc2').forEach(s=>JsBarcode(s,s.dataset.v,{format:'CODE128',width:1.5,height:50,displayValue:true}));}catch(e){} renderAdmin();}
+initFirebase();
 initCaps(); filterDBE(); render();
 </script></body></html>
